@@ -1,10 +1,10 @@
+@import "config.js"
+
 var onRun = function (context) {	
 	var app = NSApp.delegate();
 	var doc = context.document;
-	
-	var url = 'https://team.weui.io/shenfei/wechat.json'
 
-	var reqUrl = [NSURL URLWithString:url]
+	var reqUrl = [NSURL URLWithString:COLOR];
 	var request = NSMutableURLRequest.requestWithURL_cachePolicy_timeoutInterval(reqUrl, NSURLRequestReloadIgnoringLocalCacheData, 60);
 	request.setHTTPMethod_("GET");
 

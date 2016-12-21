@@ -1,3 +1,5 @@
+@import "config.js"
+
 var onRun = function (context) {
   	function request(queryURL) {
 		var request = NSMutableURLRequest.new();
@@ -8,8 +10,8 @@ var onRun = function (context) {
 		var oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:responseCode error:error];
 		return oResponseData;
 	}
-	var url = 'http://tmtdemo.qq.com/uikit.sketch';
-	var theResponseData = request(url);
+	context.document.showMessage("检查更新中...");
+	var theResponseData = request(UIKIT);
 	var data = [[NSData alloc] initWithData:theResponseData];
 	var sourceDoc = MSDocument.new();
 	var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
