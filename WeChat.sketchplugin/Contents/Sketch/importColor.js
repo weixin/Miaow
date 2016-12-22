@@ -1,21 +1,14 @@
 @import "config.js"
+@import "common.js"
 
 var onRun = function (context) {	
 	var app = NSApp.delegate();
 	var doc = context.document;
 
-	var reqUrl = [NSURL URLWithString:COLOR];
-	var request = NSMutableURLRequest.requestWithURL_cachePolicy_timeoutInterval(reqUrl, NSURLRequestReloadIgnoringLocalCacheData, 60);
-	request.setHTTPMethod_("GET");
-
-	var theResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-
-	if (theResponseData == null) {
-		NSApp.displayDialog("网络错误，请连上互联网");
-		return;
-	}
 	
-	var colorContents = ""
+	var theResponseData = request(COLOR);
+	
+	var colorContents = "";
 
 	theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
 	
@@ -45,5 +38,5 @@ var onRun = function (context) {
 	
 	app.refreshCurrentDocument();
 
-	NSApp.displayDialog("Yes!\n\nWeChat colors added to document colors");
+	NSApp.displayDialog("色板已经同步到你的Document Color");
 }

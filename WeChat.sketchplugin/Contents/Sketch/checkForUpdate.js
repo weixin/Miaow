@@ -9,7 +9,7 @@ var onRun = function(context) {
 	if(currentVersion == installedVersion){
 		updateAvailable = false;
 	}
-	updateAlert = getAlertWindow();
+	var updateAlert = COSAlertWindow.new();
 
 	updateAlert.setMessageText(updateAvailable ? "有新的升级包" : "没有更新");
 	if (updateAvailable) {
