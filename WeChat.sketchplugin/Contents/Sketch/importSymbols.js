@@ -14,93 +14,23 @@ var onRun = function (context) {
 	if(sourceDoc.readFromURL_ofType_error(NSURL.fileURLWithPath(databasePath), "com.bohemiancoding.sketch.drawing", nil)) {
 		var doc = context.document;
 		var savePage;
+		var saveArtBoard = [];
 		var pages = doc.pages();
 
 		var sourcePages = sourceDoc.documentData().pages();
 
 		var addSymbolCount = 0;
-		var CTCount = 0;
 		var addPageCount = 0;
 
-		//先处理symbol
-		(function(){
-			var sourceSymbol = sourceDoc.documentData().allSymbols();
-			var localSymobl = doc.documentData().allSymbols();
-			var pushAllArtboards = [];
-			var deleteObject = {};
-
-	        for(var f=0;f<sourceSymbol.count();f++){
-	        	var s = sourceSymbol[f];
-	        	var flagForNewSymbol = false;
-	        	for(var g=0;g<localSymobl.count();g++){
-	        		if(encodeURI(s.name()) == encodeURI(localSymobl[g].name())){
-	        			flagForNewSymbol = true;
-
-	        			// 找出相同名字的，内容相同不处理，内容不同，使用source的，并把local的放到save
-	        			if(!isSame(s,localSymobl[g])){
-	        				if(CTCount == 0){
-	        					savePage = doc.addBlankPage();
-								savePage.setName('更新冲突');
-	        				}
-	        				CTCount ++;
-	        				//添加原始的到冲突
-	        				var lolG = localSymobl[g];
-	        				savePage.addLayers([lolG]);
-	        				//删除原始的
-	        				localSymobl[g].removeFromParent();
-	        				//添加线上的到画布
-	        				var newSymbol = s;
-	        				var rect = s.rect();
-	        				newSymbol.rect = rect;
-	        				pushAllArtboards.push(newSymbol);
-	        			}
-	        			deleteObject[g] = true;
-	        			break;
-	        		}
-	        	}
-	        	if(!flagForNewSymbol){
-	        		//没找着，直接添加source的到现有的画布
-	        		var newSymbol = s;
-					var rect = s.rect();
-					newSymbol.rect = rect;
-					pushAllArtboards.push(newSymbol);
-	        		
-	        		addSymbolCount++;
-	        	}
-	        }
-	        //没找着，直接添加source的到冲突画布
-	        for(var g=0;g<localSymobl.count();g++){
-	        	if(!deleteObject[g]){
-	        		if(CTCount == 0){
-						savePage = doc.addBlankPage();
-						savePage.setName('更新冲突');
-					}
-	        		CTCount ++;
-	        		var saveSymbol = localSymobl[g];
-	        		savePage.addLayers([saveSymbol]);
-	        	}
-	        }
-	        doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
-			var currentPage = context.document.currentPage();
-			currentPage.addLayers(pushAllArtboards);
-		})()
-		
-
-
-		//再处理页面
 
 		for(var i=0;i<sourcePages.count();i++){
 			var sourcePageName = sourcePages[i].name();
-			if(sourcePageName == 'Symbols'){
-				continue;
-			}
+
 			var flagForOldPage = false;
 			for(var k=0;k<pages.count();k++){
 				//如果有同一个page名
-				if(pages[k].name() == 'Symbols'){
-					continue;
-				}
-				if(encodeURI(pages[k].name()) == encodeURI(sourcePageName)){
+
+				if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
 					flagForOldPage = true;
 
 					//比对一下
@@ -113,51 +43,34 @@ var onRun = function (context) {
 		            	var s = sourceSymbol[f];
 		            	var flagForNewSymbol = false;
 		            	for(var g=0;g<localSymobl.count();g++){
-		            		if(encodeURI(s.name()) == encodeURI(localSymobl[g].name())){
+		            		if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
 		            			flagForNewSymbol = true;
 
 		            			// 找出相同名字的，内容相同不处理，内容不同，使用source的，并把local的放到save
 		            			if(!isSame(s,localSymobl[g])){
-		            				if(CTCount == 0){
-		            					savePage = doc.addBlankPage();
-										savePage.setName('更新冲突');
-		            				}
-		            				CTCount ++;
-		            				//添加原始的到冲突
-		            				var lolG = localSymobl[g];
-		            				savePage.addLayers([lolG]);
-		            				//删除原始的
+		            				//添加现在画布上的到冲突
+		            				saveArtBoard.push(localSymobl[g]);
+		            				//删除画布上的
 		            				localSymobl[g].removeFromParent();
 		            				//添加线上的到画布
-		            				var newSymbol = s;
-		            				var rect = s.rect();
-		            				newSymbol.rect = rect;
-		            				pushAllArtboards.push(newSymbol);
+		            				pushAllArtboards.push(s);
 		            			}
-		            			deleteObject[g] = true;
+		            			deleteObject['g_'+g] = true;
 		            			break;
 		            		}
 		            	}
 		            	if(!flagForNewSymbol){
 		            		//没找着，直接添加source的到现有的画布
-		            		var newSymbol = s;
-            				var rect = s.rect();
-            				newSymbol.rect = rect;
-            				pushAllArtboards.push(newSymbol);
+            				pushAllArtboards.push(s);
 		            		
 		            		addSymbolCount++;
 		            	}
 		            }
 		            //没找着，直接添加source的到冲突画布
 		            for(var g=0;g<localSymobl.count();g++){
-		            	if(!deleteObject[g]){
-		            		if(CTCount == 0){
-            					savePage = doc.addBlankPage();
-								savePage.setName('更新冲突');
-            				}
-		            		CTCount ++;
-		            		var saveSymbol = localSymobl[g];
-		            		savePage.addLayers([saveSymbol]);
+		            	if(!deleteObject['g_'+g]){
+		            		saveArtBoard.push(localSymobl[g].copy());
+		            		localSymobl[g].removeFromParent();
 		            	}
 		            }
 		            pages[k].addLayers(pushAllArtboards);
@@ -165,29 +78,26 @@ var onRun = function (context) {
 				}
 			}
 			//如果没有直接添加一个新的page
-			// 不行，直接新增page有bug，没bug，要先添加symbol
+			// 不行，直接新增page有bug
 
 			if(!flagForOldPage){
 				addPageCount++;	
-				// var newPage = doc.addBlankPage();
-				// var sourceSymbol = sourcePages[i].artboards();
-				// var newArtBoards = [];
-				// for(var i = 0;i<sourceSymbol.count();i++){
-				// 	newArtBoards.push(sourceSymbol[i].copy());
-				// }
-				// newPage.setName(sourcePageName);
-				// newPage.addLayers(newArtBoards);
-				doc.documentData().addPage(sourcePages[i]);
+				var newPage = doc.addBlankPage();
+				var sourceSymbol = sourcePages[i].artboards();
+				newPage.setName(sourcePageName);
+				newPage.addLayers(sourceSymbol);
 			}
 			doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
 		}
-		
 	}
 	sourceDoc.close();
 	sourceDoc = nil;
-	var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，有'+ CTCount + '个冲突，';
+	var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，有'+ saveArtBoard.length + '个冲突，';
 	alertData += 'UIKIT已经导入成功！';
-	if(CTCount>0){
+	if(saveArtBoard.length>0){
+		var savePage = doc.addBlankPage();
+		savePage.setName('更新冲突');
+		savePage.addLayers(saveArtBoard);
 		doc.setCurrentPage(savePage);
 		Organizer(context);
 	}
@@ -195,32 +105,41 @@ var onRun = function (context) {
 }
 
 function isSame(a,b){
-	var layers = a.layers();
-
-	//视图不一样大
-	if(encodeURI(a.rect().toString()) != encodeURI(b.rect().toString())){
+	if(a.count() != b.count()){
 		return false;
 	}
-
-	for(var i = 0;i < layers.length; i++){
+	var layers = a.layers();
+	var layers2 = b.layers();
+	//视图不一样大
+	//if(encodeURIComponent(a.rect().size.toString()) != encodeURIComponent(b.rect().size.toString())){
+		//出bug了 不知道怎么办
+		//return false;
+	//}
+	for(var i = 0;i < layers.count(); i++){
 		var layer = layers[i];
-		if(encodeURI(layer.name()) != encodeURI(b.layers()[i].name())){
+		var flag1 = false;
+		var flag2 = false;
+		var flag3 = false;
+		for(var k = 0;k < layers2.count(); k++ ){
+			var layer2 = layers2[k];
+			//名字顺序也会变
+			if(encodeURIComponent(layer.name()) == encodeURIComponent(layer2.name())){
+				flag1 = true;
+			}
+			if(layer.class() == 'MSTextLayer' && layer2.class() == 'MSTextLayer'){
+				if(encodeURIComponent(layer.font()) == encodeURIComponent(layer2.font()) && encodeURIComponent(layer.stringValue().trim()) == encodeURIComponent(layer2.stringValue().trim())){
+					flag2 = true;
+				}
+			}
+			if(layer.class() == 'MSLayerGroup' || layer.class() == 'MSShapeGroup' || layer.class() == 'MSBitmapLayer'){
+				if(encodeURIComponent(layer.rect().size.toString()) == encodeURIComponent(layer2.rect().size.toString())){
+					flag3 = true;
+				}
+			}
+		}
+		if(flag1 == false || flag2 == false || flag3 == false){
 			return false;
 		}
-		switch(layer.class()){
-			case 'MSTextLayer':
-			if(!(encodeURI(layer.font()) == encodeURI(b.layers()[i].font()) && encodeURI(layer.stringValue()) == encodeURI(b.layers()[i].stringValue()))){
-				return false;
-			}
-			case 'MSLayerGroup':
-			case 'MSShapeGroup':
-			case 'MSBitmapLayer':
-				if(encodeURI(layer.rect().toString()) != encodeURI(b.layers()[i].rect().toString())){
-					return false;
-				}
-		}
-		
 	}
 	return true;
-	
 }
