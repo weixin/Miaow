@@ -92,8 +92,14 @@ var onRun = function (context) {
 	}
 	sourceDoc.close();
 	sourceDoc = nil;
-	var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，有'+ saveArtBoard.length + '个冲突，';
+	var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，';
+	if(saveArtBoard.length != 0){
+		alertData += '有'+ saveArtBoard.length + '个冲突，请在冲突文件page查看';
+	}
 	alertData += 'UIKIT已经导入成功！';
+	if(addPageCount == 0 && addSymbolCount == 0 && saveArtBoard.length == 0){
+		alertData = '没有新的更新！';
+	}
 	if(saveArtBoard.length>0){
 		var savePage = doc.addBlankPage();
 		savePage.setName('更新冲突');
@@ -101,29 +107,46 @@ var onRun = function (context) {
 		doc.setCurrentPage(savePage);
 		Organizer(context);
 	}
+	if(context.document.pages()[0].artboards().count() == 0){
+		context.document.removePage(context.document.pages()[0]);
+		// var copyPage = doc.addBlankPage();
+		// copyPage.setName('Page 1');
+	}
+
 	NSApp.displayDialog(alertData);
 }
 
 function isSame(a,b){
 	var layers = a.layers();
-
-	for(var i = 0;i < layers.length; i++){
+	if(encodeURIComponent(a.rect()) != encodeURIComponent(b.rect())){
+		return false;
+	}
+	for(var i = 0;i < layers.count(); i++){
 		var layer = layers[i];
 		//名字顺序也会变
 		if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
 			return false;
 		}
+		if(encodeURIComponent(layer.rect().toString()) != encodeURIComponent(b.layers()[i].rect().toString())){
+			return false;
+		}
+		
 		if(layer.class() == 'MSTextLayer'){
-			if(encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
-				log(encodeURIComponent(layer.font()))
-				log(encodeURIComponent(b.layers()[i].font()))
-				log(encodeURIComponent(layer.stringValue().trim()))
-				log(encodeURIComponent(b.layers()[i].stringValue().trim()))
+			if(encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
 				return false;
 			}
 		}
-		if(layer.class() == 'MSLayerGroup' || layer.class() == 'MSShapeGroup' || layer.class() == 'MSBitmapLayer'){
-			if(encodeURIComponent(layer.rect().size.toString()) != encodeURIComponent(b.layers()[i].rect().size.toString())){
+		// if(layer.class() == 'MSRectangleShape' || layer.class() == 'MSOvalShape' || layer.class() == 'MSShapePathLayer'){
+			
+		// }
+		if(layer.class() == 'MSLayerGroup' && layer.style().fills().count() != 0){
+			if(encodeURIComponent(layer.style().fills()[0].color().toString()) != encodeURIComponent(b.layers()[i].style().fills()[0].color().toString())){
+				return false;
+			}
+		}
+		if(layer.class() == 'MSLayerGroup' || layer.class() ==  'MSShapeGroup'){
+			var boolChild = isSame(layer,b.layers()[i]);
+			if(!boolChild){
 				return false;
 			}
 		}
