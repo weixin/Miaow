@@ -105,41 +105,30 @@ var onRun = function (context) {
 }
 
 function isSame(a,b){
-	if(a.count() != b.count()){
-		return false;
-	}
 	var layers = a.layers();
-	var layers2 = b.layers();
-	//视图不一样大
-	//if(encodeURIComponent(a.rect().size.toString()) != encodeURIComponent(b.rect().size.toString())){
-		//出bug了 不知道怎么办
-		//return false;
-	//}
-	for(var i = 0;i < layers.count(); i++){
+
+	for(var i = 0;i < layers.length; i++){
 		var layer = layers[i];
-		var flag1 = false;
-		var flag2 = false;
-		var flag3 = false;
-		for(var k = 0;k < layers2.count(); k++ ){
-			var layer2 = layers2[k];
-			//名字顺序也会变
-			if(encodeURIComponent(layer.name()) == encodeURIComponent(layer2.name())){
-				flag1 = true;
-			}
-			if(layer.class() == 'MSTextLayer' && layer2.class() == 'MSTextLayer'){
-				if(encodeURIComponent(layer.font()) == encodeURIComponent(layer2.font()) && encodeURIComponent(layer.stringValue().trim()) == encodeURIComponent(layer2.stringValue().trim())){
-					flag2 = true;
-				}
-			}
-			if(layer.class() == 'MSLayerGroup' || layer.class() == 'MSShapeGroup' || layer.class() == 'MSBitmapLayer'){
-				if(encodeURIComponent(layer.rect().size.toString()) == encodeURIComponent(layer2.rect().size.toString())){
-					flag3 = true;
-				}
-			}
-		}
-		if(flag1 == false || flag2 == false || flag3 == false){
+		//名字顺序也会变
+		if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
 			return false;
 		}
+		if(layer.class() == 'MSTextLayer'){
+			if(encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
+				log(encodeURIComponent(layer.font()))
+				log(encodeURIComponent(b.layers()[i].font()))
+				log(encodeURIComponent(layer.stringValue().trim()))
+				log(encodeURIComponent(b.layers()[i].stringValue().trim()))
+				return false;
+			}
+		}
+		if(layer.class() == 'MSLayerGroup' || layer.class() == 'MSShapeGroup' || layer.class() == 'MSBitmapLayer'){
+			if(encodeURIComponent(layer.rect().size.toString()) != encodeURIComponent(b.layers()[i].rect().size.toString())){
+				return false;
+			}
+		}
+		
 	}
 	return true;
+	
 }
