@@ -86,18 +86,12 @@ var onRun = function (context) {
 
             accessoryList = NSComboBox.alloc().initWithFrame(NSMakeRect(0,0,230,25));
             accessoryList.addItemsWithObjectValues(options);
-            // accessoryList.selectItemAtIndex(0);
-            // accessoryList.setCOSJSTargetFunction(function(){
-            //     accessoryList.selectItemAtIndex(4);
-            // })
             accessoryView.addSubview(accessoryList);
-            // userInterface.addAccessoryView(accessoryList);
 
             var button = [[NSButton alloc] initWithFrame:NSMakeRect(240,-3,60,30)];
             [button setButtonType:2];
             button.bezelStyle = 1;
             button.title = '搜索';
-            // button.bordered = 0;
             [button setCOSJSTargetFunction:function(sender) {
                  if(searchButtonType == 1){
                     button.title = '取消';
@@ -109,7 +103,6 @@ var onRun = function (context) {
                             searchList.push(options[i]);
                         }
                     }
-                    // NSApp.displayDialog(searchList);
                     accessoryList.removeAllItems();
                     accessoryList.addItemsWithObjectValues(searchList);
                     accessoryList.selectItemAtIndex(0);
@@ -119,14 +112,11 @@ var onRun = function (context) {
                     button.title = '搜索';
                     accessoryList.removeAllItems();
                     accessoryList.addItemsWithObjectValues(options);
-                    // accessoryList.selectItemAtIndex(0);
 
                  }
             }];
             accessoryView.addSubview(button);
             userInterface.addAccessoryView(accessoryView);
-
-            // userInterface.addAccessoryView(button);
 
 
             var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));

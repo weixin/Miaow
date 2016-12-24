@@ -5,14 +5,7 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
-      "name" : "全文文字替换",
-      "identifier" : "findfontandselect",
-      "script" : "findFontName.js",
-      "shortcut": "cmd shift d",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "UI kit 同步",
+      "name" : "WEUI 同步",
       "identifier" : "importsymbol",
       "script" : "importSymbols.js",
       "shortcut": "cmd shift b",
@@ -23,6 +16,13 @@
       "identifier" : "importcolor",
       "script" : "importColor.js",
       "shortcut": "cmd shift c",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "全文文字替换",
+      "identifier" : "findfontandselect",
+      "script" : "findFontName.js",
+      "shortcut": "cmd shift d",
       "handler" : "onRun"
     },
     {

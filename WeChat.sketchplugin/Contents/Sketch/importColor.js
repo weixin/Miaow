@@ -27,9 +27,9 @@ var onRun = function (context) {
 	
 	for (var i = 0; i < palette.length; i++) {
 		colors.push(MSColor.colorWithRed_green_blue_alpha(
-			palette[i].red,
-			palette[i].green,
-			palette[i].blue,
+			palette[i].red/255,
+			palette[i].green/255,
+			palette[i].blue/255,
 			palette[i].alpha
 		));	
 	}
