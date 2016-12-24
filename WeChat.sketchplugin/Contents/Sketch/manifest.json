@@ -8,7 +8,7 @@
       "name" : "WEUI 同步",
       "identifier" : "importsymbol",
       "script" : "importSymbols.js",
-      "shortcut": "cmd shift b",
+      "shortcut": "cmd shift w",
       "handler" : "onRun"
     },
     {
@@ -41,7 +41,7 @@
     }
   ],
   "menu": {
-    "items": ["findfontandselect","importsymbol","importcolor","editshortcuts","checkforupdate"],
+    "items": ["importsymbol","importcolor","findfontandselect","editshortcuts","checkforupdate"],
     "title":"微信工具箱"
   }
 }

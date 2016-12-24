@@ -38,5 +38,5 @@ var onRun = function (context) {
 	
 	app.refreshCurrentDocument();
 
-	NSApp.displayDialog("色板已经同步到你的Document Color");
+	NSApp.displayDialog("色板已经同步到你的Document Colors");
 }
