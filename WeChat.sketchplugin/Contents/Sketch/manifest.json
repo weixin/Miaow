@@ -10,38 +10,11 @@
       "script" : "importSymbols.js",
       "shortcut": "cmd shift w",
       "handler" : "onRun"
-    },
-    {
-      "name" : "色板同步",
-      "identifier" : "importcolor",
-      "script" : "importColor.js",
-      "shortcut": "cmd shift c",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "全文文字替换",
-      "identifier" : "findfontandselect",
-      "script" : "findFontName.js",
-      "shortcut": "cmd shift d",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "快捷键设置",
-      "identifier" : "editshortcuts",
-      "script" : "editShortcuts.js",
-      "shortcut": "",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "检查更新",
-      "identifier" : "checkforupdate",
-      "script" : "checkForUpdate.js",
-      "shortcut": "",
-      "handler" : "onRun"
     }
   ],
   "menu": {
-    "items": ["importsymbol","importcolor","findfontandselect","editshortcuts","checkforupdate"],
-    "title":"微信工具箱"
+    "items": ["importsymbol"],
+    "isRoot":true,
+    "title":"WEUI 同步"
   }
 }
