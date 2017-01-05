@@ -51,7 +51,8 @@ var onRun = function (context) {
 		            				//添加现在画布上的到冲突
 		            				saveArtBoard.push(localSymobl[g]);
 		            				//删除画布上的
-		            				localSymobl[g].removeFromParent();
+		            				// localSymobl[g].moveToLayer(saveArtBoard);
+		            				// localSymobl[g].removeFromParent();
 		            				//添加线上的到画布
 		            				pushAllArtboards.push(s);
 		            			}
@@ -103,7 +104,10 @@ var onRun = function (context) {
 	if(saveArtBoard.length>0){
 		var savePage = doc.addBlankPage();
 		savePage.setName('更新冲突');
-		savePage.addLayers(saveArtBoard);
+		for(var i=0;i<saveArtBoard.length;i++){
+			saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);
+		}
+		// savePage.addLayers(saveArtBoard);
 		doc.setCurrentPage(savePage);
 		Organizer(context);
 	}
@@ -118,11 +122,15 @@ var onRun = function (context) {
 
 function isSame(a,b){
 	var layers = a.layers();
+	if(layers.count() != b.layers().count()){
+		return false;
+	}
 	if(encodeURIComponent(a.rect()) != encodeURIComponent(b.rect())){
 		return false;
 	}
 	for(var i = 0;i < layers.count(); i++){
 		var layer = layers[i];
+
 		//名字顺序也会变
 		if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
 			return false;
