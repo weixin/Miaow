@@ -1,0 +1,54 @@
+{
+  "name": "WeChat Box",
+  "author": "doubleluo shenfei",
+  "version": "1.0",
+  "identifier": "cn.wechat",
+  "commands" : [
+    {
+      "name" : "UIkit 同步",
+      "identifier" : "importsymbol",
+      "script" : "importSymbols.js",
+      "shortcut": "cmd shift w",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "色板同步",
+      "identifier" : "importcolor",
+      "script" : "importColor.js",
+      "shortcut": "cmd shift c",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "全文字体替换",
+      "identifier" : "findfontandselect",
+      "script" : "findFontName.js",
+      "shortcut": "cmd shift d",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "全文文字替换",
+      "identifier" : "findtextandselect",
+      "script" : "textReplace.js",
+      "shortcut": "cmd shift f",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "设置",
+      "identifier" : "editshortcuts",
+      "script" : "setting.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "检查更新",
+      "identifier" : "checkforupdate",
+      "script" : "checkForUpdate.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    }
+  ],
+  "menu": {
+    "items": ["importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
+    "title":"微信工具箱"
+  }
+}

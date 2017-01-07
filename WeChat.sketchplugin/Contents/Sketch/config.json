@@ -1,0 +1,7 @@
+{
+  "UIKIT": "WeChat Box",
+  "VERSION": [{"WeChat":"http://tmtdemo.qq.com/uikit.sketch"},
+              {"WEUI":"http://tmtdemo.qq.com/weui.sketch"},
+              {"MP":"http://tmtdemo.qq.com/mpuikit.sketch"}],
+  "COLOR": "https://raw.githubusercontent.com/weixin/weDesgin/master/config.json"
+}
