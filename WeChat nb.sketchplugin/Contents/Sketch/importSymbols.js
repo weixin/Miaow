@@ -7,10 +7,8 @@ function chooseKit(context){
 	settingsWindow.addButtonWithTitle("取消");
 
 	settingsWindow.setMessageText("请选择您需要同步的UIkit");
-	settingsWindow.setInformativeText("");
+	settingsWindow.setInformativeText("不能在同一个项目中同步不同的UIkit，否则会产生错误");
     
-    settingsWindow.addTextLabelWithValue("选择");
-
 	var List = getConfig('config',context).UIKIT;
 	var ButtonList = [];
 

@@ -1,7 +1,7 @@
 {
   "name": "WeChat Box",
   "author": "doubleluo shenfei",
-  "version": "1.0",
+  "version": "1.1",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -35,7 +35,7 @@
     {
       "name" : "设置",
       "identifier" : "editshortcuts",
-      "script" : "setting.js",
+      "script" : "editShortcuts.js",
       "shortcut": "",
       "handler" : "onRun"
     },
