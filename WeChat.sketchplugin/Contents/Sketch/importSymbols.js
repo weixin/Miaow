@@ -105,6 +105,7 @@ var onRun = function (context) {
 		var savePage = doc.addBlankPage();
 		savePage.setName('更新冲突');
 		for(var i=0;i<saveArtBoard.length;i++){
+			saveArtBoard[i].setName(saveArtBoard[i].name()+ '(Old)');
 			saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);
 		}
 		// savePage.addLayers(saveArtBoard);
