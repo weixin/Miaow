@@ -5,6 +5,13 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
+      "name" : "新增交互连线",
+      "identifier" : "link",
+      "script" : "link.js",
+      "shortcut": "cmd shift q",
+      "handler" : "onRun"
+    },
+    {
       "name" : "UIkit 同步",
       "identifier" : "importsymbol",
       "script" : "importSymbols.js",
@@ -48,7 +55,7 @@
     }
   ],
   "menu": {
-    "items": ["importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
+    "items": ["link","importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
     "title":"微信工具箱"
   }
 }
