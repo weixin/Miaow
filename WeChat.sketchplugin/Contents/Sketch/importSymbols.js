@@ -125,7 +125,7 @@ function isSame(a,b){
 	if(layers.count() != b.layers().count()){
 		return false;
 	}
-	if(a.rect() && b.rect() && encodeURIComponent(a.rect()) != encodeURIComponent(b.rect())){
+	if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
 		return false;
 	}
 	for(var i = 0;i < layers.count(); i++){
