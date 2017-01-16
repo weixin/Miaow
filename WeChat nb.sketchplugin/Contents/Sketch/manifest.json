@@ -55,7 +55,7 @@
     }
   ],
   "menu": {
-    "items": ["link","importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
+    // "items": ["link","importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
     "title":"微信工具箱"
   }
 }

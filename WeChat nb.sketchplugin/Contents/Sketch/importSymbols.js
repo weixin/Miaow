@@ -132,6 +132,7 @@ var onRun = function (context) {
 		var savePage = doc.addBlankPage();
 		savePage.setName('更新冲突');
 		for(var i=0;i<saveArtBoard.length;i++){
+			saveArtBoard[i].setName(saveArtBoard[i].name()+ '(Old)');
 			saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);
 		}
 		// savePage.addLayers(saveArtBoard);
@@ -152,7 +153,7 @@ function isSame(a,b){
 	if(layers.count() != b.layers().count()){
 		return false;
 	}
-	if(encodeURIComponent(a.rect()) != encodeURIComponent(b.rect())){
+	if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
 		return false;
 	}
 	for(var i = 0;i < layers.count(); i++){
