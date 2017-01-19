@@ -5,10 +5,17 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
-      "name" : "新增交互连线",
+      "name" : "交互线",
       "identifier" : "link",
       "script" : "link.js",
       "shortcut": "cmd shift q",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "注释标志位",
+      "identifier" : "",
+      "script" : "flag.js",
+      "shortcut": "cmd shift g",
       "handler" : "onRun"
     },
     {
