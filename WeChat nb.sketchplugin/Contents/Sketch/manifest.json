@@ -13,9 +13,9 @@
     },
     {
       "name" : "注释标志位",
-      "identifier" : "",
+      "identifier" : "flag",
       "script" : "flag.js",
-      "shortcut": "cmd shift g",
+      "shortcut": "cmd shift d",
       "handler" : "onRun"
     },
     {
@@ -62,7 +62,7 @@
     }
   ],
   "menu": {
-    "items": ["link","importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
+    "items": ["link","flag","importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
     "title":"微信工具箱"
   }
 }

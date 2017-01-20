@@ -1,5 +1,4 @@
-var kPluginDomain = "com.abynim.sketchplugins.wechat";
-var kShowConnectionsKey = "com.abynim.wechat.showConnections";
+var kPluginDomain = "com.sketchplugins.wechat.link";
 
 var sanitizeArtboard = function(artboard, context) {
 	if (context.command.valueForKey_onLayer_forPluginIdentifier("artboardID", artboard, kPluginDomain) == nil) {
@@ -185,7 +184,6 @@ var redrawConnections = function(context) {
 
 var onRun = function(context) {
 	var selection = context.selection;
-	var validSelection = true;
 	var destArtboard, linkLayer;
 
 	if (selection.count() == 1) {
@@ -197,7 +195,6 @@ var onRun = function(context) {
 			context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "destinationArtboardID", linkLayer, kPluginDomain);
 		}
 
-		var showingConnections = NSUserDefaults.standardUserDefaults().objectForKey(kShowConnectionsKey) || 1;
 	}else if(selection.count() == 2) {
 		if (selection.firstObject().className() == "MSArtboardGroup" || selection.firstObject().className() == "MSSymbolMaster") {
 			destArtboard = selection.firstObject();
@@ -213,14 +210,6 @@ var onRun = function(context) {
 			context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "artboardID", destArtboard, kPluginDomain);
 		}
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "destinationArtboardID", linkLayer, kPluginDomain);
-
-		var showingConnections = NSUserDefaults.standardUserDefaults().objectForKey(kShowConnectionsKey) || 1;
-
-		if (!destArtboard || linkLayer.className() == "MSArtboardGroup" || linkLayer.className() == "MSSymbolMaster" || linkLayer.parentArtboard() == destArtboard) {
-			validSelection = false;
-		}
-	}else{
-		validSelection = false;
 	}
 
 
