@@ -149,7 +149,7 @@ var redrawConnections = function(context) {
 		if (destinationArtboard) {
 
 			isCondition = context.command.valueForKey_onLayer_forPluginIdentifier("isConditionGroup", linkLayer, kPluginDomain) || 0;
-			linkRect = linkLayer.parentArtboard() == nil ? linkLayer.absoluteRect().rect() : CGRectIntersection(linkLayer.absoluteRect().rect(), linkLayer.parentArtboard().absoluteRect().rect());
+			linkRect = linkLayer.absoluteRect().rect();
 
 			sanitizeArtboard(destinationArtboard, context);
 
