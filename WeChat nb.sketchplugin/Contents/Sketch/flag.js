@@ -6,34 +6,64 @@ var getConnectionsGroupInPage = function(page) {
 	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isflagContainer == true", kPluginDomain);
 	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
 }
-var getFlagCount = function(){
-	return textCount++;
-}
-// var getFlagCount = function(doc){
-// 	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID != nil", kPluginDomain);
-// 	var connectionsGroup = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
-// 	log(connectionsGroup);
-// 	if(connectionsGroup){
-// 		var name = {};
-// 		for(var i = 0;i<layers.count();i++){
-// 			name[layers[i].name().replace('___p','').replace('___t','').replace('-left','').replace('-right','')] = true;
-// 		}
-// 		var k = 1;
-// 		while(1){
-// 			if(!name['___'+k]){
-// 				return (k);
-// 			}
-// 			k++;
-// 		}
-// 	}else{
-// 		return 1;
-// 	}
-// }
 
 
 var onRun = function(context) {
 
-	var drawLeftArrow = function(doc,dom,count){
+	var getLeftFlagNum = function(){
+		var children = getConnectionsGroupInPage(doc.currentPage());
+		if(children){
+			children = children.children();
+		}else{
+			return 1;
+		}
+		var num = [];
+		for(var i = 0;i < children.length;i++){
+			var Reg = new RegExp("^\\d{1,2}$");
+			var countL = children[i].name().replace('___p','').replace('___t','').replace('___','');
+			if(Reg.test(countL)){
+				countL = parseInt(countL)-1;
+				num[countL] = true;
+			}
+		}
+		for(var k = 0;k<num.length+1;k++){
+			if(!num[k]){
+				return (k+1);
+			}
+		}
+	}
+
+	var getRightFlagNum = function(dom){
+		var children = getConnectionsGroupInPage(doc.currentPage());
+		if(children){
+			children = children.children();
+		}else{
+			return 1;
+		}
+		for(var i = 0;i < children.length;i++){
+			if(children[i].name() == dom.objectID()){
+				children = children[i].children();
+				for(var k = 0;k < children.length;k++){
+					var Reg = new RegExp("^\\d{1,2}$");
+					var countL = children[k].name().replace('___p','').replace('___t','').replace('___','');
+					if(Reg.test(countL)){
+						countL = parseInt(countL);
+						return countL;
+					}
+				}
+			}
+		}
+		return 1;
+	}
+
+	var drawLeftArrow = function(doc,dom,isNew){
+		var count;
+		if(isNew){
+			count = getLeftFlagNum();
+		}else{
+			count = getRightFlagNum(dom);
+		}
+		 
 
 		var linexl = dom.absoluteRect().x() + dom.rect().size.width;
 		var liney = dom.absoluteRect().y() + dom.rect().size.height/2 - (24 * scale/2);
@@ -74,9 +104,8 @@ var onRun = function(context) {
 		connectionsGroup.setName(dom.objectID());
 		return connectionsGroup;
 	}
-	var drawRightArrow = function(doc,dom,count){
-
-
+	var drawRightArrow = function(doc,dom){
+		var count = getRightFlagNum(dom);
 		var linexr = dom.absoluteRect().x() - 34 * scale;
 		var liney = dom.absoluteRect().y() + dom.rect().size.height/2 - (24 * scale/2);
 
@@ -125,7 +154,6 @@ var onRun = function(context) {
 		var flagCount = 1;
 		var isDrawNow = false;
 		while (linkLayer = loop.nextObject()) {
-
 			var lastState = 'e';
 			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_l'", kPluginDomain);
 			lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
@@ -154,15 +182,15 @@ var onRun = function(context) {
 			
 			if(lastState == 'l'){
 				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_l', "FlagID", linkLayer, kPluginDomain);
-				returnLine = returnLine.concat(drawLeftArrow(doc,linkLayer,flagCount++));
+				returnLine = returnLine.concat(drawLeftArrow(doc,linkLayer,false));
 			}else if(lastState == 'r'){
 				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_r', "FlagID", linkLayer, kPluginDomain);	
-				returnLine = returnLine.concat(drawRightArrow(doc,linkLayer,flagCount++));
+				returnLine = returnLine.concat(drawRightArrow(doc,linkLayer));
 			}
 		}
 		if(!isDrawNow){
 			context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_l', "FlagID", nowDom, kPluginDomain);
-			returnLine = returnLine.concat(drawLeftArrow(doc,nowDom,flagCount++));
+			returnLine = returnLine.concat(drawLeftArrow(doc,nowDom,true));
 		}
 		return returnLine;
 	}
@@ -182,8 +210,6 @@ var onRun = function(context) {
 	var flags = [];
 
 	flags = draw(doc,selection);
-
-	log(flags);
 
 	var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
 
