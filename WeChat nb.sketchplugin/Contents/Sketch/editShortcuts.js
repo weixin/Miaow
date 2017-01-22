@@ -10,7 +10,7 @@ var onRun = function(context) {
 		manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil),
 		commands = manifest.commands,
 		validCommands = manifest.menu.items,
-		commandsCount = commands.count(),
+		commandsCount = commands.count() - 2,
 		shortcutFields = {},
 		command, shortcutField, shortcut;
 
@@ -18,12 +18,19 @@ var onRun = function(context) {
 		command = commands[i];
 		if (!validCommands.containsObject(command.identifier))
 			continue;
-		settingsWindow.addTextLabelWithValue(command.name);
-		shortcutField = NSTextField.alloc().initWithFrame(NSMakeRect(0,0,160,23));
+        var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 30))
+		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,6,100,14));
+		Label.setEditable(false);
+		Label.setBordered(false);
+		Label.setDrawsBackground(false);
+        Label.setStringValue(command.name + "：");
+        accessoryView.addSubview(Label);
+		// accessoryView.addTextLabelWithValue(command.name);
+		shortcutField = NSTextField.alloc().initWithFrame(NSMakeRect(105,0,160,23));
 		shortcut = command.shortcut == nil ? "" : command.shortcut;
 		shortcutField.setStringValue(shortcut);
-		settingsWindow.addAccessoryView(shortcutField);
-
+		accessoryView.addSubview(shortcutField);
+		settingsWindow.addAccessoryView(accessoryView);
 		shortcutFields[command.identifier] = shortcutField;
 	}
 
