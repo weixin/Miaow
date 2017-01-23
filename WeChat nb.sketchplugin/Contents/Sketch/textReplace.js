@@ -2,19 +2,14 @@
 
 var onRun = function (context) {
     var textToFind = '',textToReplace = '';
+    var textToFind2;
     var selection = context.selection;
     var document = context.document;
     var currentPage = [document currentPage]
     var searchScope = 0;
     var userInterface;
-    var dialogFlag = createUserInterface();
     var typeChoose = 0;
-
-    if(dialogFlag != '1000'){
-        return;
-    }
-    processButtonClick(dialogFlag);
-    doFindAndReplace();
+    var replaceCount = 0;
 
     function JTester(r) {
         var myReg = null;
@@ -52,7 +47,7 @@ var onRun = function (context) {
         userInterface.addAccessoryView(createRadioButtons(options, options[0]));
 
         userInterface.addTextLabelWithValue("应用于：");
-        var options2 = ["仅文字","元素画板文件夹名称"];
+        var options2 = ["全文件","仅画板中的文字"];
         userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
         
         userInterface.addButtonWithTitle('确定');
@@ -63,7 +58,7 @@ var onRun = function (context) {
 
     
     function processButtonClick() {
-        textToFind = [[userInterface viewAtIndex: 1] stringValue];
+        textToFind2 = textToFind = [[userInterface viewAtIndex: 1] stringValue];
         textToReplace = userInterface.viewAtIndex(3).stringValue();
         searchScope = [[[userInterface viewAtIndex: 5] selectedCell] tag];
         typeChoose = [[[userInterface viewAtIndex: 7] selectedCell] tag];
@@ -72,7 +67,6 @@ var onRun = function (context) {
         }else{
             textToFind = new RegExp(textToFind,'gm');
         }
-        // NSApp.displayDialog(textToFind);  
     }
     
     function doFindAndReplace() {
@@ -96,6 +90,7 @@ var onRun = function (context) {
                 if ([layer stringValue].trim().match(textToFind)) {
                     layer.setStringValue(layer.stringValue().replace(textToFind,textToReplace)); 
                     layer.setName(layer.stringValue().trim().replace(/(\r\n|\n|\r)/gm," "));
+                    replaceCount ++;
                 }
                 break;
             case MSDocument:
@@ -115,10 +110,24 @@ var onRun = function (context) {
                 }
                 break;
         }
-        if(typeChoose == 1){
-            layer.setName(layer.name().replace(textToFind,textToReplace));
+        if(typeChoose == 0 && [layer class] != 'MSDocument'){
+            var name = layer.name();
+            if(name.match(textToFind)){
+                layer.setName(name.replace(textToFind,textToReplace));
+                replaceCount ++;
+            }
         }
     }
 
 
+    if(createUserInterface() != '1000'){
+        return;
+    }
+    processButtonClick();
+    doFindAndReplace();
+    if(replaceCount){
+        NSApp.displayDialog('已经将' + replaceCount + '个"' + textToFind2 + '"替换为"' + textToReplace + '"');
+    }else{
+        NSApp.displayDialog('没有找到"' + textToFind + '"');
+    }
 }

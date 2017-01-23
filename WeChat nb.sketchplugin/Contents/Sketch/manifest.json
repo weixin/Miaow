@@ -19,20 +19,6 @@
       "handler" : "onRun"
     },
     {
-      "name" : "UIkit 同步",
-      "identifier" : "importsymbol",
-      "script" : "importSymbols.js",
-      "shortcut": "cmd shift w",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "色板同步",
-      "identifier" : "importcolor",
-      "script" : "importColor.js",
-      "shortcut": "cmd shift c",
-      "handler" : "onRun"
-    },
-    {
       "name" : "全文字体替换",
       "identifier" : "findfontandselect",
       "script" : "findFontName.js",
@@ -44,6 +30,27 @@
       "identifier" : "findtextandselect",
       "script" : "textReplace.js",
       "shortcut": "cmd shift f",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "颜色检查",
+      "identifier" : "checkcolor",
+      "script" : "checkColor.js",
+      "shortcut": "cmd shift c",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "UIkit 同步",
+      "identifier" : "importsymbol",
+      "script" : "importSymbols.js",
+      "shortcut": "cmd shift w",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "色板同步",
+      "identifier" : "importcolor",
+      "script" : "importColor.js",
+      "shortcut": "cmd shift c",
       "handler" : "onRun"
     },
     {
@@ -62,7 +69,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","importsymbol","importcolor","findfontandselect","findtextandselect","editshortcuts","checkforupdate"],
+    "items": ["link","flag","findfontandselect","findtextandselect","checkcolor","importsymbol","importcolor","editshortcuts","checkforupdate"],
     "title":"微信工具箱"
   }
 }

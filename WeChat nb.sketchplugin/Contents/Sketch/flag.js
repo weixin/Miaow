@@ -1,6 +1,10 @@
+@import "common.js"
+
 var kPluginDomain = "com.sketchplugins.wechat.flag";
 var textCount = 1;
 var scale = 2;
+var isDeleteNum = 0;
+var scaleOptionsMatrix = 0;
 
 var getConnectionsGroupInPage = function(page) {
 	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isflagContainer == true", kPluginDomain);
@@ -9,6 +13,19 @@ var getConnectionsGroupInPage = function(page) {
 
 
 var onRun = function(context) {
+	function deleteDialog(context){
+		var settingsWindow = COSAlertWindow.new();
+		settingsWindow.addButtonWithTitle("确定");
+		settingsWindow.addButtonWithTitle("取消");
+
+		settingsWindow.setMessageText("请选择您要进行的操作");
+	    
+		var ButtonList = ['删除序号并保留排序','删除序号并重新排序'];
+
+		scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
+		settingsWindow.addAccessoryView(scaleOptionsMatrix);
+		return settingsWindow.runModal();
+	}
 
 	var getLeftFlagNum = function(){
 		var children = getConnectionsGroupInPage(doc.currentPage());
@@ -42,10 +59,10 @@ var onRun = function(context) {
 		}
 		for(var i = 0;i < children.length;i++){
 			if(children[i].name() == dom.objectID()){
-				children = children[i].children();
-				for(var k = 0;k < children.length;k++){
+				var children2 = children[i].children();
+				for(var k = 0;k < children2.length;k++){
 					var Reg = new RegExp("^\\d{1,2}$");
-					var countL = children[k].name().replace('___p','').replace('___t','').replace('___','');
+					var countL = children2[k].name().replace('___p','').replace('___t','').replace('___','');
 					if(Reg.test(countL)){
 						countL = parseInt(countL);
 						return countL;
@@ -62,6 +79,9 @@ var onRun = function(context) {
 			count = getLeftFlagNum();
 		}else{
 			count = getRightFlagNum(dom);
+			if(isDeleteNum !=0 && count > isDeleteNum){
+				count = count - 1;
+			}
 		}
 		 
 
@@ -106,6 +126,9 @@ var onRun = function(context) {
 	}
 	var drawRightArrow = function(doc,dom){
 		var count = getRightFlagNum(dom);
+		if(isDeleteNum !=0 && count > isDeleteNum){
+			count = count - 1;
+		}
 		var linexr = dom.absoluteRect().x() - 34 * scale;
 		var liney = dom.absoluteRect().y() + dom.rect().size.height/2 - (24 * scale/2);
 
@@ -146,12 +169,30 @@ var onRun = function(context) {
 		return connectionsGroup;
 	}
 
+	function isMaxNum(dom){
+		var num = getRightFlagNum(dom);
+		var children = getConnectionsGroupInPage(doc.currentPage());
+		if(children){
+			children = children.children();
+			for(var i = 0;i < children.length;i++){
+				var Reg = new RegExp("^\\d{1,2}$");
+				var countL = children[i].name().replace('___p','').replace('___t','').replace('___','');
+				if(Reg.test(countL)){
+					if(countL > num){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		return true;
+	}
+
 	var draw = function(doc,nowDom){
 		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID != nil", kPluginDomain);
 		var linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
 		var loop = linkLayers.objectEnumerator();
 		var returnLine = [];
-		var flagCount = 1;
 		var isDrawNow = false;
 		while (linkLayer = loop.nextObject()) {
 			var lastState = 'e';
@@ -163,6 +204,7 @@ var onRun = function(context) {
 					context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_r', "FlagID", nowDom, kPluginDomain);
 					lastState = 'r';
 					isDrawNow = true;
+					break;
 				}
 			}else{
 				lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_r'", kPluginDomain);
@@ -171,15 +213,46 @@ var onRun = function(context) {
 				if(lastDom){
 					lastState = 'r';
 					if(lastDom.objectID() == nowDom.objectID()){
-						context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomain);
-						lastState = 'e';
-						isDrawNow = true;
+						if(isMaxNum(nowDom)){
+							context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomain);
+							lastState = 'e';
+							isDrawNow = true;
+						}else{
+							if(deleteDialog(context) == 1000){
+								context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomain);
+								lastState = 'e';
+								isDrawNow = true;
+								if(scaleOptionsMatrix.selectedCell().tag() == 1){
+									isDeleteNum = getRightFlagNum(nowDom);
+								}
+							}else{
+								return false;
+							}
+						}
+						
+						break;
+						
 
 					}
 				}
 			}
-			
-			
+		}
+		linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
+		loop = linkLayers.objectEnumerator();
+
+		while (linkLayer = loop.nextObject()) {
+			var lastState = 'e';
+			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_l'", kPluginDomain);
+			lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
+			if(lastDom){
+				lastState = 'l';
+			}else{
+				lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_r'", kPluginDomain);
+				lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
+				if(lastDom){
+					lastState = 'r';
+				}
+			}
 			if(lastState == 'l'){
 				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_l', "FlagID", linkLayer, kPluginDomain);
 				returnLine = returnLine.concat(drawLeftArrow(doc,linkLayer,false));
@@ -188,10 +261,12 @@ var onRun = function(context) {
 				returnLine = returnLine.concat(drawRightArrow(doc,linkLayer));
 			}
 		}
+
 		if(!isDrawNow){
 			context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_l', "FlagID", nowDom, kPluginDomain);
 			returnLine = returnLine.concat(drawLeftArrow(doc,nowDom,true));
 		}
+
 		return returnLine;
 	}
 
@@ -210,6 +285,9 @@ var onRun = function(context) {
 	var flags = [];
 
 	flags = draw(doc,selection);
+	if(!flags){
+		return;
+	}
 
 	var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
 
