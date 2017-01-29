@@ -20,7 +20,7 @@ var onRun = function(context) {
 
 		settingsWindow.setMessageText("请选择您要进行的操作");
 	    
-		var ButtonList = ['删除序号并保留排序','删除序号并重新排序'];
+		var ButtonList = ['删除标志并保留排序','删除标志并重新排序'];
 
 		scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
 		settingsWindow.addAccessoryView(scaleOptionsMatrix);
