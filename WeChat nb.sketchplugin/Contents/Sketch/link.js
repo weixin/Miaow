@@ -1,4 +1,28 @@
 var kPluginDomain = "com.sketchplugins.wechat.link";
+var drawLineLocationX = {};
+var drawLineLocationY = {};
+
+var leaveZero = function(a){
+	return parseInt(a.toString().substr(0,a.toString().length-1) + '0');
+}
+var checkDrawLineLocation = function(location,direction){
+	if(direction == 'horizontal'){
+		if(drawLineLocationY[location]){
+			return true;
+		}
+	}else{
+		if(drawLineLocationX[location]){
+			return true;
+		}
+	}
+}
+var setDrawLineLocation = function(location,direction){
+	if(direction == 'horizontal'){
+		drawLineLocationY[location] = true;
+	}else{
+		drawLineLocationX[location] = true;
+	}
+}
 
 var sanitizeArtboard = function(artboard, context) {
 	if (context.command.valueForKey_onLayer_forPluginIdentifier("artboardID", artboard, kPluginDomain) == nil) {
@@ -87,16 +111,16 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				if(bx == 0){
 					bx = ax;
 				}
-				if(bx >= art[i].absoluteRect().x()){
+				if(ax >= art[i].absoluteRect().x()){
 					bx = art[i].absoluteRect().x() - 30;
-					if(bx <= b.x()){
+					if(bx >= b.x()){
 						bx = b.x() - 30;
 					}
 				}
 				by = ay = a.y() + a.size().height/2;
 				
 				returnLine.push({x:ax,y:ay});
-				if(bx < b.x()){
+				if(bx > b.x()){
 					returnLine.push({x:bx,y:by});
 					returnLine.push({x:bx,y:b.y() + b.size().height});
 					endPoisiton = 'b';
@@ -108,10 +132,46 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				}
 			}
 			if(endPoisiton == 'l'){
-				
+				ax = a.x() + a.size().width / 2;
+				ay = a.y() + a.size().height;
+				if(ay <= art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
+					if(by < art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
+						by = art[i].absoluteRect().size().height + art[i].absoluteRect().y() + 30;
+						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
+					}
+				}
+				returnLine.push({x:ax,y:ay});
+				if(by < b.y() + b.size().height){
+					returnLine.push({x:ax,y:by});
+					returnLine.push({x:b.size().width+b.x(),y:by});
+					endPoisiton = 'l';
+				}else{
+					returnLine.push({x:ax,y:by});
+					returnLine.push({x:b.x() + b.size().width/2,y:by});
+					returnLine.push({x:b.x() + b.size().width/2,y:b.y()+b.size().height});
+					endPoisiton = 'b';
+				}
 			}
 			if(endPoisiton == 'r'){
-				
+				ax = a.x() + a.size().width / 2;
+				ay = a.y() + a.size().height;
+				if(ay <= art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
+					if(by < art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
+						by = art[i].absoluteRect().size().height + art[i].absoluteRect().y() + 30;
+						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
+					}
+				}
+				returnLine.push({x:ax,y:ay});
+				if(by < b.y() + b.size().height){
+					returnLine.push({x:ax,y:by});
+					returnLine.push({x:b.x(),y:by});
+					endPoisiton = 'r';
+				}else{
+					returnLine.push({x:ax,y:by});
+					returnLine.push({x:b.x() + b.size().width/2,y:by});
+					returnLine.push({x:b.x() + b.size().width/2,y:b.y()+b.size().height});
+					endPoisiton = 'b';
+				}
 			}
 		}
 	}
@@ -158,7 +218,6 @@ var drawPPP = function(a,b,doc){
 		}
 		var line;
 		var returnLine = findAway({ax:startPointX,ay:startPointY,bx:endPointX,by:endPointY},domA,domB,doc,endPoisiton);
-		log(returnLine);
 		if(returnLine.flag){
 			startPointX = returnLine.line[0].x;
 			startPointY = returnLine.line[0].y;
@@ -186,7 +245,19 @@ var drawPPP = function(a,b,doc){
 			endPointX = b.x() ;
 			endPoisiton = 'r';
 		}
-		returnDom.push(drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton));
+		var line;
+		var returnLine = findAway({ax:startPointX,ay:startPointY,bx:endPointX,by:endPointY},domA,domB,doc,endPoisiton);
+		if(returnLine.flag){
+			startPointX = returnLine.line[0].x;
+			startPointY = returnLine.line[0].y;
+			endPointX = returnLine.line[returnLine.line.length-1].x;
+			endPointY = returnLine.line[returnLine.line.length-1].y;
+			line = drawLine(returnLine.line,endPoisiton,true);
+			endPoisiton = returnLine.endPoisiton;
+		}else{
+			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
+		}
+		returnDom.push(line);
 	}
 	// 都不是，要用两根线了
 	else if(b.y() + b.size().height/2  < ayPoint || b.y() + b.size().height/2 > ayPoint){
