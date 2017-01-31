@@ -5,16 +5,27 @@ var drawLineLocationY = {};
 var leaveZero = function(a){
 	return parseInt(a.toString().substr(0,a.toString().length-1) + '0');
 }
-var checkDrawLineLocation = function(location,direction){
+var drawLineLocation = function(location,direction,plus){
+	location = leaveZero(location)
 	if(direction == 'horizontal'){
 		if(drawLineLocationY[location]){
-			return true;
+			if(plus){
+				location =  location + 10;
+			}else{
+				location =  location - 10;
+			}
 		}
 	}else{
 		if(drawLineLocationX[location]){
-			return true;
+			if(plus){
+				location = location + 10;
+			}else{
+				location = location - 10;
+			}
 		}
 	}
+	setDrawLineLocation(location,direction);
+	return location;
 }
 var setDrawLineLocation = function(location,direction){
 	if(direction == 'horizontal'){
@@ -85,58 +96,57 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			isReturnFlag = true;
 			if(endPoisiton == 't'){
 				ax = a.x() + a.size().width;
-				by = ay = a.y() + a.size().height/2;
-				if(ax >= art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
-					bx = bx > ax ? bx : ax + 30;
-				}else{
-					if(bx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width + 30){
+				bx = ax + 30;
+				ay = a.y() + a.size().height/2;
+				if(ax <= art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
+					if(bx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width + 30;
+						by = art[i].absoluteRect().y() + art[i].absoluteRect().size()/2;
 					}
 				}
 				returnLine.push({x:ax,y:ay});
 				if(bx < b.x()+b.size().width){
-					returnLine.push({x:bx,y:by});
+					returnLine.push({x:bx,y:ay});
 					returnLine.push({x:bx,y:b.y()});
 					endPoisiton = 't';
 				}else{
-					returnLine.push({x:bx,y:by});
+					returnLine.push({x:bx,y:ay});
 					returnLine.push({x:bx,y:b.y()+b.size().height/2});
 					returnLine.push({x:b.x()+b.size().width,y:b.y()+b.size().height/2});
 					endPoisiton = 'l';
 				}
 				
 			}
-			if(endPoisiton == 'b'){
+			else if(endPoisiton == 'b'){
 				ax = a.x();
-				if(bx == 0){
-					bx = ax;
-				}
+				bx = ax - 30;
+				ay = a.y() + a.size().height/2;
 				if(ax >= art[i].absoluteRect().x()){
-					bx = art[i].absoluteRect().x() - 30;
-					if(bx >= b.x()){
-						bx = b.x() - 30;
+					if(bx > art[i].absoluteRect().x()){
+						bx = art[i].absoluteRect().x() - 30;
+						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height/2;
 					}
 				}
-				by = ay = a.y() + a.size().height/2;
-				
 				returnLine.push({x:ax,y:ay});
 				if(bx > b.x()){
-					returnLine.push({x:bx,y:by});
+					returnLine.push({x:bx,y:ay});
 					returnLine.push({x:bx,y:b.y() + b.size().height});
 					endPoisiton = 'b';
 				}else{
-					returnLine.push({x:bx,y:by});
+					returnLine.push({x:bx,y:ay});
 					returnLine.push({x:bx,y:b.y()+b.size().height/2});
 					returnLine.push({x:b.x(),y:b.y()+b.size().height/2});
 					endPoisiton = 'r';
 				}
 			}
-			if(endPoisiton == 'l'){
+			else if(endPoisiton == 'l'){
+				log(3)
 				ax = a.x() + a.size().width / 2;
 				ay = a.y() + a.size().height;
-				if(ay <= art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
-					if(by < art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
-						by = art[i].absoluteRect().size().height + art[i].absoluteRect().y() + 30;
+				by = ay + 30;
+				if(ay <= art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
+					if(by < art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
+						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + 30;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
 					}
 				}
@@ -152,25 +162,28 @@ var findAway = function(line,a,b,doc,endPoisiton){
 					endPoisiton = 'b';
 				}
 			}
-			if(endPoisiton == 'r'){
+			else if(endPoisiton == 'r'){
+				log(4);
 				ax = a.x() + a.size().width / 2;
-				ay = a.y() + a.size().height;
-				if(ay <= art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
-					if(by < art[i].absoluteRect().size().height + art[i].absoluteRect().y()){
-						by = art[i].absoluteRect().size().height + art[i].absoluteRect().y() + 30;
+				ay = a.y();
+				by = ay - 30;
+				if(ay >= art[i].absoluteRect().y()){
+					if(by > art[i].absoluteRect().y()){
+						by = art[i].absoluteRect().y() - 30;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
 					}
 				}
 				returnLine.push({x:ax,y:ay});
-				if(by < b.y() + b.size().height){
+				if(by > b.y()){
 					returnLine.push({x:ax,y:by});
 					returnLine.push({x:b.x(),y:by});
+					
 					endPoisiton = 'r';
 				}else{
 					returnLine.push({x:ax,y:by});
 					returnLine.push({x:b.x() + b.size().width/2,y:by});
-					returnLine.push({x:b.x() + b.size().width/2,y:b.y()+b.size().height});
-					endPoisiton = 'b';
+					returnLine.push({x:b.x() + b.size().width/2,y:b.y()});
+					endPoisiton = 't';
 				}
 			}
 		}
