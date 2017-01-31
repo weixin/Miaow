@@ -3,29 +3,37 @@ var drawLineLocationX = {};
 var drawLineLocationY = {};
 
 var leaveZero = function(a){
-	return parseInt(a.toString().substr(0,a.toString().length-1) + '0');
+	return parseInt(a);
+	// return parseInt(parseInt(a).toString().substr(0,parseInt(a).toString().length-1) + '0');
 }
 var drawLineLocation = function(location,direction,plus){
 	location = leaveZero(location)
 	if(direction == 'horizontal'){
 		if(drawLineLocationY[location]){
 			if(plus){
-				location =  location + 10;
+				location =  location + 40;
 			}else{
-				location =  location - 10;
+				location =  location - 40;
+			}
+			if(drawLineLocationY[location]){
+				return drawLineLocation(location,direction,plus);
 			}
 		}
 	}else{
 		if(drawLineLocationX[location]){
 			if(plus){
-				location = location + 10;
+				location = location + 40;
 			}else{
-				location = location - 10;
+				location = location - 40;
+			}
+			if(drawLineLocationY[location]){
+				return drawLineLocation(location,direction,plus);
 			}
 		}
 	}
 	setDrawLineLocation(location,direction);
 	return location;
+	
 }
 var setDrawLineLocation = function(location,direction){
 	if(direction == 'horizontal'){
@@ -140,7 +148,6 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				}
 			}
 			else if(endPoisiton == 'l'){
-				log(3)
 				ax = a.x() + a.size().width / 2;
 				ay = a.y() + a.size().height;
 				by = ay + 30;
@@ -163,7 +170,6 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				}
 			}
 			else if(endPoisiton == 'r'){
-				log(4);
 				ax = a.x() + a.size().width / 2;
 				ay = a.y();
 				by = ay - 30;
@@ -218,6 +224,7 @@ var drawPPP = function(a,b,doc){
 	if(b.x() < axPoint && axPoint < b.x() + b.size().width){
 		startPointX = axPoint;
 		endPointX = axPoint;
+		var plus = true;
 		//在上边
 		if(a.y() > b.y()){
 			startPointY = a.y();
@@ -228,9 +235,11 @@ var drawPPP = function(a,b,doc){
 			startPointY = a.y() + a.size().height;
 			endPointY = b.y();
 			endPoisiton = 't';
+			plus = false;
 		}
 		var line;
 		var returnLine = findAway({ax:startPointX,ay:startPointY,bx:endPointX,by:endPointY},domA,domB,doc,endPoisiton);
+		//三根线算法
 		if(returnLine.flag){
 			startPointX = returnLine.line[0].x;
 			startPointY = returnLine.line[0].y;
@@ -239,6 +248,9 @@ var drawPPP = function(a,b,doc){
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
 		}else{
+			var xLocation = drawLineLocation(startPointX,'horizontal',plus);
+			startPointX = xLocation;
+			endPointX = xLocation;
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 		returnDom.push(line);
@@ -247,6 +259,7 @@ var drawPPP = function(a,b,doc){
 	else if(b.y() < ayPoint && ayPoint < b.y() + b.size().height){
 		startPointY = ayPoint;
 		endPointY = ayPoint;
+		var plus = true;
 		if(a.x() > b.x()){
 		//在右边
 			startPointX = a.x();
@@ -257,9 +270,11 @@ var drawPPP = function(a,b,doc){
 			startPointX = a.x() + a.size().width;
 			endPointX = b.x() ;
 			endPoisiton = 'r';
+			plus = false;
 		}
 		var line;
 		var returnLine = findAway({ax:startPointX,ay:startPointY,bx:endPointX,by:endPointY},domA,domB,doc,endPoisiton);
+		//三根线算法
 		if(returnLine.flag){
 			startPointX = returnLine.line[0].x;
 			startPointY = returnLine.line[0].y;
@@ -268,6 +283,9 @@ var drawPPP = function(a,b,doc){
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
 		}else{
+			var yLocation = drawLineLocation(startPointY,'n',plus);
+			startPointY = yLocation;
+			endPointY = yLocation;
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 		returnDom.push(line);

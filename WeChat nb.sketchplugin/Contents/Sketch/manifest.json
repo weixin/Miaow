@@ -5,7 +5,7 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
-      "name" : "交互线",
+      "name" : "交互连接线",
       "identifier" : "link",
       "script" : "link.js",
       "shortcut": "cmd shift 1",
