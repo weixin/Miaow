@@ -1,11 +1,41 @@
 @import "common.js"
+var scaleOptionsMatrix;
+
+function chooseKit(context){
+	var settingsWindow = COSAlertWindow.new();
+	settingsWindow.addButtonWithTitle("同步");
+	settingsWindow.addButtonWithTitle("取消");
+
+	settingsWindow.setMessageText("请选择您需要同步的画板");
+	settingsWindow.setInformativeText("同步画板会同时清空现有画板");
+    
+	var List = getConfig('config',context).COLOR;
+	var ButtonList = [];
+
+	for(var i = 0;i < List.length;i++){
+		var key = List[i].title;
+		ButtonList.push(key);
+	}
+	scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
+	settingsWindow.addAccessoryView(scaleOptionsMatrix);
+	return settingsWindow.runModal();
+}
+
 
 var onRun = function (context) {	
 	var app = NSApp.delegate();
 	var doc = context.document;
-
+	var dialog = chooseKit(context);
+	if(dialog != '1000'){
+		return;
+	}
 	
-	var theResponseData = request(getConfig('config',context).COLOR);
+	var List = getConfig('config',context).COLOR;
+	var uikit = scaleOptionsMatrix.selectedCell();
+	var index = [uikit tag];
+	var UIKITURL = List[index].url;
+
+	var theResponseData = request(UIKITURL);
 	
 	var colorContents = "";
 

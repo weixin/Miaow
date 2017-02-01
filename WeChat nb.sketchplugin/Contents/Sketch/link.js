@@ -83,6 +83,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 	var art = doc.artboards();
 	var pca = a;
 	var pcb = b;
+	var lastEndPosition = endPoisiton;
 	a = a.absoluteRect();
 	b = b.absoluteRect();
 	var returnLine = [];
@@ -92,6 +93,23 @@ var findAway = function(line,a,b,doc,endPoisiton){
 		if(pca.parentArtboard()){
 			pca = pca.parentArtboard();
 		}
+	}
+	if(lastEndPosition == 'l'){
+		ax = a.x() + a.size().width / 2;
+		ay = a.y() + a.size().height;
+		by = ay + 30;
+	}else if(lastEndPosition == 'r'){
+		ax = a.x() + a.size().width / 2;
+		ay = a.y();
+		by = ay - 30;
+	}else if(lastEndPosition == 't'){
+		ax = a.x() + a.size().width;
+		bx = ax + 30;
+		ay = a.y() + a.size().height/2;
+	}else if(lastEndPosition == 'b'){
+		ax = a.x();
+		bx = ax - 30;
+		ay = a.y() + a.size().height/2;
 	}
 
 	for(var i = 0;i<art.length;i++){
@@ -103,95 +121,84 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			)){
 			isReturnFlag = true;
 			if(endPoisiton == 't'){
-				ax = a.x() + a.size().width;
-				bx = ax + 30;
-				ay = a.y() + a.size().height/2;
 				if(ax <= art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
 					if(bx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width + 30;
 						by = art[i].absoluteRect().y() + art[i].absoluteRect().size()/2;
 					}
 				}
-				returnLine.push({x:ax,y:ay});
-				if(bx < b.x()+b.size().width){
-					returnLine.push({x:bx,y:ay});
-					returnLine.push({x:bx,y:b.y()});
-					endPoisiton = 't';
-				}else{
-					returnLine.push({x:bx,y:ay});
-					returnLine.push({x:bx,y:b.y()+b.size().height/2});
-					returnLine.push({x:b.x()+b.size().width,y:b.y()+b.size().height/2});
-					endPoisiton = 'l';
-				}
-				
 			}
 			else if(endPoisiton == 'b'){
-				ax = a.x();
-				bx = ax - 30;
-				ay = a.y() + a.size().height/2;
 				if(ax >= art[i].absoluteRect().x()){
 					if(bx > art[i].absoluteRect().x()){
 						bx = art[i].absoluteRect().x() - 30;
 						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height/2;
 					}
 				}
-				returnLine.push({x:ax,y:ay});
-				if(bx > b.x()){
-					returnLine.push({x:bx,y:ay});
-					returnLine.push({x:bx,y:b.y() + b.size().height});
-					endPoisiton = 'b';
-				}else{
-					returnLine.push({x:bx,y:ay});
-					returnLine.push({x:bx,y:b.y()+b.size().height/2});
-					returnLine.push({x:b.x(),y:b.y()+b.size().height/2});
-					endPoisiton = 'r';
-				}
 			}
 			else if(endPoisiton == 'l'){
-				ax = a.x() + a.size().width / 2;
-				ay = a.y() + a.size().height;
-				by = ay + 30;
 				if(ay <= art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
 					if(by < art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
 						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + 30;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
 					}
 				}
-				returnLine.push({x:ax,y:ay});
-				if(by < b.y() + b.size().height){
-					returnLine.push({x:ax,y:by});
-					returnLine.push({x:b.size().width+b.x(),y:by});
-					endPoisiton = 'l';
-				}else{
-					returnLine.push({x:ax,y:by});
-					returnLine.push({x:b.x() + b.size().width/2,y:by});
-					returnLine.push({x:b.x() + b.size().width/2,y:b.y()+b.size().height});
-					endPoisiton = 'b';
-				}
 			}
 			else if(endPoisiton == 'r'){
-				ax = a.x() + a.size().width / 2;
-				ay = a.y();
-				by = ay - 30;
 				if(ay >= art[i].absoluteRect().y()){
 					if(by > art[i].absoluteRect().y()){
 						by = art[i].absoluteRect().y() - 30;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
 					}
 				}
-				returnLine.push({x:ax,y:ay});
-				if(by > b.y()){
-					returnLine.push({x:ax,y:by});
-					returnLine.push({x:b.x(),y:by});
-					
-					endPoisiton = 'r';
-				}else{
-					returnLine.push({x:ax,y:by});
-					returnLine.push({x:b.x() + b.size().width/2,y:by});
-					returnLine.push({x:b.x() + b.size().width/2,y:b.y()});
-					endPoisiton = 't';
-				}
 			}
+		}
+	}
+	returnLine.push({x:ax,y:ay});
+	if(lastEndPosition == 'l'){
+		if(by < b.y() + b.size().height){
+			returnLine.push({x:ax,y:by});
+			returnLine.push({x:b.size().width+b.x(),y:by});
+			endPoisiton = 'l';
+		}else{
+			returnLine.push({x:ax,y:by});
+			returnLine.push({x:b.x() + b.size().width/2,y:by});
+			returnLine.push({x:b.x() + b.size().width/2,y:b.y()+b.size().height});
+			endPoisiton = 'b';
+		}
+	}else if(lastEndPosition == 'r'){
+		if(by > b.y()){
+			returnLine.push({x:ax,y:by});
+			returnLine.push({x:b.x(),y:by});
+			
+			endPoisiton = 'r';
+		}else{
+			returnLine.push({x:ax,y:by});
+			returnLine.push({x:b.x() + b.size().width/2,y:by});
+			returnLine.push({x:b.x() + b.size().width/2,y:b.y()});
+			endPoisiton = 't';
+		}
+	}else if(lastEndPosition == 't'){
+		if(bx < b.x()+b.size().width){
+			returnLine.push({x:bx,y:ay});
+			returnLine.push({x:bx,y:b.y()});
+			endPoisiton = 't';
+		}else{
+			returnLine.push({x:bx,y:ay});
+			returnLine.push({x:bx,y:b.y()+b.size().height/2});
+			returnLine.push({x:b.x()+b.size().width,y:b.y()+b.size().height/2});
+			endPoisiton = 'l';
+		}
+	}else if(lastEndPosition == 'b'){
+		if(bx > b.x()){
+			returnLine.push({x:bx,y:ay});
+			returnLine.push({x:bx,y:b.y() + b.size().height});
+			endPoisiton = 'b';
+		}else{
+			returnLine.push({x:bx,y:ay});
+			returnLine.push({x:bx,y:b.y()+b.size().height/2});
+			returnLine.push({x:b.x(),y:b.y()+b.size().height/2});
+			endPoisiton = 'r';
 		}
 	}
 	return {
@@ -340,6 +347,7 @@ var drawRound = function(x,y){
 }
 
 var drawLine = function(linepoint,endPoisiton,isLess){
+	log(linepoint);
 	var linePaths = [];
 	var linePath = NSBezierPath.bezierPath();
 	for(var i = 0;i<linepoint.length - 1;i++){
