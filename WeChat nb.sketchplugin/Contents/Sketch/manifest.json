@@ -1,7 +1,7 @@
 {
   "name": "WeChat Box",
   "author": "doubleluo shenfei",
-  "version": "1.0",
+  "version": "1.0.0",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -47,9 +47,16 @@
       "handler" : "onRun"
     },
     {
+      "name" : "导出色板",
+      "identifier" : "uploadcolor",
+      "script" : "uploadColor.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
       "name" : "设置",
-      "identifier" : "editshortcuts",
-      "script" : "editShortcuts.js",
+      "identifier" : "setting",
+      "script" : "setting.js",
       "shortcut": "",
       "handler" : "onRun"
     },
@@ -62,7 +69,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","findfontandselect","findtextandselect","importsymbol","importcolor","editshortcuts","checkforupdate"],
+    "items": ["link","flag","findfontandselect","findtextandselect","importsymbol","importcolor","uploadcolor","setting","checkforupdate"],
     "title":"微信工具箱"
   }
 }

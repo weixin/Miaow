@@ -13,8 +13,11 @@ function chooseKit(context){
 	var ButtonList = [];
 
 	for(var i = 0;i < List.length;i++){
-		var key = List[i].title;
-		ButtonList.push(key);
+		if(List[i].title != '' && List[i].url != ''){
+			var key = List[i].title;
+			ButtonList.push(key);
+		}
+		
 	}
 	scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
 	settingsWindow.addAccessoryView(scaleOptionsMatrix);
