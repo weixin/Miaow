@@ -1,7 +1,13 @@
+@import "common.js"
+
 var kPluginDomain = "com.sketchplugins.wechat.link";
+var lineColorKey = "com.sketchplugins.wechat.linecolor";
 var drawLineLocationX = {};
 var drawLineLocationY = {};
-
+var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
+var colorLineR = rgb(colorLine)[0];
+var colorLineG = rgb(colorLine)[1];
+var colorLineB = rgb(colorLine)[2];
 var leaveZero = function(a){
 	return parseInt(a);
 	// return parseInt(parseInt(a).toString().substr(0,parseInt(a).toString().length-1) + '0');
@@ -340,8 +346,8 @@ var drawRound = function(x,y){
 	var linkRect = NSInsetRect(NSMakeRect(x, y, 0, 0), -5, -5);
 	var path = NSBezierPath.bezierPathWithOvalInRect(linkRect);
 	var hitAreaLayer = MSShapeGroup.shapeWithBezierPath(path);
-	hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,76.5).newMutableCounterpart());
-	hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+	hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,76.5).newMutableCounterpart());
+	hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 	hitAreaLayer.setName('Point');
 	return hitAreaLayer;
 }
@@ -370,7 +376,7 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 
 	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
 	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
-	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 	hitAreaBorder.setThickness(6);
 	hitAreaBorder.setPosition(0);
 	lineSh.setName('Line');
@@ -395,7 +401,7 @@ var drawArrow = function(x,y,z){
 		path.closePath();
 		var arrow = MSShapeGroup.shapeWithBezierPath(path);
 		arrow.setName('Arrow');
-		arrow.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+		arrow.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 		return arrow;
 	}
 	function left(){

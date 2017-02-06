@@ -1,10 +1,15 @@
 @import "common.js"
 
 var kPluginDomain = "com.sketchplugins.wechat.flag";
+var lineColorKey = "com.sketchplugins.wechat.flagcolor";
 var textCount = 1;
 var scale = 2;
 var isDeleteNum = 0;
 var scaleOptionsMatrix = 0;
+var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
+var colorLineR = rgb(colorLine)[0];
+var colorLineG = rgb(colorLine)[1];
+var colorLineB = rgb(colorLine)[2];
 
 var getConnectionsGroupInPage = function(page) {
 	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isflagContainer == true", kPluginDomain);
@@ -96,8 +101,8 @@ var onRun = function(context) {
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(22 * scale,60 * scale),NSMakePoint(0,48 * scale),NSMakePoint(15.375 * scale,60 * scale));
 		path.closePath();
 		var flag = MSShapeGroup.shapeWithBezierPath(path);
-		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,76.5).newMutableCounterpart());
-		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,76.5).newMutableCounterpart());
+		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 		flag.absoluteRect().setX(linexl);
 		flag.absoluteRect().setY(liney);
 		flag.setName('___'+count+'___p');
@@ -115,7 +120,7 @@ var onRun = function(context) {
 		var fixedBehaviour = 1;
 		textLayer.setTextBehaviour(fixedBehaviour);
 		textLayer.setStringValue(count.toString());
-		textLayer.setTextColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+		textLayer.setTextColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 		textLayer.setFontSize(13 * scale);
 		
 		doc.currentPage().addLayers([flag,textLayer]);
@@ -140,8 +145,8 @@ var onRun = function(context) {
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(12 * scale,24 * scale),NSMakePoint(34 * scale,12 * scale),NSMakePoint(18.625 * scale,24 * scale));
 		path.closePath();
 		var flag = MSShapeGroup.shapeWithBezierPath(path);
-		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,76.5).newMutableCounterpart());
-		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,76.5).newMutableCounterpart());
+		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 		flag.absoluteRect().setX(linexr);
 		flag.absoluteRect().setY(liney);
 		flag.setName('___'+count+'___p');
@@ -159,7 +164,7 @@ var onRun = function(context) {
 		var fixedBehaviour = 1;
 		textLayer.setTextBehaviour(fixedBehaviour);
 		textLayer.setStringValue(count.toString());
-		textLayer.setTextColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(26,173,25,255).newMutableCounterpart());
+		textLayer.setTextColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
 		textLayer.setFontSize(13 * scale);
 
 		doc.currentPage().addLayers([flag,textLayer]);

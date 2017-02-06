@@ -19,6 +19,23 @@ function initDefaults(pluginDomain, initialValues) {
 	return defaultValues
 }
 
+function rgb(a){
+	var sColor = a.toLowerCase();
+	if(sColor.length === 4){
+		var sColorNew = "#";
+		for(var i=1; i<4; i+=1){
+			sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));	
+		}
+		sColor = sColorNew;
+	}
+	//处理六位的颜色值
+	var sColorChange = [];
+	for(var i=1; i<7; i+=2){
+		sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));	
+	}
+	return sColorChange;
+}
+
 function saveDefaults(newValues) {
 	if (kPluginDomain) {
 		var defaults = [NSUserDefaults standardUserDefaults]

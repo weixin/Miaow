@@ -1,3 +1,7 @@
+var lineColorKey = "com.sketchplugins.wechat.linecolor";
+var flagColorKey = "com.sketchplugins.wechat.flagcolor";
+
+
 var onRun = function(context) {
 	var settingsWindow = COSAlertWindow.new();
 	settingsWindow.addButtonWithTitle("保存");
@@ -5,6 +9,33 @@ var onRun = function(context) {
 	settingsWindow.setMessageText("设置");
 
 
+	settingsWindow.addTextLabelWithValue("设置连线颜色");
+	var flowIndicatorColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
+	var flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
+	var flowIndicatorColorAlpha = 1;
+	var flowIndicatorMSColor = MSImmutableColor.colorWithSVGString(flowIndicatorColorHex);
+	flowIndicatorMSColor.setAlpha(flowIndicatorColorAlpha);
+	var flowIndicatorColor = flowIndicatorMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace())
+	flowIndicatorColorWell.setColor(flowIndicatorColor);
+	var flowIndicatorOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
+	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell);
+	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
+
+	settingsWindow.addTextLabelWithValue("设置标志位颜色");
+	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
+	flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(flagColorKey) || "#1AAD19";
+	var flowIndicatorColorAlpha = 1;
+	var flowIndicatorMSColor = MSImmutableColor.colorWithSVGString(flowIndicatorColorHex);
+	flowIndicatorMSColor.setAlpha(flowIndicatorColorAlpha);
+	var flowIndicatorColor = flowIndicatorMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace())
+	flowIndicatorColorWell2.setColor(flowIndicatorColor);
+	var flowIndicatorOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
+	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell2);
+	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
+
+	var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
+    separator.setBoxType(2);
+    settingsWindow.addAccessoryView(separator);
 	var manifestPath1 = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path();
 	var	manifest1 = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath1), NSJSONReadingMutableContainers, nil);
 	var	uikit = manifest1.UIKIT;
@@ -108,6 +139,15 @@ var onRun = function(context) {
 
 			command.shortcut = shortcutField.stringValue();
 		}
+
+		var flowIndicatorMSColor = MSColor.colorWithNSColor(flowIndicatorColorWell.color()).immutableModelObject();
+		var flowIndicatorColor = flowIndicatorMSColor.svgRepresentation()
+		var flowIndicatorMSColor2 = MSColor.colorWithNSColor(flowIndicatorColorWell2.color()).immutableModelObject();
+		var flowIndicatorColor2 = flowIndicatorMSColor2.svgRepresentation()
+		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorColor, lineColorKey);
+		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorColor2, flagColorKey);
+
+
 		NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest1, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath1, true, NSUTF8StringEncoding, nil);
 		NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
 		AppController.sharedInstance().pluginManager().reloadPlugins();
