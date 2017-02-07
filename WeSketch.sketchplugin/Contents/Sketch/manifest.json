@@ -8,14 +8,14 @@
       "name" : "交互连线",
       "identifier" : "link",
       "script" : "link.js",
-      "shortcut": "cmd shift f",
+      "shortcut": "cmd shift d",
       "handler" : "onRun"
     },
     {
-      "name" : "注释标志",
+      "name" : "注释标记",
       "identifier" : "flag",
       "script" : "flag.js",
-      "shortcut": "cmd shift d",
+      "shortcut": "cmd shift f",
       "handler" : "onRun"
     },
     {
@@ -33,21 +33,21 @@
       "handler" : "onRun"
     },
     {
-      "name" : "同步 UI kit",
+      "name" : "同步 UI Kit",
       "identifier" : "syncuikit",
       "script" : "syncUIkit.js",
       "shortcut": "",
       "handler" : "onRun"
     },
     {
-      "name" : "导入 UI kit",
+      "name" : "导入 UI Kit",
       "identifier" : "importuikit",
       "script" : "importUIkit.js",
       "shortcut": "",
       "handler" : "onRun"
     },
     {
-      "name" : "导出 UI kit",
+      "name" : "导出 UI Kit",
       "identifier" : "exportuikit",
       "script" : "exportUIkit.js",
       "shortcut": "",
@@ -108,17 +108,17 @@
     {
         "title": "色板",
         "items": [
+            "synccolor",
             "importcolor",
-            "exportcolor",
-            "synccolor"
+            "exportcolor"
         ]
     },
     {
-        "title": "UI kit",
+        "title": "UI Kit",
         "items": [
+            "syncuikit",
             "importuikit",
-            "exportuikit",
-            "syncuikit"
+            "exportuikit"
         ]
     },
     "-",

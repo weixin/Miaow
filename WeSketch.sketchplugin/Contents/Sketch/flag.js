@@ -25,7 +25,7 @@ var onRun = function(context) {
 
 		settingsWindow.setMessageText("请选择您要进行的操作");
 	    
-		var ButtonList = ['删除标志并保留排序','删除标志并重新排序'];
+		var ButtonList = ['删除标记并保留排序','删除标记并重新排序'];
 
 		scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
 		settingsWindow.addAccessoryView(scaleOptionsMatrix);
@@ -277,7 +277,7 @@ var onRun = function(context) {
 
 
 	if (context.selection.count()!=1) {
-		NSApp.displayDialog('请选且只选中一个需要添加标志的元素');
+		NSApp.displayDialog('请选且只选中一个需要添加标记的元素');
         return;
 	}
 
