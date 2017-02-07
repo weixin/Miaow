@@ -107,7 +107,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 	}else if(lastEndPosition == 'r'){
 		ax = a.x() + a.size().width / 2;
 		ay = a.y();
-		by = ay - 30;
+		by = ay - 80;
 	}else if(lastEndPosition == 't'){
 		ax = a.x() + a.size().width;
 		bx = ax + 30;
@@ -153,7 +153,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			else if(endPoisiton == 'r'){
 				if(ay >= art[i].absoluteRect().y()){
 					if(by > art[i].absoluteRect().y()){
-						by = art[i].absoluteRect().y() - 30;
+						by = art[i].absoluteRect().y() - 80;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
 					}
 				}
@@ -353,7 +353,6 @@ var drawRound = function(x,y){
 }
 
 var drawLine = function(linepoint,endPoisiton,isLess){
-	log(linepoint);
 	var linePaths = [];
 	var linePath = NSBezierPath.bezierPath();
 	for(var i = 0;i<linepoint.length - 1;i++){
@@ -532,11 +531,8 @@ var onRun = function(context) {
 			destArtboard = selection.lastObject();
 			linkLayer = selection.firstObject();
 		}
-		var artboardID = context.command.valueForKey_onLayer_forPluginIdentifier("artboardID", destArtboard, kPluginDomain);
-		if (!artboardID) {
-			artboardID = destArtboard.objectID();
-			context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "artboardID", destArtboard, kPluginDomain);
-		}
+		var artboardID = destArtboard.objectID();
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "artboardID", destArtboard, kPluginDomain);
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "destinationArtboardID", linkLayer, kPluginDomain);
 	}
 

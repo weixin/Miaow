@@ -6,8 +6,8 @@ function chooseKit(context){
 	settingsWindow.addButtonWithTitle("同步");
 	settingsWindow.addButtonWithTitle("取消");
 
-	settingsWindow.setMessageText("请选择您需要同步的 UI kit");
-	settingsWindow.setInformativeText("不能在同一个项目中同步不同的 UI kit，否则会产生错误");
+	settingsWindow.setMessageText("请选择您需要同步的 UI Kit");
+	settingsWindow.setInformativeText("不能在同一个项目中同步不同的 UI Kit，否则会产生错误");
     
 	var List = getConfig('config',context).UIKIT;
 	var ButtonList = [];

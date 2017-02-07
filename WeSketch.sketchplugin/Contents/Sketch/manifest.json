@@ -8,14 +8,14 @@
       "name" : "交互连线",
       "identifier" : "link",
       "script" : "link.js",
-      "shortcut": "cmd shift d",
+      "shortcut": "ctrl shift d",
       "handler" : "onRun"
     },
     {
       "name" : "注释标记",
       "identifier" : "flag",
       "script" : "flag.js",
-      "shortcut": "cmd shift f",
+      "shortcut": "ctrl shift f",
       "handler" : "onRun"
     },
     {
