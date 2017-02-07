@@ -96,7 +96,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "遇到问题",
+      "name" : "FAQ",
       "identifier" : "issues",
       "script" : "issues.js",
       "shortcut": "",
@@ -121,6 +121,8 @@
             "syncuikit"
         ]
     },
+    "-",
+    "setting",
     {
         "title": "帮助",
         "items": [

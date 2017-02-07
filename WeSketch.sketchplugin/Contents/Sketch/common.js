@@ -58,6 +58,10 @@ function getConfig(json,context) {
 		return NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
 }
 
+function openUrlInBrowser(url) {
+    NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(url));
+}
+
 function createRadioButtons(options, selectedItem) {
     var rows = Math.ceil(options.length / 2);
     var columns = ((options.length < 2) ? 1 : 2);

@@ -12,48 +12,36 @@ var onRun = function (context) {
 		save.setAllowsOtherFileTypes(false);
 		save.setExtensionHidden(false);
 		
-		// Open save dialog and run if Save was clicked
-		
 		if (save.runModal()) {
 			
-			// Convert MSColors to rgba
 			
 			var palette = [];
 			
 			for (var i = 0; i < colors.length; i++) {
 				palette.push({
-					red: colors[i].red(),
-					green: colors[i].green(),
-					blue: colors[i].blue(),
+					red: colors[i].red() * 255,
+					green: colors[i].green() * 255,
+					blue: colors[i].blue() * 255,
 					alpha: colors[i].alpha()	
 				});
 			};
 			
-			// Palette data
 
 			var fileData = {
 				"colors": palette
 			}
 			
-			// Get chosen file path
-			
 			var filePath = save.URL().path();
 			
-			// Write file to specified file path
 			
 			var file = NSString.stringWithString(JSON.stringify(fileData));
 			
 			[file writeToFile:filePath atomically:true encoding:NSUTF8StringEncoding error:null];
+			NSApp.displayDialog("色板导出成功"); 
+
 		}
 		
 	} else { 
 		NSApp.displayDialog("色板是空的"); 
 	}
 }
-// let fill  = shape.style().fills().firstObject();
-//   var red   = fill.color().red().toFixed(3).toString();
-//   var green = fill.color().green().toFixed(3).toString();
-//   var blue  = fill.color().blue().toFixed(3).toString();
-//   var alpha = fill.color().alpha().toFixed(3).toString();
-
-//   var color = [NSColor colorWithRed:red green:green blue:blue alpha:alpha];

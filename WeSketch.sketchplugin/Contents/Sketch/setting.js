@@ -9,7 +9,7 @@ var onRun = function(context) {
 	settingsWindow.setMessageText("设置");
 
 
-	settingsWindow.addTextLabelWithValue("设置连线颜色");
+	settingsWindow.addTextLabelWithValue("箭头线色值             标志色值");
 	var flowIndicatorColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	var flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
 	var flowIndicatorColorAlpha = 1;
@@ -19,17 +19,14 @@ var onRun = function(context) {
 	flowIndicatorColorWell.setColor(flowIndicatorColor);
 	var flowIndicatorOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
 	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell);
-	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
 
-	settingsWindow.addTextLabelWithValue("设置标志位颜色");
-	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
+	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(105,0,44,23));
 	flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(flagColorKey) || "#1AAD19";
 	var flowIndicatorColorAlpha = 1;
 	var flowIndicatorMSColor = MSImmutableColor.colorWithSVGString(flowIndicatorColorHex);
 	flowIndicatorMSColor.setAlpha(flowIndicatorColorAlpha);
 	var flowIndicatorColor = flowIndicatorMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace())
 	flowIndicatorColorWell2.setColor(flowIndicatorColor);
-	var flowIndicatorOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
 	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell2);
 	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
 
@@ -45,7 +42,7 @@ var onRun = function(context) {
 	var uikitField = [];	
 	var colorField = [];	
 
-    settingsWindow.addTextLabelWithValue("UI kit 地址设置");
+    settingsWindow.addTextLabelWithValue("UI kit 同步源");
 	for (var i = 0; i < 4; i++) {
 		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))
 		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,9,100,22));
@@ -64,7 +61,7 @@ var onRun = function(context) {
 	var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
     separator.setBoxType(2);
     settingsWindow.addAccessoryView(separator);
-    settingsWindow.addTextLabelWithValue("色板地址设置");
+    settingsWindow.addTextLabelWithValue("色板同步源");
     for (var i = 0; i < 2; i++) {
 		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))
 		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,9,100,22));
@@ -90,7 +87,7 @@ var onRun = function(context) {
 		manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil),
 		commands = manifest.commands,
 		validCommands = manifest.menu.items,
-		commandsCount = commands.count() - 3,
+		commandsCount = 4,
 		shortcutFields = {},
 		command, shortcutField, shortcut;
 
