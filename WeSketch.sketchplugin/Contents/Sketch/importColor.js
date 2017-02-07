@@ -20,7 +20,7 @@ var onRun = function(context){
     var theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
     var dataPre = [theText substringToIndex:1];
     if (dataPre == "<"){
-      NSApp.displayDialog("数据出错，请检查json文件");
+      NSApp.displayDialog("导入失败，请检查色板文件");
       return;
     }else{
       colorContents = theText   
@@ -43,8 +43,7 @@ var onRun = function(context){
     doc.documentData().assets().setColors(colors);
     
     app.refreshCurrentDocument();
-
-    NSApp.displayDialog("色板已经导入到你的Document Colors");
+    NSApp.displayDialog("色板已导入 Document Colors，请重新打开色板查看");
   }
 
 }

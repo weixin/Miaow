@@ -277,7 +277,7 @@ var onRun = function(context) {
 
 
 	if (context.selection.count()!=1) {
-		NSApp.displayDialog('请选且只选中一个需要添加标记的元素');
+		NSApp.displayDialog('请只选择一个元素进行操作');
         return;
 	}
 

@@ -6,8 +6,8 @@ function chooseKit(context){
 	settingsWindow.addButtonWithTitle("同步");
 	settingsWindow.addButtonWithTitle("取消");
 
-	settingsWindow.setMessageText("请选择您需要同步的画板");
-	settingsWindow.setInformativeText("同步画板会同时清空现有画板");
+	settingsWindow.setMessageText("请选择同步的色板来源");
+	settingsWindow.setInformativeText("本次同步会覆盖当前画板");
     
 	var List = getConfig('config',context).COLOR;
 	var ButtonList = [];
@@ -70,5 +70,5 @@ var onRun = function (context) {
 	
 	app.refreshCurrentDocument();
 
-	NSApp.displayDialog("色板已经同步到你的Document Colors");
+	NSApp.displayDialog("色板已同步到 Document Colors，请重新打开色板查看");
 }

@@ -33,21 +33,21 @@ var onRun = function (context) {
         }
         userInterface = COSAlertWindow.new();
 
-        userInterface.setMessageText("全文替换文字");
-        userInterface.setInformativeText("区分大小写，如需忽略大小写请使用正则表达式");
+        userInterface.setMessageText("文本批量替换");
+        userInterface.setInformativeText("注：区分大小写，如需忽略大小写请使用正则表达式");
 
-        userInterface.addTextLabelWithValue("请填写需要替换的文字（支持正则）：");
+        userInterface.addTextLabelWithValue("查找文本（支持正则表达式）：");
         userInterface.addTextFieldWithValue(textToFind);
 
-        userInterface.addTextLabelWithValue("请填写想要替换的文字：");
+        userInterface.addTextLabelWithValue("替换为：");
         userInterface.addTextFieldWithValue('');
 
-        userInterface.addTextLabelWithValue("应用于：");
-        var options = ["全文件","选择中的Page"];
+        userInterface.addTextLabelWithValue("Page 生效范围：");
+        var options = ["所有 Page","当前工作 Page"];
         userInterface.addAccessoryView(createRadioButtons(options, options[0]));
 
-        userInterface.addTextLabelWithValue("应用于：");
-        var options2 = ["全文件","仅画板中的文字"];
+        userInterface.addTextLabelWithValue("图层生效范围：");
+        var options2 = ["整个 Page（含元素名）","仅元素中的正文内容"];
         userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
         
         userInterface.addButtonWithTitle('确定');
@@ -123,10 +123,14 @@ var onRun = function (context) {
     if(createUserInterface() != '1000'){
         return;
     }
+    if(textToFind2.trim() == ''){
+        return NSApp.displayDialog('查找内容不能为空');
+    }
+
     processButtonClick();
     doFindAndReplace();
     if(replaceCount){
-        NSApp.displayDialog('已经将' + replaceCount + '个"' + textToFind2 + '"替换为"' + textToReplace + '"');
+        NSApp.displayDialog('替换成功，共找到' + replaceCount + '处\r\n"' + textToFind2 + '"替换为"' + textToReplace + '"');
     }else{
         NSApp.displayDialog('没有找到"' + textToFind + '"');
     }

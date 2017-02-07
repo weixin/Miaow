@@ -26,7 +26,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "文字批量替换",
+      "name" : "文本批量替换",
       "identifier" : "findtextandselect",
       "script" : "textReplace.js",
       "shortcut": "",
@@ -96,7 +96,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "FAQ",
+      "name" : "反馈",
       "identifier" : "issues",
       "script" : "issues.js",
       "shortcut": "",
@@ -104,9 +104,9 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findfontandselect","findtextandselect","-",
+    "items": ["link","flag","-","findtextandselect","findfontandselect","-",
     {
-        "title": "色板",
+        "title": "管理色板",
         "items": [
             "synccolor",
             "importcolor",
@@ -114,7 +114,7 @@
         ]
     },
     {
-        "title": "UI Kit",
+        "title": "管理 UI Kit",
         "items": [
             "syncuikit",
             "importuikit",
@@ -127,9 +127,10 @@
         "title": "帮助",
         "items": [
             "about",
-            "issues"
+            "issues",
+            "checkforupdate"
         ]
     }],
-    "title":"微信工具箱"
+    "title":"WeSketch"
   }
 }

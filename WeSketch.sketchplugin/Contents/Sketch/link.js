@@ -504,7 +504,7 @@ var onRun = function(context) {
 	var destArtboard, linkLayer;
 
 	if (selection.count() != 1 && selection.count() != 2) {
-		return NSApp.displayDialog('选中一个元素删除连接线，选中一个元素和一个Artboard生成连接线。');
+		return NSApp.displayDialog('请同时选中元素和 Artboard 添加连线，只选中元素可删除连线');
 	}
 
 	if (selection.count() == 1) {
