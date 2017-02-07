@@ -5,51 +5,72 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
-      "name" : "交互连接线",
+      "name" : "交互连线",
       "identifier" : "link",
       "script" : "link.js",
-      "shortcut": "cmd shift 1",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "注释标志位",
-      "identifier" : "flag",
-      "script" : "flag.js",
-      "shortcut": "cmd shift 2",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "全文字体替换",
-      "identifier" : "findfontandselect",
-      "script" : "findFontName.js",
-      "shortcut": "cmd shift d",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "全文文字替换",
-      "identifier" : "findtextandselect",
-      "script" : "textReplace.js",
       "shortcut": "cmd shift f",
       "handler" : "onRun"
     },
     {
-      "name" : "UI kit 同步",
-      "identifier" : "importsymbol",
-      "script" : "importSymbols.js",
-      "shortcut": "cmd shift w",
+      "name" : "注释标志",
+      "identifier" : "flag",
+      "script" : "flag.js",
+      "shortcut": "cmd shift d",
       "handler" : "onRun"
     },
     {
-      "name" : "色板同步",
-      "identifier" : "importcolor",
-      "script" : "importColor.js",
-      "shortcut": "cmd shift c",
+      "name" : "字体批量替换",
+      "identifier" : "findfontandselect",
+      "script" : "findFontName.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "文字批量替换",
+      "identifier" : "findtextandselect",
+      "script" : "textReplace.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "同步 UI kit",
+      "identifier" : "syncuikit",
+      "script" : "syncUIkit.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "导入 UI kit",
+      "identifier" : "importuikit",
+      "script" : "importUIkit.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "导出 UI kit",
+      "identifier" : "exportuikit",
+      "script" : "exportUIkit.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "同步色板",
+      "identifier" : "synccolor",
+      "script" : "syncColor.js",
+      "shortcut": "",
       "handler" : "onRun"
     },
     {
       "name" : "导出色板",
-      "identifier" : "uploadcolor",
-      "script" : "uploadColor.js",
+      "identifier" : "exportcolor",
+      "script" : "exportColor.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "导入色板",
+      "identifier" : "importcolor",
+      "script" : "importColor.js",
       "shortcut": "",
       "handler" : "onRun"
     },
@@ -66,10 +87,47 @@
       "script" : "checkForUpdate.js",
       "shortcut": "",
       "handler" : "onRun"
+    },
+    {
+      "name" : "关于",
+      "identifier" : "about",
+      "script" : "about.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "遇到问题",
+      "identifier" : "issues",
+      "script" : "issues.js",
+      "shortcut": "",
+      "handler" : "onRun"
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findfontandselect","findtextandselect","-","importsymbol","importcolor","uploadcolor","-","setting","checkforupdate"],
+    "items": ["link","flag","-","findfontandselect","findtextandselect","-",
+    {
+        "title": "色板",
+        "items": [
+            "importcolor",
+            "exportcolor",
+            "synccolor"
+        ]
+    },
+    {
+        "title": "UI kit",
+        "items": [
+            "importuikit",
+            "exportuikit",
+            "syncuikit"
+        ]
+    },
+    {
+        "title": "帮助",
+        "items": [
+            "about",
+            "issues"
+        ]
+    }],
     "title":"微信工具箱"
   }
 }
