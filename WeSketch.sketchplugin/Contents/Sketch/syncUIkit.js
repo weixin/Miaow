@@ -25,6 +25,7 @@ function chooseKit(context){
 }
 
 var onRun = function (context) {
+	// NSapp.displayDialog([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]);
 	var dialog = chooseKit(context);
 	if(dialog != '1000'){
 		return;

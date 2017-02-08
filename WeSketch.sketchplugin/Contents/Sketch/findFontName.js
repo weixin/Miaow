@@ -15,51 +15,18 @@ var onRun = function (context) {
     var searchButtonType = 1;
     var fontRpleaceCount = 0;
 
-    initialise(context);
+    featureSearchFontName();
     userInterfaceLoop();
 
 
-    function initialise(context) {
-        SELECT = 1000;
-        READY_TO_SEARCH = true;
-        CANCELLED = false;
-        NOT_READY = null;
-
-        featureSearchFontName();
-    }
-
-
     function userInterfaceLoop() {
-
-        var uiResponse = NOT_READY;
-
-        while (uiResponse === NOT_READY) {
-
-            var modal = createUserInterface();
-
-            uiResponse = processButtonClick(modal, modal.runModal());
-
-            switch (uiResponse) {
-
-                case NOT_READY:
-                uiResponse = CANCELLED;
-                break;
-
-                case READY_TO_SEARCH:
-                
-                break;
-
-                case CANCELLED:
-                break;
-            }
-        }
+        var modal = createUserInterface();
+        uiResponse = processButtonClick(modal, modal.runModal());
 
     }
 
 
     function createUserInterface() {
-
-
         if (includedFontName.length == 0) {
             doc.showMessage("本页面没有任何可以选择的字体");
         } else {
@@ -158,28 +125,21 @@ var onRun = function (context) {
 
         var result;
 
-        if (buttonClick === SELECT) {
+        if (buttonClick == '1000') {
             page.deselectAllLayers()
 
             for (var i = 0; i < includedFontName.length; i++) {
-                if ([[[modal viewAtIndex: i] selectedCell] state] == true) {
-                    selectingFontName.push([[[modal viewAtIndex: i] selectedCell] title]);
+                if ([[[modal viewAtIndex: i+1] selectedCell] state] == true) {
+                    selectingFontName.push([[[modal viewAtIndex: i+1] selectedCell] title]);
                 }
             }
+            NSApp.displayDialog(selectingFontName);
 
             featureSelectSpecificFontTextLayer();
 
-            if (selectingFontName.length > 0) {
-                result = READY_TO_SEARCH;
-            } else {
-                result = NOT_READY;
-            }
+            NSApp.displayDialog("字体批量替换成功"); 
 
-        } else {
-            result = CANCELLED;
         }
-
-        return result;
     }
 
 
