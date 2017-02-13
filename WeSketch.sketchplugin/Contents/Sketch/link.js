@@ -130,7 +130,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				if(ax <= art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
 					if(bx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width + 30;
-						by = art[i].absoluteRect().y() + art[i].absoluteRect().size()/2;
+						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height/2;
 					}
 				}
 			}
@@ -146,7 +146,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				if(ay <= art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
 					if(by < art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
 						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + 30;
-						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
+						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width/2;
 					}
 				}
 			}
@@ -154,7 +154,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 				if(ay >= art[i].absoluteRect().y()){
 					if(by > art[i].absoluteRect().y()){
 						by = art[i].absoluteRect().y() - 80;
-						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size()/2;
+						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width/2;
 					}
 				}
 			}
