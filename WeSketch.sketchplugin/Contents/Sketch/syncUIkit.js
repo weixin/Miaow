@@ -33,7 +33,7 @@ var onRun = function (context) {
 	var List = getConfig('config',context).UIKIT;
 	var uikit = scaleOptionsMatrix.selectedCell();
 	var index = [uikit tag];
-	var UIKITURL = List[index].url;
+	var UIKITURL = 'http://tmtdemo.qq.com/uikit.sketch';
 	context.document.showMessage("下载更新中...");
 	var theResponseData = request(UIKITURL);
 	var data = [[NSData alloc] initWithData:theResponseData];
@@ -157,9 +157,9 @@ function isSame(a,b){
 	if(layers.count() != b.layers().count()){
 		return false;
 	}
-	if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
-		return false;
-	}
+	// if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
+	// 	return false;
+	// }
 	for(var i = 0;i < layers.count(); i++){
 		var layer = layers[i];
 
