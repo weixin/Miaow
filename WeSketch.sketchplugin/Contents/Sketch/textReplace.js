@@ -123,9 +123,6 @@ var onRun = function (context) {
     if(createUserInterface() != '1000'){
         return;
     }
-    if(textToFind2.trim() == ''){
-        return NSApp.displayDialog('查找内容不能为空');
-    }
 
     processButtonClick();
     doFindAndReplace();
