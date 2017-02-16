@@ -33,7 +33,7 @@ var onRun = function (context) {
 	var List = getConfig('config',context).UIKIT;
 	var uikit = scaleOptionsMatrix.selectedCell();
 	var index = [uikit tag];
-	var UIKITURL = 'http://tmtdemo.qq.com/uikit.sketch';
+	var UIKITURL = List[index].url;
 	context.document.showMessage("下载更新中...");
 	var theResponseData = request(UIKITURL);
 	var data = [[NSData alloc] initWithData:theResponseData];
