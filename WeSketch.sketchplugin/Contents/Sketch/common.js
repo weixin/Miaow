@@ -50,6 +50,16 @@ function request(queryURL) {
 	var oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:null error:null];
 	return oResponseData;
 }
+function networkRequest(args) {
+  var task = NSTask.alloc().init();
+  task.setLaunchPath("/usr/bin/curl");
+  task.setArguments(args);
+  var outputPipe = [NSPipe pipe];
+  [task setStandardOutput:outputPipe];
+  task.launch();
+  var responseData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
+  return responseData;
+}
 
 function getConfig(json,context) {
 		var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent(json+".json").path();

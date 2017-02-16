@@ -35,7 +35,8 @@ var onRun = function (context) {
 	var index = [uikit tag];
 	var UIKITURL = List[index].url;
 	context.document.showMessage("下载更新中...");
-	var theResponseData = request(UIKITURL);
+	var theResponseData = networkRequest([UIKITURL]);
+	// var theResponseData = request(UIKITURL);
 	var data = [[NSData alloc] initWithData:theResponseData];
 	var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
 	var databasePath = [[NSString alloc] initWithString: [basepath stringByAppendingPathComponent:@"Users/Shared/uikit.sketch"]]
