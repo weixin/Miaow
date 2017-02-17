@@ -1,7 +1,6 @@
 @import "common.js"
 var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 var scaleOptionsMatrix;
-var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
 
 function chooseKit(context){
 	var settingsWindow = COSAlertWindow.new();
@@ -12,6 +11,7 @@ function chooseKit(context){
 	settingsWindow.setInformativeText("本次同步会覆盖当前画板");
     
 	var ButtonList = [];
+	var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
 
 	for(var i = 0;i < List.length;i++){
 		if(List[i].title != '' && List[i].url != ''){
@@ -35,6 +35,8 @@ var onRun = function (context) {
 	}
 	
 	var uikit = scaleOptionsMatrix.selectedCell();
+	var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
+	
 	var index = [uikit tag];
 	var UIKITURL = List[index].url;
 

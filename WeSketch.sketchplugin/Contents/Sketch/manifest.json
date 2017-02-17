@@ -106,19 +106,19 @@
   "menu": {
     "items": ["link","flag","-","findtextandselect","findfontandselect","-",
     {
-        "title": "管理色板",
-        "items": [
-            "synccolor",
-            "importcolor",
-            "exportcolor"
-        ]
-    },
-    {
         "title": "管理 UI Kit",
         "items": [
             "syncuikit",
             "importuikit",
             "exportuikit"
+        ]
+    },
+    {
+        "title": "管理色板",
+        "items": [
+            "synccolor",
+            "importcolor",
+            "exportcolor"
         ]
     },
     "-",

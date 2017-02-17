@@ -2,7 +2,6 @@
 @import "organizer.js"
 var scaleOptionsMatrix;
 var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
-var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
 
 function chooseKit(context){
 	var settingsWindow = COSAlertWindow.new();
@@ -13,6 +12,7 @@ function chooseKit(context){
 	settingsWindow.setInformativeText("请勿同步多个 UI Kit，以免发生错误");
     
 	var ButtonList = [];
+	var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
 
 	for(var i = 0;i < List.length;i++){
 		if(List[i].title != '' && List[i].url != ''){
@@ -34,6 +34,7 @@ var onRun = function (context) {
 	}
 	var uikit = scaleOptionsMatrix.selectedCell();
 	var index = [uikit tag];
+	var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
 	var UIKITURL = List[index].url;
 
 	context.document.showMessage("下载更新中...");
