@@ -1,5 +1,9 @@
 var lineColorKey = "com.sketchplugins.wechat.linecolor";
 var flagColorKey = "com.sketchplugins.wechat.flagcolor";
+var lineThicknessKey = "com.sketchplugins.wechat.linethickness";
+
+var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
+var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
 
 var onRun = function(context) {
@@ -9,7 +13,8 @@ var onRun = function(context) {
 	settingsWindow.setMessageText("设置");
 
 
-	settingsWindow.addTextLabelWithValue("箭头线色值             标记色值");
+	settingsWindow.addTextLabelWithValue("箭头线色值             箭头线粗细             标记色值");
+
 	var flowIndicatorColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	var flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
 	var flowIndicatorColorAlpha = 1;
@@ -20,7 +25,16 @@ var onRun = function(context) {
 	var flowIndicatorOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
 	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell);
 
-	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(105,0,44,23));
+	// 添加箭头线粗细  
+	var flowIndicatorThicknessWell = NSTextField.alloc().initWithFrame(NSMakeRect(105, 0, 44, 23));
+	// 读取系统默认的粗细
+	var flowIndicatorThicknessNum = NSUserDefaults.standardUserDefaults().objectForKey(lineThicknessKey) || "6";
+	// // 默认值填入输入框
+	flowIndicatorThicknessWell.setStringValue(flowIndicatorThicknessNum);
+	// 将文本输入框放在 NSView 中
+	flowIndicatorOptionsView.addSubview(flowIndicatorThicknessWell);
+
+	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(210,0,44,23));
 	flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(flagColorKey) || "#1AAD19";
 	var flowIndicatorColorAlpha = 1;
 	var flowIndicatorMSColor = MSImmutableColor.colorWithSVGString(flowIndicatorColorHex);
@@ -28,6 +42,7 @@ var onRun = function(context) {
 	var flowIndicatorColor = flowIndicatorMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace())
 	flowIndicatorColorWell2.setColor(flowIndicatorColor);
 	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell2);
+
 	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
 
 	var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
@@ -35,8 +50,14 @@ var onRun = function(context) {
     settingsWindow.addAccessoryView(separator);
 	var manifestPath1 = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path();
 	var	manifest1 = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath1), NSJSONReadingMutableContainers, nil);
-	var	uikit = manifest1.UIKIT;
-	var	color = manifest1.COLOR;
+
+	// 如果 系统key 中有，就从系统key 中读取，没有再去读取 config.json 
+	var uiKitUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey);
+	var colorUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey);
+
+	var	uikit = uiKitUrlInKey || manifest1.UIKIT;
+	var	color = colorUrlInKey || manifest1.COLOR;
+
 	var uikitLabel = [];	
 	var colorLabel = [];	
 	var uikitField = [];	
@@ -126,8 +147,13 @@ var onRun = function(context) {
 				url:colorField[i].stringValue(),
 			})
 		}
+		// 存到 config.json 中
 		manifest1.UIKIT = uikitsave;
 		manifest1.COLOR = colorsave;
+		// 存到 系统key 中
+		NSUserDefaults.standardUserDefaults().setObject_forKey(uikitsave, uiKitUrlKey);
+		NSUserDefaults.standardUserDefaults().setObject_forKey(colorsave, colorUrlKey);
+
 		for (var i = 0; i < commandsCount; i++) {
 			command = commands[i];
 			shortcutField = shortcutFields[command.identifier];
@@ -144,6 +170,9 @@ var onRun = function(context) {
 		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorColor, lineColorKey);
 		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorColor2, flagColorKey);
 
+		// 获取 “箭头线粗细” 输入框的值，存入 系统key 中
+		var flowIndicatorThickness = flowIndicatorThicknessWell.stringValue();
+		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorThickness, lineThicknessKey);
 
 		NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest1, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath1, true, NSUTF8StringEncoding, nil);
 		NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);

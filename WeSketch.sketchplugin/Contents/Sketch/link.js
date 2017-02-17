@@ -2,9 +2,11 @@
 
 var kPluginDomain = "com.sketchplugins.wechat.link";
 var lineColorKey = "com.sketchplugins.wechat.linecolor";
+var lineThicknessKey = "com.sketchplugins.wechat.linethickness";
 var drawLineLocationX = {};
 var drawLineLocationY = {};
 var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
+var lineThickness = NSUserDefaults.standardUserDefaults().objectForKey(lineThicknessKey) || "6";
 var colorLineR = rgb(colorLine)[0];
 var colorLineG = rgb(colorLine)[1];
 var colorLineB = rgb(colorLine)[2];
@@ -376,7 +378,7 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
 	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
 	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
-	hitAreaBorder.setThickness(6);
+	hitAreaBorder.setThickness(lineThickness);
 	hitAreaBorder.setPosition(0);
 	lineSh.setName('Line');
 	return lineSh;

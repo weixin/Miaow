@@ -1,6 +1,9 @@
 @import "common.js"
 @import "organizer.js"
 var scaleOptionsMatrix;
+var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
+var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
+
 function chooseKit(context){
 	var settingsWindow = COSAlertWindow.new();
 	settingsWindow.addButtonWithTitle("同步");
@@ -9,7 +12,6 @@ function chooseKit(context){
 	settingsWindow.setMessageText("请选择需要同步的 UI Kit 来源");
 	settingsWindow.setInformativeText("请勿同步多个 UI Kit，以免发生错误");
     
-	var List = getConfig('config',context).UIKIT;
 	var ButtonList = [];
 
 	for(var i = 0;i < List.length;i++){
@@ -30,13 +32,14 @@ var onRun = function (context) {
 	if(dialog != '1000'){
 		return;
 	}
-	var List = getConfig('config',context).UIKIT;
 	var uikit = scaleOptionsMatrix.selectedCell();
 	var index = [uikit tag];
 	var UIKITURL = List[index].url;
+
 	context.document.showMessage("下载更新中...");
 	var theResponseData = networkRequest([UIKITURL]);
-	// var theResponseData = request(UIKITURL);
+
+	//var theResponseData = request(UIKITURL);
 	var data = [[NSData alloc] initWithData:theResponseData];
 	var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
 	var databasePath = [[NSString alloc] initWithString: [basepath stringByAppendingPathComponent:@"Users/Shared/uikit.sketch"]]
