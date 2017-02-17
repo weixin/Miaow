@@ -36,7 +36,6 @@ var onRun = function (context) {
 	var index = [uikit tag];
 	var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
 	var UIKITURL = List[index].url;
-
 	context.document.showMessage("下载更新中...");
 	var theResponseData = networkRequest([UIKITURL]);
 
@@ -45,12 +44,12 @@ var onRun = function (context) {
 	var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
 	var databasePath = [[NSString alloc] initWithString: [basepath stringByAppendingPathComponent:@"Users/Shared/uikit.sketch"]]
 	[data writeToFile:databasePath atomically:true];
+	var saveArtBoard = [];
 
 	var sourceDoc = MSDocument.new();
 	if(sourceDoc.readFromURL_ofType_error(NSURL.fileURLWithPath(databasePath), "com.bohemiancoding.sketch.drawing", nil)) {
 		var doc = context.document;
 		var savePage;
-		var saveArtBoard = [];
 		var pages = doc.pages();
 
 		var sourcePages = sourceDoc.documentData().pages();
