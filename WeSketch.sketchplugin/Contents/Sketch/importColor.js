@@ -1,9 +1,17 @@
 @import "common.js"
 
+var importUrlKey = "com.sketchplugins.wechat.importcolorurl";
+
+
 var onRun = function(context){
   var doc = context.document;
   var app = NSApp.delegate();
+  var getLocal = NSUserDefaults.standardUserDefaults().objectForKey(importUrlKey);
+ 
   var panel = [NSOpenPanel openPanel];
+  if(getLocal){
+    [panel setDirectoryURL:[NSURL URLWithString:getLocal]];
+  }
   [panel setCanChooseDirectories:false];
   [panel setCanCreateDirectories:false];
   panel.setAllowedFileTypes([@"json"]);
@@ -16,6 +24,10 @@ var onRun = function(context){
     var firstURL = [[panel URLs] objectAtIndex:0];
     var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
     var file_path = [unformattedURL stringByRemovingPercentEncoding];
+    var urlSave = file_path.replace('file:///','');
+    urlSave = urlSave.substr(0,urlSave.lastIndexOf('/'));
+    NSUserDefaults.standardUserDefaults().setObject_forKey(urlSave, importUrlKey);
+
     var theResponseData = request(file_path)
     var theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
     var dataPre = [theText substringToIndex:1];

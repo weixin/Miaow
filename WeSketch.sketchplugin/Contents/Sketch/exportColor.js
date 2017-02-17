@@ -42,6 +42,6 @@ var onRun = function (context) {
 		}
 		
 	} else { 
-		NSApp.displayDialog("色板是空的"); 
+		NSApp.displayDialog("请先在 Document Colors 创建你想建立的公共色"); 
 	}
 }

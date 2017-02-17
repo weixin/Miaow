@@ -1,7 +1,7 @@
 {
   "name": "WeChat Box",
   "author": "doubleluo shenfei",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "identifier": "cn.wechat",
   "commands" : [
     {

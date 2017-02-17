@@ -9,7 +9,6 @@ function chooseKit(context){
 
 	settingsWindow.setMessageText("请选择同步的色板来源");
 	settingsWindow.setInformativeText("本次同步会覆盖当前画板");
-    
 	var ButtonList = [];
 	var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
 
@@ -18,7 +17,6 @@ function chooseKit(context){
 			var key = List[i].title;
 			ButtonList.push(key);
 		}
-		
 	}
 	scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
 	settingsWindow.addAccessoryView(scaleOptionsMatrix);

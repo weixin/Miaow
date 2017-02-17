@@ -1,9 +1,14 @@
 @import "common.js"
+var importUrlKey = "com.sketchplugins.wechat.importuikiturl";
 
 var onRun = function(context){
   var doc = context.document;
   var app = NSApp.delegate();
   var panel = [NSOpenPanel openPanel];
+  var getLocal = NSUserDefaults.standardUserDefaults().objectForKey(importUrlKey);
+  if(getLocal){
+    [panel setDirectoryURL:[NSURL URLWithString:getLocal]];
+  }
   [panel setCanChooseDirectories:false];
   [panel setCanCreateDirectories:false];
   panel.setAllowedFileTypes([@"sketch"]);
@@ -17,6 +22,10 @@ var onRun = function(context){
   var firstURL = [[panel URLs] objectAtIndex:0];
   var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
   var file_path = [unformattedURL stringByRemovingPercentEncoding];
+  var urlSave = file_path.replace('file:///','');
+  urlSave = urlSave.substr(0,urlSave.lastIndexOf('/'));
+  NSUserDefaults.standardUserDefaults().setObject_forKey(urlSave, importUrlKey);
+
   var theResponseData = request(file_path)
   var data = [[NSData alloc] initWithData:theResponseData];
   var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
