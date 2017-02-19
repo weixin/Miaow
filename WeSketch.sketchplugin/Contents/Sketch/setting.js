@@ -179,7 +179,7 @@ var onRun = function(context) {
 		manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil),
 		commands = manifest.commands,
 		validCommands = manifest.menu.items,
-		commandsCount = 2,
+		commandsCount = 4,
 		shortcutFields = {},
 		command, shortcutField, shortcut;
 

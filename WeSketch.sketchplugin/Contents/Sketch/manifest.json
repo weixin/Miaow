@@ -1,7 +1,7 @@
 {
   "name": "WeChat Box",
   "author": "doubleluo shenfei",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -34,7 +34,7 @@
       "name" : "文本批量替换",
       "identifier" : "findtextandselect",
       "script" : "textReplace.js",
-      "shortcut": "",
+      "shortcut": "command shift f",
       "handler" : "onRun"
     },
     {
