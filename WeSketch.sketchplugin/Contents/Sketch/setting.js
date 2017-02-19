@@ -5,15 +5,139 @@ var lineThicknessKey = "com.sketchplugins.wechat.linethickness";
 var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
 var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
+function drawIcon(sender){
+    var size = sender.frame().size;
+	var image = [NSImage imageWithSize:size];
+    [image lockFocus];
+    [[NSColor colorWithCalibratedRed:0.157 green:0.78 blue:0.4 alpha:1] set];
+
+    var path = [NSBezierPath bezierPath];
+    [path moveToPoint:NSMakePoint(10.1, 1)];
+    path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(11.81,1.73),NSMakePoint(10.65,1),NSMakePoint(11.42,1.32));
+    path.lineToPoint(NSMakePoint(14, 4));
+    path.lineToPoint(NSMakePoint(22, 4));
+    path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(25,7),NSMakePoint(23.65,4),NSMakePoint(25,5.34));
+    path.lineToPoint(NSMakePoint(25, 16));
+    path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(22,19),NSMakePoint(25,17.66),NSMakePoint(23.66,19));
+    path.lineToPoint(NSMakePoint(4, 19));
+    path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(1,16),NSMakePoint(2.34,19),NSMakePoint(1,17.65));
+    path.lineToPoint(NSMakePoint(1, 4));
+    path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(4,1),NSMakePoint(1,2.34),NSMakePoint(2.34,1));
+    path.lineToPoint(NSMakePoint(10, 1));
+
+    [path stroke];
+	[image unlockFocus];
+	return image;
+}
+
+function addButton(index,func){
+    var button = [[NSButton alloc] initWithFrame:NSMakeRect(250, 10, 26, 24)];
+    [button setButtonType:1];
+    button.bezelStyle = 1;
+    button.bordered = 0;
+    button.tag = index;
+    button.allowsMixedState = true;  // 仅初始化状态为混合态时允许
+    button.state = true;
+    var imageState = drawIcon(button);
+    button.image = imageState;
+    button.cell().imageScaling = 1;
+    [button setCOSJSTargetFunction:function(sender) {func(sender);}];
+    return button;
+}
 
 var onRun = function(context) {
 	var settingsWindow = COSAlertWindow.new();
 	settingsWindow.addButtonWithTitle("保存");
 	settingsWindow.addButtonWithTitle("取消");
 	settingsWindow.setMessageText("设置");
+    settingsWindow.setInformativeText("填写线上地址或者点击按钮选取本地文件作为同步源");
 
+	var manifestPath1 = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path();
+	var	manifest1 = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath1), NSJSONReadingMutableContainers, nil);
 
-	settingsWindow.addTextLabelWithValue("箭头线色值             箭头线粗细             标记色值");
+	// 如果 系统key 中有，就从系统key 中读取，没有再去读取 config.json 
+	var uiKitUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey);
+	var colorUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey);
+
+	var	uikit = uiKitUrlInKey || manifest1.UIKIT;
+	var	color = colorUrlInKey || manifest1.COLOR;
+
+	var uikitLabel = [];	
+	var colorLabel = [];	
+	var uikitField = [];	
+	var colorField = [];	
+
+    settingsWindow.addTextLabelWithValue("UI Kit 同步源");
+	for (var i = 0; i < 4; i++) {
+		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))
+		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,9,100,22));
+		uikitLabel.push(Label);
+        accessoryView.addSubview(Label);
+		var Field = NSTextField.alloc().initWithFrame(NSMakeRect(105,0,130,40));
+		uikitField.push(Field);
+		accessoryView.addSubview(Field);
+		var linkbutton = addButton(i,function(d){
+			var panel = [NSOpenPanel openPanel];
+			[panel setCanChooseDirectories:false];
+			[panel setCanCreateDirectories:false];
+			panel.setAllowedFileTypes([@"sketch"]);
+			panel.setAllowsOtherFileTypes(false);
+			panel.setExtensionHidden(false);
+			var clicked = [panel runModal];
+			if (clicked != NSFileHandlingPanelOKButton) {
+				return;
+			}
+			var firstURL = [[panel URLs] objectAtIndex:0];
+			var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
+			var file_path = [unformattedURL stringByRemovingPercentEncoding];
+			uikitField[d.tag()].setStringValue(file_path);
+		});
+		accessoryView.addSubview(linkbutton);
+		settingsWindow.addAccessoryView(accessoryView);
+		if(i <= uikit.length-1){
+        	Label.setStringValue(uikit[i].title);
+			Field.setStringValue(uikit[i].url);
+		}
+    }
+
+    settingsWindow.addTextLabelWithValue("色板同步源");
+    for (var i = 0; i < 2; i++) {
+		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))
+		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,9,100,22));
+		colorLabel.push(Label);
+        accessoryView.addSubview(Label);
+		Field = NSTextField.alloc().initWithFrame(NSMakeRect(105,0,130,40));
+		accessoryView.addSubview(Field);
+		colorField.push(Field);
+		var linkbutton = addButton(i,function(d){
+			var panel = [NSOpenPanel openPanel];
+			[panel setCanChooseDirectories:false];
+			[panel setCanCreateDirectories:false];
+			panel.setAllowedFileTypes([@"json"]);
+			panel.setAllowsOtherFileTypes(false);
+			panel.setExtensionHidden(false);
+			var clicked = [panel runModal];
+			if (clicked != NSFileHandlingPanelOKButton) {
+				return;
+			}
+			var firstURL = [[panel URLs] objectAtIndex:0];
+			var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
+			var file_path = [unformattedURL stringByRemovingPercentEncoding];
+			colorField[d.tag()].setStringValue(file_path);
+		});
+		accessoryView.addSubview(linkbutton);
+		settingsWindow.addAccessoryView(accessoryView);
+		if(i <= color.length-1){
+	        Label.setStringValue(color[i].title);
+			Field.setStringValue(color[i].url);	
+		}
+    }
+
+    var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
+    separator.setBoxType(2);
+    settingsWindow.addAccessoryView(separator);
+
+    settingsWindow.addTextLabelWithValue("箭头线色值             箭头线粗细             标记色值");
 
 	var flowIndicatorColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	var flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
@@ -44,59 +168,6 @@ var onRun = function(context) {
 	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell2);
 
 	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
-
-	var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
-    separator.setBoxType(2);
-    settingsWindow.addAccessoryView(separator);
-	var manifestPath1 = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path();
-	var	manifest1 = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath1), NSJSONReadingMutableContainers, nil);
-
-	// 如果 系统key 中有，就从系统key 中读取，没有再去读取 config.json 
-	var uiKitUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey);
-	var colorUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey);
-
-	var	uikit = uiKitUrlInKey || manifest1.UIKIT;
-	var	color = colorUrlInKey || manifest1.COLOR;
-
-	var uikitLabel = [];	
-	var colorLabel = [];	
-	var uikitField = [];	
-	var colorField = [];	
-
-    settingsWindow.addTextLabelWithValue("UI Kit 同步源");
-	for (var i = 0; i < 4; i++) {
-		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))
-		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,9,100,22));
-		uikitLabel.push(Label);
-        accessoryView.addSubview(Label);
-		var Field = NSTextField.alloc().initWithFrame(NSMakeRect(105,0,160,40));
-		uikitField.push(Field);
-		accessoryView.addSubview(Field);
-		settingsWindow.addAccessoryView(accessoryView);
-		if(i <= uikit.length-1){
-        	Label.setStringValue(uikit[i].title);
-			Field.setStringValue(uikit[i].url);
-		}
-    }
-
-	var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
-    separator.setBoxType(2);
-    settingsWindow.addAccessoryView(separator);
-    settingsWindow.addTextLabelWithValue("色板同步源");
-    for (var i = 0; i < 2; i++) {
-		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))
-		var Label = NSTextField.alloc().initWithFrame(NSMakeRect(0,9,100,22));
-		colorLabel.push(Label);
-        accessoryView.addSubview(Label);
-		Field = NSTextField.alloc().initWithFrame(NSMakeRect(105,0,160,40));
-		accessoryView.addSubview(Field);
-		colorField.push(Field);
-		settingsWindow.addAccessoryView(accessoryView);
-		if(i <= color.length-1){
-	        Label.setStringValue(color[i].title);
-			Field.setStringValue(color[i].url);	
-		}
-    }
 
 	var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
     separator.setBoxType(2);
