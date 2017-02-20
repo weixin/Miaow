@@ -1,16 +1,16 @@
 # weBox 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://opensource.org/licenses/MIT "Feel free to contribute.") 
-
-<p style="text-align: center;">
-<img alt="weBox" src="img/weBox-logo.png" width="142">
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://opensource.org/licenses/MIT "Feel free to contribute.")
+ 
+<p align="center">
+<img src="img/weBox-logo.png" alt="weBox" width="142">
 </p>
-
+ 
 weBox 是一个Sketch插件，解决了设计团队UI Kit协作问题。包括组件库(Symbols)和色板(Document Colors)等同步。
 
 ### 使用方法
 1. [点击下载](https://github.com/weixin/weBox/archive/master.zip) 之后解压；
 2. 运行(直接双击) **WeSketch.sketchplugin** 文件即可完成安装；
-3. 在**设置**里，填写UI Kit同步源(线上或本地文件)，开始weBox！
+3. 在 **设置** 里，填写UI Kit同步源(线上或本地文件)。
 
 
 ### [快速开始](https://github.com/weixin/weBox/wiki/0.%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
