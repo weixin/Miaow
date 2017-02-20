@@ -1,9 +1,11 @@
 # weBox 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://opensource.org/licenses/MIT "Feel free to contribute.") 
 
-weBox 是一个Sketch插件，解决了设计团队UI Kit协作问题。包括组件库(Symbols)和色板(Document Colors)等同步。
-
+<p style="text-align: center;">
 <img alt="weBox" src="img/weBox-logo.png" width="142">
+</p>
+
+weBox 是一个Sketch插件，解决了设计团队UI Kit协作问题。包括组件库(Symbols)和色板(Document Colors)等同步。
 
 ### 使用方法
 1. [点击下载](https://github.com/weixin/weBox/archive/master.zip) 之后解压；
