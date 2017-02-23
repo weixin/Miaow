@@ -67,6 +67,7 @@ var onRun = function(context) {
 	var uikitField = [];	
 	var colorField = [];	
 
+    settingsWindow.addTextLabelWithValue("同步UI Kit 可以自动同步同名色板");
     settingsWindow.addTextLabelWithValue("UI Kit 同步源");
 	for (var i = 0; i < 4; i++) {
 		var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, i*24 + 40, 300.0, 40))

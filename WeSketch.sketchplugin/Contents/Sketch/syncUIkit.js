@@ -1,7 +1,10 @@
 @import "common.js"
 @import "organizer.js"
+@import "syncColor.js"
+
 var scaleOptionsMatrix;
 var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
+var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
 function chooseKit(context){
 	var settingsWindow = COSAlertWindow.new();
@@ -27,7 +30,6 @@ function chooseKit(context){
 }
 
 var onRun = function (context) {
-	// NSapp.displayDialog([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]);
 	var dialog = chooseKit(context);
 	if(dialog != '1000'){
 		return;
@@ -36,6 +38,17 @@ var onRun = function (context) {
 	var index = [uikit tag];
 	var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
 	var UIKITURL = List[index].url;
+
+	var colorList = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
+	var tbColor = '';
+	for(var co = 0;co<colorList.length;co ++){
+		if(colorList[co].title == List[index].title){
+			SyncColor(context,colorList[co].url);
+			tbColor = '\r\n色板已同步到 Document Colors，请重新打开色板查看';
+			break;
+		}
+	}
+
 	context.document.showMessage("下载更新中...");
 	var theResponseData = networkRequest([UIKITURL]);
 
@@ -153,7 +166,7 @@ var onRun = function (context) {
 		// copyPage.setName('Page 1');
 	}
 
-	NSApp.displayDialog(alertData);
+	NSApp.displayDialog(alertData + tbColor);
 }
 
 function isSame(a,b){

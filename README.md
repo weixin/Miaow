@@ -1,4 +1,4 @@
-# weBox 
+# WeSketch 
 
 [下载解压后双击wechat.sketch文件安装](https://github.com/weixin/weBox/archive/master.zip)
 
