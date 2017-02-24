@@ -308,7 +308,7 @@ var findAway2 = function(a,b,doc){
 
 	function getLinePath(startPosition,endPoisiton,fx,nextFx){
 		iFlag = iFlag +1;
-		if(iFlag == 6){
+		if(iFlag == 8){
 			return;
 		}
 		//找到路径中最近的产生碰撞的元素
@@ -342,6 +342,7 @@ var findAway2 = function(a,b,doc){
 					{x:art[i].absoluteRect().x(),y:art[i].absoluteRect().y()},
 					{x:art[i].absoluteRect().x()+art[i].absoluteRect().size().width,y:art[i].absoluteRect().y()+art[i].absoluteRect().size().height}
 				)){
+
 				isReturnFlag = true;
 				if((pzysx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width || !isPZ) && fx == 'l'){
 					pzysx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width;
@@ -358,7 +359,7 @@ var findAway2 = function(a,b,doc){
 				}
 				else if((pzysy > art[i].absoluteRect().y() || !isPZ) && fx == 'b'){
 					pzysy = art[i].absoluteRect().y();
-					thisEndPosition.y = startPosition.y + ((art[i].absoluteRect().y() + art[i].absoluteRect().size().height) - startPosition.y) / 2;
+					thisEndPosition.y = startPosition.y + (art[i].absoluteRect().y() - startPosition.y) / 2;
 				}
 				isPZ = true;
 
@@ -368,15 +369,35 @@ var findAway2 = function(a,b,doc){
 
 		if(isPZ){
 			endObject = {x:parseInt(thisEndPosition.x),y:parseInt(thisEndPosition.y)};
+			pzysx = 0;
+			pzysy = 0;
 		}else{
 			if(fx == 'l' || fx == 'r'){
-				endObject = {x:endPoisiton.x,y:startPosition.y};
+				// if(endPoisiton.y != startPosition.y && ){
+				// 	endObject = {x:endPoisiton.x - 80,y:startPosition.y};
+				// 	if(fx == 'l'){
+				// 		endObject = {x:endPoisiton.x + 80,y:startPosition.y};
+				// 	}
+				// }else{
+					endObject = {x:endPoisiton.x,y:startPosition.y};
+				// }
 
 			}else if(fx == 't' || fx == 'b'){
-				endObject = {x:startPosition.x,y:endPoisiton.y};
+				// if(endPoisiton.x != startPosition.x){
+				// 	endObject = {x:endPoisiton.x,y:startPosition.y - 80};
+				// 	if(fx == 'b'){
+				// 		endObject = {x:endPoisiton.x,y:startPosition.y + 80};
+				// 	}
+				// }else{
+					endObject = {x:startPosition.x,y:endPoisiton.y};
+				// }	
 			}
 		}
-		returnLine.push(endObject);
+		if(returnLine[returnLine.length-1].x != endObject.x || returnLine[returnLine.length-1].y != endObject.y){
+			returnLine.push(endObject);
+		}else{
+			returnLine.splice(returnLine.length-1,1);
+		}
 		if(endObject.x != endPoisiton.x || endObject.y != endPoisiton.y){
 			 getLinePath(endObject,endPoisiton,nextFx,fx);
 		}else{
@@ -438,9 +459,9 @@ var drawPPP = function(a,b,doc){
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
 		}else{
-			var xLocation = drawLineLocation(startPointX,'horizontal',plus);
-			startPointX = xLocation;
-			endPointX = xLocation;
+			// var xLocation = drawLineLocation(startPointX,'horizontal',plus);
+			// startPointX = xLocation;
+			// endPointX = xLocation;
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 		returnDom.push(line);
@@ -473,9 +494,9 @@ var drawPPP = function(a,b,doc){
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
 		}else{
-			var yLocation = drawLineLocation(startPointY,'n',plus);
-			startPointY = yLocation;
-			endPointY = yLocation;
+			// var yLocation = drawLineLocation(startPointY,'n',plus);
+			// startPointY = yLocation;
+			// endPointY = yLocation;
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 		returnDom.push(line);
@@ -543,26 +564,90 @@ var drawRound = function(x,y){
 	return hitAreaLayer;
 }
 
+/*
+* 获取两个点（有顺序的点）连成线的方向
+*/
+var getLineDirection = function (pointeOne, pointTwo) {
+		if (pointeOne.x === pointTwo.x) { // 两个点的 x 相同
+				if (pointeOne.y > pointTwo.y) { // 上
+						return 't';
+				}
+				else { // 下
+						return 'b';
+				}
+		}
+		else { // 两个点的 y 相同
+				if (pointeOne.x > pointTwo.x) { // 左
+						return 'l';
+				}
+				else { // 右
+						return 'r';
+				}
+		}
+}
+
 var drawLine = function(linepoint,endPoisiton,isLess){
 	var linePaths = [];
 	var linePath = NSBezierPath.bezierPath();
-	for(var i = 0;i<linepoint.length - 1;i++){
-		if(i != 0){
-			isLess = true;
-		}
-		if(endPoisiton == 'l'){
-			linePath.moveToPoint(NSMakePoint(isLess?linepoint[i].x:linepoint[i].x-5,linepoint[i].y));
-		}else if(endPoisiton == 'r'){
-			linePath.moveToPoint(NSMakePoint(isLess?linepoint[i].x:linepoint[i].x+5,linepoint[i].y));
-		}else if(endPoisiton == 't'){
-			linePath.moveToPoint(NSMakePoint(linepoint[i].x,isLess?linepoint[i].y:linepoint[i].y+5));
-		}else if(endPoisiton == 'b'){
-			linePath.moveToPoint(NSMakePoint(linepoint[i].x,isLess?linepoint[i].y:linepoint[i].y-5));
-		}
-		linePath.lineToPoint(NSMakePoint(linepoint[i+1].x,linepoint[i+1].y));
-	}
 
-	linePath.closePath();
+	var lineCount = linepoint.length;
+	var offset = 40;
+	for (var i = 0; i < lineCount - 1; i++) { // 给每个点添加接下来的方向属性
+			linepoint[i].direction = getLineDirection(linepoint[i], linepoint[i+1]);
+	}
+	for(var i = 0; i < lineCount - 1; i++){
+		if (i === 0) { // 第一个点不做修改
+				linePath.moveToPoint(NSMakePoint(linepoint[i].x, linepoint[i].y));
+		}
+		if (i === lineCount - 2) { // 倒数第二个点绘制直线
+				linePath.lineToPoint(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y));
+		}
+		else {
+			// 先绘制到下一个点的直线，然后绘制到下下个点的曲线
+			// 0.13 = 1 - cos(30)
+			// 0.5 = 1- sin(30)
+			if (linepoint[i].direction === 't') { // 上
+					linePath.lineToPoint(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y + offset));
+					// 绘制过渡曲线
+					if (linepoint[i+1].direction === 'l') { // 下一条线的方向 左
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x - offset, linepoint[i+1].y), NSMakePoint(linepoint[i+1].x - offset*0.13, linepoint[i+1].y + offset*0.5), NSMakePoint(linepoint[i+1].x - offset*0.5, linepoint[i+1].y + offset*0.13));
+					}
+					else { // 右
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x + offset, linepoint[i+1].y), NSMakePoint(linepoint[i+1].x + offset*0.13, linepoint[i+1].y + offset*0.5), NSMakePoint(linepoint[i+1].x + offset*0.5, linepoint[i+1].y + offset*0.13));
+					}
+			}
+			else if (linepoint[i].direction === 'b') { // 下
+					linePath.lineToPoint(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y - offset));
+					// 绘制过渡曲线
+					if (linepoint[i+1].direction === 'l') { // 下一条线的方向 左
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x - offset, linepoint[i+1].y), NSMakePoint(linepoint[i+1].x - offset*0.13, linepoint[i+1].y - offset*0.5), NSMakePoint(linepoint[i+1].x - offset*0.5, linepoint[i+1].y - offset*0.13));
+					}
+					else { // 右
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x + offset, linepoint[i+1].y), NSMakePoint(linepoint[i+1].x + offset*0.13, linepoint[i+1].y - offset*0.5), NSMakePoint(linepoint[i+1].x + offset*0.5, linepoint[i+1].y - offset*0.13));
+					}
+			}
+			else if (linepoint[i].direction === 'l') { // 左
+					linePath.lineToPoint(NSMakePoint(linepoint[i+1].x + offset, linepoint[i+1].y));
+					// 绘制过渡曲线
+					if (linepoint[i+1].direction === 't') { // 下一条线的方向 上
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y - offset), NSMakePoint(linepoint[i+1].x + offset*0.5, linepoint[i+1].y - offset*0.13), NSMakePoint(linepoint[i+1].x + offset*0.13, linepoint[i+1].y - offset*0.5));
+					}
+					else { // 下
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y + offset), NSMakePoint(linepoint[i+1].x + offset*0.5, linepoint[i+1].y + offset*0.13), NSMakePoint(linepoint[i+1].x + offset*0.13, linepoint[i+1].y + offset*0.5));
+					}
+			}
+			else { // 右
+					linePath.lineToPoint(NSMakePoint(linepoint[i+1].x - offset, linepoint[i+1].y));
+					// 绘制过渡曲线
+					if (linepoint[i+1].direction === 't') { // 下一条线的方向 上
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y - offset), NSMakePoint(linepoint[i+1].x - offset*0.5, linepoint[i+1].y - offset*0.13), NSMakePoint(linepoint[i+1].x - offset*0.13, linepoint[i+1].y - offset*0.5));
+					}
+					else { // 下
+							linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i+1].x, linepoint[i+1].y + offset), NSMakePoint(linepoint[i+1].x - offset*0.5, linepoint[i+1].y + offset*0.13), NSMakePoint(linepoint[i+1].x - offset*0.13, linepoint[i+1].y + offset*0.5));
+					}
+			}
+		}
+	}
 
 	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
 	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
@@ -688,8 +773,8 @@ var redrawConnections = function(context) {
 
 	return connectionsGroup;
 }
-
 var onRun = function(context) {
+
 	var selection = context.selection;
 	var destArtboard, linkLayer;
 
