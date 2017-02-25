@@ -260,6 +260,7 @@ var findAway2 = function(a,b,doc){
 	var isReturnFlag = false;
 	var pca = a,pcb = b;
 	var fx;
+	var zaLength = 0;
 	if(a.className() != "MSArtboardGroup" && a.className() != "MSSymbolMaster"){
 		if(a.parentArtboard()){
 			pca = pca.parentArtboard();
@@ -305,11 +306,10 @@ var findAway2 = function(a,b,doc){
 		}
 	}
 
-
 	function getLinePath(startPosition,endPoisiton,fx,nextFx){
 		iFlag = iFlag +1;
-		if(iFlag == 8){
-			return;
+		if(iFlag == 15){
+			return iFlag ++;
 		}
 		//找到路径中最近的产生碰撞的元素
 		var pzysx = 0;
@@ -368,29 +368,36 @@ var findAway2 = function(a,b,doc){
 		var endObject = {};
 
 		if(isPZ){
+			if(fx == 'l' || fx == 'r'){
+				zaLength ++;
+			}else{
+				zaLength --;
+			}
+			if(zaLength > 0){
+				if(b.x() > a.x()){
+					endPoisiton.x = b.x() + 5;
+					endPoisiton.y = b.size().height/2 + b.y();
+				}else{
+					endPoisiton.x = b.size().width + b.x();
+					endPoisiton.y = b.size().height/2 + b.y();
+				}
+			}else{
+				if(b.y() < a.y()){
+					endPoisiton.x = b.x() + b.size().width/2;
+					endPoisiton.y = b.y() + b.size().height - 5;
+				}else{
+					endPoisiton.x = b.x() + b.size().width/2;
+					endPoisiton.y = b.y() + 5;
+				}
+			}
 			endObject = {x:parseInt(thisEndPosition.x),y:parseInt(thisEndPosition.y)};
 			pzysx = 0;
 			pzysy = 0;
 		}else{
 			if(fx == 'l' || fx == 'r'){
-				// if(endPoisiton.y != startPosition.y && ){
-				// 	endObject = {x:endPoisiton.x - 80,y:startPosition.y};
-				// 	if(fx == 'l'){
-				// 		endObject = {x:endPoisiton.x + 80,y:startPosition.y};
-				// 	}
-				// }else{
-					endObject = {x:endPoisiton.x,y:startPosition.y};
-				// }
-
+				endObject = {x:endPoisiton.x,y:startPosition.y};
 			}else if(fx == 't' || fx == 'b'){
-				// if(endPoisiton.x != startPosition.x){
-				// 	endObject = {x:endPoisiton.x,y:startPosition.y - 80};
-				// 	if(fx == 'b'){
-				// 		endObject = {x:endPoisiton.x,y:startPosition.y + 80};
-				// 	}
-				// }else{
-					endObject = {x:startPosition.x,y:endPoisiton.y};
-				// }	
+				endObject = {x:startPosition.x,y:endPoisiton.y};
 			}
 		}
 		if(returnLine[returnLine.length-1].x != endObject.x || returnLine[returnLine.length-1].y != endObject.y){
@@ -401,9 +408,17 @@ var findAway2 = function(a,b,doc){
 		if(endObject.x != endPoisiton.x || endObject.y != endPoisiton.y){
 			 getLinePath(endObject,endPoisiton,nextFx,fx);
 		}else{
-			endPoisitonArrow = fx;
+			endPoisitonArrow = fx; 
+			if(fx == 'b'){
+				endPoisitonArrow = 't';
+			}else if(fx == 't'){
+				endPoisitonArrow = 'b';
+			}
 		}
 
+	}
+	if(iFlag == 16){
+		NSApp.displayDialog(pca.name() + '和' + pcb.name() + '之间生成连线太过复杂，请调整它们之间的摆放顺序再进行连接');
 	}
 	
 	return {
@@ -591,7 +606,7 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 	var linePath = NSBezierPath.bezierPath();
 
 	var lineCount = linepoint.length;
-	var offset = 40;
+	var offset = 20;
 	for (var i = 0; i < lineCount - 1; i++) { // 给每个点添加接下来的方向属性
 			linepoint[i].direction = getLineDirection(linepoint[i], linepoint[i+1]);
 	}
@@ -773,6 +788,7 @@ var redrawConnections = function(context) {
 
 	return connectionsGroup;
 }
+
 var onRun = function(context) {
 
 	var selection = context.selection;
