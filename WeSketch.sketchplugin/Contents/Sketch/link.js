@@ -117,9 +117,12 @@ function segmentsIntr(a, b, c, d){
 	    if (  area_cda * area_cdb >= 0 ) {  
 	        continue;
 	    }
-	    return true;
+	    var t = area_cda / ( area_abd- area_abc );  
+	    var dx= t*(b.x - a.x),  
+	        dy= t*(b.y - a.y);  
+	    return { x: a.x + dx , y: a.y + dy,flag:true };  
 	}
-    return false;
+    return {flag:false};
 }
 
 var findAway = function(line,a,b,doc,endPoisiton){
@@ -336,12 +339,13 @@ var findAway2 = function(a,b,doc){
 		
 		var startArtPosition = pca.absoluteRect();
 		for(var i = 0;i<art.length;i++){
-			if(pca.objectID() != art[i].objectID() && pcb.objectID() != art[i].objectID() && segmentsIntr(
+			var segments = segmentsIntr(
 					{x:startPosition.x,y:startPosition.y},
 					PZLine,
 					{x:art[i].absoluteRect().x(),y:art[i].absoluteRect().y()},
 					{x:art[i].absoluteRect().x()+art[i].absoluteRect().size().width,y:art[i].absoluteRect().y()+art[i].absoluteRect().size().height}
-				)){
+				);
+			if(pca.objectID() != art[i].objectID() && pcb.objectID() != art[i].objectID() && segments.flag == true){
 
 				isReturnFlag = true;
 				if((pzysx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width || !isPZ) && fx == 'l'){
@@ -362,7 +366,16 @@ var findAway2 = function(a,b,doc){
 					thisEndPosition.y = startPosition.y + (art[i].absoluteRect().y() - startPosition.y) / 2;
 				}
 				isPZ = true;
-
+			}else if(pcb.objectID() == art[i].objectID() && segments.flag == true){
+				returnLine.push({x:segments.x,y:segments.y});
+				if(fx == 'b'){
+					endPoisitonArrow = 't';
+				}else if(fx == 't'){
+					endPoisitonArrow = 'b';
+				}else{
+					endPoisitonArrow = fx;
+				}
+				return;
 			}
 		}
 		var endObject = {};
