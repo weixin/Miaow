@@ -40,7 +40,7 @@ var drawLineLocation = function(location,direction,plus){
 	}
 	setDrawLineLocation(location,direction);
 	return location;
-	
+
 }
 var setDrawLineLocation = function(location,direction){
 	if(direction == 'horizontal'){
@@ -61,22 +61,22 @@ var getConnectionsGroupInPage = function(page) {
 	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
 }
 function segmentsIntr0(a, b, c, d){
-    // 三角形abc 面积的2倍  
-    var area_abc = (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);  
-    // 三角形abd 面积的2倍  
-    var area_abd = (a.x - d.x) * (b.y - d.y) - (a.y - d.y) * (b.x - d.x);   
-    // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);  
-    if ( area_abc*area_abd>=0 ) {  
-        return false;  
-    }  
-    // 三角形cda 面积的2倍  
-    var area_cda = (c.x - a.x) * (d.y - a.y) - (c.y - a.y) * (d.x - a.x);  
-    // 三角形cdb 面积的2倍  
-    // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.  
-    var area_cdb = area_cda + area_abc - area_abd ;  
-    if (  area_cda * area_cdb >= 0 ) {  
-        return false;  
-    }  
+    // 三角形abc 面积的2倍
+    var area_abc = (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
+    // 三角形abd 面积的2倍
+    var area_abd = (a.x - d.x) * (b.y - d.y) - (a.y - d.y) * (b.x - d.x);
+    // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
+    if ( area_abc*area_abd>=0 ) {
+        return false;
+    }
+    // 三角形cda 面积的2倍
+    var area_cda = (c.x - a.x) * (d.y - a.y) - (c.y - a.y) * (d.x - a.x);
+    // 三角形cdb 面积的2倍
+    // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
+    var area_cdb = area_cda + area_abc - area_abd ;
+    if (  area_cda * area_cdb >= 0 ) {
+        return false;
+    }
     return true;
 }
 
@@ -101,26 +101,26 @@ function segmentsIntr(a, b, c, d){
 			c = {x:dd.x,y:dd.y};
 			d = {x:cc.x,y:dd.y};
 		}
-		// 三角形abc 面积的2倍  
-	    var area_abc = (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);  
-	    // 三角形abd 面积的2倍  
-	    var area_abd = (a.x - d.x) * (b.y - d.y) - (a.y - d.y) * (b.x - d.x);   
-	    // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);  
-	    if ( area_abc*area_abd>=0 ) {  
-	        continue;
-	    }  
-	    // 三角形cda 面积的2倍  
-	    var area_cda = (c.x - a.x) * (d.y - a.y) - (c.y - a.y) * (d.x - a.x);  
-	    // 三角形cdb 面积的2倍  
-	    // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.  
-	    var area_cdb = area_cda + area_abc - area_abd ;  
-	    if (  area_cda * area_cdb >= 0 ) {  
+		// 三角形abc 面积的2倍
+	    var area_abc = (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
+	    // 三角形abd 面积的2倍
+	    var area_abd = (a.x - d.x) * (b.y - d.y) - (a.y - d.y) * (b.x - d.x);
+	    // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
+	    if ( area_abc*area_abd>=0 ) {
 	        continue;
 	    }
-	    var t = area_cda / ( area_abd- area_abc );  
-	    var dx= t*(b.x - a.x),  
-	        dy= t*(b.y - a.y);  
-	    return { x: a.x + dx , y: a.y + dy,flag:true };  
+	    // 三角形cda 面积的2倍
+	    var area_cda = (c.x - a.x) * (d.y - a.y) - (c.y - a.y) * (d.x - a.x);
+	    // 三角形cdb 面积的2倍
+	    // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
+	    var area_cdb = area_cda + area_abc - area_abd ;
+	    if (  area_cda * area_cdb >= 0 ) {
+	        continue;
+	    }
+	    var t = area_cda / ( area_abd- area_abc );
+	    var dx= t*(b.x - a.x),
+	        dy= t*(b.y - a.y);
+	    return { x: a.x + dx , y: a.y + dy,flag:true };
 	}
     return {flag:false};
 }
@@ -157,7 +157,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 		bx = ax - 30;
 		ay = a.y() + a.size().height/2;
 	}
-		
+
 
 	for(var i = 0;i<art.length;i++){
 		if(pca.objectID() != art[i].objectID() && pcb.objectID() != art[i].objectID() && segmentsIntr0(
@@ -217,7 +217,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 		if(by > b.y()){
 			returnLine.push({x:ax,y:by});
 			returnLine.push({x:b.x(),y:by});
-			
+
 			endPoisiton = 'r';
 		}else{
 			returnLine.push({x:ax,y:by});
@@ -253,7 +253,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 		flag: isReturnFlag,
 		endPoisiton: endPoisiton
 	}
-	
+
 }
 
 var findAway2 = function(a,b,doc){
@@ -290,7 +290,7 @@ var findAway2 = function(a,b,doc){
 			// 目标在右下角 右下右
 			getLinePath({x:ax,y:ay},{x:bx,y:by},fx,'b');
 		}else{
-			// 目标在右上角 右上右		
+			// 目标在右上角 右上右
 			getLinePath({x:ax,y:ay},{x:bx,y:by},fx,'t');
 		}
 	}else{
@@ -336,7 +336,7 @@ var findAway2 = function(a,b,doc){
 				PZLine.y = PZLine.y + pcb.absoluteRect().size().height/2;
 			}
 		}
-		
+
 		var startArtPosition = pca.absoluteRect();
 		for(var i = 0;i<art.length;i++){
 			var segments = segmentsIntr(
@@ -421,7 +421,7 @@ var findAway2 = function(a,b,doc){
 		if(endObject.x != endPoisiton.x || endObject.y != endPoisiton.y){
 			 getLinePath(endObject,endPoisiton,nextFx,fx);
 		}else{
-			endPoisitonArrow = fx; 
+			endPoisitonArrow = fx;
 			if(fx == 'b'){
 				endPoisitonArrow = 't';
 			}else if(fx == 't'){
@@ -433,7 +433,7 @@ var findAway2 = function(a,b,doc){
 	if(iFlag == 16){
 		NSApp.displayDialog(pca.name() + '和' + pcb.name() + '之间生成连线太过复杂，请调整它们之间的摆放顺序再进行连接');
 	}
-	
+
 	return {
 		line: returnLine,
 		flag: isReturnFlag,
@@ -569,17 +569,17 @@ var drawPPP = function(a,b,doc){
 				endPointY = b.y() + b.size().height;
 				endPoisiton = 'b';
 			}
-			
+
 			returnDom.push(drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton,true));
 			startPointX = tempPointX;
 			startPointY = tempPointY;
 		}
-		
+
 
 
 	}
 	returnDom.push(drawRound(startPointX,startPointY));
-	returnDom.push(drawArrow(endPointX,endPointY,endPoisiton));
+	// returnDom.push(drawArrow(endPointX,endPointY,endPoisiton));
 	return returnDom;
 }
 var drawRound = function(x,y){
@@ -677,6 +677,31 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 		}
 	}
 
+	// 绘制箭头
+	var arrowDirection = linepoint[lineCount - 2].direction; // 1. 箭头方向
+	var arrowOffset = 20; // 1. 箭头长度
+
+	if (arrowDirection === 't') {
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
+	}
+	else if (arrowDirection === 'b') {
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
+	}
+	else if (arrowDirection === 'l') {
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
+	}
+	else {
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
+			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
+	}
+
 	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
 	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
 	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
@@ -697,10 +722,10 @@ var drawArrow = function(x,y,z){
 		path.lineToPoint(NSMakePoint(0.85, 18.73));
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(1.54, 18.22),NSMakePoint(1.06, 18.52),NSMakePoint(1.29, 18.35));
 		path.lineToPoint(NSMakePoint(19.03, 0.73));
-		
+
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(23.27, 0.73),NSMakePoint(20.2, -0.45),NSMakePoint(22.1, -0.45));
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(23.27, 4.97),NSMakePoint(24.45, 1.9),NSMakePoint(24.45, 3.8));
-		path.lineToPoint(NSMakePoint(7.37, 20.87));		
+		path.lineToPoint(NSMakePoint(7.37, 20.87));
 		path.closePath();
 		var arrow = MSShapeGroup.shapeWithBezierPath(path);
 		arrow.setName('Arrow');
@@ -829,7 +854,7 @@ var onRun = function(context) {
 				destArtboard = selection[0];
 				linkLayer = selection[1];
 			}
-			
+
 		}
 		else if(selection.lastObject().className() == "MSArtboardGroup" || selection.lastObject().className() == "MSSymbolMaster") {
 			destArtboard = selection.lastObject();
