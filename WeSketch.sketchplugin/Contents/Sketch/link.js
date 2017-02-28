@@ -2,53 +2,12 @@
 var kPluginDomain = "com.sketchplugins.wechat.link";
 var lineColorKey = "com.sketchplugins.wechat.linecolor";
 var lineThicknessKey = "com.sketchplugins.wechat.linethickness";
-var drawLineLocationX = {};
-var drawLineLocationY = {};
 var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
 var lineThickness = NSUserDefaults.standardUserDefaults().objectForKey(lineThicknessKey) || "6";
 var colorLineR = rgb(colorLine)[0];
 var colorLineG = rgb(colorLine)[1];
 var colorLineB = rgb(colorLine)[2];
-var leaveZero = function(a){
-	return parseInt(a);
-	// return parseInt(parseInt(a).toString().substr(0,parseInt(a).toString().length-1) + '0');
-}
-var drawLineLocation = function(location,direction,plus){
-	location = leaveZero(location)
-	if(direction == 'horizontal'){
-		if(drawLineLocationY[location]){
-			if(plus){
-				location =  location + 40;
-			}else{
-				location =  location - 40;
-			}
-			if(drawLineLocationY[location]){
-				return drawLineLocation(location,direction,plus);
-			}
-		}
-	}else{
-		if(drawLineLocationX[location]){
-			if(plus){
-				location = location + 40;
-			}else{
-				location = location - 40;
-			}
-			if(drawLineLocationY[location]){
-				return drawLineLocation(location,direction,plus);
-			}
-		}
-	}
-	setDrawLineLocation(location,direction);
-	return location;
-	
-}
-var setDrawLineLocation = function(location,direction){
-	if(direction == 'horizontal'){
-		drawLineLocationY[location] = true;
-	}else{
-		drawLineLocationX[location] = true;
-	}
-}
+var LineToArtJL = 120;
 
 var sanitizeArtboard = function(artboard, context) {
 	if (context.command.valueForKey_onLayer_forPluginIdentifier("artboardID", artboard, kPluginDomain) == nil) {
@@ -143,18 +102,18 @@ var findAway = function(line,a,b,doc,endPoisiton){
 	if(lastEndPosition == 'l'){
 		ax = a.x() + a.size().width / 2;
 		ay = a.y() + a.size().height;
-		by = ay + 30;
+		by = ay + LineToArtJL;
 	}else if(lastEndPosition == 'r'){
 		ax = a.x() + a.size().width / 2;
 		ay = a.y();
-		by = ay - 80;
+		by = ay - LineToArtJL;
 	}else if(lastEndPosition == 't'){
 		ax = a.x() + a.size().width;
-		bx = ax + 30;
+		bx = ax + LineToArtJL;
 		ay = a.y() + a.size().height/2;
 	}else if(lastEndPosition == 'b'){
 		ax = a.x();
-		bx = ax - 30;
+		bx = ax - LineToArtJL;
 		ay = a.y() + a.size().height/2;
 	}
 		
@@ -170,7 +129,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			if(endPoisiton == 't'){
 				if(ax <= art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
 					if(bx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width){
-						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width + 30;
+						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width + LineToArtJL;
 						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height/2;
 					}
 				}
@@ -178,7 +137,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			else if(endPoisiton == 'b'){
 				if(ax >= art[i].absoluteRect().x()){
 					if(bx > art[i].absoluteRect().x()){
-						bx = art[i].absoluteRect().x() - 30;
+						bx = art[i].absoluteRect().x() - LineToArtJL;
 						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height/2;
 					}
 				}
@@ -186,7 +145,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			else if(endPoisiton == 'l'){
 				if(ay <= art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
 					if(by < art[i].absoluteRect().y() + art[i].absoluteRect().size().height){
-						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + 30;
+						by = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + LineToArtJL;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width/2;
 					}
 				}
@@ -194,7 +153,7 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			else if(endPoisiton == 'r'){
 				if(ay >= art[i].absoluteRect().y()){
 					if(by > art[i].absoluteRect().y()){
-						by = art[i].absoluteRect().y() - 80;
+						by = art[i].absoluteRect().y() - LineToArtJL;
 						bx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width/2;
 					}
 				}
@@ -318,8 +277,8 @@ var findAway2 = function(a,b,doc){
 		var pzysx = 0;
 		var pzysy = 0;
 		var isPZ = false;
-		var thisEndPosition = {x:startPosition.x,y:startPosition.y};
-		var PZLine = {x:endPoisiton.x,y:endPoisiton.y};
+		var thisEndPosition = {x:parseInt(startPosition.x),y:parseInt(startPosition.y)};
+		var PZLine = {x:parseInt(endPoisiton.x),y:parseInt(endPoisiton.y)};
 
 		if(fx == 'l' || fx == 'r'){
 			PZLine.y = startPosition.y;
@@ -347,35 +306,55 @@ var findAway2 = function(a,b,doc){
 				);
 			if(pca.objectID() != art[i].objectID() && pcb.objectID() != art[i].objectID() && segments.flag == true){
 
+				//需要一个绕过的情况
+
 				isReturnFlag = true;
 				if((pzysx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width || !isPZ) && fx == 'l'){
-					pzysx = art[i].absoluteRect().x() + art[i].absoluteRect().size().width;
-					thisEndPosition.x = startArtPosition.x() - (startArtPosition.x() - (art[i].absoluteRect().x() + art[i].absoluteRect().size().width)) / 2;
+					pzysx = parseInt(art[i].absoluteRect().x() + art[i].absoluteRect().size().width);
+					thisEndPosition.x = parseInt(startArtPosition.x() - (startArtPosition.x() - (art[i].absoluteRect().x() + art[i].absoluteRect().size().width)) / 2);
+					log(1);
+					if(thisEndPosition.x == startPosition.x && thisEndPosition.y == startPosition.y){
+						if(nextFx == 'b'){
+							returnLine.splice(returnLine.length-1,1);
+							thisEndPosition.y = art[i].absoluteRect().y() - LineToArtJL;
+						}else if(nextFx == 't'){
+							returnLine.splice(returnLine.length-1,1);
+							thisEndPosition.y = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + LineToArtJL;
+						}
+						returnLine.push({x:thisEndPosition.x,y:thisEndPosition.y});
+		 				getLinePath(thisEndPosition,endPoisiton,fx,nextFx);
+		 				return;
+					}
 				}
 				else if((pzysx > art[i].absoluteRect().x() || !isPZ) && fx == 'r'){
 					pzysx = art[i].absoluteRect().x();
-					thisEndPosition.x = startArtPosition.x() + startArtPosition.size().width + (art[i].absoluteRect().x() - startArtPosition.x() - startArtPosition.size().width) / 2;
+					thisEndPosition.x = parseInt(startArtPosition.x() + startArtPosition.size().width + (art[i].absoluteRect().x() - startArtPosition.x() - startArtPosition.size().width) / 2);
+					log(2);
+					if(thisEndPosition.x == startPosition.x && thisEndPosition.y == startPosition.y){
+						if(nextFx == 'b'){
+							returnLine.splice(returnLine.length-1,1);
+							thisEndPosition.y = art[i].absoluteRect().y() - LineToArtJL;
+						}else if(nextFx == 't'){
+							returnLine.splice(returnLine.length-1,1);
+							thisEndPosition.y = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + LineToArtJL;
+						}
+						returnLine.push({x:thisEndPosition.x,y:thisEndPosition.y});
+		 				getLinePath(thisEndPosition,endPoisiton,fx,nextFx);
+		 				return;
+					}
 				}
 				else if((pzysy > art[i].absoluteRect().y() + art[i].absoluteRect().size().height || !isPZ) && fx == 't'){
+					log(3);
 					pzysy = art[i].absoluteRect().y() + art[i].absoluteRect().size().height;
-					thisEndPosition.y = startPosition.y - (startPosition.y - (art[i].absoluteRect().y() + art[i].absoluteRect().size().height)) / 2;
+					thisEndPosition.y = parseInt(startPosition.y - (startPosition.y - (art[i].absoluteRect().y() + art[i].absoluteRect().size().height)) / 2);
 
 				}
 				else if((pzysy > art[i].absoluteRect().y() || !isPZ) && fx == 'b'){
+					log(4);
 					pzysy = art[i].absoluteRect().y();
-					thisEndPosition.y = startPosition.y + (art[i].absoluteRect().y() - startPosition.y) / 2;
+					thisEndPosition.y = parseInt(startPosition.y + (art[i].absoluteRect().y() - startPosition.y) / 2);
 				}
 				isPZ = true;
-			}else if(pcb.objectID() == art[i].objectID() && segments.flag == true){
-				returnLine.push({x:segments.x,y:segments.y});
-				if(fx == 'b'){
-					endPoisitonArrow = 't';
-				}else if(fx == 't'){
-					endPoisitonArrow = 'b';
-				}else{
-					endPoisitonArrow = fx;
-				}
-				return;
 			}
 		}
 		var endObject = {};
@@ -388,19 +367,19 @@ var findAway2 = function(a,b,doc){
 			}
 			if(zaLength > 0){
 				if(b.x() > a.x()){
-					endPoisiton.x = b.x() + 5;
+					endPoisiton.x = b.x() + 10;
 					endPoisiton.y = b.size().height/2 + b.y();
 				}else{
-					endPoisiton.x = b.size().width + b.x();
+					endPoisiton.x = b.size().width + b.x() - 10;
 					endPoisiton.y = b.size().height/2 + b.y();
 				}
 			}else{
 				if(b.y() < a.y()){
 					endPoisiton.x = b.x() + b.size().width/2;
-					endPoisiton.y = b.y() + b.size().height - 5;
+					endPoisiton.y = b.y() + b.size().height - 10;
 				}else{
 					endPoisiton.x = b.x() + b.size().width/2;
-					endPoisiton.y = b.y() + 5;
+					endPoisiton.y = b.y() + 10;
 				}
 			}
 			endObject = {x:parseInt(thisEndPosition.x),y:parseInt(thisEndPosition.y)};
@@ -408,16 +387,40 @@ var findAway2 = function(a,b,doc){
 			pzysy = 0;
 		}else{
 			if(fx == 'l' || fx == 'r'){
-				endObject = {x:endPoisiton.x,y:startPosition.y};
+				endObject = {x:parseInt(endPoisiton.x),y:parseInt(startPosition.y)};
 			}else if(fx == 't' || fx == 'b'){
-				endObject = {x:startPosition.x,y:endPoisiton.y};
+				endObject = {x:parseInt(startPosition.x),y:parseInt(endPoisiton.y)};
 			}
 		}
+
+
 		if(returnLine[returnLine.length-1].x != endObject.x || returnLine[returnLine.length-1].y != endObject.y){
 			returnLine.push(endObject);
+			//判断是不是撞到目标了
+			for(var i = 0;i<art.length;i++){
+				var segments = segmentsIntr(
+					{x:startPosition.x,y:startPosition.y},
+					endObject,
+					{x:art[i].absoluteRect().x(),y:art[i].absoluteRect().y()},
+					{x:art[i].absoluteRect().x()+art[i].absoluteRect().size().width,y:art[i].absoluteRect().y()+art[i].absoluteRect().size().height}
+				);
+				if(pcb.objectID() == art[i].objectID() && segments.flag == true){
+					returnLine.splice(returnLine.length-1,1);
+					returnLine.push({x:segments.x,y:segments.y});
+					if(fx == 'b'){
+						endPoisitonArrow = 't';
+					}else if(fx == 't'){
+						endPoisitonArrow = 'b';
+					}else{
+						endPoisitonArrow = fx;
+					}
+					return;
+				}
+			}
 		}else{
 			returnLine.splice(returnLine.length-1,1);
 		}
+		
 		if(endObject.x != endPoisiton.x || endObject.y != endPoisiton.y){
 			 getLinePath(endObject,endPoisiton,nextFx,fx);
 		}else{
@@ -428,7 +431,6 @@ var findAway2 = function(a,b,doc){
 				endPoisitonArrow = 'b';
 			}
 		}
-
 	}
 	if(iFlag == 16){
 		NSApp.displayDialog(pca.name() + '和' + pcb.name() + '之间生成连线太过复杂，请调整它们之间的摆放顺序再进行连接');
@@ -487,9 +489,6 @@ var drawPPP = function(a,b,doc){
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
 		}else{
-			// var xLocation = drawLineLocation(startPointX,'horizontal',plus);
-			// startPointX = xLocation;
-			// endPointX = xLocation;
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 		returnDom.push(line);
@@ -522,9 +521,6 @@ var drawPPP = function(a,b,doc){
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
 		}else{
-			// var yLocation = drawLineLocation(startPointY,'n',plus);
-			// startPointY = yLocation;
-			// endPointY = yLocation;
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 		returnDom.push(line);
@@ -841,4 +837,5 @@ var onRun = function(context) {
 	}
 
 	redrawConnections(context);
+
 }
