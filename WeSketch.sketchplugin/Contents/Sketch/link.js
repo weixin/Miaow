@@ -707,7 +707,7 @@ var drawArrow = function(x,y,z) {
 	var arrowStyle = arrow.style().addStylePartOfType(1);
 	arrowStyle.setThickness(lineThickness);
 	arrowStyle.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
-	arrowStyle.setName('Arrow');
+	arrow.setName('Arrow');
 	return arrow;
 }
 
