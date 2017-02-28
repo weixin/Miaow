@@ -417,7 +417,7 @@ var findAway2 = function(a,b,doc){
 			returnLine.splice(returnLine.length-1,1);
 		}
 		
-		if(endObject.x != endPoisiton.x || endObject.y != endPoisiton.y){
+		if(parseInt(endObject.x) != parseInt(endPoisiton.x) || parseInt(endObject.y) != parseInt(endPoisiton.y)){
 			 getLinePath(endObject,endPoisiton,nextFx,fx);
 		}else{
 			endPoisitonArrow = fx;
