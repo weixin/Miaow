@@ -574,12 +574,9 @@ var drawPPP = function(a,b,doc){
 			startPointX = tempPointX;
 			startPointY = tempPointY;
 		}
-
-
-
 	}
 	returnDom.push(drawRound(startPointX,startPointY));
-	// returnDom.push(drawArrow(endPointX,endPointY,endPoisiton));
+	returnDom.push(drawArrow(endPointX,endPointY,endPoisiton));
 	return returnDom;
 }
 var drawRound = function(x,y){
@@ -677,31 +674,6 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 		}
 	}
 
-	// 绘制箭头
-	var arrowDirection = linepoint[lineCount - 2].direction; // 1. 箭头方向
-	var arrowOffset = 20; // 1. 箭头长度
-
-	if (arrowDirection === 't') {
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
-	}
-	else if (arrowDirection === 'b') {
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
-	}
-	else if (arrowDirection === 'l') {
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x + arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
-	}
-	else {
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y - arrowOffset));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y));
-			linePath.lineToPoint(NSMakePoint(linepoint[lineCount - 1].x - arrowOffset, linepoint[lineCount - 1].y + arrowOffset));
-	}
-
 	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
 	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
 	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
@@ -711,63 +683,40 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 	return lineSh;
 }
 
-var drawArrow = function(x,y,z){
-	function base(){
-		var path = NSBezierPath.bezierPath();
-		path.moveToPoint(NSMakePoint(7.37,20.87));
-		path.lineToPoint(NSMakePoint(23.25, 36.4));
-		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(23.25, 40.65),NSMakePoint(24.45, 37.58),NSMakePoint(24.45, 39.47));
-		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(18.92, 40.65),NSMakePoint(22.06, 41.82),NSMakePoint(20.11, 41.82));
-		path.lineToPoint(NSMakePoint(0.85, 22.97));
-		path.lineToPoint(NSMakePoint(0.85, 18.73));
-		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(1.54, 18.22),NSMakePoint(1.06, 18.52),NSMakePoint(1.29, 18.35));
-		path.lineToPoint(NSMakePoint(19.03, 0.73));
+var drawArrow = function(x,y,z) {
+	// 绘制箭头
+	var arrowDirection = z; // 1. 箭头方向
+	var arrowOffset = 20 * (lineThickness / 6); // 2. 箭头长度
+	var arrowPath = NSBezierPath.bezierPath();
 
-		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(23.27, 0.73),NSMakePoint(20.2, -0.45),NSMakePoint(22.1, -0.45));
-		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(23.27, 4.97),NSMakePoint(24.45, 1.9),NSMakePoint(24.45, 3.8));
-		path.lineToPoint(NSMakePoint(7.37, 20.87));
-		path.closePath();
-		var arrow = MSShapeGroup.shapeWithBezierPath(path);
-		arrow.setName('Arrow');
-		arrow.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
-		return arrow;
+	arrowPath.moveToPoint(NSMakePoint(x, y));
+	if (arrowDirection == 't') {
+			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
+			arrowPath.lineToPoint(NSMakePoint(x, y));
+			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
 	}
-	function left(){
-		var arrow = base();
-		arrow.absoluteRect().setX(x);
-		arrow.absoluteRect().setY(y - 21);
-		return arrow;
+	else if (arrowDirection == 'b') {
+			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
+			arrowPath.lineToPoint(NSMakePoint(x, y));
+			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
 	}
-	function right(){
-		var arrow = base();
-		arrow.setRotation(180);
-		arrow.absoluteRect().setX(x - 24);
-		arrow.absoluteRect().setY(y - 21);
-		return arrow;
+	else if (arrowDirection == 'l') {
+			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
+			arrowPath.lineToPoint(NSMakePoint(x, y));
+			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
 	}
-	function top(){
-		var arrow = base();
-		arrow.setRotation(90);
-		arrow.absoluteRect().setX(x - 21);
-		arrow.absoluteRect().setY(y - 23);
-		return arrow;
+	else {
+			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
+			arrowPath.lineToPoint(NSMakePoint(x, y));
+			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
 	}
-	function bottom(){
-		var arrow = base();
-		arrow.setRotation(270);
-		arrow.absoluteRect().setX(x - 21);
-		arrow.absoluteRect().setY(y);
-		return arrow;
-	}
-	if(z == 'l'){
-		return left();
-	}else if(z == 'r'){
-		return right();
-	}else if(z == 't'){
-		return top();
-	}else if(z == 'b'){
-		return bottom();
-	}
+
+	var arrow = MSShapeGroup.shapeWithBezierPath(arrowPath);
+	var arrowStyle = arrow.style().addStylePartOfType(1);
+	arrowStyle.setThickness(lineThickness);
+	arrowStyle.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
+	arrowStyle.setName('Arrow');
+	return arrow;
 }
 
 
