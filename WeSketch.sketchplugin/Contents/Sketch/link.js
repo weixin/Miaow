@@ -416,7 +416,7 @@ var findAway2 = function(a,b,doc){
 		}else{
 			returnLine.splice(returnLine.length-1,1);
 		}
-		
+
 		if(parseInt(endObject.x) != parseInt(endPoisiton.x) || parseInt(endObject.y) != parseInt(endPoisiton.y)){
 			 getLinePath(endObject,endPoisiton,nextFx,fx);
 		}else{
@@ -533,13 +533,14 @@ var drawPPP = function(a,b,doc){
 			endPoisiton = returnLine.endPoisiton;
 			returnDom.push(line);
 		}else{
+			var tmpLinePoint = [];
 			if(b.x() > a.x() + a.size().width / 2){
 				startPointX = a.x() + a.size().width;
 				startPointY = ayPoint;
 				endPointX = b.x() + b.size().width/2;
 				endPointY = ayPoint;
 				endPoisiton = 'r';
-				returnDom.push(drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton));
+				tmpLinePoint = [{x:startPointX, y:startPointY}, {x:endPointX, y:endPointY}];
 			}
 			else if(b.x() + b.size().width / 2 < a.x()){
 				startPointX = a.x();
@@ -547,7 +548,7 @@ var drawPPP = function(a,b,doc){
 				endPointX = b.x() + b.size().width/2;
 				endPointY = ayPoint;
 				endPoisiton = 'l';
-				returnDom.push(drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton));
+				tmpLinePoint = [{x:startPointX, y:startPointY}, {x:endPointX, y:endPointY}];
 			}
 			tempPointX = startPointX;
 			tempPointY = startPointY;
@@ -561,8 +562,8 @@ var drawPPP = function(a,b,doc){
 				endPointY = b.y() + b.size().height;
 				endPoisiton = 'b';
 			}
-
-			returnDom.push(drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton,true));
+			tmpLinePoint.push({ x:endPointX, y:endPointY });
+			returnDom.push(drawLine(tmpLinePoint, endPoisiton, true));
 			startPointX = tempPointX;
 			startPointY = tempPointY;
 		}
