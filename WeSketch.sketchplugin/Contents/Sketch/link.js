@@ -312,7 +312,6 @@ var findAway2 = function(a,b,doc){
 				if((pzysx < art[i].absoluteRect().x() + art[i].absoluteRect().size().width || !isPZ) && fx == 'l'){
 					pzysx = parseInt(art[i].absoluteRect().x() + art[i].absoluteRect().size().width);
 					thisEndPosition.x = parseInt(startArtPosition.x() - (startArtPosition.x() - (art[i].absoluteRect().x() + art[i].absoluteRect().size().width)) / 2);
-					log(1);
 					if(thisEndPosition.x == startPosition.x && thisEndPosition.y == startPosition.y){
 						if(nextFx == 'b'){
 							returnLine.splice(returnLine.length-1,1);
@@ -329,7 +328,6 @@ var findAway2 = function(a,b,doc){
 				else if((pzysx > art[i].absoluteRect().x() || !isPZ) && fx == 'r'){
 					pzysx = art[i].absoluteRect().x();
 					thisEndPosition.x = parseInt(startArtPosition.x() + startArtPosition.size().width + (art[i].absoluteRect().x() - startArtPosition.x() - startArtPosition.size().width) / 2);
-					log(2);
 					if(thisEndPosition.x == startPosition.x && thisEndPosition.y == startPosition.y){
 						if(nextFx == 'b'){
 							returnLine.splice(returnLine.length-1,1);
@@ -344,13 +342,11 @@ var findAway2 = function(a,b,doc){
 					}
 				}
 				else if((pzysy > art[i].absoluteRect().y() + art[i].absoluteRect().size().height || !isPZ) && fx == 't'){
-					log(3);
 					pzysy = art[i].absoluteRect().y() + art[i].absoluteRect().size().height;
 					thisEndPosition.y = parseInt(startPosition.y - (startPosition.y - (art[i].absoluteRect().y() + art[i].absoluteRect().size().height)) / 2);
 
 				}
 				else if((pzysy > art[i].absoluteRect().y() || !isPZ) && fx == 'b'){
-					log(4);
 					pzysy = art[i].absoluteRect().y();
 					thisEndPosition.y = parseInt(startPosition.y + (art[i].absoluteRect().y() - startPosition.y) / 2);
 				}
@@ -837,5 +833,4 @@ var onRun = function(context) {
 	}
 
 	redrawConnections(context);
-
 }
