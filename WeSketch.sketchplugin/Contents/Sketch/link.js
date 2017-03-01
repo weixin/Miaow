@@ -608,7 +608,7 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 
 	var lineCount = linepoint.length;
 	var offset = 20;
-	var coincideOffset = lineThickness * 3;
+	var coincideOffset = lineThickness * 5;
 
 	for (var i = 0; i < lineCount - 1; i++) { // 给每个点添加接下来走向的方向和位置属性
 			linepoint[i].direction = getLineDirection(linepoint[i], linepoint[i+1]);
@@ -618,7 +618,7 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 
 	// 解决线重合问题
 	for (var i = 0; i < lineCount -1; i++) {
-			for (var j = 0; j < lineCollections.length; j++) {
+			for (var j = 0; j < lineCollections.length - 1; j++) {
 					if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b') && linepoint[i].position == lineCollections[j].position) {
 							// 不是起始线重合，位于起始点左侧 || 起始线重合: 位于重合线下侧，减去 coincideOffset
 							if ((i != 0 && linepoint[0].x < linepoint[i].x)
@@ -627,20 +627,20 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 										linepoint[i+1].x -= coincideOffset;
 							}
 							else {
-									linepoint[i].x += coincideOffset;
-									linepoint[i+1].x += coincideOffset;
+										linepoint[i].x += coincideOffset;
+										linepoint[i+1].x += coincideOffset;
 							}
 					}
 					else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r') && linepoint[i].position == lineCollections[j].position) {
 							// 不是起始线重合，位于起始点上侧 || 起始线重合: 位于重合线左侧，减去 coincideOffset
 							if ((i != 0 && linepoint[0].y < linepoint[i].y)
-									|| (i == 0 && linepoint[0].x < linepoint[i].x)) {
+									|| (i == 0 && linepoint[0].x < lineCollections[j].x)) {
 										linepoint[i].y -= coincideOffset;
 										linepoint[i+1].y -= coincideOffset;
 							}
 							else {
-									linepoint[i].y += coincideOffset;
-									linepoint[i+1].y += coincideOffset;
+										linepoint[i].y += coincideOffset;
+										linepoint[i+1].y += coincideOffset;
 						 }
 					}
 					else {}
