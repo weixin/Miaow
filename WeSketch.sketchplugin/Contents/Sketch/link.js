@@ -8,6 +8,7 @@ var colorLineR = rgb(colorLine)[0];
 var colorLineG = rgb(colorLine)[1];
 var colorLineB = rgb(colorLine)[2];
 var LineToArtJL = 120;
+var lineCollections = []; // 所有线的集合 [{ x: 1; y: 2; direction: ‘l’; position: 3 },...]
 
 var sanitizeArtboard = function(artboard, context) {
 	if (context.command.valueForKey_onLayer_forPluginIdentifier("artboardID", artboard, kPluginDomain) == nil) {
@@ -449,7 +450,6 @@ var drawPPP = function(a,b,doc){
 	var endPointX;
 	var endPointY;
 	var endPoisiton = 'l';
-	var returnDom = [];
 	var tempPointX;
 	var tempPointY;
 
@@ -487,7 +487,6 @@ var drawPPP = function(a,b,doc){
 		}else{
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
-		returnDom.push(line);
 	}
 	//是否是左右关系
 	else if(b.y() < ayPoint && ayPoint < b.y() + b.size().height){
@@ -519,7 +518,6 @@ var drawPPP = function(a,b,doc){
 		}else{
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
-		returnDom.push(line);
 	}
 	// 都不是，要用两根线了
 	else if(b.y() + b.size().height/2  < ayPoint || b.y() + b.size().height/2 > ayPoint){
@@ -531,7 +529,6 @@ var drawPPP = function(a,b,doc){
 			endPointY = returnLine.line[returnLine.line.length-1].y;
 			line = drawLine(returnLine.line,endPoisiton,true);
 			endPoisiton = returnLine.endPoisiton;
-			returnDom.push(line);
 		}else{
 			var tmpLinePoint = [];
 			if(b.x() > a.x() + a.size().width / 2){
@@ -563,23 +560,12 @@ var drawPPP = function(a,b,doc){
 				endPoisiton = 'b';
 			}
 			tmpLinePoint.push({ x:endPointX, y:endPointY });
-			returnDom.push(drawLine(tmpLinePoint, endPoisiton, true));
+			line = drawLine(tmpLinePoint, endPoisiton, true);
 			startPointX = tempPointX;
 			startPointY = tempPointY;
 		}
 	}
-	returnDom.push(drawRound(startPointX,startPointY));
-	returnDom.push(drawArrow(endPointX,endPointY,endPoisiton));
-	return returnDom;
-}
-var drawRound = function(x,y){
-	var linkRect = NSInsetRect(NSMakeRect(x, y, 0, 0), -5, -5);
-	var path = NSBezierPath.bezierPathWithOvalInRect(linkRect);
-	var hitAreaLayer = MSShapeGroup.shapeWithBezierPath(path);
-	hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,76.5).newMutableCounterpart());
-	hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
-	hitAreaLayer.setName('Point');
-	return hitAreaLayer;
+	return line;
 }
 
 /*
@@ -604,15 +590,63 @@ var getLineDirection = function (pointeOne, pointTwo) {
 		}
 }
 
+/*
+* 获取两个点（有顺序的点）连成线的位置
+*/
+var getLinePosition = function (point) {
+		if (point.direction == 't' || point.direction == 'b') {
+				return point.x;
+		}
+		else {
+				return point.y;
+		}
+}
+
 var drawLine = function(linepoint,endPoisiton,isLess){
 	var linePaths = [];
 	var linePath = NSBezierPath.bezierPath();
 
 	var lineCount = linepoint.length;
 	var offset = 20;
-	for (var i = 0; i < lineCount - 1; i++) { // 给每个点添加接下来的方向属性
+	var coincideOffset = lineThickness * 3;
+
+	for (var i = 0; i < lineCount - 1; i++) { // 给每个点添加接下来走向的方向和位置属性
 			linepoint[i].direction = getLineDirection(linepoint[i], linepoint[i+1]);
+			linepoint[i].position = getLinePosition(linepoint[i]]);
+			lineCollections.push(linepoint[i]);
 	}
+
+	// 解决线重合问题
+	for (var i = 0; i < lineCount -1; i++) {
+			for (var j = 0; j < lineCollections.length; j++) {
+					if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b') && linepoint[i].position == lineCollections[j].position) {
+							// 不是起始线重合，位于起始点左侧 || 起始线重合: 位于重合线下侧，减去 coincideOffset
+							if ((i != 0 && linepoint[0].x < linepoint[i].x)
+									|| (i == 0 && (linepoint[0].y < lineCollections[j].y))) {
+										linepoint[i].x -= coincideOffset;
+										linepoint[i+1].x -= coincideOffset;
+							}
+							else {
+									linepoint[i].x += coincideOffset;
+									linepoint[i+1].x += coincideOffset;
+							}
+					}
+					else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r') && linepoint[i].position == lineCollections[j].position) {
+							// 不是起始线重合，位于起始点上侧 || 起始线重合: 位于重合线左侧，减去 coincideOffset
+							if ((i != 0 && linepoint[0].y < linepoint[i].y)
+									|| (i == 0 && linepoint[0].x < linepoint[i].x)) {
+										linepoint[i].y -= coincideOffset;
+										linepoint[i+1].y -= coincideOffset;
+							}
+							else {
+									linepoint[i].y += coincideOffset;
+									linepoint[i+1].y += coincideOffset;
+						 }
+					}
+					else {}
+			}
+	}
+
 	for(var i = 0; i < lineCount - 1; i++){
 		if (i === 0) { // 第一个点不做修改
 				linePath.moveToPoint(NSMakePoint(linepoint[i].x, linepoint[i].y));
@@ -673,45 +707,61 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 	hitAreaBorder.setThickness(lineThickness);
 	hitAreaBorder.setPosition(0);
 	lineSh.setName('Line');
-	return lineSh;
+
+	// 绘制起点圆圈
+	var drawRound = function(x,y){
+		var linkRect = NSInsetRect(NSMakeRect(x, y, 0, 0), -5, -5);
+		var path = NSBezierPath.bezierPathWithOvalInRect(linkRect);
+		var hitAreaLayer = MSShapeGroup.shapeWithBezierPath(path);
+		hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,76.5).newMutableCounterpart());
+		hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
+		hitAreaLayer.setName('Point');
+		return hitAreaLayer;
+	}
+
+  // 绘制终点箭头
+	var drawArrow = function(x,y,z) {
+		// 绘制箭头
+		var arrowDirection = z; // 1. 箭头方向
+		var arrowOffset = 20 * (lineThickness / 6); // 2. 箭头长度
+		var arrowPath = NSBezierPath.bezierPath();
+
+		arrowPath.moveToPoint(NSMakePoint(x, y));
+		if (arrowDirection == 't') {
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
+		}
+		else if (arrowDirection == 'b') {
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
+		}
+		else if (arrowDirection == 'l') {
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
+		}
+		else {
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
+		}
+
+		var arrow = MSShapeGroup.shapeWithBezierPath(arrowPath);
+		var arrowStyle = arrow.style().addStylePartOfType(1);
+		arrowStyle.setThickness(lineThickness);
+		arrowStyle.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
+		arrow.setName('Arrow');
+		return arrow;
+	}
+
+	var startRound = drawRound(linepoint[0].x, linepoint[0].y);
+
+	var endArrow = drawArrow(linepoint[lineCount-1].x, linepoint[lineCount-1].y, linepoint[lineCount-2].direction);
+
+	return [lineSh, startRound, endArrow];
 }
-
-var drawArrow = function(x,y,z) {
-	// 绘制箭头
-	var arrowDirection = z; // 1. 箭头方向
-	var arrowOffset = 20 * (lineThickness / 6); // 2. 箭头长度
-	var arrowPath = NSBezierPath.bezierPath();
-
-	arrowPath.moveToPoint(NSMakePoint(x, y));
-	if (arrowDirection == 't') {
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
-	}
-	else if (arrowDirection == 'b') {
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
-	}
-	else if (arrowDirection == 'l') {
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
-	}
-	else {
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
-	}
-
-	var arrow = MSShapeGroup.shapeWithBezierPath(arrowPath);
-	var arrowStyle = arrow.style().addStylePartOfType(1);
-	arrowStyle.setThickness(lineThickness);
-	arrowStyle.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineR,colorLineG,colorLineB,255).newMutableCounterpart());
-	arrow.setName('Arrow');
-	return arrow;
-}
-
 
 var drawConnections = function(connection, doc) {
 	var draw = drawPPP(connection.linkRect,connection.artboard,doc);
