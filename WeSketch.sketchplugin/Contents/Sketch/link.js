@@ -216,6 +216,101 @@ var findAway = function(line,a,b,doc,endPoisiton){
 
 }
 
+var drawTwoLine = function(a,b,doc){
+	var art = doc.artboards();
+	var pca = a;
+	var pcb = b;
+	var endPoisiton;
+	a = a.absoluteRect();
+	b = b.absoluteRect();
+	if(a.className() != "MSArtboardGroup" && a.className() != "MSSymbolMaster"){
+		if(pca.parentArtboard()){
+			pca = pca.parentArtboard();
+		}
+	}
+	//先左右后上下
+	var axPoint = a.x() + a.size().width/2;
+	var ayPoint = a.y() + a.size().height/2;
+	var tmpLinePoint = [];
+	var isReturnFlag = true;
+	if(b.x() > a.x() + a.size().width / 2){
+		startPointX = a.x() + a.size().width;
+		startPointY = ayPoint;
+		endPointX = b.x() + b.size().width/2;
+		endPointY = ayPoint;
+	}
+	else if(b.x() + b.size().width / 2 < a.x()){
+		startPointX = a.x();
+		startPointY = ayPoint;
+		endPointX = b.x() + b.size().width/2;
+		endPointY = ayPoint;
+	}
+	tmpLinePoint = [{x:startPointX, y:startPointY}, {x:endPointX, y:endPointY}];
+
+	if(b.y() + b.size().height/2 > ayPoint){
+		endPointY = b.y();
+		endPoisiton = 't';
+	}else{
+		endPointY = b.y() + b.size().height;
+		endPoisiton = 'b';
+	}
+	tmpLinePoint.push({ x:endPointX, y:endPointY });
+	for(var k = 0;k<tmpLinePoint.length - 1;k++){
+		for(var i = 0;i<art.length;i++){
+			var segments = segmentsIntr(
+					{x:tmpLinePoint[k].x,y:tmpLinePoint[k].y},
+					{x:tmpLinePoint[k+1].x+5,y:tmpLinePoint[k+1].y+5},
+					{x:art[i].absoluteRect().x(),y:art[i].absoluteRect().y()},
+					{x:art[i].absoluteRect().x()+art[i].absoluteRect().size().width,y:art[i].absoluteRect().y()+art[i].absoluteRect().size().height}
+				);
+			if(pca.objectID() != art[i].objectID() && pcb.objectID() != art[i].objectID() && segments.flag == true){
+				isReturnFlag = false;
+			}
+		}
+	}
+	//先上下后左右
+	if(!isReturnFlag){
+		tmpLinePoint.splice(0,tmpLinePoint.length);
+		isReturnFlag = true;
+		if(b.y() + b.size().height/2 > ayPoint){
+			startPointY = a.y() + a.size().height;
+		}else{
+			startPointY = a.y();
+		}
+		startPointX = a.x() + a.size().width/2;
+		endPointX = startPointX;
+		endPointY = b.y() + b.size().height/2;
+		tmpLinePoint = [{x:startPointX, y:startPointY}, {x:endPointX, y:endPointY}];
+		if(b.x() > a.x() + a.size().width / 2){
+			endPointX = b.x();
+			endPoisiton = 'r';
+		}else{
+			endPointX = b.x() + b.size().width;
+			endPoisiton = 'l';
+		}
+		tmpLinePoint.push({ x:endPointX, y:endPointY });
+		for(var k = 0;k<tmpLinePoint.length - 1;k++){
+			for(var i = 0;i<art.length;i++){
+				var segments = segmentsIntr(
+					{x:tmpLinePoint[k].x,y:tmpLinePoint[k].y},
+					{x:tmpLinePoint[k+1].x+5,y:tmpLinePoint[k+1].y+5},
+					{x:art[i].absoluteRect().x(),y:art[i].absoluteRect().y()},
+					{x:art[i].absoluteRect().x()+art[i].absoluteRect().size().width,y:art[i].absoluteRect().y()+art[i].absoluteRect().size().height}
+				);
+				if(pca.objectID() != art[i].objectID() && pcb.objectID() != art[i].objectID() && segments.flag == true){
+					isReturnFlag = false;
+				}
+			}
+		}
+	}
+	
+	return {
+		line: tmpLinePoint,
+		flag: isReturnFlag,
+		endPoisiton: endPoisiton
+	}
+}
+
 var findAway2 = function(a,b,doc){
 	var endPoisitonArrow = 'b';
 	var art = doc.artboards();
@@ -245,7 +340,7 @@ var findAway2 = function(a,b,doc){
 		bx = b.x() + 5;
 		by = b.size().height/2 + b.y();
 		fx = 'r';
-		returnLine.push({x:ax,y:ay});
+		returnLine.push({x:parseInt(ax),y:parseInt(ay)});
 		if(b.y() > a.y()){
 			// 目标在右下角 右下右
 			getLinePath({x:ax,y:ay},{x:bx,y:by},fx,'b');
@@ -259,7 +354,7 @@ var findAway2 = function(a,b,doc){
 		bx = b.size().width + b.x();
 		by = b.size().height/2 + b.y();
 		fx = 'l';
-		returnLine.push({x:ax,y:ay});
+		returnLine.push({x:parseInt(ax),y:parseInt(ay)});
 		if(b.y() > a.y()){
 			// 目标在左下角 左下左
 			getLinePath({x:ax,y:ay},{x:bx,y:by},fx,'b');
@@ -321,7 +416,7 @@ var findAway2 = function(a,b,doc){
 							returnLine.splice(returnLine.length-1,1);
 							thisEndPosition.y = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + LineToArtJL;
 						}
-						returnLine.push({x:thisEndPosition.x,y:thisEndPosition.y});
+						returnLine.push({x:parseInt(thisEndPosition.x),y:parseInt(thisEndPosition.y)});
 		 				getLinePath(thisEndPosition,endPoisiton,fx,nextFx);
 		 				return;
 					}
@@ -337,7 +432,7 @@ var findAway2 = function(a,b,doc){
 							returnLine.splice(returnLine.length-1,1);
 							thisEndPosition.y = art[i].absoluteRect().y() + art[i].absoluteRect().size().height + LineToArtJL;
 						}
-						returnLine.push({x:thisEndPosition.x,y:thisEndPosition.y});
+						returnLine.push({x:parseInt(thisEndPosition.x),y:parseInt(thisEndPosition.y)});
 		 				getLinePath(thisEndPosition,endPoisiton,fx,nextFx);
 		 				return;
 					}
@@ -403,7 +498,7 @@ var findAway2 = function(a,b,doc){
 				);
 				if(pcb.objectID() == art[i].objectID() && segments.flag == true){
 					returnLine.splice(returnLine.length-1,1);
-					returnLine.push({x:segments.x,y:segments.y});
+					returnLine.push({x:parseInt(segments.x),y:parseInt(segments.y)});
 					if(fx == 'b'){
 						endPoisitonArrow = 't';
 					}else if(fx == 't'){
@@ -509,61 +604,21 @@ var drawPPP = function(a,b,doc){
 		var returnLine = findAway({ax:startPointX,ay:startPointY,bx:endPointX,by:endPointY},domA,domB,doc,endPoisiton);
 		//三根线算法
 		if(returnLine.flag){
-			startPointX = returnLine.line[0].x;
-			startPointY = returnLine.line[0].y;
-			endPointX = returnLine.line[returnLine.line.length-1].x;
-			endPointY = returnLine.line[returnLine.line.length-1].y;
-			line = drawLine(returnLine.line,endPoisiton,true);
-			endPoisiton = returnLine.endPoisiton;
+			line = drawLine(returnLine.line,returnLine.endPoisiton,true);
 		}else{
 			line = drawLine([{x:startPointX,y:startPointY},{x:endPointX,y:endPointY}],endPoisiton);
 		}
 	}
 	// 都不是，要用两根线了
 	else if(b.y() + b.size().height/2  < ayPoint || b.y() + b.size().height/2 > ayPoint){
-		var returnLine = findAway2(domA,domB,doc);
-		if(returnLine.flag){
-			startPointX = returnLine.line[0].x;
-			startPointY = returnLine.line[0].y;
-			endPointX = returnLine.line[returnLine.line.length-1].x;
-			endPointY = returnLine.line[returnLine.line.length-1].y;
-			line = drawLine(returnLine.line,endPoisiton,true);
-			endPoisiton = returnLine.endPoisiton;
-		}else{
-			var tmpLinePoint = [];
-			if(b.x() > a.x() + a.size().width / 2){
-				startPointX = a.x() + a.size().width;
-				startPointY = ayPoint;
-				endPointX = b.x() + b.size().width/2;
-				endPointY = ayPoint;
-				endPoisiton = 'r';
-				tmpLinePoint = [{x:startPointX, y:startPointY}, {x:endPointX, y:endPointY}];
-			}
-			else if(b.x() + b.size().width / 2 < a.x()){
-				startPointX = a.x();
-				startPointY = ayPoint;
-				endPointX = b.x() + b.size().width/2;
-				endPointY = ayPoint;
-				endPoisiton = 'l';
-				tmpLinePoint = [{x:startPointX, y:startPointY}, {x:endPointX, y:endPointY}];
-			}
-			tempPointX = startPointX;
-			tempPointY = startPointY;
-			startPointX = endPointX;
-			startPointY = endPointY;
-			endPointX = startPointX;
-			if(b.y() + b.size().height/2 > ayPoint){
-				endPointY = b.y();
-				endPoisiton = 't';
-			}else{
-				endPointY = b.y() + b.size().height;
-				endPoisiton = 'b';
-			}
-			tmpLinePoint.push({ x:endPointX, y:endPointY });
-			line = drawLine(tmpLinePoint, endPoisiton, true);
-			startPointX = tempPointX;
-			startPointY = tempPointY;
+		var returnLine = drawTwoLine(domA,domB,doc);
+		if(returnLine.flag == false){
+			returnLine = findAway2(domA,domB,doc);
 		}
+		log(returnLine);
+		line = drawLine(returnLine.line,returnLine.endPoisiton,true);
+		
+
 	}
 	return line;
 }
