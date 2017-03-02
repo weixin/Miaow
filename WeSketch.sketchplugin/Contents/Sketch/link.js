@@ -616,10 +616,13 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 			lineCollections.push(linepoint[i]);
 	}
 
+	var comparedLineCollectionCount = lineCollections.length - (lineCount - 1);
+
 	// 解决线重合问题
-	for (var i = 0; i < lineCount -1; i++) {
-			for (var j = 0; j < lineCollections.length - 1; j++) {
-					if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b') && linepoint[i].position == lineCollections[j].position) {
+	for (var i = 0; i < lineCount; i++) {
+			for (var j = 0; j < comparedLineCollectionCount; j++) {
+					if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b')
+							&& (Math.abs(linepoint[i].position - lineCollections[j].position) < 3)) {
 							// 不是起始线重合，位于起始点左侧 || 起始线重合: 位于重合线下侧，减去 coincideOffset
 							if ((i != 0 && linepoint[0].x < linepoint[i].x)
 									|| (i == 0 && (linepoint[0].y < lineCollections[j].y))) {
@@ -631,7 +634,8 @@ var drawLine = function(linepoint,endPoisiton,isLess){
 										linepoint[i+1].x += coincideOffset;
 							}
 					}
-					else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r') && linepoint[i].position == lineCollections[j].position) {
+					else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r')
+									 && (Math.abs(linepoint[i].position - lineCollections[j].position) < 3)) {
 							// 不是起始线重合，位于起始点上侧 || 起始线重合: 位于重合线左侧，减去 coincideOffset
 							if ((i != 0 && linepoint[0].y < linepoint[i].y)
 									|| (i == 0 && linepoint[0].x < lineCollections[j].x)) {

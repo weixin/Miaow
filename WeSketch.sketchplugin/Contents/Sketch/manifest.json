@@ -38,6 +38,13 @@
       "handler" : "onRun"
     },
     {
+      "name" : "颜色批量替换",
+      "identifier" : "findcolorandreplace",
+      "script" : "colorReplace.js",
+      "shortcut": "command shift c",
+      "handler" : "onRun"
+    },
+    {
       "name" : "同步 UI Kit",
       "identifier" : "syncuikit",
       "script" : "syncUIkit.js",
@@ -109,7 +116,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findtextandselect","findfontandselect","-",
+    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-",
     {
         "title": "管理 UI Kit",
         "items": [
