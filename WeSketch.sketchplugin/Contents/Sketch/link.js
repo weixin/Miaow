@@ -884,7 +884,8 @@ var onRun = function(context) {
 	var destArtboard, linkLayer;
 
 	if (selection.count() != 1 && selection.count() != 2) {
-		return NSApp.displayDialog('请同时选中元素和 Artboard 添加连线，只选中元素可删除连线');
+		redrawConnections(context);
+		return NSApp.displayDialog('画板已刷新，请同时选中元素和 Artboard 添加连线，只选中元素可删除连线');
 	}
 
 	if (selection.count() == 1) {

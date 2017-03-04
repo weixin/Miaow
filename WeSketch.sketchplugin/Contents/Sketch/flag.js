@@ -16,8 +16,7 @@ var getConnectionsGroupInPage = function(page) {
 	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
 }
 
-
-var onRun = function(context) {
+var onRun = function(context){
 	function deleteDialog(context){
 		var settingsWindow = COSAlertWindow.new();
 		settingsWindow.addButtonWithTitle("确定");
@@ -205,7 +204,7 @@ var onRun = function(context) {
 			lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
 			if(lastDom){
 				lastState = 'l';
-				if(lastDom.objectID() == nowDom.objectID()){
+				if(nowDom && lastDom.objectID() == nowDom.objectID()){
 					context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_r', "FlagID", nowDom, kPluginDomain);
 					lastState = 'r';
 					isDrawNow = true;
@@ -217,7 +216,7 @@ var onRun = function(context) {
 
 				if(lastDom){
 					lastState = 'r';
-					if(lastDom.objectID() == nowDom.objectID()){
+					if(nowDom && lastDom.objectID() == nowDom.objectID()){
 						if(isMaxNum(nowDom)){
 							context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomain);
 							lastState = 'e';
@@ -267,7 +266,7 @@ var onRun = function(context) {
 			}
 		}
 
-		if(!isDrawNow){
+		if(!isDrawNow && nowDom){
 			context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_l', "FlagID", nowDom, kPluginDomain);
 			returnLine = returnLine.concat(drawLeftArrow(doc,nowDom,true));
 		}
@@ -275,24 +274,17 @@ var onRun = function(context) {
 		return returnLine;
 	}
 
-
-	if (context.selection.count()!=1) {
-		NSApp.displayDialog('请只选择一个元素进行操作');
-        return;
-	}
-
-	var selection = context.selection[0];
 	var doc = context.document;
+	var flags = [];
 	var selectedLayers = doc.findSelectedLayers();
 
-
-
-	var flags = [];
-
-	flags = draw(doc,selection);
-	if(!flags){
-		return;
+	if (context.selection.count()!=1) {
+		flags = draw(doc,null);
+		NSApp.displayDialog('画板已刷新，请只选择一个元素增删标志位');
+	}else{
+		flags = draw(doc,context.selection[0]);
 	}
+	
 
 	var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
 
