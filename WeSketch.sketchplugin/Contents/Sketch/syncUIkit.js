@@ -102,7 +102,7 @@ var onRun = function (context) {
 		            				// localSymobl[g].moveToLayer(saveArtBoard);
 		            				// localSymobl[g].removeFromParent();
 		            				//添加线上的到画布
-		            				pushAllArtboards.push(s);
+		            				// pushAllArtboards.push(s);
 		            			}
 		            			deleteObject['g_'+g] = true;
 		            			break;
@@ -110,7 +110,7 @@ var onRun = function (context) {
 		            	}
 		            	if(!flagForNewSymbol){
 		            		//没找着，直接添加source的到现有的画布
-            				pushAllArtboards.push(s);
+            				// pushAllArtboards.push(s);
 		            		
 		            		addSymbolCount++;
 		            	}
@@ -122,7 +122,10 @@ var onRun = function (context) {
 		            		localSymobl[g].removeFromParent();
 		            	}
 		            }
-		            pages[k].addLayers(pushAllArtboards);
+
+		            // 这里全部换一种实现，先将冲突提出来换到冲突画板，然后把整张画布删除再copy一份
+		            // pages[k].addLayers(pushAllArtboards);
+					context.document.removePage(pages[k]);
 					break;
 				}
 			}
@@ -131,11 +134,11 @@ var onRun = function (context) {
 
 			if(!flagForOldPage){
 				addPageCount++;	
-				var newPage = doc.addBlankPage();
-				var sourceSymbol = sourcePages[i].artboards();
-				newPage.setName(sourcePageName);
-				newPage.addLayers(sourceSymbol);
 			}
+			var newPage = doc.addBlankPage();
+			var sourceSymbol = sourcePages[i].artboards();
+			newPage.setName(sourcePageName);
+			newPage.addLayers(sourceSymbol);
 			doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
 		}
 	}
@@ -156,14 +159,11 @@ var onRun = function (context) {
 			saveArtBoard[i].setName(saveArtBoard[i].name()+ '(Old)');
 			saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);
 		}
-		// savePage.addLayers(saveArtBoard);
 		doc.setCurrentPage(savePage);
 		Organizer(context);
 	}
 	if(context.document.pages()[0].artboards().count() == 0){
 		context.document.removePage(context.document.pages()[0]);
-		// var copyPage = doc.addBlankPage();
-		// copyPage.setName('Page 1');
 	}
 
 	NSApp.displayDialog(alertData + tbColor);

@@ -43,12 +43,16 @@ function saveDefaults(newValues) {
 	}
 }
 
-function request(queryURL) {
-	var request = NSMutableURLRequest.new();
-	[request setHTTPMethod:@"GET"];
-	[request setURL:[NSURL URLWithString:queryURL]];
-	var oResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:null error:null];
-	return oResponseData;
+function request(args) {
+  var aara = [args];
+  var task = NSTask.alloc().init();
+  task.setLaunchPath("/usr/bin/curl");
+  task.setArguments(aara);
+  var outputPipe = [NSPipe pipe];
+  [task setStandardOutput:outputPipe];
+  task.launch();
+  var responseData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
+  return responseData;
 }
 function networkRequest(args) {
   var task = NSTask.alloc().init();

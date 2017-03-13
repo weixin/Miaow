@@ -10,10 +10,7 @@
       "script" : "link.js",
       "shortcut": "command shift 1",
       "handlers" : {
-        "run" : "onRun",
-        "actions": {
-          "*": "onAction"
-        }
+        "run" : "onRun"
       }
     },
     {
