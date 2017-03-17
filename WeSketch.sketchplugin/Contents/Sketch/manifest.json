@@ -84,6 +84,13 @@
       "handler" : "onRun"
     },
     {
+      "name" : "生成代码",
+      "identifier" : "codeQ",
+      "script" : "codeQ.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
       "name" : "设置",
       "identifier" : "setting",
       "script" : "setting.js",
@@ -131,6 +138,7 @@
         ]
     },
     "-",
+    "codeQ",
     "setting",
     {
         "title": "帮助",
