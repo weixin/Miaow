@@ -850,11 +850,10 @@ var redrawConnections = function(context) {
 
 	while (linkLayer = loop.nextObject()) {
 		destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
+		var Message = destinationArtboardID.split('____');
+		destinationArtboard = doc.currentPage().artboards().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
 
-		destinationArtboard = doc.currentPage().artboards().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", destinationArtboardID, kPluginDomain, destinationArtboardID)).firstObject();
-
-
-		if (destinationArtboard) {
+		if (destinationArtboard && Message[0] == linkLayer.objectID()) {
 			sanitizeArtboard(destinationArtboard, context);
 			connections.push(drawConnections({
 		  		linkRect : linkLayer,
@@ -879,7 +878,6 @@ var redrawConnections = function(context) {
 }
 
 var onRun = function(context) {
-
 	var selection = context.selection;
 	var destArtboard, linkLayer;
 
@@ -914,7 +912,7 @@ var onRun = function(context) {
 		}
 		var artboardID = destArtboard.objectID();
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "artboardID", destArtboard, kPluginDomain);
-		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "destinationArtboardID", linkLayer, kPluginDomain);
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '____' + artboardID, "destinationArtboardID", linkLayer, kPluginDomain);
 	}
 
 	redrawConnections(context);
