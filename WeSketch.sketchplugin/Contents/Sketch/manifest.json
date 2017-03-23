@@ -5,6 +5,15 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
+      "name" : "工具栏",
+      "identifier" : "toolbar",
+      "script" : "toolbar.js",
+      "shortcut": "",
+      "handlers" : {
+        "run" : "onRun"
+      }
+    },
+    {
       "name" : "交互连线",
       "identifier" : "link",
       "script" : "link.js",
@@ -39,6 +48,13 @@
       "identifier" : "findcolorandreplace",
       "script" : "colorReplace.js",
       "shortcut": "command shift c",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "图标库",
+      "identifier" : "icon",
+      "script" : "icon.js",
+      "shortcut": "",
       "handler" : "onRun"
     },
     {
@@ -120,7 +136,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-",
+    "items": ["toolbar","-","link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-","icon",
     {
         "title": "管理 UI Kit",
         "items": [
