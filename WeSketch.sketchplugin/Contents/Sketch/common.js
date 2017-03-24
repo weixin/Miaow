@@ -208,11 +208,12 @@ function SMPanel(options){
         }
 
     });
+    closeButton.setFrameOrigin(NSMakePoint(8, 8));
     closeButton.setAction("callAction:");
+
 
     var titlebarView = contentView.superview().titlebarViewController().view(),
         titlebarContainerView = titlebarView.superview();
-    closeButton.setFrameOrigin(NSMakePoint(8, 8));
     titlebarContainerView.setFrame(NSMakeRect(0, options.height, options.width, 32));
     titlebarView.setFrameSize(NSMakeSize(options.width, 32));
     titlebarView.setTransparent(true);
@@ -233,6 +234,8 @@ function SMPanel(options){
         if(options.identifier){
             threadDictionary[options.identifier] = Panel;
         }
+        // Panel.center();
+        // Panel.makeKeyAndOrderFront(nil);
         NSApp.runModalForWindow(Panel);
     }
 
