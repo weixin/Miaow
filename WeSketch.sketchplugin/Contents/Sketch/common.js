@@ -152,20 +152,12 @@ function SMPanel(options){
 
                     windowObject.evaluateWebScript(SMAction);
                     // windowObject.evaluateWebScript(language);
-                    // windowObject.evaluateWebScript(DOMReady);
+                    windowObject.evaluateWebScript(DOMReady);
                 }),
             "webView:didChangeLocationWithinPageForFrame:": (function(webView, webFrame){
                     var request = NSURL.URLWithString(webView.mainFrameURL()).fragment();
 
-                    if(request == "submit"){
-                        var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
-                        options.callback(data);
-                        result = true;
-                        if(!options.floatWindow){
-                            windowObject.evaluateWebScript("window.location.hash = 'close';");
-                        }
-                    }
-                    else if(request == "close"){
+                    if(request == "close"){
                         if(!options.floatWindow){
                             Panel.orderOut(nil);
                             NSApp.stopModal();
@@ -173,33 +165,11 @@ function SMPanel(options){
                         else{
                             Panel.close();
                         }
-                    }
-                    else if(request == "donate"){
-                        // NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString("http://utom.design/measure/donate.html?ref=update"));
-                        // windowObject.evaluateWebScript("window.location.hash = 'close';");
-                    }
-                    else if(request == "import"){
-                        // if( options.importCallback(windowObject) ){
-                        //      self.message(_("Import complete!"));
-                        // }
-                    }
-                    else if(request == "export"){
-                        // if( options.exportCallback(windowObject) ){
-                        //      self.message(_("Export complete!"));
-                        // }
-                    }
-                    else if(request == "export-xml"){
-                        // if( options.exportXMLCallback(windowObject) ){
-                        //      self.message(_("Export complete!"));
-                        // }
-                    }
-                    else if(request == "add"){
-                        // options.addCallback(windowObject);
-                    }
-                    else if(request == "focus"){
-                        // var point = Panel.currentEvent().locationInWindow(),
-                        //     y = NSHeight(Panel.frame()) - point.y - 32;
-                        // windowObject.evaluateWebScript("lookupItemInput(" + point.x + ", " + y + ")");
+                    }else if(request == 'copy'){
+                        // NSApp.displayDialog("2");
+                    }else if(request == 'submit'){
+                        var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+                        options.callback(data);
                     }
                     windowObject.evaluateWebScript("window.location.hash = '';");
                 })
@@ -219,7 +189,6 @@ function SMPanel(options){
     var closeButton = Panel.standardWindowButton(NSWindowCloseButton);
     closeButton.setCOSJSTargetFunction(function(sender) {
         var request = NSURL.URLWithString(webView.mainFrameURL()).fragment();
-
         if(options.floatWindow && request == "submit"){
             data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             options.callback(data);
