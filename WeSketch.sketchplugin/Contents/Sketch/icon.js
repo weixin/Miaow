@@ -9,9 +9,10 @@ var onRun = function(context){
         width: 320,
         height: 451,
         data: {
+            a:"1"
         },
         hiddenClose: false,
-        floatWindow: false,
+        floatWindow: true,
         identifier: "icon",
         callback: function( data ){
             var logoURL = [NSURL URLWithString:'https://logos-api.funkreich.de/logo/gilbarbara-github'];
