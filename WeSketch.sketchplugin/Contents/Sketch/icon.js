@@ -15,32 +15,17 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "icon",
         callback: function( data ){
-            var logoURL = [NSURL URLWithString:'https://logos-api.funkreich.de/logo/gilbarbara-github'];
-            var request = [NSURLRequest requestWithURL:logoURL];
-            var response = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null);
+            logo = NSString.stringWithString(data);
+            logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
             var svgImporter = MSSVGImporter.svgImporter();
-            svgImporter.prepareToImportFromURL(logoURL);
+            svgImporter.prepareToImportFromData(logo);
             var importedSVGLayer = svgImporter.importAsLayer();
             var svgFrame = importedSVGLayer.frame();
-            importedSVGLayer.name = 'test';
-
-            // var selectedFrame = selectedShape.frame();
-            // var ratio = svgFrame.width() / svgFrame.height();
-            // var newWidth = selectedFrame.width();
-            // var newHeight = newWidth / ratio;
-            // if (newHeight > selectedFrame.height()) {
-            //     newHeight = selectedFrame.height();
-            //     newWidth = newHeight * ratio;
-            // }
-
-            // Center in selection frame
+            importedSVGLayer.name = 'test123';
             [svgFrame setX:0];
             [svgFrame setY:0];
-            [svgFrame setWidth:50];
-            [svgFrame setHeight:50];
-
-            // Add label layer
             var page = context.document.currentPage();
+
             var canvas = page.currentArtboard() || page;
             canvas.addLayers([importedSVGLayer]);
         }

@@ -4,7 +4,7 @@ var onRun = function(context){
 
     function getImage(size, name){
         // var isRetinaDisplay = (NSScreen.mainScreen().backingScaleFactor() > 1)? true: false;
-        var imageURL = pluginSketch.URLByAppendingPathComponent("toolbar").URLByAppendingPathComponent(name + '.png');
+        var imageURL = pluginSketch.URLByAppendingPathComponent("toolbar").URLByAppendingPathComponent(name + '@2x.png');
         var image = NSImage.alloc().initWithContentsOfURL(imageURL);
         return image
     }
