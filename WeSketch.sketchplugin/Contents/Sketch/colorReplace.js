@@ -1,134 +1,208 @@
 @import "common.js"
 
 var onRun = function (context) {
-    var textToFind = '',textToReplace = '';
-    var textToFind2;
-    var selection = context.selection;
-    var document = context.document;
-    var currentPage = [document currentPage]
-    var searchScope = 0;
-    var userInterface;
-    var typeChoose = 0;
-    var replaceCount = 0;
+    var selection   = context.selection;
+    var document    = context.document;
+    var currentPage = [document currentPage];
+    var layerCount  = selection.count();
 
-    function JTester(r) {
-        var myReg = null;
-        var begin = r.indexOf('/');
-        var end = r.lastIndexOf('/');
-        if (begin<0 || end<0 || begin==end) {
-            return false;
-        }
-        var flags = r.match(/\/([igm]{0,3})$/i)[1];
-        try{
-            myReg = new RegExp(r.substring(begin + 1, end), flags);
-            return myReg;
-        }catch(e){
-            return false;
-        }
-    };
+    var colorToFind = '',
+        colorToFind2 = '',
+        colorToReplace = '',
+        searchScope = 0,
+        replaceElementType = 0,
+        replaceCount = 0;
+    var userInterface,
+        findedColorWell,
+        replaceColorWell;
 
-    function createUserInterface() {
-        if (selection && selection.count() == 1 && selection[0].class() == MSTextLayer) {
-            textToFind = selection[0].stringValue().trim();
-        }
-        userInterface = COSAlertWindow.new();
+    if (layerCount == 0) {
+     document.displayMessage('没有选择图层');
+    }
+    else {
+     var selectedLayer = getSelectedLayer(selection.firstObject());
+     var selectedLayerType = selectedLayer.class();
 
-        userInterface.setMessageText("文本批量替换");
-        userInterface.setInformativeText("注：区分大小写，如需忽略大小写请使用正则表达式");
+     if (selection && selection.count() == 1) {
+       colorToFind = colorToFind2 = getColour(selectedLayer);
+     }
 
-        userInterface.addTextLabelWithValue("查找文本（支持正则表达式）：");
-        userInterface.addTextFieldWithValue(textToFind);
+     if(createUserInterface(colorToFind) != '1000'){
+           return;
+       }
+     else {
+       processButtonClick();
 
-        userInterface.addTextLabelWithValue("替换为：");
-        userInterface.addTextFieldWithValue('');
-
-        userInterface.addTextLabelWithValue("Page 生效范围：");
-        var options = ["所有 Page","当前工作 Page"];
-        userInterface.addAccessoryView(createRadioButtons(options, options[0]));
-
-        userInterface.addTextLabelWithValue("图层生效范围：");
-        var options2 = ["整个 Page（含元素名）","仅元素中的正文内容"];
-        userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
-
-        userInterface.addButtonWithTitle('确定');
-        userInterface.addButtonWithTitle('取消');
-
-        return userInterface.runModal();
+       doFindAndReplace();
+     }
     }
 
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
-    function processButtonClick() {
-        textToFind2 = textToFind = [[userInterface viewAtIndex: 1] stringValue];
-        textToReplace = userInterface.viewAtIndex(3).stringValue();
-        searchScope = [[[userInterface viewAtIndex: 5] selectedCell] tag];
-        typeChoose = [[[userInterface viewAtIndex: 7] selectedCell] tag];
-        if(JTester(textToFind)){
-            textToFind = JTester(textToFind);
-        }else{
-            textToFind = new RegExp(textToFind,'gm');
-        }
+     if (result) {
+      result = {
+             r : parseInt(result[1], 16),
+             g : parseInt(result[2], 16),
+             b : parseInt(result[3], 16),
+            };
+     } else {
+      result = null;
+     }
+
+     return result;
+     }
+
+    function getColour(layer) {
+     var colour;
+     var fill;
+     var selectedLayerType = layer.class();
+
+     if (selectedLayerType == 'MSTextLayer') {
+      colour = layer.textColor();
+
+      fill = layer.style().fills().firstObject();
+
+      if (fill != undefined && fill.isEnabled()) {
+       colour = fill.color();
+      }
+      // log(colour.immutableModelObject().hexValue())
+     } else if (selectedLayerType == 'MSShapeGroup') {
+      fill = layer.style().fills().firstObject();
+
+      if (fill != undefined && fill.isEnabled()) {
+       colour = fill.color();
+      }
+     }
+
+     if (colour != undefined) {
+      colour = colour.immutableModelObject();
+     }
+
+     return colour;
     }
 
-    function doFindAndReplace() {
-
-        switch (searchScope) {
-            case 0:
-                searchInLayer(document);
-                break;
-            case 1:
-                searchInLayer(currentPage);
-                break;
-        }
-
+    function setColour(layer, layerType, colorToReplace) {
+     var layerColour = getColour(layer); // 可能匹配的图层颜色
+     var hexColour = '#' + layerColour.hexValue();
+     if (hexColour == colorToFind) {
+      replaceCount++;
+      if (layerType == MSShapeGroup) {
+       var fill = layer.style().fills().firstObject();
+       if (fill != undefined) {
+        fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+       }
+      }
+      else {
+       layer.textColor = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+      }
+     }
     }
 
+    function getSelectedLayer(selectedLayer) {
+     var selectedLayerType = selectedLayer.class();
+
+     if (selectedLayerType == MSLayerGroup) {
+      return getSelectedLayer(selectedLayer.layers().firstObject());
+     } else {
+      return selectedLayer;
+     }
+    }
+
+      function createUserInterface(colorToFind) {
+          userInterface = COSAlertWindow.new(); // 创建弹框
+
+          userInterface.setMessageText("颜色批量替换");
+
+          userInterface.addTextLabelWithValue("查找颜色(默认值为当前选择颜色)：");
+          findedColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
+         var findedColorHex = '#' + colorToFind.hexValue();
+         var findedColorAlpha = 1;
+         var findedMSColor = MSImmutableColor.colorWithSVGString(findedColorHex);
+         findedMSColor.setAlpha(findedColorAlpha);
+         var findedColor = findedMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace());
+         findedColorWell.setColor(findedColor);
+         var findedColorView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25)); // 创建包含被选择颜色控件的容器
+         findedColorView.addSubview(findedColorWell);
+      userInterface.addAccessoryView(findedColorView);
+
+          userInterface.addTextLabelWithValue("替换为：");
+      replaceColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
+         var replaceColorHex = '#' + colorToFind.hexValue() || "#1AAD19"; // #1AAD19 同设置中的默认值
+         var replaceColorAlpha = 1;
+         var replaceMSColor = MSImmutableColor.colorWithSVGString(replaceColorHex);
+         replaceMSColor.setAlpha(replaceColorAlpha);
+         var replaceColor = replaceMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace());
+         replaceColorWell.setColor(replaceColor);
+         var replaceColorView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25)); // 创建包含要替换颜色控件的容器
+         replaceColorView.addSubview(replaceColorWell);
+      userInterface.addAccessoryView(replaceColorView);
+
+          userInterface.addTextLabelWithValue("Page 生效范围：");
+          var options = ["所有 Page","当前工作 Page"];
+          userInterface.addAccessoryView(createRadioButtons(options, options[0]));
+
+      // userInterface.addTextLabelWithValue("替换元素类型：");
+          // var options = ["所有元素","同种类型元素"];
+          // userInterface.addAccessoryView(createRadioButtons(options, options[0]));
+
+          userInterface.addButtonWithTitle('确定');
+          userInterface.addButtonWithTitle('取消');
+
+          return userInterface.runModal();
+      }
+
+      function processButtonClick() {
+      colorToFind = colorToFind2 = MSColor.colorWithNSColor(findedColorWell.color()).immutableModelObject().svgRepresentation();
+      colorToReplace = hexToRgb(MSColor.colorWithNSColor(replaceColorWell.color()).immutableModelObject().svgRepresentation());
+      searchScope = [[[userInterface viewAtIndex: 5] selectedCell] tag];
+      // replaceElementType = [[[userInterface viewAtIndex: 7] selectedCell] tag];
+      }
+
+      function doFindAndReplace() {
+      switch (searchScope) {
+        case 0:
+          searchInLayer(document);
+          break;
+        case 1:
+          searchInLayer(currentPage);
+          break;
+      }
+      }
 
     function searchInLayer(layer) {
+     var layerType = layer.class();
 
-        switch ([layer class]) {
-            case MSTextLayer:
-                if ([layer stringValue].trim().match(textToFind)) {
-                    layer.setStringValue(layer.stringValue().replace(textToFind,textToReplace));
-                    layer.setName(layer.stringValue().trim().replace(/(\r\n|\n|\r)/gm," "));
-                    replaceCount ++;
-                }
-                break;
-            case MSDocument:
-                var documentPages = [layer pages];
-                for (var i = 0; i < [documentPages count]; i++) {
-                    var documentPage = [documentPages objectAtIndex:i];
-                    searchInLayer(documentPage);
-                }
-                break;
-            case MSPage:
-            case MSLayerGroup:
-            case MSArtboardGroup:
-                var sublayers = [layer layers];
-                for (var i = 0; i < [sublayers count]; i++) {
-                    var sublayer = [sublayers objectAtIndex: i];
-                    searchInLayer(sublayer);
-                }
-                break;
-        }
-        if(typeChoose == 0 && [layer class] != 'MSDocument'){
-            var name = layer.name();
-            if(name.match(textToFind)){
-                layer.setName(name.replace(textToFind,textToReplace));
-                replaceCount ++;
-            }
-        }
-    }
+     switch (layerType) {
+       case MSTextLayer:
+       case MSShapeGroup:
+         if (layerType == selectedLayerType) {
+          setColour(layer, layerType, colorToReplace);
+         }
+         break;
+       case MSDocument:
+         var documentPages = [layer pages];
+         for (var i = 0; i < [documentPages count]; i++) {
+           var documentPage = [documentPages objectAtIndex:i];
+           searchInLayer(documentPage);
+         }
+         break;
+       case MSPage:
+       case MSLayerGroup:
+       case MSArtboardGroup:
+         var sublayers = [layer layers];
+         for (var i = 0; i < [sublayers count]; i++) {
+           var sublayer = [sublayers objectAtIndex: i];
+           searchInLayer(sublayer);
+         }
+         break;
+     }
+   }
 
-
-    if(createUserInterface() != '1000'){
-        return;
-    }
-
-    processButtonClick();
-    doFindAndReplace();
-    if(replaceCount){
-        NSApp.displayDialog('替换成功，共找到' + replaceCount + '处\r\n"' + textToFind2 + '"替换为"' + textToReplace + '"');
-    }else{
-        NSApp.displayDialog('没有找到"' + textToFind + '"');
-    }
+   if(replaceCount){
+       NSApp.displayDialog('替换成功，共找到' + replaceCount + '处\r\n');
+   }
+   else{
+       NSApp.displayDialog('没有找到"' + textToFind + '"');
+   }
 }
