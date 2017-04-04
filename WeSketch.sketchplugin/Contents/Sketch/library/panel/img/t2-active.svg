@@ -1,0 +1,10 @@
+<svg width="32" height="26" viewBox="0 0 32 26">
+  <g fill="#1AAD19" fill-rule="evenodd">
+    <rect width="6" height="6"/>
+    <rect width="22" height="2" x="10" y="2"/>
+    <rect width="22" height="2" x="10" y="12"/>
+    <rect width="22" height="2" x="10" y="22"/>
+    <rect width="6" height="6" y="10"/>
+    <rect width="6" height="6" y="20"/>
+  </g>
+</svg>

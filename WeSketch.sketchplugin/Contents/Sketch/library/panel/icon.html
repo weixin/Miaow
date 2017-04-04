@@ -10,18 +10,152 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript">
-    <!--
     var init = function(data){
-        alert(data);
-    } -->
+        log(1);
+    } 
     // $(function(){
     //     init(data)
     // });
     </script>
+    <style>
+    .toolbar{
+      padding:35px 20px 25px 20px;
+      background-color:#F1F1F1;
+    }
+    .search-inputwrap{
+      width:370px;
+      display: inline-block;
+    }
+    .content-type{
+      width:190px;
+      padding:0 15px;
+    }
+    .listchoose-icon{
+      display: inline-block;
+    }
+    .gz-icon{
+      background-image:url(./img/t1.svg);
+      width:24px;
+      height:25px;
+    }
+    .gz-icon_active{
+      background-image:url(./img/t1-active.svg);
+      width:24px;
+      height:25px;
+    }
+    .list-icon{
+      background-image:url(./img/t2.svg);
+      width:32px;
+      height:26px;
+    }
+    .list-icon_active{
+      background-image:url(./img/t2-active.svg);
+      width:32px;
+      height:26px;
+    }
+    .messagebox{
+      position: absolute;
+      width:100%;
+      box-sizing: border-box;
+      display: flex;
+      padding:33px 22px;
+      border-top:1px solid rgba(0,0,0,0.3);
+    }
+    .messagebox-content{
+      display: 1;
+    }
+    .export{
+      padding:16px 58px;
+      color:#FFFFFF;
+      background: #1AAD19;
+      border-radius: 10px;
+      font-size: 24px;
+      width:50px;
+    }
+    .messagebox-content1{
+      font-size: 32px;
+    }
+    .messagebox-content2{
+      font-size: 18px;
+      color:rgba(0,0,0,0.6);
+    }
+    .messagebox-content3{
+      padding-left:10px;
+    }
+    .content-list{
+
+    }
+    .content-title{
+      font-size: 24px;
+      padding:12px 0 25px 0;
+      border-top:1px solid #D8D8D8;
+    }
+    .content-body{
+      width:223px;
+      height:223px;
+    }
+    .content-body + .content-body{
+      padding-left:7px;
+    }
+    .content-view{
+      display: flex;
+    }
+    </style>
   </head>
   <body>
-      <div id="abc">
-        测试  
+      <div class="toolbar">
+        <div class="search-inputwrap">
+          <div class="search-icon"></div>
+          <input class="search-input" type="text">
+        </div>
+        <select class="content-type" name="" id="">
+          <option value="All">1</option>
+          <option value="1">项目</option>
+          <option value="2">项目2</option>
+        </select>
+        <div class="listchoose-icon">
+          <div class="gz-icon">
+          </div>
+          <div class="list-icon">
+          </div>
+        </div>
+      </div>
+      <div class="content-list">
+          <div class="content-title">Tab Bar (32)</div>
+          <div class="content-view">
+              <div class="content-body">
+                <img class="content-body_img" src="http://temp.im/100x100" alt="">
+              </div>
+              <div class="content-body">
+                <img class="content-body_img" src="http://temp.im/100x100" alt="">
+              </div>
+              <div class="content-body">
+                <img class="content-body_img" src="http://temp.im/100x100" alt="">
+              </div>
+          </div>
+          <div class="content-view">
+              <div class="content-body">
+                <img class="content-body_img" src="http://temp.im/100x100" alt="">
+              </div>
+              <div class="content-body">
+                <img class="content-body_img" src="http://temp.im/100x100" alt="">
+              </div>
+              <div class="content-body">
+                <img class="content-body_img" src="http://temp.im/100x100" alt="">
+              </div>
+          </div>
+      </div>
+      <div class="messagebox">
+        <div class="messagebox-content">
+          <div class="messagebox-content1">multitalkCheckboxSelected</div>
+          <div class="messagebox-content2">
+            BenceFang
+            <span class="messagebox-content3">提交日期：2014-05-08</span>
+          </div>
+        </div>
+        <div class="messagebox-tool">
+          <div class="export">导入</div>
+        </div>
       </div>
   </body>
   <script type="text/javascript">
