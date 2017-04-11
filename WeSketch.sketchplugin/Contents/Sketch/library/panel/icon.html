@@ -9,17 +9,10 @@
     <link href="css/normalize.css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/common.js"></script>
-    <script type="text/javascript">
-    var init = function(data){
-        log(1);
-    } 
-    // $(function(){
-    //     init(data)
-    // });
-    </script>
     <style>
     html,body{
       height: 100%;
+      background:white;
     }
     *{
       margin:0;
@@ -32,47 +25,55 @@
       position: fixed;
       top:0;
       display: flex;
-      padding:35px 20px 25px 20px;
+          align-items: center;
+      padding:0 10px 12px 10px;
       background-color:#F1F1F1;
     }
     .search-inputwrap{
       flex:1;
       display: inline-block;
+      padding:0 10px 0 0;
     }
     .search-input{
       width:100%;
+      outline:0;
     }
     .content-type{
-      width:190px;
-      padding:0 15px;
+      width:100px;
+
     }
     .listchoose-icon{
-      display: inline-block;
-      margin:0 10px;
+      display: block;
+      margin:0 5px;
+      text-overflow:ellipsis;
+      display:-webkit-box;
+      -webkit-line-clamp:1;
+          align-items: center;
+      -webkit-box-orient:vertical;
     }
     .gz-icon{
       background-image:url(./img/t1.png);
-      width:24px;
-      height:25px;
+      width:12px;
+      height:12px;
       background-size: 100% 100%;
     }
     .gz-icon_active{
       background-image:url(./img/t1-active.png);
-      width:24px;
+      width:12px;
       background-size: 100% 100%;
-      height:25px;
+      height:12px;
     }
     .list-icon{
       background-image:url(./img/t2.png);
-      width:32px;
+      width:16px;
       background-size: 100% 100%;
-      height:26px;
+      height:13px;
     }
     .list-icon_active{
       background-image:url(./img/t2-active.png);
-      width:32px;
+      width:26px;
       background-size: 100% 100%;
-      height:26px;
+      height:13px;
     }
     .messagebox{
       z-index: 9;
@@ -82,7 +83,7 @@
       position: fixed;
       width:100%;
       box-sizing: border-box;
-      padding:33px 22px;
+      padding:16px 11px;
       border-top:1px solid rgba(0,0,0,0.3);
     }
     .messagebox-content{
@@ -103,7 +104,7 @@
       width:110px;
     }
     .messagebox-content1{
-      font-size: 32px;
+      font-size: 16px;
       overflow:hidden;
       text-overflow:ellipsis;
       display:-webkit-box;
@@ -111,7 +112,7 @@
       -webkit-box-orient:vertical;
     }
     .messagebox-content2{
-      font-size: 18px;
+      font-size: 9px;
       color:rgba(0,0,0,0.6);
       overflow:hidden;
       text-overflow:ellipsis;
@@ -120,40 +121,51 @@
       -webkit-box-orient:vertical;
     }
     .messagebox-content3{
-      padding-left:10px;
+      padding-left:5px;
     }
     .content-list{
-      padding:0 20px;
-      margin-top:20px;
+      padding:0 10px;
+      margin-top:10px;
     }
     .content-title{
-      font-size: 24px;
-      padding:12px 0 25px 0;
+      font-size: 12px;
+      padding:6px 0 12px 0;
 
       border-top:1px solid #D8D8D8;
     }
     .content-body{
-      width:223px;
-      height:223px;
+      width:111px;
+      height:111px;
       flex:1;
       display: flex;
       justify-content:center;
       align-items: center;
       background-color:#F6F6F6;
+      position: relative;
+    }
+    .content-body_active:before{
+      content:" ";
+      position: absolute;
+      width:100%;
+      height:100%;
+      border:3px solid red;
     }
     .content-body>svg{
       width:44px;
       height:44px;
     }
     .content-body + .content-body{
-      margin-left:7px;
+      margin-left:3px;
     }
     .content-view{
       display: flex;
-      padding:0 0 7px 0;
+      padding:0 0 3px 0;
+    }
+    .content{
+      padding:43px 0 69px 0;
     }
     .content-wrap{
-      padding:86px 20px 137px 20px;
+      padding:69px 20px 137px 20px;
       overflow: auto;
     }
     .btn-active{
@@ -208,57 +220,58 @@
       </div>
   </body>
   <script type="text/javascript">
-    window.onload = function(){
-      var savedata;
-      var choicedata;
-      var searchData;
+  var savedata;
+  var choicedata;
+  var searchData;
 
-      function appendDom(data){
-        $('.content-wrap').empty();
-        var title = $('#selecttype').find("option:selected").text();
-        var dom = [];
-        dom.push('<div class="content-title">'+ title +'</div>');
-        for(var i = 0;i < (parseInt(data.length/3)*3);i++ ){
-          dom.push('<div class="content-view">');
-          dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
-          i++;
-          dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
-          i++;
-          dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
-          dom.push('</div>')
+  function appendDom(data){
+    $('.content-wrap').empty();
+    var title = $('#selecttype').find("option:selected").text();
+    var dom = [];
+    dom.push('<div class="content-title">'+ title +'</div>');
+    for(var i = 0;i < (parseInt(data.length/3)*3);i++ ){
+      dom.push('<div class="content-view">');
+      dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
+      i++;
+      dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
+      i++;
+      dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
+      dom.push('</div>')
+    }
+    $('.content-wrap').append(dom.join(''));
+  }
+  
+  $('.content-wrap').on('click','.content-body',function(){
+      $('.content-body').removeClass('btn-active');
+      $(this).addClass('btn-active');
+      var i = parseInt($(this).attr('data-i'));
+      choicedata = savedata[i];
+      $('.messagebox').css('display','flex');
+      $('.messagebox-content1').text(choicedata.name.replace('.svg',''));
+  })
+  $('.search-input').on('input',function(e){
+    searchData = [];
+    var inputKey = $(this).val();
+    if(inputKey != ''){
+      for(var i = 0;i < savedata.length;i++){
+        if(savedata[i].name.replace('.svg','').indexOf(inputKey) > -1){
+          searchData.push(savedata[i]);
         }
-        $('.content-wrap').append(dom.join(''));
       }
-      $.get('http://123.207.94.56:3000/users/getFiles',function(data){
-        savedata = data.data;
-        appendDom(savedata);
-      },'json')
-      $('.content-wrap').on('click','.content-body',function(){
-          $('.content-body').removeClass('btn-active');
-          $(this).addClass('btn-active');
-          var i = parseInt($(this).attr('data-i'));
-          choicedata = savedata[i];
-          $('.messagebox').css('display','flex');
-          $('.messagebox-content1').text(choicedata.name.replace('.svg',''));
-      })
-      $('.search-input').on('input',function(e){
-        searchData = [];
-        var inputKey = $(this).val();
-        if(inputKey != ''){
-          for(var i = 0;i < savedata.length;i++){
-            if(savedata[i].name.replace('.svg','').indexOf(inputKey) > -1){
-              searchData.push(savedata[i]);
-            }
-          }
-          appendDom(searchData);
+      appendDom(searchData);
 
-        }else{
-          appendDom(savedata);
-        }
-      })
-      $('body').on('click','.export',function(){
-          SMAction('submit',choicedata.content);
-      })
+    }else{
+      appendDom(savedata);
+    }
+  })
+  $('body').on('click','.export',function(){
+      SMAction('submit',choicedata.content);
+  })
+  var init = function(data){
+    $('.content-wrap').append('<div>' + data + '</div>');
+      // data = JSON.parse(decodeURI(data));
+      savedata = data.data;
+      // appendDom(savedata);
     }
   </script>
 </html>

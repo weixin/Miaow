@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "double shenfei maybe",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -52,8 +52,8 @@
     },
     {
       "name" : "图标库",
-      "identifier" : "icon",
-      "script" : "icon.js",
+      "identifier" : "iconqqq",
+      "script" : "iconqqq.js",
       "shortcut": "",
       "handler" : "onRun"
     },
@@ -136,7 +136,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-","icon","toolbar","-",
+    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-","iconqqq","toolbar","-",
     {
         "title": "管理 UI Kit",
         "items": [
@@ -154,7 +154,6 @@
         ]
     },
     "-",
-    "codeQ",
     "setting",
     {
         "title": "帮助",
