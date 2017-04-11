@@ -109,8 +109,8 @@ function SMPanel(options){
         result = false;
     options.url = encodeURI("file://" + options.url);
     var frame = NSMakeRect(0, 0, options.width, (options.height + 32)),
-        titleBgColor = NSColor.colorWithRed_green_blue_alpha(0.1, 0.1, 0.1, 1),
-        contentBgColor = NSColor.colorWithRed_green_blue_alpha(0.13, 0.13, 0.13, 1);
+        titleBgColor = NSColor.colorWithRed_green_blue_alpha(1,1,1, 1),
+        contentBgColor = NSColor.colorWithRed_green_blue_alpha(1, 1, 1, 1);
 
     if(options.identifier){
         var threadDictionary = NSThread.mainThread().threadDictionary();

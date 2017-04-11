@@ -6,8 +6,8 @@ var onRun = function(context){
 
 	SMPanel({
         url: pluginSketch + "/panel/icon.html",
-        width: 725,
-        height: 1096,
+        width: 362,
+        height: 548,
         data: {
             a:"1"
         },
