@@ -2,6 +2,10 @@
 var kPluginDomain = "com.sketchplugins.wechat.link";
 var lineColorKey = "com.sketchplugins.wechat.linecolor";
 var lineThicknessKey = "com.sketchplugins.wechat.linethickness";
+var selectionDom = "com.sketchplugins.wechat.selectionDom";
+var selectionDom1 = "com.sketchplugins.wechat.selectionDom1";
+var selectionDom2 = "com.sketchplugins.wechat.selectionDom2";
+var Selection = NSUserDefaults.standardUserDefaults().objectForKey(selectionDom) || '';
 var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
 var lineThickness = NSUserDefaults.standardUserDefaults().objectForKey(lineThicknessKey) || "6";
 var colorLineR = rgb(colorLine)[0];
@@ -851,7 +855,7 @@ var redrawConnections = function(context) {
 	while (linkLayer = loop.nextObject()) {
 		destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
 		var Message = destinationArtboardID.split('____');
-		destinationArtboard = doc.currentPage().artboards().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
+		destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
 
 		if (destinationArtboard && Message[0] == linkLayer.objectID()) {
 			sanitizeArtboard(destinationArtboard, context);
@@ -909,6 +913,14 @@ var onRun = function(context) {
 		else if(selection.lastObject().className() == "MSArtboardGroup" || selection.lastObject().className() == "MSSymbolMaster") {
 			destArtboard = selection.lastObject();
 			linkLayer = selection.firstObject();
+		}else{
+
+			var Selection = NSUserDefaults.standardUserDefaults().objectForKey(selectionDom) || '';
+			Selection = Selection.split(',');
+			var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection1 == '"+ Selection[0] +"'", selectionDom1);
+			linkLayer = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+			var linkLayersPredicate2 = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection2 == '"+ Selection[1] +"'", selectionDom2);
+			destArtboard = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate2).firstObject();
 		}
 		var artboardID = destArtboard.objectID();
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "artboardID", destArtboard, kPluginDomain);

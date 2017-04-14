@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "double shenfei maybe",
-  "version": "1.3.2",
+  "version": "1.3.4",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -133,6 +133,14 @@
       "script" : "issues.js",
       "shortcut": "",
       "handler" : "onRun"
+    },
+    {
+      "handlers": {
+              "actions": {
+                  "SelectionChanged.finish" : "onSelectionChanged"
+              }
+          },
+      "script": "selectionChanged.js"
     }
   ],
   "menu": {
