@@ -231,11 +231,11 @@
     dom.push('<div class="content-title">'+ title +'</div>');
     for(var i = 0;i < (parseInt(data.length/3)*3);i++ ){
       dom.push('<div class="content-view">');
-      dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
+      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'</div>');
       i++;
-      dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
+      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'</div>');
       i++;
-      dom.push('<div data-i="'+i+'" class="content-body">'+data[i].content+'</div>');
+      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'</div>');
       dom.push('</div>')
     }
     $('.content-wrap').append(dom.join(''));
@@ -247,7 +247,7 @@
       var i = parseInt($(this).attr('data-i'));
       choicedata = savedata[i];
       $('.messagebox').css('display','flex');
-      $('.messagebox-content1').text(choicedata.name.replace('.svg',''));
+      $('.messagebox-content1').text(decodeURIComponent(choicedata.name).replace('.svg',''));
   })
   $('.search-input').on('input',function(e){
     searchData = [];
@@ -265,13 +265,13 @@
     }
   })
   $('body').on('click','.export',function(){
-      SMAction('submit',choicedata.content);
+      SMAction('submit',decodeURIComponent(choicedata.content));
   })
-  var init = function(data){
-    $('.content-wrap').append('<div>' + data + '</div>');
+  init = function(data){
+    // $('.content-wrap').append('<div>' + JSON.stringify(data) + '</div>');
       // data = JSON.parse(decodeURI(data));
-      savedata = data.data;
-      // appendDom(savedata);
+      savedata = data;
+      appendDom(savedata);
     }
   </script>
 </html>

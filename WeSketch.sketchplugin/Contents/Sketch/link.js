@@ -104,6 +104,11 @@ var findAway = function(line,a,b,doc,endPoisiton){
 			pca = pca.parentArtboard();
 		}
 	}
+	if(b.className() != "MSArtboardGroup" && b.className() != "MSSymbolMaster"){
+		if(pcb.parentArtboard()){
+			pcb = pcb.parentArtboard();
+		}
+	}
 	if(lastEndPosition == 'l'){
 		ax = a.x() + a.size().width / 2;
 		ay = a.y() + a.size().height;
@@ -232,6 +237,11 @@ var drawTwoLine = function(a,b,doc){
 			pca = pca.parentArtboard();
 		}
 	}
+	if(b.className() != "MSArtboardGroup" && b.className() != "MSSymbolMaster"){
+		if(pcb.parentArtboard()){
+			pcb = pcb.parentArtboard();
+		}
+	}
 	//先左右后上下
 	var axPoint = a.x() + a.size().width/2;
 	var ayPoint = a.y() + a.size().height/2;
@@ -326,6 +336,11 @@ var findAway2 = function(a,b,doc){
 	if(a.className() != "MSArtboardGroup" && a.className() != "MSSymbolMaster"){
 		if(a.parentArtboard()){
 			pca = pca.parentArtboard();
+		}
+	}
+	if(b.className() != "MSArtboardGroup" && b.className() != "MSSymbolMaster"){
+		if(pcb.parentArtboard()){
+			pcb = pcb.parentArtboard();
 		}
 	}
 	a = a.absoluteRect();

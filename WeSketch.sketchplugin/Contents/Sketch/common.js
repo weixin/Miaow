@@ -144,7 +144,7 @@ function SMPanel(options){
                         DOMReady = [
                                 "$(",
                                     "function(){",
-                                        "init(" + encodeURI(options.data) + ")",
+                                        "init(" + JSON.stringify(options.data) + ")",
                                     "}",
                                 ");"
                             ].join("");
