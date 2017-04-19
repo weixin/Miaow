@@ -54,9 +54,11 @@ var onRun = function (context) {
 
 	//var theResponseData = request(UIKITURL);
 	var data = [[NSData alloc] initWithData:theResponseData];
-	var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
-	var databasePath = [[NSString alloc] initWithString: [basepath stringByAppendingPathComponent:@"Users/Shared/uikit.sketch"]]
+	var save = NSSavePanel.savePanel();
+	var databasePath = save.URL().path();
 	[data writeToFile:databasePath atomically:true];
+	var nsfile = [NSFileManager defaultManager];
+	
 	
 	var saveArtBoard = [];
 	var sourceDoc = MSDocument.new();
