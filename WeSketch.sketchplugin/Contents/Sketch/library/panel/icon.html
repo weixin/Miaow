@@ -96,12 +96,13 @@
       -webkit-box-orient:vertical;
     }
     .export{
-      padding:16px 18px;
+      padding:4px 9px;
       color:#FFFFFF;
       background: #1AAD19;
-      border-radius: 10px;
-      font-size: 22px;
-      width:110px;
+      border-radius: 5px;
+      font-size: 16px;
+      width:90px;
+      cursor: pointer;
     }
     .messagebox-content1{
       font-size: 16px;
@@ -265,7 +266,7 @@
     }
   })
   $('body').on('click','.export',function(){
-      SMAction('submit',decodeURIComponent(choicedata.content));
+      SMAction('submit',choicedata);
   })
   init = function(data){
     // $('.content-wrap').append('<div>' + JSON.stringify(data) + '</div>');

@@ -8,8 +8,8 @@ var onRun = function(context){
     var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(theResponseData,0,nil);
     var object = [];
     for (var i = 0; i < jsonData.data.length; i++) {
-        var name = encodeURIComponent(jsonData.data[0].name);
-        var content = encodeURIComponent(jsonData.data[0].content);
+        var name = encodeURIComponent(jsonData.data[i].name);
+        var content = encodeURIComponent(jsonData.data[i].content);
         object.push({name:name,content:content});
     };
 
@@ -22,7 +22,9 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "icon",
         callback: function( data ){
+            // '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
             logo = NSString.stringWithString(data.content);
+            context.document.showMessage(logo);
             logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
             var svgImporter = MSSVGImporter.svgImporter();
             svgImporter.prepareToImportFromData(logo);

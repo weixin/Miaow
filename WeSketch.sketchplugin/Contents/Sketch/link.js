@@ -929,9 +929,11 @@ var onRun = function(context) {
 			destArtboard = selection.lastObject();
 			linkLayer = selection.firstObject();
 		}else{
-
 			var Selection = NSUserDefaults.standardUserDefaults().objectForKey(selectionDom) || '';
+    		NSApp.displayDialog(Selection);
+
 			Selection = Selection.split(',');
+
 			var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection1 == '"+ Selection[0] +"'", selectionDom1);
 			linkLayer = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
 			var linkLayersPredicate2 = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection2 == '"+ Selection[1] +"'", selectionDom2);
