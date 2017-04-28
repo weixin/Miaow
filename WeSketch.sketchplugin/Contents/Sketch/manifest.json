@@ -121,6 +121,13 @@
       "handler" : "onRun"
     },
     {
+      "name" : "快捷键设置",
+      "identifier" : "keySetting",
+      "script" : "keySetting.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
       "name" : "检查更新",
       "identifier" : "checkforupdate",
       "script" : "checkForUpdate.js",
@@ -131,6 +138,13 @@
       "name" : "关于",
       "identifier" : "about",
       "script" : "about.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "捐赠",
+      "identifier" : "donation",
+      "script" : "donation.js",
       "shortcut": "",
       "handler" : "onRun"
     },
@@ -151,7 +165,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-","iconqqq","toolbar","-","codeS",
+    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-","iconqqq","toolbar","-",
     {
         "title": "管理 UI Kit",
         "items": [
@@ -170,12 +184,14 @@
     },
     "-",
     "setting",
+    "keySetting",
     {
         "title": "帮助",
         "items": [
             "about",
             "issues",
-            "checkforupdate"
+            "checkforupdate",
+            "donation"
         ]
     }],
     "title":"WeSketch"

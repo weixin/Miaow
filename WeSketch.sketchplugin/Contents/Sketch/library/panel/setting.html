@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <link href="css/normalize.css" rel="stylesheet">
+  </head>
+  <body >
+      <input id="input" type="text"/>
+      <div id="wrap">测试：</div>
+  <script type="text/javascript">
+  window.onload = function(){
+    $('#input').on('keydown',function(e){
+      var ctrlKey = e.ctrlKey;
+      var shiftKey = e.shiftKey;
+      var metaKey = e.metaKey;
+      var text = [];
+      if(ctrlKey){
+        text.push('control');
+      }
+      if(shiftKey){
+        text.push('shift');
+      }
+      if(metaKey){
+        text.push('command');
+      }
+      if(e.keyCode){
+        $('#wrap').text(text.join('+')+e.keyCode);
+      }
+    })
+  }
+  </script>
+  </body>
+</html>
