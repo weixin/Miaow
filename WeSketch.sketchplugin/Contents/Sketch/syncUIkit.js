@@ -120,7 +120,7 @@ var onRun = function (context) {
 	          //线上源中没找着，直接添加source的到冲突画布
 	          for(var g=0;g<localSymobl.count();g++){
 	            if(!deleteObject['g_'+g]){
-	              saveArtBoard2.push(localSymobl[g]);
+	              saveArtBoard.push(localSymobl[g]);
 	              // localSymobl[g].removeFromParent();
 	            }
 	          }
@@ -138,10 +138,10 @@ var onRun = function (context) {
 	        addPageCount++; 
 	      }
 	      var newPage = doc.addBlankPage();
-	      var sourceSymbol = sourcePages[i].artboards();
+	      var sourceSymbol = sourcePages[i].children();
 	      newPage.setName(sourcePageName);
 	      newPage.addLayers(sourceSymbol);
-	      newPage.addLayers(saveArtBoard2);
+	      // newPage.addLayers(saveArtBoard2);
 	      doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
 	    }
 	}

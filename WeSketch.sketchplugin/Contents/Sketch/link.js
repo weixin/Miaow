@@ -930,7 +930,6 @@ var onRun = function(context) {
 			linkLayer = selection.firstObject();
 		}else{
 			var Selection = NSUserDefaults.standardUserDefaults().objectForKey(selectionDom) || '';
-    		NSApp.displayDialog(Selection);
 
 			Selection = Selection.split(',');
 

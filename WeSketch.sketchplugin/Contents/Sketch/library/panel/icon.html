@@ -77,7 +77,7 @@
     }
     .messagebox{
       z-index: 9;
-      display: none;
+      display: flex;
       bottom: 0;
       background-color: #F6F6F6;
       position: fixed;
@@ -100,8 +100,8 @@
       color:#FFFFFF;
       background: #1AAD19;
       border-radius: 5px;
-      font-size: 16px;
-      width:90px;
+      font-size: 13px;
+      width:50px;
       cursor: pointer;
     }
     .messagebox-content1{
@@ -113,13 +113,9 @@
       -webkit-box-orient:vertical;
     }
     .messagebox-content2{
-      font-size: 9px;
+      font-size: 12px;
       color:rgba(0,0,0,0.6);
-      overflow:hidden;
-      text-overflow:ellipsis;
-      display:-webkit-box;
-      -webkit-line-clamp:1;
-      -webkit-box-orient:vertical;
+      margin: 0 10px;
     }
     .messagebox-content3{
       padding-left:5px;
@@ -135,10 +131,10 @@
       border-top:1px solid #D8D8D8;
     }
     .content-body{
-      width:111px;
-      height:111px;
-      flex:1;
-      display: flex;
+      width:64px;
+      height:64px;
+      float: left;
+      display:flex;
       justify-content:center;
       align-items: center;
       background-color:#F6F6F6;
@@ -149,14 +145,14 @@
       position: absolute;
       width:100%;
       height:100%;
-      border:3px solid red;
+      border:1px solid red;
     }
     .content-body>svg{
-      width:44px;
-      height:44px;
+      max-width: 44px;
     }
-    .content-body + .content-body{
-      margin-left:3px;
+    .content-body{
+      margin:20px;
+      position: relative;
     }
     .content-view{
       display: flex;
@@ -177,11 +173,32 @@
       position: absolute;
       top:0;
       left:0;
-      border:10px solid #1AAD19;
+      border:3px solid #1AAD19;
       width:100%;
       height:100%;
       box-sizing:border-box;
     }
+    .content-name{
+      text-align: center;
+      color:black;
+      font-size: 12px;
+      position: absolute;
+      top:70px;
+      left:0;
+      width:64px;
+    }
+    .tools-input{
+      width:70px;
+      outline: 0;
+      color:#000;
+      font-size: 12px;
+    }
+    .color-box{
+      width:17px;
+      height:17px;
+      background-color:#000;
+    }
+
     </style>
   </head>
   <body>
@@ -192,7 +209,7 @@
         </div>
         <select class="content-type" name="" id="selecttype">
           <option value="gk">公共图标</option>
-          <option value="self">自用图标</option>
+          <option value="history">常用</option>
         </select>
         <div class="listchoose-icon">
           <div class="gz-icon_active">
@@ -209,14 +226,15 @@
       </div>
       <div class="messagebox">
         <div class="messagebox-content">
-          <div class="messagebox-content1">multitalkCheckboxSelected</div>
-    <!--       <div class="messagebox-content2">
-            BenceFang
-            <span class="messagebox-content3">提交日期：2014-05-08</span>
-          </div> -->
-        </div>
-        <div class="messagebox-tool">
-          <div class="export">添加到画板</div>
+          <div class="messagebox-content2">颜色 #</div>
+          <div class="">
+            <input id="color" class="tools-input" type="text" value="FFFFFF" />
+          </div> 
+          <div class="color-box"></div>
+          <div class="messagebox-content2">大小</div>
+          <div class="">
+            <input id="size" class="tools-input" type="text" value="64" />
+          </div>
         </div>
       </div>
   </body>
@@ -224,20 +242,15 @@
   var savedata;
   var choicedata;
   var searchData;
+  var first = [];
 
   function appendDom(data){
     $('.content-wrap').empty();
     var title = $('#selecttype').find("option:selected").text();
     var dom = [];
     dom.push('<div class="content-title">'+ title +'</div>');
-    for(var i = 0;i < (parseInt(data.length/3)*3);i++ ){
-      dom.push('<div class="content-view">');
-      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'</div>');
-      i++;
-      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'</div>');
-      i++;
-      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'</div>');
-      dom.push('</div>')
+    for(var i = 0;i < data.length;i++){
+      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
@@ -247,8 +260,10 @@
       $(this).addClass('btn-active');
       var i = parseInt($(this).attr('data-i'));
       choicedata = savedata[i];
-      $('.messagebox').css('display','flex');
+      // $('.messagebox').css('display','flex');
       $('.messagebox-content1').text(decodeURIComponent(choicedata.name).replace('.svg',''));
+      SMAction('submit',choicedata);
+
   })
   $('.search-input').on('input',function(e){
     searchData = [];
@@ -267,12 +282,22 @@
   })
   $('body').on('click','.export',function(){
       SMAction('submit',choicedata);
+      return;
+  })
+  $('#color').on('input',function(){
+    var val = $(this).val();
+    if(val.length == 6){
+      $('.color-box').css('background','#'+val);
+      $('svg path').attr('fill','#' + val);
+    }
+  })
+  $('#size').on('input',function(){
+    var val = $(this).val();
+
   })
   init = function(data){
-    // $('.content-wrap').append('<div>' + JSON.stringify(data) + '</div>');
-      // data = JSON.parse(decodeURI(data));
-      savedata = data;
+      savedata = data.data;
       appendDom(savedata);
-    }
+  }
   </script>
 </html>
