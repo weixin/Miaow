@@ -1,16 +1,30 @@
 @import "common.js";
 
 var usualKey = "com.sketchplugins.wechat.iconusual";
-var usualObj = NSUserDefaults.standardUserDefaults().objectForKey(usualKey);
 
 var onRun = function(context){
 
+    var usualArr = NSUserDefaults.standardUserDefaults().objectForKey(usualKey);
+    if(usualArr){
+        usualArr = usualArr.split(',');
+    }else{
+        usualArr = [];
+    }
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 
     var theResponseData = networkRequest(['http://123.207.94.56:3000/users/getFiles']);
     var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(theResponseData,0,nil);
     var object = [];
     for (var i = 0; i < jsonData.data.length; i++) {
+        for(var k = 0;k < usualArr.length; k ++){
+            if(usualArr[k].name == jsonData.data[i].name){
+                // var t = jsonData.data[i];
+                // jsonData.data.splice(i);
+                // jsonData.data.push(t);
+                // i = i-1;
+                // break;
+            }
+        }
         var name = encodeURIComponent(jsonData.data[i].name);
         var content = encodeURIComponent(jsonData.data[i].content);
         object.push({name:name,content:content});
@@ -21,6 +35,21 @@ var onRun = function(context){
           [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
           [pasteBoard setString:text forType:NSPasteboardTypeString];
     }
+    function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+        if (result) {
+        result = {
+             r : parseInt(result[1], 16),
+             g : parseInt(result[2], 16),
+             b : parseInt(result[3], 16),
+            };
+        } else {
+        result = null;
+        }
+
+        return result;
+     }
 
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
@@ -28,18 +57,13 @@ var onRun = function(context){
         url: pluginSketch + "/panel/icon.html?12",
         width: 362,
         height: 548,
-        data: {data:object,usual:usualObj},
+        data: {data:object},
         hiddenClose: false,
         floatWindow: true,
         identifier: "icon",
         callback: function( data ){
-            var usualArr = [];
-            usualObj = NSUserDefaults.standardUserDefaults().objectForKey(usualKey);
-            if(usualObj){
-               usualArr  = usualObj.split(',');
-            }else{
-                usualArr.push(data.name);
-            }
+            usualArr = NSUserDefaults.standardUserDefaults().objectForKey(usualKey).split(',');
+            usualArr.push(data.name);  
             NSUserDefaults.standardUserDefaults().setObject_forKey(usualArr.join(','), usualKey);
             var x = 0;
             var y = 0;
@@ -47,8 +71,8 @@ var onRun = function(context){
             if (selection.count() > 0) {
                 selection = selection[0];
                 if(selection.className() == 'MSSymbolMaster' || selection.className() == 'MSArtboardGroup'){
-                    x = selection.absoluteRect().size().width/2;
-                    y = selection.absoluteRect().size().height/2;
+                    x = selection.absoluteRect().size().width/2 - 30;
+                    y = selection.absoluteRect().size().height/2 - 30;
                 }else{
                     x = selection.frame().x;
                     y = selection.frame().y;
@@ -64,6 +88,11 @@ var onRun = function(context){
             var importedSVGLayer = svgImporter.importAsLayer();
             var svgFrame = importedSVGLayer.frame();
             importedSVGLayer.name = data.name;
+            [svgFrame setWidth:data.width];
+            [svgFrame setHeight:data.height];
+            var fill = importedSVGLayer.style().fills().firstObject();
+            fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+
             [svgFrame setX:x];
             [svgFrame setY:y];
             var page = context.document.currentPage();

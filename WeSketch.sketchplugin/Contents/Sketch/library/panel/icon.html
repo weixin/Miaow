@@ -250,28 +250,47 @@
     var dom = [];
     dom.push('<div class="content-title">'+ title +'</div>');
     for(var i = 0;i < data.length;i++){
-      dom.push('<div data-i="'+i+'" class="content-body">'+decodeURIComponent(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+      dom.push('<div data-i="'+(data.index||i)+'" class="content-body">'+decodeURIComponent(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
   
   $('.content-wrap').on('click','.content-body',function(){
+    if($('.search-input').length > 0){
       $('.content-body').removeClass('btn-active');
       $(this).addClass('btn-active');
       var i = parseInt($(this).attr('data-i'));
       choicedata = savedata[i];
-      // $('.messagebox').css('display','flex');
-      $('.messagebox-content1').text(decodeURIComponent(choicedata.name).replace('.svg',''));
+      choicedata.width = $('#size').val();
+      choicedata.height = parseInt($('#size').val()*$(this).find('svg').height()/$(this).find('svg').width());
+      choicedata.color = $('#color').val();
+      savedata.splice(i,1);
+      savedata.unshift(choicedata);
+      
       SMAction('submit',choicedata);
+      searchK($('.search-input').val());
+      $('.content-body:eq(0)').addClass('btn-active');
 
+    }else{
+      var i = parseInt($(this).attr('data-i'));
+      choicedata = savedata[i];
+      choicedata.width = $('#size').val();
+      choicedata.height = parseInt($('#size').val()*$(this).find('svg').height()/$(this).find('svg').width());
+      choicedata.color = $('#color').val();
+      SMAction('submit',choicedata);
+      savedata.splice(i,1);
+      savedata.unshift(choicedata);
+      appendDom(savedata);
+      $('.content-body:eq(0)').addClass('btn-active');
+    }
   })
-  $('.search-input').on('input',function(e){
+
+  function searchK(inputKey){
     searchData = [];
-    var inputKey = $(this).val();
     if(inputKey != ''){
       for(var i = 0;i < savedata.length;i++){
         if(savedata[i].name.replace('.svg','').indexOf(inputKey) > -1){
-          searchData.push(savedata[i]);
+          searchData.push({name:savedata[i].name,content:savedata[i].content,index:i});
         }
       }
       appendDom(searchData);
@@ -279,21 +298,21 @@
     }else{
       appendDom(savedata);
     }
-  })
-  $('body').on('click','.export',function(){
-      SMAction('submit',choicedata);
-      return;
+  }
+  $('.search-input').on('input',function(e){
+    var inputKey = $(this).val();
+    searchK(inputKey);
   })
   $('#color').on('input',function(){
     var val = $(this).val();
-    if(val.length == 6){
+    if(val.length == 6 || val.length == 3){
       $('.color-box').css('background','#'+val);
       $('svg path').attr('fill','#' + val);
     }
   })
   $('#size').on('input',function(){
     var val = $(this).val();
-
+    $('svg').width(val);
   })
   init = function(data){
       savedata = data.data;
