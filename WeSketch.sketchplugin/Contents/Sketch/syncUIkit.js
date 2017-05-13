@@ -57,7 +57,7 @@ var onRun = function (context) {
 	var save = NSSavePanel.savePanel();
 	var databasePath = save.URL().path();
 	[data writeToFile:databasePath atomically:true];
-	var nsfile = [NSFileManager defaultManager];
+	// var nsfile = [NSFileManager defaultManager];
 	
 	
 	var saveArtBoard = [];
@@ -67,7 +67,7 @@ var onRun = function (context) {
 	    var savePage;
 	    var pages = doc.pages();
 
-	    var sourcePages = sourceDoc.documentData().pages();
+	    var sourcePages = sourceDoc.pages();
 
 	    var addSymbolCount = 0;
 	    var addPageCount = 0;
@@ -75,15 +75,16 @@ var onRun = function (context) {
 	    for(var i=0;i<sourcePages.count();i++){
 	      var saveArtBoard2 = [];
 	      var sourcePageName = sourcePages[i].name();
+	      var sourceSymbol = sourcePages[i].artboards();
 
 	      var flagForOldPage = false;
+	      var nowK = k;
 	      for(var k=0;k<pages.count();k++){
 	        //如果有同一个page名
 	        if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
 	          flagForOldPage = true;
 
 	          //比对一下
-	          var sourceSymbol = sourcePages[i].artboards();
 	          var localSymobl = pages[k].artboards();
 	          var deleteObject = {};
 	          var pushAllArtboards = [];
@@ -127,7 +128,7 @@ var onRun = function (context) {
 
 	          // 这里全部换一种实现，先将冲突提出来换到冲突画板，然后把整张画布删除再copy一份
 	          // pages[k].addLayers(pushAllArtboards);
-	          context.document.removePage(pages[k]);
+	          nowK = k;
 	          break;
 	        }
 	      }
@@ -138,9 +139,9 @@ var onRun = function (context) {
 	        addPageCount++; 
 	      }
 	      var newPage = doc.addBlankPage();
-	      var sourceSymbol = sourcePages[i].children();
 	      newPage.setName(sourcePageName);
 	      newPage.addLayers(sourceSymbol);
+	      context.document.removePage(pages[nowK]);
 	      // newPage.addLayers(saveArtBoard2);
 	      doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
 	    }

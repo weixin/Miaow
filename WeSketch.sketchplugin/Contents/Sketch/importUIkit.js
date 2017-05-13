@@ -27,20 +27,14 @@ var onRun = function(context){
   urlSave = urlSave.substr(0,urlSave.lastIndexOf('/'));
   NSUserDefaults.standardUserDefaults().setObject_forKey(urlSave, importUrlKey);
 
-  var theResponseData = request(file_path)
-  var data = [[NSData alloc] initWithData:theResponseData];
-  var basepath = [[NSFileManager defaultManager] currentDirectoryPath];
-  var databasePath = [[NSString alloc] initWithString: [basepath stringByAppendingPathComponent:@"Users/Shared/uikit.sketch"]]
-  [data writeToFile:databasePath atomically:true];
-
   var saveArtBoard = [];
   var sourceDoc = MSDocument.new();
-  if(sourceDoc.readFromURL_ofType_error(NSURL.fileURLWithPath(databasePath), "com.bohemiancoding.sketch.drawing", nil)) {
+  if(sourceDoc.readFromURL_ofType_error(NSURL.fileURLWithPath(panel.URL().path()), "com.bohemiancoding.sketch.drawing", nil)) {
       var doc = context.document;
       var savePage;
       var pages = doc.pages();
 
-      var sourcePages = sourceDoc.documentData().pages();
+      var sourcePages = sourceDoc.pages();
 
       var addSymbolCount = 0;
       var addPageCount = 0;
@@ -48,15 +42,16 @@ var onRun = function(context){
       for(var i=0;i<sourcePages.count();i++){
         var saveArtBoard2 = [];
         var sourcePageName = sourcePages[i].name();
+        var sourceSymbol = sourcePages[i].artboards();
 
         var flagForOldPage = false;
+        var nowK = k;
         for(var k=0;k<pages.count();k++){
           //如果有同一个page名
           if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
             flagForOldPage = true;
 
             //比对一下
-            var sourceSymbol = sourcePages[i].artboards();
             var localSymobl = pages[k].artboards();
             var deleteObject = {};
             var pushAllArtboards = [];
@@ -93,14 +88,14 @@ var onRun = function(context){
             //线上源中没找着，直接添加source的到冲突画布
             for(var g=0;g<localSymobl.count();g++){
               if(!deleteObject['g_'+g]){
-                saveArtBoard2.push(localSymobl[g]);
+                saveArtBoard.push(localSymobl[g]);
                 // localSymobl[g].removeFromParent();
               }
             }
 
             // 这里全部换一种实现，先将冲突提出来换到冲突画板，然后把整张画布删除再copy一份
             // pages[k].addLayers(pushAllArtboards);
-            context.document.removePage(pages[k]);
+            nowK = k;
             break;
           }
         }
@@ -111,10 +106,10 @@ var onRun = function(context){
           addPageCount++; 
         }
         var newPage = doc.addBlankPage();
-        var sourceSymbol = sourcePages[i].artboards();
         newPage.setName(sourcePageName);
         newPage.addLayers(sourceSymbol);
-        newPage.addLayers(saveArtBoard2);
+        context.document.removePage(pages[nowK]);
+        // newPage.addLayers(saveArtBoard2);
         doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
       }
   }
@@ -150,9 +145,9 @@ function isSame(a,b){
   if(layers.count() != b.layers().count()){
     return false;
   }
-  if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
-    return false;
-  }
+  // if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
+  //  return false;
+  // }
   for(var i = 0;i < layers.count(); i++){
     var layer = layers[i];
 
