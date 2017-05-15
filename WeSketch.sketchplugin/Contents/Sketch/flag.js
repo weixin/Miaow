@@ -1,22 +1,20 @@
 @import "common.js"
 
-var kPluginDomain = "com.sketchplugins.wechat.flag";
-var lineColorKey = "com.sketchplugins.wechat.flagcolor";
-var textCount = 1;
-var scale = 2;
-var isDeleteNum = 0;
-var scaleOptionsMatrix = 0;
-var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
-var colorLineR = rgb(colorLine)[0];
-var colorLineG = rgb(colorLine)[1];
-var colorLineB = rgb(colorLine)[2];
-
-var getConnectionsGroupInPage = function(page) {
-	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isflagContainer == true", kPluginDomain);
-	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
-}
-
-var onRun = function(context){
+function getFlag(context,refrush){
+	var kPluginDomainFlag = "com.sketchplugins.wechat.flag";
+	var lineColorKey = "com.sketchplugins.wechat.flagcolor";
+	var textCount = 1;
+	var scale = 2;
+	var isDeleteNum = 0;
+	var scaleOptionsMatrix = 0;
+	var getConnectionsGroupInPage = function(page) {
+		var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isflagContainer == true", kPluginDomainFlag);
+		return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
+	}
+	var colorLine = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
+	var colorLineR = rgb(colorLine)[0];
+	var colorLineG = rgb(colorLine)[1];
+	var colorLineB = rgb(colorLine)[2];
 	function deleteDialog(context){
 		var settingsWindow = COSAlertWindow.new();
 		settingsWindow.addButtonWithTitle("确定");
@@ -192,38 +190,38 @@ var onRun = function(context){
 		return true;
 	}
 
-	var draw = function(doc,nowDom){
-		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID != nil", kPluginDomain);
+	var drawFunction = function(doc,nowDom){
+		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID != nil", kPluginDomainFlag);
 		var linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
 		var loop = linkLayers.objectEnumerator();
 		var returnLine = [];
 		var isDrawNow = false;
 		while (linkLayer = loop.nextObject()) {
 			var lastState = 'e';
-			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_l'", kPluginDomain);
+			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_l'", kPluginDomainFlag);
 			lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
 			if(lastDom){
 				lastState = 'l';
 				if(nowDom && lastDom.objectID() == nowDom.objectID()){
-					context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_r', "FlagID", nowDom, kPluginDomain);
+					context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_r', "FlagID", nowDom, kPluginDomainFlag);
 					lastState = 'r';
 					isDrawNow = true;
 					break;
 				}
 			}else{
-				lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_r'", kPluginDomain);
+				lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_r'", kPluginDomainFlag);
 				lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
 
 				if(lastDom){
 					lastState = 'r';
 					if(nowDom && lastDom.objectID() == nowDom.objectID()){
 						if(isMaxNum(nowDom)){
-							context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomain);
+							context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomainFlag);
 							lastState = 'e';
 							isDrawNow = true;
 						}else{
 							if(deleteDialog(context) == 1000){
-								context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomain);
+								context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "FlagID", nowDom, kPluginDomainFlag);
 								lastState = 'e';
 								isDrawNow = true;
 								if(scaleOptionsMatrix.selectedCell().tag() == 1){
@@ -246,28 +244,28 @@ var onRun = function(context){
 
 		while (linkLayer = loop.nextObject()) {
 			var lastState = 'e';
-			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_l'", kPluginDomain);
+			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_l'", kPluginDomainFlag);
 			lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
 			if(lastDom){
 				lastState = 'l';
 			}else{
-				lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_r'", kPluginDomain);
+				lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '"+linkLayer.objectID() + "_r'", kPluginDomainFlag);
 				lastDom = doc.currentPage().children().filteredArrayUsingPredicate(lastDom).firstObject();
 				if(lastDom){
 					lastState = 'r';
 				}
 			}
 			if(lastState == 'l'){
-				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_l', "FlagID", linkLayer, kPluginDomain);
+				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_l', "FlagID", linkLayer, kPluginDomainFlag);
 				returnLine = returnLine.concat(drawLeftArrow(doc,linkLayer,false));
 			}else if(lastState == 'r'){
-				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_r', "FlagID", linkLayer, kPluginDomain);	
+				context.command.setValue_forKey_onLayer_forPluginIdentifier(linkLayer.objectID() + '_r', "FlagID", linkLayer, kPluginDomainFlag);	
 				returnLine = returnLine.concat(drawRightArrow(doc,linkLayer));
 			}
 		}
 
 		if(!isDrawNow && nowDom){
-			context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_l', "FlagID", nowDom, kPluginDomain);
+			context.command.setValue_forKey_onLayer_forPluginIdentifier(nowDom.objectID() + '_l', "FlagID", nowDom, kPluginDomainFlag);
 			returnLine = returnLine.concat(drawLeftArrow(doc,nowDom,true));
 		}
 
@@ -279,10 +277,12 @@ var onRun = function(context){
 	var selectedLayers = doc.findSelectedLayers();
 
 	if (context.selection.count()!=1) {
-		flags = draw(doc,null);
-		NSApp.displayDialog('画板已刷新，请只选择一个元素增删标志位');
+		flags = drawFunction(doc,null);
+		if(!refrush){
+			NSApp.displayDialog('画板已刷新，请只选择一个元素增删标志位');
+		}
 	}else{
-		flags = draw(doc,context.selection[0]);
+		flags = drawFunction(doc,context.selection[0]);
 	}
 	
 
@@ -296,10 +296,14 @@ var onRun = function(context){
 	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
 	connectionsGroup.setName("___flags");
 	connectionsGroup.setIsLocked(1);
-	context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isflagContainer", connectionsGroup, kPluginDomain);
+	context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isflagContainer", connectionsGroup, kPluginDomainFlag);
 	doc.currentPage().deselectAllLayers();
 	var loop = selectedLayers.objectEnumerator(), selectedLayer;
 	while (selectedLayer = loop.nextObject()) {
 		selectedLayer.select_byExpandingSelection(true, true);
 	}
+}
+
+var onRun = function(context){
+	getFlag(context);
 }

@@ -1,7 +1,7 @@
 {
   "VERSION": "https://raw.githubusercontent.com/weixin/weDesgin/master/config.json",
-  "UIKIT": [{"title":"WeUI","url":"http://tmtdemo.qq.com/weui.sketch"},
-  			{"title":"WeChat","url":"http://tmtdemo.qq.com/uikit.sketch"}],
-  "COLOR": [{"title":"WeChat","url":"http://tmtdemo.qq.com/wechatcolor.json"
-  			}]
+  "UIKITCOLOR": [
+  			{"title":"WeUI","uikit":"http://tmtdemo.qq.com/weui.sketch","color":"http://tmtdemo.qq.com/wechatcolor.json"},
+  			{"title":"WeChat","uikit":"http://tmtdemo.qq.com/uikit.sketch"}
+  ]
 }

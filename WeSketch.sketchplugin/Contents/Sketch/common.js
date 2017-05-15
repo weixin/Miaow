@@ -168,6 +168,8 @@ function SMPanel(options){
                         else{
                             Panel.close();
                         }
+                        threadDictionary.removeObjectForKey(options.identifier);
+
                     }
                     windowObject.evaluateWebScript("window.location.hash = '';");
                 })

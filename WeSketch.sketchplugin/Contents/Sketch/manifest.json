@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "double shenfei maybe",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -52,8 +52,8 @@
     },
     {
       "name" : "图标库",
-      "identifier" : "iconqqq",
-      "script" : "iconqqq.js",
+      "identifier" : "iconQ",
+      "script" : "iconQ.js",
       "shortcut": "",
       "handler" : "onRun"
     },
@@ -114,39 +114,52 @@
       "handler" : "onRun"
     },
     {
-      "name" : "设置",
-      "identifier" : "setting",
-      "script" : "setting.js",
+      "name" : "同步源设置",
+      "identifier" : "syncSetting",
+      "script" : "syncSetting.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "name" : "快捷键设置",
       "identifier" : "keySetting",
       "script" : "keySetting.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
+    },
+    {
+      "name" : "交互设置",
+      "identifier" : "toolSetting",
+      "script" : "toolSetting.js",
+      "shortcut": "",
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "name" : "检查更新",
       "identifier" : "checkforupdate",
       "script" : "checkForUpdate.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "name" : "关于",
       "identifier" : "about",
       "script" : "about.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "name" : "捐赠",
       "identifier" : "donation",
       "script" : "donation.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "name" : "反馈",
@@ -165,7 +178,7 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","-","findtextandselect","findfontandselect","findcolorandreplace","-","iconqqq","toolbar","-",
+    "items": ["toolbar","-","link","flag","toolSetting","-","findtextandselect","findfontandselect","findcolorandreplace","-","iconQ","-",
     {
         "title": "管理 UI Kit",
         "items": [
@@ -182,8 +195,8 @@
             "exportcolor"
         ]
     },
+    "syncSetting",
     "-",
-    "setting",
     "keySetting",
     {
         "title": "帮助",
