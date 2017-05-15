@@ -9,10 +9,15 @@
     <link href="css/normalize.css" rel="stylesheet">
   </head>
   <body >
+    <div class="title">
+      快捷键设置
+    </div>
+    <div class="key-setting">
+      
+    </div>
       <input id="input" type="text"/>
       <div id="wrap">测试：</div>
   <script type="text/javascript">
-  window.onload = function(){
     $('#input').on('keydown',function(e){
       var ctrlKey = e.ctrlKey;
       var shiftKey = e.shiftKey;
@@ -31,7 +36,17 @@
         $('#wrap').text(text.join('+')+e.keyCode);
       }
     })
-  }
+    var init = function(data){
+      var command = data.commands;
+      var keybody = [];
+      for(var i = 0;i<command.length - 1;i++){
+        keybody.push('<div>' +command[i].name + '</div>');
+        keybody.push('<input value="' +command[i].shortcut + '" />');
+      }
+      $('.key-setting').text(JSON.stringify(data));
+      // $('.key-setting').text(keybody.join(''));
+      // $('.key-setting').append(keybody.join(''));
+    }
   </script>
   </body>
 </html>
