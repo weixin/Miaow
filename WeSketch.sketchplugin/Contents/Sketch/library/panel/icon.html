@@ -228,7 +228,7 @@
         <div class="messagebox-content">
           <div class="messagebox-content2">颜色 #</div>
           <div class="">
-            <input id="color" class="tools-input" type="text" value="FFFFFF" />
+            <input id="color" class="tools-input" type="text" value="000000" />
           </div> 
           <div class="color-box"></div>
           <div class="messagebox-content2">大小</div>
@@ -256,33 +256,27 @@
   }
   
   $('.content-wrap').on('click','.content-body',function(){
+    var i = parseInt($(this).attr('data-i'));
+    choicedata = savedata[i];
+    var oldHeight = $(this).find('svg:eq(0)')[0].getAttribute('viewBox');
+    oldHeight = oldHeight.replace('0 0 ','');
+    oldHeight = oldHeight.split(' ');
+    var oldWidth = oldHeight[0];
+    oldHeight = oldHeight[1];
+    choicedata.width = $('#size').val();
+    choicedata.height =  $('#size').val() * oldHeight / oldWidth;
+    choicedata.color = $('#color').val();
+    $('.content-body').removeClass('btn-active');
+    SMAction('submit',choicedata);
+    savedata.splice(i,1);
+    savedata.unshift(choicedata);
     if($('.search-input').length > 0){
-      $('.content-body').removeClass('btn-active');
-      $(this).addClass('btn-active');
-      var i = parseInt($(this).attr('data-i'));
-      choicedata = savedata[i];
-      choicedata.width = $('#size').val();
-      choicedata.height = parseInt($('#size').val()*$(this).find('svg').height()/$(this).find('svg').width());
-      choicedata.color = $('#color').val();
-      savedata.splice(i,1);
-      savedata.unshift(choicedata);
-      
-      SMAction('submit',choicedata);
       searchK($('.search-input').val());
-      $('.content-body:eq(0)').addClass('btn-active');
-
     }else{
-      var i = parseInt($(this).attr('data-i'));
-      choicedata = savedata[i];
-      choicedata.width = $('#size').val();
-      choicedata.height = parseInt($('#size').val()*$(this).find('svg').height()/$(this).find('svg').width());
-      choicedata.color = $('#color').val();
-      SMAction('submit',choicedata);
-      savedata.splice(i,1);
-      savedata.unshift(choicedata);
       appendDom(savedata);
-      $('.content-body:eq(0)').addClass('btn-active');
     }
+    $('.content-body:eq(0)').addClass('btn-active');
+
   })
 
   function searchK(inputKey){
@@ -307,7 +301,15 @@
     var val = $(this).val();
     if(val.length == 6 || val.length == 3){
       $('.color-box').css('background','#'+val);
-      $('svg path').attr('fill','#' + val);
+      $('path').attr('fill','#' + val);
+      $('svg').css('color','#' + val);
+    }
+  }).on('blur',function(){
+    if(val.length == 3){
+      $('#color').val(a[0] + a[0] + a[1] + a[1] + a[2] + a[2]);
+    }else if(val.length == 6){
+    }else{
+      $('#color').val('000000');
     }
   })
   $('#size').on('input',function(){
@@ -318,5 +320,10 @@
       savedata = data.data;
       appendDom(savedata);
   }
+  // $.get('http://123.207.94.56:3000/users/getFiles',function(d){
+  //   savedata = d.data;
+  //     appendDom(d.data);
+
+  // })
   </script>
 </html>

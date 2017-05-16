@@ -38,7 +38,7 @@ var onRun = function(context){
         var flagFirst = false;
         for(var k = 0;k < usualArr.length; k ++){
             if(usualArr[k].replace('.svg','') == jsonData.data[i].name.replace('.svg','')){
-                flagFirstArr[usualArr.length - 1 - k] = jsonData.data[i];
+                flagFirstArr[usualArr.length - 1 - k] = {name:encodeURIComponent(jsonData.data[i].name),content:encodeURIComponent(jsonData.data[i].content)};
                 flagFirst = true;
             }
         }
@@ -48,8 +48,7 @@ var onRun = function(context){
             object.push({name:name,content:content});
         }
     };
-    object = object.concat(flagFirstArr);
-    object = flagFirstArr;
+    object = flagFirstArr.concat(object);
     function hexToRgb(hex) {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
@@ -89,11 +88,11 @@ var onRun = function(context){
             var x = 0;
             var y = 0;
             var selection = context.selection;
-            if(selection.count() > 0) {
+            if(selection) {
                 selection = selection[0];
                 if(selection.className() == 'MSSymbolMaster' || selection.className() == 'MSArtboardGroup'){
-                    x = selection.absoluteRect().size().width/2 - 30;
-                    y = selection.absoluteRect().size().height/2 - 30;
+                    x = selection.absoluteRect().size().width/2 - data.width/2;
+                    y = selection.absoluteRect().size().height/2 - data.height/2;
                 }else{
                     x = selection.frame().x;
                     y = selection.frame().y;
@@ -111,10 +110,14 @@ var onRun = function(context){
             importedSVGLayer.name = data.name;
             [svgFrame setWidth:data.width];
             [svgFrame setHeight:data.height];
-            NSApp.displayDialog(data.color);
-            var fill = importedSVGLayer.style().fills().firstObject();
-            NSApp.displayDialog(fill);
-            // fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+            var children = importedSVGLayer.children();
+            var colorToReplace = hexToRgb(data.color);
+            for(var j = 0;j<children.length;j++){
+                if(children[j].className() == 'MSShapeGroup'){
+                    var fill = children[j].style().fills().firstObject();
+                    fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+                }
+            }
 
             [svgFrame setX:x];
             [svgFrame setY:y];

@@ -1,5 +1,14 @@
 @import "common.js";
 
+function exportSVG(layer,doc,file){
+    var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
+    slice.scale = '1';
+    slice.format = 'svg';
+    // var savePath = file + '/svg/' + layer.name() + '.svg';
+    doc.saveArtboardOrSlice_toFile(slice, savePath);
+    var content = networkRequest([savePath]);
+    log(content);
+}
 
 var onRun = function(context){
 

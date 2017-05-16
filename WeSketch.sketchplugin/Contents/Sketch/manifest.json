@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "double shenfei maybe",
-  "version": "1.5.4",
+  "version": "1.5.6",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -52,13 +52,13 @@
     },
     {
       "name" : "上传图标",
-      "identifier" : "iconQ",
-      "script" : "iconQ.js",
+      "identifier" : "uploadIcon",
+      "script" : "uploadIcon.js",
       "shortcut": "",
       "handler" : "onRun"
     },
     {
-      "name" : "图标库",
+      "name" : "图标管理",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "shortcut": "",
@@ -111,7 +111,8 @@
       "identifier" : "codeS",
       "script" : "codeS.js",
       "shortcut": "command shift d",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "name" : "同步源设置",
@@ -178,7 +179,7 @@
     }
   ],
   "menu": {
-    "items": ["toolbar","-","link","flag","toolSetting","-","findtextandselect","findfontandselect","findcolorandreplace","-","iconQ","-",
+    "items": ["toolbar","-","link","flag","toolSetting","-","findtextandselect","findfontandselect","findcolorandreplace","-","uploadIcon","iconQ","-",
     {
         "title": "管理 UI Kit",
         "items": [
