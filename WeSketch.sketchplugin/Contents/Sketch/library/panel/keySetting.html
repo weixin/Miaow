@@ -34,13 +34,13 @@
     }
     .inputwrap input{
       height:14px;
-      width:200px;
+      width:210px;
     }
     .cancelbutton{
       border:1px solid #cacaca;
       color:#000;
       float:right;
-      padding:1px 15px;
+      padding:0 15px;
       border-radius:5px;
       margin-right:15px;
       cursor: pointer;
@@ -51,7 +51,7 @@
       color:white;
       border: 1px solid #1465fb;
       border-radius:5px;
-      padding:1px 15px;
+      padding:0 15px;
       float:right;
       cursor: pointer;
     }
@@ -124,7 +124,7 @@
       var command = data.commands;
       keydata = command;
       var keybody = [];
-      for(var i = 0;i<command.length;i++){
+      for(var i = 0;i<command.length-1;i++){
         keybody.push('<div class="keywrap">')
         keybody.push('<div class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
         keybody.push('<div class="inputwrap"><input data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');

@@ -167,7 +167,8 @@
       "identifier" : "issues",
       "script" : "issues.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
       "handlers": {

@@ -1,8 +1,8 @@
 {
   "VERSION": "https://raw.githubusercontent.com/weixin/weDesgin/master/config.json",
   "UIKIT": [{"title":"WeUI","url":"http://tmtdemo.qq.com/weui.sketch"},
-  			{"title":"Android Design","url":"http://tmtdemo.qq.com/sketch/android.Design.sketch"},
-  			{"title":"Ant Design","url":"http://tmtdemo.qq.com/sketch/Ant.Design.Template.sketch"},
+  			{"title":"AndroidDesign","url":"http://tmtdemo.qq.com/sketch/android.Design.sketch"},
+  			{"title":"AntDesign","url":"http://tmtdemo.qq.com/sketch/Ant.Design.Template.sketch"}
   		],
   "COLOR": [{"title":"WeUI","url":"http://tmtdemo.qq.com/wechatcolor.json"
   			}]

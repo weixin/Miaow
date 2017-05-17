@@ -8,15 +8,131 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <link href="css/normalize.css" rel="stylesheet">
     <style type="text/css">
-    
+      body{
+        background-color: #f6f6f6;
+        font-size: 12px;
+      }
+      .toolbar{
+        background-color: #f1f1f1;
+        height:40px;
+        padding:0 20px;
+        position: fixed;
+        top:0;
+        width:100%;
+        box-sizing:border-box;
+      }
+      .ui-flex{
+        display: flex;
+      }
+      .ui-item{
+        flex:1;
+      }
+      .list{
+        font-size:12px;
+        padding: 40px 0;
+      }
+      .list-item{
+        background-color: white;
+        padding:10px 20px;
+      }
+      .list-item + .list-item{
+        margin-top: 10px;
+      }
+      .add-button{
+        font-size: 12px;
+        float:right;
+        padding: 0 15px;
+        background-color: red;
+        color:white;
+        border-radius: 5px;
+      }
+      .list-name{
+        width:60px;
+        padding-right:20px;
+      }
+      .list-name input{
+        width:100%;
+      }
+      .ui-icon{
+        padding: 0 0 0 10px;
+        display: flex;
+        justify-content:center;
+        align-items: center;
+      }
+      .icon-delete{
+        width:16px;
+        height:16px;
+        background-size: 100% 100%;
+        background: url(./img/delete.png);
+        cursor: pointer;
+      }
+      .label{
+        display: inline-block;
+        width:60px;
+      }
+      .colorwrap{
+        margin-top:5px;
+      }
+
     </style>
   </head>
   <body >
+  <div class="toolbar">
+    <div style="overflow:hidden">
+      <div class="add-button">
+        新增
+      </div>
+    </div>
+    <div class="ui-flex">
+      <div class="list-name">名称</div>
+      <div class="ui-item">地址</div>
+    </div>
+  </div>
+  <div class="list">
+    <div class="list-item ui-flex">
+      <div class="list-name">
+        <input type="text"/>
+      </div>
+      <div class="ui-item">
+        <div>
+          <label class="label">UIKIT：</label>
+          <input type="text"/>
+        </div>
+        <div class="colorwrap">
+          <label class="label">COLOR：</label>
+          <input type="text"/>
+        </div>
+      </div>
+      <div class="ui-icon">
+        <div class="icon-delete">
+        </div>
+      </div>
+    </div>
+    <div class="list-item ui-flex">
+      <div class="list-name">
+        <input type="text"/>
+      </div>
+      <div class="ui-item">
+        <div>
+          <label class="label">UIKIT：</label>
+          <input type="text"/>
+        </div>
+        <div class="colorwrap">
+          <label class="label">COLOR：</label>
+          <input type="text"/>
+        </div>
+      </div>
+      <div class="ui-icon">
+        <div class="icon-delete">
+        </div>
+      </div>
+    </div>
+  </div>
     
   <script type="text/javascript">
     
     var init = function(data){
-      $('body').html(JSON.stringify(data));
+      // $('body').html(JSON.stringify(data));
     }
   </script>
   </body>

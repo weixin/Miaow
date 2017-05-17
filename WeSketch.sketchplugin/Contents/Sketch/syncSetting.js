@@ -6,16 +6,29 @@ var onRun = function(context){
 
     var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path(),
         manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
+    
     var obj = [];
-    for(var i = 0;i<manifest.UIKITCOLOR.length;i++){
+    for(var i = 0;i<manifest.UIKIT.length;i++){
         obj.push({
-            title:encodeURIComponent(manifest.UIKITCOLOR[i].title),
-            uikit:encodeURIComponent(manifest.UIKITCOLOR[i].uikit),
-            color:encodeURIComponent(manifest.UIKITCOLOR[i].color)
+            title:encodeURIComponent(manifest.UIKIT[i].title),
+            uikit:encodeURIComponent(manifest.UIKIT[i].url)
         })
-        
     }
-    NSApp.displayDialog(obj);
+    for(var k = 0;k<manifest.COLOR.length;k++){
+        var flagT = false;
+        for(var j = 0;j<obj.length;j++){
+            if(obj[j].title == manifest.COLOR[k].title){
+                flagT = true;
+                obj[j].color = encodeURIComponent(manifest.COLOR[k].url);
+            }
+        }
+        if(!flagT){
+            obj.push({
+                title:encodeURIComponent(manifest.COLOR[k].title),
+                color:encodeURIComponent(manifest.COLOR[k].url)
+            })
+        }
+    }
 
 
 	SMPanel({
