@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <link href="css/normalize.css" rel="stylesheet">
+    <style type="text/css">
+    body,html{
+      height:100%;
+      background-color: #ececec;
+      font-size: 14px;
+    }
+    body{
+      padding: 10px 40px 0 40px;
+    }
+    .label-wrap{
+      margin-top: 20px;
+    }
+    .label-wrap label{
+      width: 60px;
+      display: block;
+    }
+    .label-wrap{
+      display: flex;
+    }
+    .ui-item{
+      flex:1;
+    }
+    .svg-wrap{
+      text-align: center;
+    }
+    .svg-wrap>div{
+      margin: 10px;
+      display:inline-block;
+      text-align: center;
+    }
+    .svg-wrap svg{
+      max-width: 64px;
+      max-height: 64px;
+    }
+    .svg-title{
+      margin-bottom: 10px;
+    }
+    .svg-w{
+      display: flex;
+      justify-content:center;
+      align-items: center;
+    }
+    .input-width{
+      width:140px;
+      resize:none;
+    }
+    .savebutton{
+      background:#4fa3f6;
+      color:white;
+      border: 1px solid #1465fb;
+      border-radius:5px;
+      padding:0 15px;
+      float:right;
+      cursor: pointer;
+    }
+    .savebutton:active{
+      background:#3485f0;
+    }
+    .buttonwrap{
+      margin-top:10px;
+    }
+    </style>
+  </head>
+  <body >
+    <div class="wrap">
+      <div  class="svg-wrap">
+            <div>
+              <div class="svg-title" style="color:red;">待上传 icon</div>
+              <div class="svg-w" id="svg-wrap"></div>
+            </div>
+            <div style="display:none">
+              <div class="svg-title">历史 icon</div>
+              <div class="svg-w" id="history-wrap">
+              </div>
+            </div>
+      </div>
+      <div class="label-wrap">
+        <label>命名</label>
+        <div class="ui-item">
+          <input readonly="readonly" id="name" class="input-width" type="text" />
+        </div>
+      </div>
+      <div class="label-wrap">
+        <label>项目</label>
+        <div class="ui-item">
+          <select class="input-width" >
+            <option>项目</option>
+            <option>项目</option>
+            <option>项目</option>
+          </select>
+        </div>
+        
+      </div>
+      <div class="label-wrap">
+        <label>备注</label>
+        <div class="ui-item">
+          <textarea class="input-width" style="height:100px"></textarea>
+        </div>
+      </div>
+      <div class="buttonwrap">
+        <div class="savebutton">保存</div>
+      </div>
+    </div>
+    
+    
+  <script type="text/javascript">
+    
+    var init = function(data){
+      $('#svg-wrap').append($(decodeURIComponent(data.svg)));
+      $('#name').append(data.name);
+    }
+  </script>
+  </body>
+</html>

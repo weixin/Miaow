@@ -52,12 +52,10 @@ var onRun = function (context) {
 	context.document.showMessage("下载更新中...");
 	var theResponseData = networkRequest([UIKITURL]);
 
-	//var theResponseData = request(UIKITURL);
 	var data = [[NSData alloc] initWithData:theResponseData];
 	var save = NSSavePanel.savePanel();
 	var databasePath = save.URL().path();
 	[data writeToFile:databasePath atomically:true];
-	// var nsfile = [NSFileManager defaultManager];
 	
 	
 	var saveArtBoard = [];
@@ -146,6 +144,8 @@ var onRun = function (context) {
 	      doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
 	    }
 	}
+	var fm  =[NSFileManager defaultManager];
+    fm.removeItemAtPath_error(databasePath,nil);
 	sourceDoc.close();
 	sourceDoc = nil;
 	var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，';
