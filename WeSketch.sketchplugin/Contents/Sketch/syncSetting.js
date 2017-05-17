@@ -42,7 +42,30 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "syncSetting",
         callback: function( data ){
-            
+            if(data.type == 'choicefile'){
+                var panel = [NSOpenPanel openPanel];
+                [panel setCanChooseDirectories:false];
+                [panel setCanCreateDirectories:false];
+                panel.setAllowedFileTypes([@"sketch"]);
+                panel.setAllowsOtherFileTypes(false);
+                panel.setExtensionHidden(false);
+                var clicked = [panel runModal];
+                if (clicked != NSFileHandlingPanelOKButton) {
+                    return;
+                }
+                var firstURL = [[panel URLs] objectAtIndex:0];
+                var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
+                var file_path = [unformattedURL stringByRemovingPercentEncoding];
+                NSApp.displayDialog(file_path);
+                var inputAction = [
+                    "$(",
+                        "function(){",
+                            "inputFile('" + file_path + "')",
+                        "}",
+                    ");"].join("");
+                windowObject.evaluateWebScript(inputAction);
+
+            }
         }
     });
 }

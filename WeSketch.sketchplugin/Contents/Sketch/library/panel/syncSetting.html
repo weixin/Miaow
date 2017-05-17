@@ -74,64 +74,128 @@
         margin-top:5px;
       }
 
+      .savebutton{
+        background:#4fa3f6;
+        color:white;
+        border: 1px solid #1465fb;
+        border-radius:5px;
+        padding:0 15px;
+        margin-right:20px;
+        float:right;
+        cursor: pointer;
+      }
+      .savebutton:active{
+        background:#3485f0;
+      }
+      .buttonwrap{
+        bottom:0;
+        padding: 10px 0;
+        width:100%;
+        box-sizing:border-box;
+        background: #f1f1f1;
+        position: fixed;
+      }
+
     </style>
   </head>
   <body >
-  <div class="toolbar">
-    <div style="overflow:hidden">
-      <div class="add-button">
-        新增
+  <div>
+    <div class="toolbar">
+      <div style="overflow:hidden">
+        <div class="add-button" id="addlist">
+          新增
+        </div>
+      </div>
+      <div class="ui-flex">
+        <div class="list-name">名称</div>
+        <div class="ui-item">地址</div>
       </div>
     </div>
-    <div class="ui-flex">
-      <div class="list-name">名称</div>
-      <div class="ui-item">地址</div>
+    <div class="list">
     </div>
-  </div>
-  <div class="list">
-    <div class="list-item ui-flex">
-      <div class="list-name">
-        <input type="text"/>
-      </div>
-      <div class="ui-item">
-        <div>
-          <label class="label">UIKIT：</label>
-          <input type="text"/>
-        </div>
-        <div class="colorwrap">
-          <label class="label">COLOR：</label>
-          <input type="text"/>
-        </div>
-      </div>
-      <div class="ui-icon">
-        <div class="icon-delete">
-        </div>
-      </div>
-    </div>
-    <div class="list-item ui-flex">
-      <div class="list-name">
-        <input type="text"/>
-      </div>
-      <div class="ui-item">
-        <div>
-          <label class="label">UIKIT：</label>
-          <input type="text"/>
-        </div>
-        <div class="colorwrap">
-          <label class="label">COLOR：</label>
-          <input type="text"/>
-        </div>
-      </div>
-      <div class="ui-icon">
-        <div class="icon-delete">
-        </div>
-      </div>
+    <div class="buttonwrap">
+      <div class="savebutton">保存</div>
     </div>
   </div>
+ 
     
   <script type="text/javascript">
     
+    function listDom(data){
+      if(data){
+        var dom = '<div class="list-item ui-flex">' +
+        '<div class="list-name">' + 
+          '<input class="name-input" type="text" value="'+data.title+'"/>' +
+        '</div>'+
+        '<div class="ui-item">'+
+          '<div>'+
+            '<label class="label">UIKIT：</label>'+
+            '<input class="uikit-input" type="text" value="'+(data.uikit !='undefined'?data.uikit:'')+'"/>'+
+            '<div class="choice-file">ttt</div>'+
+          '</div>'+
+          '<div class="colorwrap">'+
+            '<label class="label">COLOR：</label>'+
+            '<input class="color-input" type="text" value="'+(data.color !='undefined'?data.color:'')+'"/>'+
+          '</div>'+
+        '</div>'+
+        '<div class="ui-icon">'+
+          '<div class="icon-delete">'+
+          '</div>'+
+        '</div>' + 
+      '</div>';
+      $('.list').append(dom);
+      }else{
+        var dom = '<div class="list-item ui-flex">' +
+        '<div class="list-name">' + 
+          '<input class="name-input" type="text" value=""/>' +
+        '</div>'+
+        '<div class="ui-item">'+
+          '<div>'+
+            '<label class="label">UIKIT：</label>'+
+            '<input class="uikit-input" type="text"/>'+
+          '</div>'+
+          '<div class="colorwrap">'+
+            '<label class="label">COLOR：</label>'+
+            '<input class="color-input" type="text"/>'+
+          '</div>'+
+        '</div>'+
+        '<div class="ui-icon">'+
+          '<div class="icon-delete">'+
+          '</div>'+
+        '</div>' + 
+      '</div>'
+      $('.list').append(dom);
+      }
+    }
+
+    $('#addlist').click(function(){
+      listDom();
+    })
+    $('body').on('click','.icon-delete',function(){
+      $(this).parent().parent().remove();
+      if($('.list-item').length == 0){
+        listDom();
+      }
+    })
+
+    $('body').on('click','.choice-file',function(){
+      SMAction('submit',{type:'choicefile'});      
+      return;
+    })
+
+    var inputFile = function(data){
+      $('.name-input').val(data);
+    }
+
     var init = function(data){
+      var list = data.list;
+      for(var i = 0;i<list.length;i++){
+        listDom({
+          title:decodeURIComponent(list[i].title),
+          uikit:decodeURIComponent(list[i].uikit),
+          color:decodeURIComponent(list[i].color)
+        });
+      }
       // $('body').html(JSON.stringify(data));
     }
   </script>
