@@ -52,9 +52,9 @@ var onRun = function (context) {
 	context.document.showMessage("下载更新中...");
 	var theResponseData = networkRequest([UIKITURL]);
 
-	var data = [[NSData alloc] initWithData:theResponseData];
 	var save = NSSavePanel.savePanel();
 	var databasePath = save.URL().path();
+	var data = [[NSData alloc] initWithData:theResponseData];
 	[data writeToFile:databasePath atomically:true];
 	
 	

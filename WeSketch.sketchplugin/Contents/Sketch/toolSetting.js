@@ -97,7 +97,7 @@ var onRun = function(context) {
 		var flowIndicatorThickness = flowIndicatorThicknessWell.stringValue();
 		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorThickness, lineThicknessKey);
 
-		NSApp.displayDialog("修改已保存");
+		NSApp.displayDialog("设置成功");
 		getLink(context,true);
 		getFlag(context,true);
 	}

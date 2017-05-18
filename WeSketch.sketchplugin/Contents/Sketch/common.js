@@ -169,7 +169,21 @@ function SMPanel(options){
                             Panel.close();
                         }
                         threadDictionary.removeObjectForKey(options.identifier);
-
+                    }else if(request == 'file'){
+                        var panel = [NSOpenPanel openPanel];
+                        [panel setCanChooseDirectories:false];
+                        [panel setCanCreateDirectories:false];
+                        panel.setAllowedFileTypes([@"sketch"]);
+                        panel.setAllowsOtherFileTypes(false);
+                        panel.setExtensionHidden(false);
+                        var clicked = [panel runModal];
+                        if (clicked != NSFileHandlingPanelOKButton) {
+                            return;
+                        }
+                        var firstURL = [[panel URLs] objectAtIndex:0];
+                        var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
+                        var file_path = [unformattedURL stringByRemovingPercentEncoding];
+                        windowObject.evaluateWebScript("inputFile('"+file_path+"')");
                     }
                     windowObject.evaluateWebScript("window.location.hash = '';");
                 })
@@ -237,5 +251,5 @@ function SMPanel(options){
         NSApp.runModalForWindow(Panel);
     }
 
-    return result;
+    return windowObject;
 }

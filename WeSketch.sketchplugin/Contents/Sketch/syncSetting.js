@@ -1,5 +1,6 @@
 @import "common.js";
-
+var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
+var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
 var onRun = function(context){
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
@@ -7,31 +8,38 @@ var onRun = function(context){
     var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path(),
         manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
     
+    // 如果 系统key 中有，就从系统key 中读取，没有再去读取 config.json 
+    var uiKitUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey);
+    var colorUrlInKey = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey);
+
+    var saveUIKIT = uiKitUrlInKey || manifest.UIKIT;
+    var saveCOLOR = colorUrlInKey || manifest.COLOR;
+
     var obj = [];
-    for(var i = 0;i<manifest.UIKIT.length;i++){
+    for(var i = 0;i<saveUIKIT.length;i++){
         obj.push({
-            title:encodeURIComponent(manifest.UIKIT[i].title),
-            uikit:encodeURIComponent(manifest.UIKIT[i].url)
+            title:encodeURIComponent(saveUIKIT[i].title),
+            uikit:encodeURIComponent(saveUIKIT[i].url)
         })
     }
-    for(var k = 0;k<manifest.COLOR.length;k++){
+    for(var k = 0;k<saveCOLOR.length;k++){
         var flagT = false;
         for(var j = 0;j<obj.length;j++){
-            if(obj[j].title == manifest.COLOR[k].title){
+            if(obj[j].title == saveCOLOR[k].title){
                 flagT = true;
-                obj[j].color = encodeURIComponent(manifest.COLOR[k].url);
+                obj[j].color = encodeURIComponent(saveCOLOR[k].url);
             }
         }
         if(!flagT){
             obj.push({
-                title:encodeURIComponent(manifest.COLOR[k].title),
-                color:encodeURIComponent(manifest.COLOR[k].url)
+                title:encodeURIComponent(saveCOLOR[k].title),
+                color:encodeURIComponent(saveCOLOR[k].url)
             })
         }
     }
 
 
-	SMPanel({
+	var windowObject = SMPanel({
         url: pluginSketch + "/panel/syncSetting.html",
         width: 362,
         height: 548,
@@ -42,28 +50,28 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "syncSetting",
         callback: function( data ){
-            if(data.type == 'choicefile'){
-                var panel = [NSOpenPanel openPanel];
-                [panel setCanChooseDirectories:false];
-                [panel setCanCreateDirectories:false];
-                panel.setAllowedFileTypes([@"sketch"]);
-                panel.setAllowsOtherFileTypes(false);
-                panel.setExtensionHidden(false);
-                var clicked = [panel runModal];
-                if (clicked != NSFileHandlingPanelOKButton) {
-                    return;
+            if(data.type == 'save'){
+                var UIKIT = [];
+                var COLOR = [];
+                for(var i = 0;i<data.data.length;i++){
+                    if(data.data[i].color != ''){
+                        COLOR.push({
+                            title:data.data[i].title,
+                            url:data.data[i].color
+                        })
+                    }
+                    if(data.data[i].uikit != ''){
+                        UIKIT.push({
+                            title:data.data[i].title,
+                            url:data.data[i].uikit
+                        })
+                    }
                 }
-                var firstURL = [[panel URLs] objectAtIndex:0];
-                var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
-                var file_path = [unformattedURL stringByRemovingPercentEncoding];
-                NSApp.displayDialog(file_path);
-                var inputAction = [
-                    "$(",
-                        "function(){",
-                            "inputFile('" + file_path + "')",
-                        "}",
-                    ");"].join("");
-                windowObject.evaluateWebScript(inputAction);
+                manifest.UIKIT = UIKIT;
+                manifest.COLOR = COLOR;
+                NSUserDefaults.standardUserDefaults().setObject_forKey(UIKIT, uiKitUrlKey);
+                NSUserDefaults.standardUserDefaults().setObject_forKey(COLOR, colorUrlKey);
+                NSApp.displayDialog('同步源设置成功');
 
             }
         }

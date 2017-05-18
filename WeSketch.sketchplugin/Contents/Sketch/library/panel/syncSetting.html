@@ -95,6 +95,14 @@
         background: #f1f1f1;
         position: fixed;
       }
+      .choice-file{
+        display: inline-block;
+        width:20px;
+        height:20px;
+        margin-left:2px;
+        vertical-align: middle;
+        background-image: url(./img/folder.svg);
+      }
 
     </style>
   </head>
@@ -131,11 +139,12 @@
           '<div>'+
             '<label class="label">UIKIT：</label>'+
             '<input class="uikit-input" type="text" value="'+(data.uikit !='undefined'?data.uikit:'')+'"/>'+
-            '<div class="choice-file">ttt</div>'+
+            '<div class="choice-file"></div>'+
           '</div>'+
           '<div class="colorwrap">'+
             '<label class="label">COLOR：</label>'+
             '<input class="color-input" type="text" value="'+(data.color !='undefined'?data.color:'')+'"/>'+
+            '<div class="choice-file"></div>'+
           '</div>'+
         '</div>'+
         '<div class="ui-icon">'+
@@ -153,10 +162,12 @@
           '<div>'+
             '<label class="label">UIKIT：</label>'+
             '<input class="uikit-input" type="text"/>'+
+            '<div class="choice-file"></div>'+
           '</div>'+
           '<div class="colorwrap">'+
             '<label class="label">COLOR：</label>'+
             '<input class="color-input" type="text"/>'+
+            '<div class="choice-file"></div>'+
           '</div>'+
         '</div>'+
         '<div class="ui-icon">'+
@@ -178,13 +189,34 @@
       }
     })
 
+    var choiceFileDom;
+
     $('body').on('click','.choice-file',function(){
-      SMAction('submit',{type:'choicefile'});      
+      choiceFileDom = $(this).prev('input');
+      SMAction('file');    
       return;
     })
 
+    $('.savebutton').click(function(){
+      var savedom = $('.list-item');
+      var saveData = [];
+      $('.list-item').each(function(i,dom){
+        var title = $(dom).find('.name-input').val();
+        var color = $(dom).find('.color-input').val();
+        var uikit = $(dom).find('.uikit-input').val();
+        saveData.push({
+          title:title,
+          color:color,
+          uikit:uikit
+        })
+        
+      })
+      SMAction('submit',{type:'save',data:saveData})
+      SMAction('close');
+    })
+
     var inputFile = function(data){
-      $('.name-input').val(data);
+      choiceFileDom.val(data);
     }
 
     var init = function(data){

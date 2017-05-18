@@ -37,7 +37,7 @@ var onRun = function(context){
 
             NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
             AppController.sharedInstance().pluginManager().reloadPlugins();
-            NSApp.displayDialog("修改已保存");
+            NSApp.displayDialog("快捷键设置成功");
 
         }
     });
