@@ -1,3 +1,4 @@
+var Rate = 1;
 
 function getCode(selection){
     var text = '';
@@ -9,8 +10,6 @@ function getCode(selection){
         case MSLayerGroup:
         case MSSymbolMaster:
         case MSArtboardGroup:
-            // log(layer.class());
-            // log(layer);
         break;
     }
     paste(text);
@@ -33,10 +32,10 @@ function exportText(selection){
     var layerStyle = selection.style();
     var returnText = [];
     if(layerStyle.contextSettings().opacity() != 1){
-        returnText.push('opacity:' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
+        returnText.push('opacity: ' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
     }
-    returnText.push('font-size:' +　selection.fontSize() + 'px;');
-    returnText.push('color:' +　colorToJSON(selection.textColor()) + ';');
+    returnText.push('font-size: ' +　(selection.fontSize()/Rate) + 'px;');
+    returnText.push('color: ' +　colorToJSON(selection.textColor()) + ';');
     return returnText.join('\n');
 }
 
@@ -46,8 +45,13 @@ function paste(text){
       [pasteBoard setString:text forType:NSPasteboardTypeString];
 }
 
-
 var onRun = function (context) {
     var selection = context.selection[0];
+    var artboard = selection.parentArtboard().absoluteRect();
+    if(artboard.size().width > 414 && artboard.size().width < 751){
+        Rate = 2;
+    }else if(artboard.size().width > 750){
+        Rate = 3;
+    }
     getCode(selection);
 }
