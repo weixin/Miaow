@@ -114,7 +114,7 @@ var onRun = function (context) {
 
           userInterface.setMessageText("颜色批量替换");
 
-          userInterface.addTextLabelWithValue("查找颜色(默认值为当前选择颜色)：");
+          userInterface.addTextLabelWithValue("查找颜色(默认值为当前选中元素颜色)：");
           findedColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
          var findedColorHex = '#' + colorToFind.hexValue();
          var findedColorAlpha = 1;

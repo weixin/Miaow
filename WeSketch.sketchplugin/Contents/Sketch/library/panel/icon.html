@@ -198,10 +198,84 @@
       height:17px;
       background-color:#000;
     }
+    .login{
+      margin-left: 15px;
+      background-image: url(./img/login.svg);
+      width:20px;
+      height:20px;
+      background-size: 20px;
+      cursor: pointer;
+    }
+    .person{
+      display: none;
+      margin-left: 15px;
+      background-image: url(./img/person.svg);
+      width:20px;
+      height:20px;
+      cursor: pointer;
+      background-size: 20px;
+    }
+    .login-mag{
+      display: none;
+    }
+    .cell{
+      align-items:center;
+      position:relative;
+      display:flex;
+      padding:10px 30px;
+      width:100%;
+      box-sizing:border-box;
+      font-size:17px;
+      text-align:left;
+      text-decoration:none;
+      color:#555555;
+      background-color:white;
+      font-size: 17px;
+      border:0;
+    }
+    .cell + .cell:before{
+      position:absolute;
+      content:'';
+      left:15px;
+      top:0;
+      right:0;
+      border-top:1px solid #EEEEEE;
+    }
+    .cell-title{
+      width:50px;
+      margin-left:10px;
+      color:#555555;
+    }
+    .cell-input{
+      flex:1;
+    }
+    .cell-input input{
+      color:#555555;
+      border:0;
+      width:100%;
+    }
+    .login-mag{
+      height:100%;
+      box-sizing:border-box;
+      background-color: #ececec;
+      padding-top:50px;
+    }
+    .loginbtnwrap{
+      padding:40px 30px 0 30px;
 
+    }
+    .loginbutton{
+      border-radius:100px;
+      line-height:48px;
+      font-size:17px;
+      color:#ffffff;
+      background:#1A8CC2;
+      text-align:center;
+    }
     </style>
   </head>
   <body>
+    <div class="icon-mag">
       <div class="toolbar">
         <div class="search-inputwrap">
           <div class="search-icon"></div>
@@ -210,17 +284,11 @@
         <select class="content-type" name="" id="selecttype">
           <option value="gk">公共图标</option>
         </select>
-        <div class="listchoose-icon">
-          <div class="gz-icon_active">
-          </div>
+        <div class="login">
         </div>
-        <div class="listchoose-icon">
-          <div class="list-icon">
-          </div>
+        <div class="person">
         </div>
       </div>
-       
-      <!--  <div id="data-online" class="content-list">  -->
       <div class="content-wrap">
       </div>
       <div class="messagebox">
@@ -236,6 +304,30 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="login-mag">
+      <div class="cell">
+        <div class="cell-title">
+          用户
+        </div>
+        <div class="cell-input">
+          <input type="text" />          
+        </div>
+      </div>
+      <div class="cell">
+        <div class="cell-title">
+          密码
+        </div>
+        <div class="cell-input">
+          <input type="text" />          
+        </div>
+      </div>
+      <span class="">申请帐号</span>
+      <div class="loginbtnwrap">
+        <div class="loginbutton">登录</div> 
+      </div>
+    </div>
+
   </body>
   <script type="text/javascript">
   var savedata;
@@ -292,6 +384,12 @@
       appendDom(savedata);
     }
   }
+
+  $('.login').click(function(){
+    $('.icon-mag').hide();
+    $('.login-mag').show();
+  })
+
   $('.search-input').on('input',function(e){
     var inputKey = $(this).val();
     searchK(inputKey);
