@@ -76,6 +76,10 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "icon",
         callback: function( data ){
+            if(data.type == 'link'){
+                openUrlInBrowser(data.link);
+                return;
+            }
             usualArr = NSUserDefaults.standardUserDefaults().objectForKey(usualKey);
             if(usualArr){
                 usualArr = usualArr.split(',');

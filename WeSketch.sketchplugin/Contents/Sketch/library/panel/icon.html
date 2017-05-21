@@ -272,6 +272,14 @@
       background:#1A8CC2;
       text-align:center;
     }
+    .register{
+      display: block;
+      margin:10px;
+      float:right;
+      color:#1A8CC2;
+      font-size: 12px;
+      cursor: pointer;
+    }
     </style>
   </head>
   <body>
@@ -322,7 +330,7 @@
           <input type="text" />          
         </div>
       </div>
-      <span class="">申请帐号</span>
+      <span class="register">申请帐号</span>
       <div class="loginbtnwrap">
         <div class="loginbutton">登录</div> 
       </div>
@@ -388,6 +396,11 @@
   $('.login').click(function(){
     $('.icon-mag').hide();
     $('.login-mag').show();
+  })
+
+  $('.register').click(function(){
+    SMAction('submit',{type:'link',link:'http://www.baidu.com'});
+    return;
   })
 
   $('.search-input').on('input',function(e){

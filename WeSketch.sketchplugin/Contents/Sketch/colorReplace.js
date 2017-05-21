@@ -17,24 +17,20 @@ var onRun = function (context) {
         replaceColorWell;
 
     if (layerCount == 0) {
-     document.displayMessage('没有选择图层');
+     colorToFind = colorToFind2 = '';
     }
     else {
      var selectedLayer = getSelectedLayer(selection.firstObject());
      var selectedLayerType = selectedLayer.class();
+      colorToFind = colorToFind2 = getColour(selectedLayer);
+    }
+    if(createUserInterface(colorToFind) != '1000'){
+          return;
+      }
+    else {
+      processButtonClick();
 
-     if (selection && selection.count() == 1) {
-       colorToFind = colorToFind2 = getColour(selectedLayer);
-     }
-
-     if(createUserInterface(colorToFind) != '1000'){
-           return;
-       }
-     else {
-       processButtonClick();
-
-       doFindAndReplace();
-     }
+      doFindAndReplace();
     }
 
     function hexToRgb(hex) {
@@ -116,7 +112,7 @@ var onRun = function (context) {
 
           userInterface.addTextLabelWithValue("查找颜色(默认值为当前选中元素颜色)：");
           findedColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
-         var findedColorHex = '#' + colorToFind.hexValue();
+         var findedColorHex = colorToFind ? '#' + colorToFind.hexValue() : "#1AAD19";
          var findedColorAlpha = 1;
          var findedMSColor = MSImmutableColor.colorWithSVGString(findedColorHex);
          findedMSColor.setAlpha(findedColorAlpha);
@@ -128,7 +124,7 @@ var onRun = function (context) {
 
           userInterface.addTextLabelWithValue("替换为：");
       replaceColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
-         var replaceColorHex = '#' + colorToFind.hexValue() || "#1AAD19"; // #1AAD19 同设置中的默认值
+         var replaceColorHex = colorToFind ? '#' + colorToFind.hexValue() : "#1AAD19"; // #1AAD19 同设置中的默认值
          var replaceColorAlpha = 1;
          var replaceMSColor = MSImmutableColor.colorWithSVGString(replaceColorHex);
          replaceMSColor.setAlpha(replaceColorAlpha);
@@ -203,6 +199,6 @@ var onRun = function (context) {
        NSApp.displayDialog('替换成功，共找到' + replaceCount + '处\r\n');
    }
    else{
-       NSApp.displayDialog('没有找到"' + textToFind + '"');
+       NSApp.displayDialog('没有找到需要替换的颜色');
    }
 }
