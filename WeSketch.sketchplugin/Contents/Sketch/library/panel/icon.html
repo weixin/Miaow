@@ -271,6 +271,7 @@
       color:#ffffff;
       background:#1A8CC2;
       text-align:center;
+      cursor: pointer;
     }
     .register{
       display: block;
@@ -319,7 +320,7 @@
           用户
         </div>
         <div class="cell-input">
-          <input type="text" />          
+          <input id="username" type="text" />          
         </div>
       </div>
       <div class="cell">
@@ -327,7 +328,7 @@
           密码
         </div>
         <div class="cell-input">
-          <input type="text" />          
+          <input id="password" type="password" />          
         </div>
       </div>
       <span class="register">申请帐号</span>
@@ -365,6 +366,7 @@
     choicedata.width = $('#size').val();
     choicedata.height =  $('#size').val() * oldHeight / oldWidth;
     choicedata.color = $('#color').val();
+    choicedata.type = 'show';
     $('.content-body').removeClass('btn-active');
     SMAction('submit',choicedata);
     savedata.splice(i,1);
@@ -426,9 +428,29 @@
     var val = $(this).val();
     $('svg').width(val);
   })
+  $('.loginbutton').click(function(){
+    var username = $('#username').val();
+    var password = $('#password').val();
+    SMAction('login',{
+      username:username,
+      password:password
+    });
+  })
   init = function(data){
       savedata = data.data;
       appendDom(savedata);
+  }
+  function sLogin(data){
+    // data = JSON.parse(data);
+    // $('body').empty().text(JSON.stringify(data));
+    $('.login-mag').hide();
+    $('.icon-mag').show();
+    if(data.status == 200){
+      $('.login').hide();
+      $('.person').show();
+    }else{
+
+    }
   }
   // $.get('http://123.207.94.56:3000/users/getFiles',function(d){
   //   savedata = d.data;

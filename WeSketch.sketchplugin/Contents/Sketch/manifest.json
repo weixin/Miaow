@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "double shenfei maybe",
-  "version": "1.5.6",
+  "version": "1.5.8",
   "identifier": "cn.wechat",
   "commands" : [
     {

@@ -85,9 +85,9 @@
             </div>
       </div>
       <div class="label-wrap">
-        <label>命名</label>
+        <label>名称</label>
         <div class="ui-item">
-          <input readonly="readonly" id="name" class="input-width" type="text" />
+          <input disabled="disabled" id="svgname" class="input-width" type="text" />
         </div>
       </div>
       <div class="label-wrap">
@@ -114,11 +114,18 @@
     
     
   <script type="text/javascript">
-    
+    var encodeSVG = '';
+    var svgname = '';
     var init = function(data){
+      encodeSVG = data.svg;
       $('#svg-wrap').append($(decodeURIComponent(data.svg)));
-      $('#name').append(data.name);
+      svgname = data.svgname;
+      $('#svgname').val(decodeURIComponent(data.svgname));
     }
+    $('.savebutton').click(function(){
+      SMAction('submit',{name:svgname,content:encodeSVG});
+      return;
+    })
   </script>
   </body>
 </html>

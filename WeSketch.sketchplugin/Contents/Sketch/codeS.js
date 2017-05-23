@@ -41,8 +41,7 @@ function exportText(selection){
 
 function paste(text){
     var pasteBoard = [NSPasteboard generalPasteboard];
-      [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
-      [pasteBoard setString:text forType:NSPasteboardTypeString];
+    [pasteBoard setString:text forType:NSPasteboardTypeString];
 }
 
 var onRun = function (context) {

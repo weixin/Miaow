@@ -184,6 +184,8 @@ function SMPanel(options){
                         var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
                         var file_path = [unformattedURL stringByRemovingPercentEncoding];
                         windowObject.evaluateWebScript("inputFile('"+file_path+"')");
+                    }else if(request == 'login'){
+                        options.loginCallback(windowObject);
                     }
                     windowObject.evaluateWebScript("window.location.hash = '';");
                 })
