@@ -5,15 +5,6 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
-      "name" : "工具栏",
-      "identifier" : "toolbar",
-      "script" : "toolbar.js",
-      "shortcut": "",
-      "handlers" : {
-        "run" : "onRun"
-      }
-    },
-    {
       "name" : "交互连线",
       "identifier" : "link",
       "script" : "link.js",
@@ -122,6 +113,15 @@
       "noshortcut":"true"
     },
     {
+      "name" : "工具栏",
+      "identifier" : "toolbar",
+      "script" : "toolbar.js",
+      "shortcut": "",
+      "handlers" : {
+        "run" : "onRun"
+      }
+    },
+    {
       "name" : "快捷键设置",
       "identifier" : "keySetting",
       "script" : "keySetting.js",
@@ -179,7 +179,7 @@
     }
   ],
   "menu": {
-    "items": ["toolbar","-","link","flag","toolSetting","-","findtextandselect","findfontandselect","findcolorandreplace","-","uploadIcon","iconQ","-",
+    "items": ["link","flag","toolSetting","-","findtextandselect","findfontandselect","findcolorandreplace","-","uploadIcon","iconQ","-",
     {
         "title": "管理 UI Kit",
         "items": [
@@ -200,6 +200,7 @@
     "-",
     "codeS",
     "-",
+    "toolbar",
     "keySetting",
     {
         "title": "帮助",

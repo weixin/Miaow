@@ -33,13 +33,23 @@ var onRun = function(context){
       var doc = context.document;
       var savePage;
       var pages = doc.pages();
+      var deletePageNum = {};
 
-      var sourcePages = sourceDoc.pages();
+      var sourcePages = sourceDoc.documentData().pages();
 
       var addSymbolCount = 0;
       var addPageCount = 0;
 
+      var firstSymbols = false;
+
       for(var i=0;i<sourcePages.count();i++){
+        if(sourcePages[i].name() != 'Symbols' && firstSymbols == false){
+          continue;
+        }
+        if(sourcePages[i].name() == 'Symbols' && firstSymbols == true){
+          continue;
+        }
+        // context.document.removePage(pages[i]);
         var saveArtBoard2 = [];
         var sourcePageName = sourcePages[i].name();
         var sourceSymbol = sourcePages[i].artboards();
@@ -49,6 +59,7 @@ var onRun = function(context){
         for(var k=0;k<pages.count();k++){
           //如果有同一个page名
           if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
+            deletePageNum['d_'+k] = true;
             flagForOldPage = true;
 
             //比对一下
@@ -61,6 +72,7 @@ var onRun = function(context){
               var flagForNewSymbol = false;
               for(var g=0;g<localSymobl.count();g++){
                 if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
+                  
                   flagForNewSymbol = true;
 
                   // 找出相同名字的，内容相同不处理，内容不同，使用source的，并把local的放到save
@@ -95,10 +107,11 @@ var onRun = function(context){
 
             // 这里全部换一种实现，先将冲突提出来换到冲突画板，然后把整张画布删除再copy一份
             // pages[k].addLayers(pushAllArtboards);
-            nowK = k;
+
             break;
           }
         }
+        
         //如果没有直接添加一个新的page
         // 不行，直接新增page有bug
 
@@ -108,10 +121,19 @@ var onRun = function(context){
         var newPage = doc.addBlankPage();
         newPage.setName(sourcePageName);
         newPage.addLayers(sourceSymbol);
-        context.document.removePage(pages[nowK]);
         // newPage.addLayers(saveArtBoard2);
         doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
+        if(sourcePages[i].name() == 'Symbols'){
+          firstSymbols = true;
+          i = -1;
+        }
       }
+      for(var i = 0;i<pages.count().i++){
+        if(deletePageNum['d_'+i]){
+          context.document.removePage(pages[i]);
+        }
+      }
+
   }
   sourceDoc.close();
   sourceDoc = nil;
