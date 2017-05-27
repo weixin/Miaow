@@ -1,6 +1,7 @@
 @import "MochaJSDelegate.js";
 
 var kPluginDomain;
+var iconQueryUrl = 'http://123.207.94.56:3000';
 
 function initDefaults(pluginDomain, initialValues) {
 	kPluginDomain = pluginDomain
@@ -65,6 +66,22 @@ function networkRequest(args) {
   task.launch();
   var responseData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
   return responseData;
+}
+
+function post(args){
+    var returnData = networkRequest(['-d',args[1],iconQueryUrl + args[0]]);
+    var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(returnData,0,nil);
+
+    for(var o in jsonData){
+        jsonData[o] = encodeURIComponent(jsonData[o]);
+    }
+    
+    if(jsonData.status == 200){
+        return jsonData;
+    }else{
+        NSApp.displayDialog(jsonData.msg);
+        return jsonData;
+    }
 }
 
 function getConfig(json,context) {

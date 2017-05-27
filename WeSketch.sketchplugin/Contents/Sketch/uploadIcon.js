@@ -18,25 +18,19 @@ function choiceSVG(layer,doc){
     return string;
 }
 
+function queryProject(){
+    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+    var r = post('/users/queryProject','&sig'+sig);
+    NSApp.displayDialog(JSON.stringify(r));
+}
+
 function uploadIconFunc(data){
     var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
-    var returnData = networkRequest(['-d','name='+data.name + '&content='+ data.content + '&sig'+sig','http://123.207.94.56:3000/users/single_upload']);
-    var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(returnData,0,nil);
-    jsonData = {
-        msg: encodeURIComponent(jsonData.msg),
-        status: encodeURIComponent(jsonData.status)
-    }
-    
-    if(jsonData.status == 200){
-        return jsonData;
-    }else{
-        NSApp.displayDialog(jsonData.msg);
-        return jsonData;
-    }
+    return post('/users/single_upload','name='+data.name + '&content='+ data.content + '&sig'+sig);
 }
 
 var onRun = function(context){
-
+    queryProject();
     var selection = context.selection;
     if(selection.length == 1){
         selection = selection[0];

@@ -70,22 +70,7 @@ var onRun = function(context){
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
     function iconLogin(data){
-        var returnData = networkRequest(['http://123.207.94.56:3000/users/login?userName='+data.username + '&password='+data.password]);
-        var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(returnData,0,nil);
-        jsonData = {
-            msg: encodeURIComponent(jsonData.msg),
-            sig: encodeURIComponent(jsonData.sig),
-            status: encodeURIComponent(jsonData.status)
-        }
-        
-        if(jsonData.status == 200){
-            sig = jsonData.sig;
-            NSUserDefaults.standardUserDefaults().setObject_forKey(jsonData.sig,loginKey);
-            return jsonData;
-        }else{
-            NSApp.displayDialog(jsonData.msg);
-            return jsonData;
-        }
+        return post('/users/login','userName='+data.username + '&password='+data.password);
     }
 
 	SMPanel({
@@ -155,6 +140,7 @@ var onRun = function(context){
         },loginCallback:function( windowObject ){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             var reuslt = iconLogin(data);
+            NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
             // NSApp.displayDialog(JSON.stringify(reuslt));
         }
