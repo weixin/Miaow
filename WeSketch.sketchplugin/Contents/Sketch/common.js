@@ -2,6 +2,7 @@
 
 var kPluginDomain;
 var iconQueryUrl = 'http://123.207.94.56:3000';
+var loginKey = "com.sketchplugins.wechat.iconLogin";
 
 function initDefaults(pluginDomain, initialValues) {
 	kPluginDomain = pluginDomain
@@ -57,6 +58,7 @@ function request(args) {
   var responseData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
   return responseData;
 }
+
 function networkRequest(args) {
   var task = NSTask.alloc().init();
   task.setLaunchPath("/usr/bin/curl");
@@ -68,14 +70,19 @@ function networkRequest(args) {
   return responseData;
 }
 
-function post(args){
-    var returnData = networkRequest(['-d',args[1],iconQueryUrl + args[0]]);
-    var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(returnData,0,nil);
-
+function encodeData(jsonData){
+    var result = {};
     for(var o in jsonData){
-        jsonData[o] = encodeURIComponent(jsonData[o]);
+        result[o] = typeof jsonData != 'object'? encodeURIComponent(jsonData[o]) : encodeData(jsonData[o]);
     }
-    
+    return result;
+}
+
+function post(args){
+    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+    var returnData = networkRequest(['-d','sig='+ sig + '&' + args[1],iconQueryUrl + args[0]]);
+    var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    jsonData = JSON.parse(jsonData);
     if(jsonData.status == 200){
         return jsonData;
     }else{

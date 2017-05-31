@@ -19,31 +19,32 @@ function choiceSVG(layer,doc){
 }
 
 function queryProject(){
-    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
-    var r = post('/users/queryProject','&sig'+sig);
-    NSApp.displayDialog(JSON.stringify(r));
+    var r = post(['/users/queryProject']);
+    return r;
 }
 
 function uploadIconFunc(data){
-    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
-    return post('/users/single_upload','name='+data.name + '&content='+ data.content + '&sig'+sig);
+    return post(['/users/single_upload','name='+data.name + '&content='+ data.content]);
 }
 
 var onRun = function(context){
-    queryProject();
+    var project = queryProject().list;
+    NSApp.displayDialog(JSON.stringify(project));
     var selection = context.selection;
     if(selection.length == 1){
         selection = selection[0];
     }else{
         return NSApp.displayDialog('请选中一个您需要上传到项目管理的图标');
     }
+    var svgname = selection.name().toString();
+    NSApp.displayDialog(svgname);
     var svg = encodeURIComponent(choiceSVG(selection,context.document));
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 	SMPanel({
         url: pluginSketch + "/panel/uploadIcon.html",
         width: 300,
         height: 430,
-        data:{svg:svg,svgname:selection.name()},
+        data:{svg:svg,svgtest:svgname,project:project},
         hiddenClose: false,
         floatWindow: true,
         identifier: "uploadIcon",

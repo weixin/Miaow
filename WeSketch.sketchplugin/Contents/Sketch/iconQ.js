@@ -70,14 +70,20 @@ var onRun = function(context){
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
     function iconLogin(data){
-        return post('/users/login','userName='+data.username + '&password='+data.password);
+        return post(['/users/login','username='+data.username + '&password='+data.password]);
     }
+    function queryProject(){
+        var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+        var r = post(['/users/queryProject','sig'+sig]);
+        return r;
+    }
+    var prject = queryProject();
 
 	SMPanel({
         url: pluginSketch + "/panel/icon.html?12",
         width: 362,
         height: 548,
-        data: {data:object},
+        data: {data:object,prject:prject.list},
         hiddenClose: false,
         floatWindow: true,
         identifier: "icon",
@@ -140,6 +146,7 @@ var onRun = function(context){
         },loginCallback:function( windowObject ){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             var reuslt = iconLogin(data);
+            NSApp.displayDialog(reuslt.sig);
             NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
             // NSApp.displayDialog(JSON.stringify(reuslt));
