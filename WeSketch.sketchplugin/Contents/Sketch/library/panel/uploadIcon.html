@@ -69,6 +69,72 @@
     .buttonwrap{
       margin-top:10px;
     }
+    .login-mag{
+      display: none;
+    }
+    .cell{
+      align-items:center;
+      position:relative;
+      display:flex;
+      padding:10px 30px;
+      width:100%;
+      box-sizing:border-box;
+      font-size:17px;
+      text-align:left;
+      text-decoration:none;
+      color:#555555;
+      background-color:white;
+      font-size: 17px;
+      border:0;
+    }
+    .cell + .cell:before{
+      position:absolute;
+      content:'';
+      left:15px;
+      top:0;
+      right:0;
+      border-top:1px solid #EEEEEE;
+    }
+    .cell-title{
+      width:50px;
+      margin-left:10px;
+      color:#555555;
+    }
+    .cell-input{
+      flex:1;
+    }
+    .cell-input input{
+      color:#555555;
+      border:0;
+      width:100%;
+    }
+    .login-mag{
+      height:100%;
+      box-sizing:border-box;
+      background-color: #ececec;
+      padding-top:50px;
+    }
+    .loginbtnwrap{
+      padding:40px 30px 0 30px;
+
+    }
+    .loginbutton{
+      border-radius:100px;
+      line-height:48px;
+      font-size:17px;
+      color:#ffffff;
+      background:#1A8CC2;
+      text-align:center;
+      cursor: pointer;
+    }
+    .register{
+      display: block;
+      margin:10px;
+      float:right;
+      color:#1A8CC2;
+      font-size: 12px;
+      cursor: pointer;
+    }
     </style>
   </head>
   <body >
@@ -108,11 +174,33 @@
       <div class="label-wrap">
         <label>备注</label>
         <div class="ui-item">
-          <textarea class="input-width" style="height:100px"></textarea>
+          <textarea class="input-width" id="bz" style="height:100px"></textarea>
         </div>
       </div>
       <div class="buttonwrap">
         <div class="savebutton">保存</div>
+      </div>
+    </div>
+    <div class="login-mag">
+      <div class="cell">
+        <div class="cell-title">
+          用户
+        </div>
+        <div class="cell-input">
+          <input id="username" type="text" />          
+        </div>
+      </div>
+      <div class="cell">
+        <div class="cell-title">
+          密码
+        </div>
+        <div class="cell-input">
+          <input id="password" type="password" />          
+        </div>
+      </div>
+      <span class="register">申请帐号</span>
+      <div class="loginbtnwrap">
+        <div class="loginbutton">登录</div> 
       </div>
     </div>
     
@@ -125,10 +213,19 @@
     var project = [];
     var init = function(data){
       encodeSVG = data.svg;
-      project = data.project;
       svgtest = data.svgtest;
+
       $('#svg-wrap').append($(decodeURIComponent(data.svg)));
       $('#svg-name').val(svgtest);
+
+      if(data.isLogin){
+        project = data.project;
+      }else{
+        $('.wrap').hide();
+        $('.login-mag').show();
+      }
+    }
+    var appendType = function(){
       var projectDom = [];
       for(var i = 0 ;i<project.length;i++){
         projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
@@ -144,6 +241,7 @@
         }
       }
       $('#type').empty().append(typeDom);
+      typeID = $('#type').val();
     }
     $('#project').on('change',function(){
       projectID = $(this).val();
@@ -161,9 +259,31 @@
       typeID = $(this).val();
     })
     $('.savebutton').click(function(){
-      SMAction('submit',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID});
+      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID});
       return;
     })
+
+    function sLogin(data){
+      $('.login-mag').hide();
+      $('.wrap').show();
+      if(data.status == 200){
+        isLogin = true;
+        project = data.project;
+        appendType();
+      }else{
+        $('#password').val('');
+      }
+    }
+    
+    $('.loginbutton').click(function(){
+      var username = $('#username').val();
+      var password = $('#password').val();
+      SMAction('login',{
+        username:username,
+        password:password
+      });
+    })
+
   </script>
   </body>
 </html>

@@ -2,7 +2,9 @@
 
 var loginKey = "com.sketchplugins.wechat.iconLogin";
 
-
+function iconLogin(data){
+    return post(['/users/login','username='+data.username + '&password='+data.password]);
+}
 
 function choiceSVG(layer,doc){
     var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
@@ -18,41 +20,63 @@ function choiceSVG(layer,doc){
     return string;
 }
 
+function getLogin(){
+    return post(['/users/login']);
+}
+
 function queryProject(){
     var r = post(['/users/queryProject']);
     return r;
 }
 
 function uploadIconFunc(data){
-    return post(['/users/single_upload','name='+data.name + '&content='+ data.content]);
+    return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type ]);
 }
 
 var onRun = function(context){
-    var project = queryProject().list;
-    NSApp.displayDialog(JSON.stringify(project));
+    var isLogin = getLogin();
+    var project = [];
+    if(isLogin.status != 200){
+        isLogin = false;
+    }else{
+        isLogin = true;
+        project = queryProject().list;
+    }
     var selection = context.selection;
     if(selection.length == 1){
         selection = selection[0];
     }else{
         return NSApp.displayDialog('请选中一个您需要上传到项目管理的图标');
     }
-    var svgname = selection.name().toString();
-    NSApp.displayDialog(svgname);
+    var svgname = encodeURIComponent(selection.name().toString());
     var svg = encodeURIComponent(choiceSVG(selection,context.document));
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
-	SMPanel({
+	var panel = SMPanel({
         url: pluginSketch + "/panel/uploadIcon.html",
         width: 300,
         height: 430,
-        data:{svg:svg,svgtest:svgname,project:project},
+        data:{svg:svg,svgtest:svgname,isLogin:isLogin,project:project},
         hiddenClose: false,
         floatWindow: true,
         identifier: "uploadIcon",
         callback: function( data ){
             var result = uploadIconFunc(data);
             if(result.status == 200){
-                NSApp.displayDialog('上传成功');
+                NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
+                return true;
+            }else{
+                return false;
             }
+        },loginCallback:function( windowObject ){
+            var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+            var reuslt = iconLogin(data);
+            if(reuslt.status == 200){
+                project = queryProject().list;
+                reuslt.project = project;
+                NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
+            }
+            windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
+            // NSApp.displayDialog(JSON.stringify(reuslt));
         }
     });
 }

@@ -127,6 +127,39 @@ function createRadioButtons(options, selectedItem) {
     return buttonMatrix;
 }
 
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (result) {
+    result = {
+         r : parseInt(result[1], 16),
+         g : parseInt(result[2], 16),
+         b : parseInt(result[3], 16),
+        };
+    } else {
+    result = null;
+    }
+    return result;
+ }
+
+ function unique(a) {  
+   var res = [];  
+   
+   for (var i = 0, len = a.length; i < len; i++) {  
+     var item = a[i];  
+   
+  for (var j = 0, jLen = res.length; j < jLen; j++) {  
+       if (res[j] === item)  
+         break;  
+     }  
+   
+     if (j === jLen)  
+       res.push(item);  
+   }  
+   
+   return res;  
+ }
+
 function SMPanel(options){
     coscript.setShouldKeepAround(true);
     var self = this,
@@ -183,8 +216,7 @@ function SMPanel(options){
                         var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
                         options.callback(data);
                         result = true;
-                    }
-                    else if(request == "close"){
+                    }else if(request == "close"){
                         if(!options.floatWindow){
                             Panel.orderOut(nil);
                             NSApp.stopModal();
@@ -193,6 +225,20 @@ function SMPanel(options){
                             Panel.close();
                         }
                         threadDictionary.removeObjectForKey(options.identifier);
+                    }else if(request == 'submitandclose'){
+                        var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+                        var closeflag = options.callback(data);
+                        result = true;
+                        if(closeflag){
+                            if(!options.floatWindow){
+                                Panel.orderOut(nil);
+                                NSApp.stopModal();
+                            }
+                            else{
+                                Panel.close();
+                            }
+                            threadDictionary.removeObjectForKey(options.identifier);
+                        }
                     }else if(request == 'file'){
                         var panel = [NSOpenPanel openPanel];
                         [panel setCanChooseDirectories:false];
@@ -210,6 +256,9 @@ function SMPanel(options){
                         windowObject.evaluateWebScript("inputFile('"+file_path+"')");
                     }else if(request == 'login'){
                         options.loginCallback(windowObject);
+                    }else if(request == 'pushdata'){
+                        var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+                        options.pushdataCallback(data,windowObject);
                     }
                     windowObject.evaluateWebScript("window.location.hash = '';");
                 })

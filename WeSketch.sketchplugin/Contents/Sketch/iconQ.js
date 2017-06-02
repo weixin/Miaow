@@ -4,86 +4,55 @@ var usualKey = "com.sketchplugins.wechat.iconusual";
 var loginKey = "com.sketchplugins.wechat.iconLogin";
 var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
 
+
+function iconLogin(data){
+    return post(['/users/login','username='+data.username + '&password='+data.password]);
+}
+
+function getSvg(){
+    return post(['/users/getFiles']);
+}
+
+function getLogin(){
+    return post(['/users/login']);
+}
+
+function queryProject(){
+   var r = post(['/users/queryProject']);
+   return r;
+}
+
+function queryProjectIcon(projectid){
+   var r = post(['/users/queryIconByProId','projectid='+projectid]);
+   return r;
+}
+
+function queryTypeIcon(categoryid){
+   var r = post(['/users/queryIconByCateId','categoryid='+categoryid]);
+   return r;
+}
+
 var onRun = function(context){
-    function unique(a) {  
-      var res = [];  
-      
-      for (var i = 0, len = a.length; i < len; i++) {  
-        var item = a[i];  
-      
-     for (var j = 0, jLen = res.length; j < jLen; j++) {  
-          if (res[j] === item)  
-            break;  
-        }  
-      
-        if (j === jLen)  
-          res.push(item);  
-      }  
-      
-      return res;  
-    }
-
-    var usualArr = NSUserDefaults.standardUserDefaults().objectForKey(usualKey);
-    if(usualArr){
-        usualArr = usualArr.split(',');
-    }else{
-        usualArr = [];
-    }
-    usualArr = unique(usualArr);
-    var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
-
-    var theResponseData = networkRequest(['http://123.207.94.56:3000/users/getFiles']);
-    var jsonData = NSJSONSerialization.JSONObjectWithData_options_error(theResponseData,0,nil);
-    var object = [];
-    var flagFirstArr = [];
-    for (var i = 0; i < jsonData.data.length; i++) {
-        var flagFirst = false;
-        for(var k = 0;k < usualArr.length; k ++){
-            if(usualArr[k].replace('.svg','') == jsonData.data[i].name.replace('.svg','')){
-                flagFirstArr[usualArr.length - 1 - k] = {name:encodeURIComponent(jsonData.data[i].name),content:encodeURIComponent(jsonData.data[i].content)};
-                flagFirst = true;
-            }
-        }
-        if(!flagFirst){
-            var name = encodeURIComponent(jsonData.data[i].name);
-            var content = encodeURIComponent(jsonData.data[i].content);
-            object.push({name:name,content:content});
-        }
-    };
-    object = flagFirstArr.concat(object);
-    function hexToRgb(hex) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-
-        if (result) {
-        result = {
-             r : parseInt(result[1], 16),
-             g : parseInt(result[2], 16),
-             b : parseInt(result[3], 16),
-            };
-        } else {
-        result = null;
-        }
-
-        return result;
-     }
 
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
-    function iconLogin(data){
-        return post(['/users/login','username='+data.username + '&password='+data.password]);
+    var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
+
+    var project = queryProject().list;
+    var baseSvg = getSvg();
+
+    var isLogin = getLogin();
+
+    var initData = {data:baseSvg,isLogin:isLogin};
+    if(isLogin){
+        initData.project = project;
     }
-    function queryProject(){
-        var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
-        var r = post(['/users/queryProject','sig'+sig]);
-        return r;
-    }
-    var prject = queryProject();
 
 	SMPanel({
         url: pluginSketch + "/panel/icon.html?12",
         width: 362,
         height: 548,
-        data: {data:object,prject:prject.list},
+        data: ,
         hiddenClose: false,
         floatWindow: true,
         identifier: "icon",
@@ -92,15 +61,7 @@ var onRun = function(context){
                 openUrlInBrowser(data.link);
                 return;
             }else if(data.type == 'show'){
-                usualArr = NSUserDefaults.standardUserDefaults().objectForKey(usualKey);
-                if(usualArr){
-                    usualArr = usualArr.split(',');
-                }else{
-                    usualArr = [];
-                }
                 data.name = data.name.replace('.svg','');
-                usualArr.push(data.name);
-                NSUserDefaults.standardUserDefaults().setObject_forKey(unique(usualArr).join(','), usualKey);
                 var x = 0;
                 var y = 0;
                 var selection = context.selection;
@@ -115,7 +76,7 @@ var onRun = function(context){
                     }
                 }
 
-                logo = decodeURIComponent(data.content);
+                var logo = decodeURIComponent(data.content);
                 logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
                 logo = NSString.stringWithString(logo);
                 logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
@@ -126,30 +87,62 @@ var onRun = function(context){
                 importedSVGLayer.name = data.name;
                 [svgFrame setWidth:data.width];
                 [svgFrame setHeight:data.height];
-                var children = importedSVGLayer.children();
-                var colorToReplace = hexToRgb(data.color);
-                for(var j = 0;j<children.length;j++){
-                    if(children[j].className() == 'MSShapeGroup'){
-                        var fill = children[j].style().fills().firstObject();
-                        fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
-                    }
-                }
+                // var children = importedSVGLayer.children();
+                // var colorToReplace = hexToRgb(data.color);
+                // for(var j = 0;j<children.length;j++){
+                //     if(children[j].className() == 'MSShapeGroup'){
+                //         var fill = children[j].style().fills().firstObject();
+                //         fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+                //     }
+                // }
 
                 [svgFrame setX:x];
                 [svgFrame setY:y];
                 var page = context.document.currentPage();
                 var canvas = page.currentArtboard() || page;
                 canvas.addLayers([importedSVGLayer]);
-            }else if(data.type == 'login'){
-
+            }else if(data.type == 'private'){
+                NSApp.displayDialog('1');
+                data.name = data.name.replace('.svg','');
+                var x = 0;
+                var y = 0;
+                
+                var logo = (data.content);
+                logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+                NSApp.displayDialog(logo);
+                logo = NSString.stringWithString(logo);
+                logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
+                var svgImporter = MSSVGImporter.svgImporter();
+                svgImporter.prepareToImportFromData(logo);
+                var importedSVGLayer = svgImporter.importAsLayer();
+                var svgFrame = importedSVGLayer.frame();
+                importedSVGLayer.name = data.name;
+                [svgFrame setWidth:data.width];
+                [svgFrame setHeight:data.height];
+                [svgFrame setX:x];
+                [svgFrame setY:y];
+                var page = context.document.currentPage();
+                var canvas = page.currentArtboard() || page;
+                canvas.addLayers([importedSVGLayer]);
             }
         },loginCallback:function( windowObject ){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             var reuslt = iconLogin(data);
-            NSApp.displayDialog(reuslt.sig);
-            NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
+            if(reuslt.status == 200){
+                NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
+                project = queryProject().list;
+                reuslt.project = project;
+            }
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
-            // NSApp.displayDialog(JSON.stringify(reuslt));
+        },pushdataCallback:function(data ,windowObject ){
+            var reuslt = {};
+            if(data.type == 'type'){
+                reuslt = queryTypeIcon(data.id);
+            }else{
+                reuslt = queryProjectIcon(data.id);
+            }
+            windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
+
         }
     });
 }

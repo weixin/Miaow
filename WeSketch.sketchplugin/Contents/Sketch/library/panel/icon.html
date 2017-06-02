@@ -151,6 +151,7 @@
       max-width: 44px;
     }
     .content-body{
+      cursor: pointer;
       margin:20px;
       position: relative;
     }
@@ -290,8 +291,9 @@
           <div class="search-icon"></div>
           <input class="search-input" type="text">
         </div>
-        <select class="content-type" name="" id="selecttype">
-          <option value="gk">公共图标</option>
+        <select class="content-type" name="" id="selectproject">
+        </select>
+        <select class="content-type" name="" id="selecttype2">
         </select>
         <div class="login">
         </div>
@@ -343,6 +345,12 @@
   var choicedata;
   var searchData;
   var first = [];
+  var project = [];
+  var projectID = '';
+  var typeID = '';
+  var baseData;
+  var getData;
+  var isLogin = false;
 
   function appendDom(data){
     $('.content-wrap').empty();
@@ -350,33 +358,32 @@
     var dom = [];
     dom.push('<div class="content-title">'+ title +'</div>');
     for(var i = 0;i < data.length;i++){
-      dom.push('<div data-i="'+(data.index||i)+'" class="content-body">'+decodeURIComponent(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+      dom.push('<div data-i="'+(data.index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
   
   $('.content-wrap').on('click','.content-body',function(){
-    var i = parseInt($(this).attr('data-i'));
-    choicedata = savedata[i];
-    var oldHeight = $(this).find('svg:eq(0)')[0].getAttribute('viewBox');
-    oldHeight = oldHeight.replace('0 0 ','');
-    oldHeight = oldHeight.split(' ');
-    var oldWidth = oldHeight[0];
-    oldHeight = oldHeight[1];
-    choicedata.width = $('#size').val();
-    choicedata.height =  $('#size').val() * oldHeight / oldWidth;
-    choicedata.color = $('#color').val();
-    choicedata.type = 'show';
-    $('.content-body').removeClass('btn-active');
-    SMAction('submit',choicedata);
-    savedata.splice(i,1);
-    savedata.unshift(choicedata);
-    if($('.search-input').length > 0){
-      searchK($('.search-input').val());
+
+    if(projectID == 'public'){
+      var i = parseInt($(this).attr('data-i'));
+      choicedata = savedata[i];
+      choicedata.width = $('#size').val();
+      choicedata.height =  $('#size').val();
+      choicedata.color = $('#color').val();
+      choicedata.type = 'show';
+      $('.content-body:eq(0)').addClass('btn-active');
+      SMAction('submit',choicedata);
     }else{
-      appendDom(savedata);
+      var i = parseInt($(this).attr('data-i'));
+      choicedata = getData[i];
+      choicedata.type = 'private';
+      $('.content-body').removeClass('btn-active');
+      SMAction('submit',choicedata);
+      $(this).addClass('btn-active');
+
     }
-    $('.content-body:eq(0)').addClass('btn-active');
+
 
   })
 
@@ -436,26 +443,84 @@
       password:password
     });
   })
+  function appendType(){
+    var projectDom = [];
+    projectDom.push('<option value="">'+'全部'+'</option>')
+    for(var i = 0 ;i<project.length;i++){
+      projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
+    }
+    $('#selectproject').append(projectDom.join(''));
+    var typeDom = [];
+    projectID = $('#selectproject').val();
+    typeDom.push('<option value="">'+'全部'+'</option>');
+    $('#selecttype2').empty().append(typeDom);
+    typeID = $('#selecttype2').val();
+  }
+  $('#selectproject').on('change',function(){
+    projectID = $(this).val();
+    var typeDom = [];
+    typeDom.push('<option value="">'+'全部'+'</option>')
+    if(projectID != ''){
+      for(var i = 0 ;i<project.length;i++){
+        if(project[i].projectId == projectID){
+          for(var k = 0;k<project[i].categoryList.length;k++){
+            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+          }
+        }
+      }
+    }
+
+    $('#selecttype2').empty().append(typeDom);
+
+    if(projectID != ''){
+      SMAction('pushdata',{
+        type:'project',
+        id:projectID
+      })
+    }else{
+      appendDom(baseData);
+    }
+  })
+  $('#selecttype2').on('change',function(){
+    typeID = $('#selecttype2').val();
+    if(typeID != ''){
+      SMAction('pushdata',{
+        type:'type',
+        id:typeID
+      })
+    }else{
+      SMAction('pushdata',{
+        type:'project',
+        id:projectID
+      })
+    }
+
+  })
   init = function(data){
-      savedata = data.data;
-      appendDom(savedata);
+    baseData = data.data;
+    savedata = data.data;
+    isLogin = data.isLogin;
+    if(isLogin){
+      project = data.project;
+      appendType();
+    }
+    appendDom(baseData);
   }
   function sLogin(data){
-    // data = JSON.parse(data);
-    // $('body').empty().text(JSON.stringify(data));
     $('.login-mag').hide();
     $('.icon-mag').show();
     if(data.status == 200){
       $('.login').hide();
       $('.person').show();
+      isLogin = true;
+      project = data.project;
+      appendType();
     }else{
-
     }
   }
-  // $.get('http://123.207.94.56:3000/users/getFiles',function(d){
-  //   savedata = d.data;
-  //     appendDom(d.data);
-
-  // })
+  function pushdata(data){
+    getData = data.list;
+    appendDom(getData);
+  }
   </script>
 </html>
