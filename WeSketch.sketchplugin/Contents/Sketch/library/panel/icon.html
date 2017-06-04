@@ -445,7 +445,7 @@
   })
   function appendType(){
     var projectDom = [];
-    projectDom.push('<option value="">'+'全部'+'</option>')
+    projectDom.push('<option value="">'+'公共'+'</option>')
     for(var i = 0 ;i<project.length;i++){
       projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
     }
@@ -501,6 +501,8 @@
     savedata = data.data;
     isLogin = data.isLogin;
     if(isLogin){
+      $('.login').hide();
+      $('.person').show();
       project = data.project;
       appendType();
     }
@@ -520,6 +522,7 @@
   }
   function pushdata(data){
     getData = data.list;
+    savedata = data.list;
     appendDom(getData);
   }
   </script>

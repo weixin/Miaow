@@ -220,6 +220,7 @@
 
       if(data.isLogin){
         project = data.project;
+        appendType();
       }else{
         $('.wrap').hide();
         $('.login-mag').show();
@@ -258,7 +259,7 @@
     $('#type').on('change',function(){
       typeID = $(this).val();
     })
-    $('.savebutton').click(function(){
+    $('.savebutton').on('click',function(){
       SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID});
       return;
     })
@@ -275,7 +276,7 @@
       }
     }
     
-    $('.loginbutton').click(function(){
+    $('.loginbutton').on('click',function(){
       var username = $('#username').val();
       var password = $('#password').val();
       SMAction('login',{

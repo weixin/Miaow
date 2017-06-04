@@ -50,9 +50,9 @@ var onRun = function(context){
 
 	SMPanel({
         url: pluginSketch + "/panel/icon.html?12",
-        width: 362,
+        width: 562,
         height: 548,
-        data: ,
+        data: initData,
         hiddenClose: false,
         floatWindow: true,
         identifier: "icon",
@@ -102,14 +102,12 @@ var onRun = function(context){
                 var canvas = page.currentArtboard() || page;
                 canvas.addLayers([importedSVGLayer]);
             }else if(data.type == 'private'){
-                NSApp.displayDialog('1');
                 data.name = data.name.replace('.svg','');
                 var x = 0;
                 var y = 0;
                 
                 var logo = (data.content);
                 logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
-                NSApp.displayDialog(logo);
                 logo = NSString.stringWithString(logo);
                 logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
                 var svgImporter = MSSVGImporter.svgImporter();
