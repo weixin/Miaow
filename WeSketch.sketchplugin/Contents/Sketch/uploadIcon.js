@@ -1,9 +1,14 @@
 @import "common.js";
 
 var loginKey = "com.sketchplugins.wechat.iconLogin";
+var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
 
 function iconLogin(data){
-    return post(['/users/login','username='+data.username + '&password='+data.password]);
+    var r = post(['/users/login','username='+data.username + '&password='+data.password]);
+    if(r.status == 200){
+        NSUserDefaults.standardUserDefaults().setObject_forKey(data.username,loginNameKey);
+    }
+    return r;
 }
 
 function choiceSVG(layer,doc){
@@ -30,17 +35,15 @@ function queryProject(){
 }
 
 function uploadIconFunc(data){
-    return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type ]);
+    return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type + '&author='+data.author ]);
 }
 
 var onRun = function(context){
-    var isLogin = getLogin();
-    var project = [];
-    if(isLogin.status != 200){
+    var isLogin;
+    if(!NSUserDefaults.standardUserDefaults().objectForKey(loginKey) || NSUserDefaults.standardUserDefaults().objectForKey(loginKey).length() != 32){
         isLogin = false;
     }else{
-        isLogin = true;
-        project = queryProject().list;
+        isLogin = getLogin();
     }
     var selection = context.selection;
     if(selection.length == 1){
@@ -48,18 +51,35 @@ var onRun = function(context){
     }else{
         return NSApp.displayDialog('请选中一个您需要上传到项目管理的图标');
     }
+    var project = [];
     var svgname = encodeURIComponent(selection.name().toString());
     var svg = encodeURIComponent(choiceSVG(selection,context.document));
+    var initData = {svg:svg,svgtest:svgname,isLogin:isLogin};
+    if(isLogin == false || isLogin.status != 200){
+        initData.isLogin = false;
+    }else{
+        var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+        var b = '';
+        b += username;
+        reuslt.nametest = b;
+        initData.isLogin = true;
+        initData.project = queryProject().list;
+    }
+
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 	var panel = SMPanel({
         url: pluginSketch + "/panel/uploadIcon.html",
         width: 300,
         height: 430,
-        data:{svg:svg,svgtest:svgname,isLogin:isLogin,project:project},
+        data:initData,
         hiddenClose: false,
         floatWindow: true,
         identifier: "uploadIcon",
         callback: function( data ){
+            if(data.type == 'link'){
+                openUrlInBrowser(data.link);
+                return;
+            }
             var result = uploadIconFunc(data);
             if(result.status == 200){
                 NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
@@ -73,6 +93,10 @@ var onRun = function(context){
             if(reuslt.status == 200){
                 project = queryProject().list;
                 reuslt.project = project;
+                var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+                var b = '';
+                b += username;
+                reuslt.nametest = b;
                 NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
             }
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");

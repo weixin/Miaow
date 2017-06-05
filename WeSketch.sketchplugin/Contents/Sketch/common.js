@@ -260,7 +260,7 @@ function SMPanel(options){
                         var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
                         options.pushdataCallback(data,windowObject);
                     }
-                    windowObject.evaluateWebScript("window.location.hash = '';");
+                    // windowObject.evaluateWebScript("window.location.hash = '';");
                 })
         });
 

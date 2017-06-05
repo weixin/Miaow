@@ -2,11 +2,16 @@
 
 var usualKey = "com.sketchplugins.wechat.iconusual";
 var loginKey = "com.sketchplugins.wechat.iconLogin";
+var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
 var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
 
 
 function iconLogin(data){
-    return post(['/users/login','username='+data.username + '&password='+data.password]);
+    var r = post(['/users/login','username='+data.username + '&password='+data.password]);
+    if(r.status == 200){
+        NSUserDefaults.standardUserDefaults().setObject_forKey(data.username,loginNameKey);
+    }
+    return r;
 }
 
 function getSvg(){
@@ -38,14 +43,27 @@ var onRun = function(context){
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 
-    var project = queryProject().list;
-    var baseSvg = getSvg();
+    var baseSvg = getSvg().data;
 
-    var isLogin = getLogin();
+    var isLogin;
+    if(!NSUserDefaults.standardUserDefaults().objectForKey(loginKey) || NSUserDefaults.standardUserDefaults().objectForKey(loginKey).length()  != 32){
+        isLogin = false;
+    }else{
+        isLogin = getLogin();
+    }
+     
 
     var initData = {data:baseSvg,isLogin:isLogin};
-    if(isLogin){
+    if(isLogin != false && isLogin.status == 200){
+        var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+        var b = '';
+        b += username;
+        initData.nametest = b;
+        var project = queryProject().list;
         initData.project = project;
+        initData.isLogin = true;
+    }else{
+        initData.isLogin = false;
     }
 
 	SMPanel({
@@ -122,14 +140,22 @@ var onRun = function(context){
                 var page = context.document.currentPage();
                 var canvas = page.currentArtboard() || page;
                 canvas.addLayers([importedSVGLayer]);
+            }else if(data.type == 'loginout'){
+                NSUserDefaults.standardUserDefaults().setObject_forKey('',loginNameKey);
+                NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);
             }
         },loginCallback:function( windowObject ){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             var reuslt = iconLogin(data);
+
             if(reuslt.status == 200){
                 NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
                 project = queryProject().list;
                 reuslt.project = project;
+                var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+                var b = '';
+                b += username;
+                reuslt.nametest = b;
             }
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
         },pushdataCallback:function(data ,windowObject ){

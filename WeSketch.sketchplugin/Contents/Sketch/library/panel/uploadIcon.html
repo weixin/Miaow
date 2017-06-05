@@ -139,16 +139,22 @@
   </head>
   <body >
     <div class="wrap">
-      <div  class="svg-wrap">
-            <div>
-              <div class="svg-title" style="color:red;">待上传 icon</div>
-              <div class="svg-w" id="svg-wrap"></div>
+      <div class="svg-wrap">
+          <div>
+            <div class="svg-title" style="color:red;">待上传 icon</div>
+            <div class="svg-w" id="svg-wrap"></div>
+          </div>
+          <div style="display:none">
+            <div class="svg-title">历史 icon</div>
+            <div class="svg-w" id="history-wrap">
             </div>
-            <div style="display:none">
-              <div class="svg-title">历史 icon</div>
-              <div class="svg-w" id="history-wrap">
-              </div>
-            </div>
+          </div>
+      </div>
+      <div class="label-wrap">
+        <label>上传者</label>
+        <div class="ui-item">
+          <input readonly="readonly" id="upload-username" class="input-width" type="text" />
+        </div>
       </div>
       <div class="label-wrap">
         <label>名称</label>
@@ -174,7 +180,7 @@
       <div class="label-wrap">
         <label>备注</label>
         <div class="ui-item">
-          <textarea class="input-width" id="bz" style="height:100px"></textarea>
+          <textarea class="input-width" id="bz" style="height:50px"></textarea>
         </div>
       </div>
       <div class="buttonwrap">
@@ -221,6 +227,7 @@
       if(data.isLogin){
         project = data.project;
         appendType();
+        $('#upload-username').val(data.nametest);
       }else{
         $('.wrap').hide();
         $('.login-mag').show();
@@ -260,21 +267,27 @@
       typeID = $(this).val();
     })
     $('.savebutton').on('click',function(){
-      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID});
+      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
       return;
     })
 
     function sLogin(data){
-      $('.login-mag').hide();
-      $('.wrap').show();
       if(data.status == 200){
+        $('.login-mag').hide();
+        $('.wrap').show();
         isLogin = true;
         project = data.project;
+        $('#upload-username').val(data.nametest);
         appendType();
       }else{
         $('#password').val('');
       }
     }
+
+    $('.register').on('click',function(){
+      SMAction('submit',{type:'link',link:'http://www.baidu.com'});
+      return;
+    })
     
     $('.loginbutton').on('click',function(){
       var username = $('#username').val();
