@@ -222,7 +222,7 @@
       svgtest = data.svgtest;
 
       $('#svg-wrap').append($(decodeURIComponent(data.svg)));
-      $('#svg-name').val(svgtest);
+      $('#svg-name').val(decodeURIComponent(svgtest));
 
       if(data.isLogin){
         project = data.project;

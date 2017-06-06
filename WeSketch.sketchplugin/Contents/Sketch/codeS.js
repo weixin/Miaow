@@ -2,15 +2,10 @@ var Rate = 1;
 
 function getCode(selection){
     var text = '';
-    switch ([selection class]) {
-        case MSTextLayer:
-            text = exportText(selection);
-        break;
-
-        case MSLayerGroup:
-        case MSSymbolMaster:
-        case MSArtboardGroup:
-        break;
+    if([selection class] == 'MSTextLayer'){
+        text = exportText(selection);
+    }else{
+        text = exportSize(selection);
     }
     paste(text);
 }
@@ -35,10 +30,19 @@ function exportText(selection){
         returnText.push('opacity: ' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
     }
     returnText.push('font-size: ' +　(selection.fontSize()/Rate) + 'px;');
+    var lineHeight = (selection.lineHeight() || selection.font().defaultLineHeightForFont())/Rate;
+    returnText.push('line-height: ' + lineHeight + 'px;');
     returnText.push('color: ' +　colorToJSON(selection.textColor()) + ';');
     return returnText.join('\n');
 }
-
+function exportSize(selection){
+    var returnText = [];
+    var width = selection.rect().size.width/Rate;
+    var height = selection.rect().size.height/Rate;
+    returnText.push('width: '+width + 'px;');
+    returnText.push('height: ' + height + 'px;');
+    return returnText.join('\n');
+}
 function paste(text){
     var pasteBoard = [NSPasteboard generalPasteboard];
     [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];

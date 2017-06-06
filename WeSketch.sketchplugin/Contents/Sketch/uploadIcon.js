@@ -18,7 +18,7 @@ function choiceSVG(layer,doc){
     var save = NSSavePanel.savePanel();
     var savePath = save.URL().path() + '.svg';
     doc.saveArtboardOrSlice_toFile(slice, savePath);
-    var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file://'+savePath));
+    var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
     var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
     var fm  =[NSFileManager defaultManager];
     fm.removeItemAtPath_error(savePath,nil);
@@ -58,10 +58,10 @@ var onRun = function(context){
     if(isLogin == false || isLogin.status != 200){
         initData.isLogin = false;
     }else{
-        var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+        var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
         var b = '';
         b += username;
-        reuslt.nametest = b;
+        initData.nametest = b;
         initData.isLogin = true;
         initData.project = queryProject().list;
     }
@@ -93,7 +93,7 @@ var onRun = function(context){
             if(reuslt.status == 200){
                 project = queryProject().list;
                 reuslt.project = project;
-                var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+                var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
                 var b = '';
                 b += username;
                 reuslt.nametest = b;
