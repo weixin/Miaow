@@ -54,16 +54,16 @@ var onRun = function(context){
      
 
     var initData = {data:baseSvg,isLogin:isLogin};
-    if(isLogin != false && isLogin.status == 200){
-        var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+    if(isLogin == false || isLogin.status != 200){
+        initData.isLogin = false;
+    }else{
+        var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
         var b = '';
         b += username;
         initData.nametest = b;
         var project = queryProject().list;
         initData.project = project;
         initData.isLogin = true;
-    }else{
-        initData.isLogin = false;
     }
 
 	SMPanel({
@@ -152,7 +152,7 @@ var onRun = function(context){
                 NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
                 project = queryProject().list;
                 reuslt.project = project;
-                var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+                var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
                 var b = '';
                 b += username;
                 reuslt.nametest = b;

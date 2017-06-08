@@ -18,7 +18,7 @@ function choiceSVG(layer,doc){
     var save = NSSavePanel.savePanel();
     var savePath = save.URL().path() + '.svg';
     doc.saveArtboardOrSlice_toFile(slice, savePath);
-    var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file://'+savePath));
+    var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
     var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
     var fm  =[NSFileManager defaultManager];
     fm.removeItemAtPath_error(savePath,nil);
@@ -33,6 +33,12 @@ function queryProject(){
     var r = post(['/users/queryProject']);
     return r;
 }
+
+function svgExist(data){
+    var r = post(['/users/svgExist','svgname=' + data.svgname + '&projectid=' + data.projectid]);
+    return r;
+}
+
 
 function uploadIconFunc(data){
     return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type + '&author='+data.author ]);
@@ -58,10 +64,10 @@ var onRun = function(context){
     if(isLogin == false || isLogin.status != 200){
         initData.isLogin = false;
     }else{
-        var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+        var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
         var b = '';
         b += username;
-        reuslt.nametest = b;
+        initData.nametest = b;
         initData.isLogin = true;
         initData.project = queryProject().list;
     }
@@ -93,14 +99,16 @@ var onRun = function(context){
             if(reuslt.status == 200){
                 project = queryProject().list;
                 reuslt.project = project;
-                var username = (NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey)).toString();
+                var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
                 var b = '';
                 b += username;
                 reuslt.nametest = b;
                 NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
             }
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
-            // NSApp.displayDialog(JSON.stringify(reuslt));
+        },pushdataCallback:function(data ,windowObject){
+            var result = svgExist(data);
+            windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
         }
     });
 }

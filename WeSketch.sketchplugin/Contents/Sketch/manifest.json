@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "double shenfei maybe",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -98,7 +98,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "生成样式到剪贴板",
+      "name" : "获取元素样式",
       "identifier" : "codeS",
       "script" : "codeS.js",
       "shortcut": "command shift d",
