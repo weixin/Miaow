@@ -164,7 +164,7 @@ function exportText(selection){
     }
     returnText.push('font-size: ' +　(selection.fontSize()/Rate) + 'px;');
     var lineHeight = (selection.lineHeight() || selection.font().defaultLineHeightForFont())/Rate;
-    returnText.push('line-height: ' + lineHeight + 'px;');
+    returnText.push('line-height: ' + parseInt(lineHeight) + 'px;');
     returnText.push('color: ' +　colorToJSON(selection.textColor()) + ';');
     if(selection.font().fontName().indexOf('Medium')>0 || selection.font().fontName().indexOf('Semibold')>0){
         returnText.push('font-weight: bold;');
@@ -196,8 +196,8 @@ function exportSize(selection){
     }
     var width = selection.rect().size.width/Rate;
     var height = selection.rect().size.height/Rate;
-    returnText.push('width: '+(width - borderless) + 'px;');
-    returnText.push('height: ' + (height - borderless) + 'px;');
+    returnText.push('width: '+parseInt(width - borderless) + 'px;');
+    returnText.push('height: ' + parseInt(height - borderless) + 'px;');
 
     if(backgroundColor.length>0){
         if(backgroundColor[0].fillType == 'color'){
