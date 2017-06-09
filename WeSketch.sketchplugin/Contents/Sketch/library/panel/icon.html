@@ -97,7 +97,7 @@
       background-size: 100% 100%;
       height:13px;
     }
-    .messagebox{
+    .messagebox,.messagebox2{
       z-index: 9;
       display: flex;
       bottom: 0;
@@ -108,6 +108,7 @@
       padding:16px 11px;
       border-top:1px solid rgba(0,0,0,0.3);
     }
+
     .messagebox-content{
       flex: 1;
       overflow:hidden;
@@ -174,7 +175,7 @@
     }
     .content-body{
       cursor: pointer;
-      margin:20px;
+      margin:20px 20px 35px 20px;
       position: relative;
     }
     .content-view{
@@ -209,6 +210,10 @@
       top:70px;
       left:0;
       width:64px;
+      text-overflow:ellipsis;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
       overflow: hidden;
     }
     .tools-input{
@@ -228,7 +233,6 @@
       text-align: right;
     }
     .person{
-      cursor: pointer;
       display: none;
       flex:1;
       text-align: right;
@@ -317,6 +321,9 @@
       font-size: 12px;
       cursor: pointer;
     }
+    #exit{
+      cursor: pointer;
+    }
     </style>
   </head>
   <body>
@@ -359,6 +366,21 @@
           </div>
         </div>
       </div>
+      <div class="messagebox2" style="display:none">
+        <div class="messagebox-content">
+          <div class="messagebox-content1">
+            
+          </div>
+          <div class="messagebox-content2">
+            
+          </div>
+        </div>
+        <div class="messagebox-content3">
+          查看更多
+        </div>
+
+      </div>
+      
     </div>
     <div class="login-mag">
       <div class="cell">
@@ -402,7 +424,7 @@
     var dom = [];
     dom.push('<div class="content-title">'+ title +'</div>');
     for(var i = 0;i < data.length;i++){
-      dom.push('<div data-i="'+(data.index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+      dom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
@@ -415,14 +437,24 @@
       choicedata = savedata[i];
       choicedata.width = $('#size').val();
       choicedata.height =  $('#size').val();
+      var width = choicedata.content.match(/viewBox=\".*?\"/)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
+      var height = width[1];
+      var width = width[0];
+
       choicedata.color = $('#color').val();
-      choicedata.type = 'show';
+      choicedata.type = 'public';
       $(this).addClass('btn-active');
       SMAction('submit',choicedata);
     }else{
+      $('.messagebox').hide();
+      $('.messagebox2').show();
       var i = parseInt($(this).attr('data-i'));
-      choicedata = getData[i];
+      choicedata = savedata[i];
       choicedata.type = 'private';
+      var width = choicedata.content.match(/viewBox=\".*?\"/)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
+      var height = width[1];
+      var width = width[0];
+      
       SMAction('submit',choicedata);
       $(this).addClass('btn-active');
     }
@@ -497,8 +529,8 @@
     $('#selecttype2').empty().append(typeDom);
     typeID = $('#selecttype2').val();
   }
-  $('#selectproject').on('change',function(){
-    projectID = $(this).val();
+  $('body').on('change','#selectproject',function(){
+    projectID = $('#selectproject').val();
     var typeDom = [];
     typeDom.push('<option value="">'+'全部'+'</option>')
     if(projectID != ''){
@@ -514,16 +546,19 @@
     $('#selecttype2').empty().append(typeDom);
 
     if(projectID != ''){
+      $('.messagebox').hide();
       SMAction('pushdata',{
         type:'project',
         id:projectID
       })
     }else{
+      $('.messagebox2').hide();
+      $('.messagebox').show();
       savedata = baseData;
       appendDom(savedata);
     }
   })
-  $('#selecttype2').on('change',function(){
+  $('body').on('change','#selecttype2',function(){
     typeID = $('#selecttype2').val();
     if(typeID != ''){
       SMAction('pushdata',{
@@ -574,7 +609,7 @@
   function pushdata(data){
     getData = data.list;
     savedata = data.list;
-    appendDom(getData);
+    appendDom(savedata);
   }
   $('body').on('click',function(){
     return false;

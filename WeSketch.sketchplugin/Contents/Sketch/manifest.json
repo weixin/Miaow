@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
-  "author": "double shenfei maybe",
-  "version": "1.6.1",
+  "author": "doubleluo maybexia shenfeili",
+  "version": "1.6.2",
   "identifier": "cn.wechat",
   "commands" : [
     {

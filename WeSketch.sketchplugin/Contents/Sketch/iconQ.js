@@ -38,7 +38,8 @@ function queryTypeIcon(categoryid){
 }
 
 var onRun = function(context){
-
+    var sketch = context.api()
+    var document2 = sketch.selectedDocument;
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
@@ -75,22 +76,20 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "icon",
         callback: function( data ){
+            
             if(data.type == 'link'){
                 openUrlInBrowser(data.link);
                 return;
-            }else if(data.type == 'show'){
+            }else if(data.type == 'public' || data.type == 'private'){
                 data.name = data.name.replace('.svg','');
                 var x = 0;
                 var y = 0;
                 var selection = context.selection;
-                if(selection) {
-                    selection = selection[0];
+                if(selection.count()>0) {
+                    selection = selection[0].parentArtboard();
                     if(selection.className() == 'MSSymbolMaster' || selection.className() == 'MSArtboardGroup'){
                         x = selection.absoluteRect().size().width/2 - data.width/2;
                         y = selection.absoluteRect().size().height/2 - data.height/2;
-                    }else{
-                        x = selection.frame().x;
-                        y = selection.frame().y;
                     }
                 }
 
@@ -105,41 +104,24 @@ var onRun = function(context){
                 importedSVGLayer.name = data.name;
                 [svgFrame setWidth:data.width];
                 [svgFrame setHeight:data.height];
-                // var children = importedSVGLayer.children();
-                // var colorToReplace = hexToRgb(data.color);
-                // for(var j = 0;j<children.length;j++){
-                //     if(children[j].className() == 'MSShapeGroup'){
-                //         var fill = children[j].style().fills().firstObject();
-                //         fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
-                //     }
-                // }
-
+                if(data.type == 'public'){
+                    var children = importedSVGLayer.children();
+                    var colorToReplace = hexToRgb(data.color);
+                    for(var j = 0;j<children.length;j++){
+                        if(children[j].className() == 'MSShapeGroup'){
+                            var fill = children[j].style().fills().firstObject();
+                            fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+                        }
+                    }
+                }
                 [svgFrame setX:x];
                 [svgFrame setY:y];
                 var page = context.document.currentPage();
                 var canvas = page.currentArtboard() || page;
                 canvas.addLayers([importedSVGLayer]);
-            }else if(data.type == 'private'){
-                data.name = data.name.replace('.svg','');
-                var x = 0;
-                var y = 0;
-                
-                var logo = (data.content);
-                logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
-                logo = NSString.stringWithString(logo);
-                logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
-                var svgImporter = MSSVGImporter.svgImporter();
-                svgImporter.prepareToImportFromData(logo);
-                var importedSVGLayer = svgImporter.importAsLayer();
-                var svgFrame = importedSVGLayer.frame();
-                importedSVGLayer.name = data.name;
-                [svgFrame setWidth:data.width];
-                [svgFrame setHeight:data.height];
-                [svgFrame setX:x];
-                [svgFrame setY:y];
-                var page = context.document.currentPage();
-                var canvas = page.currentArtboard() || page;
-                canvas.addLayers([importedSVGLayer]);
+                importedSVGLayer.select_byExpandingSelection(true, true);
+                importedSVGLayer.adjustToFit();
+                document2.centerOnLayer(importedSVGLayer);
             }else if(data.type == 'loginout'){
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginNameKey);
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);
@@ -166,6 +148,8 @@ var onRun = function(context){
                 reuslt = queryProjectIcon(data.id);
             }
             windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
+            windowObject.evaluateWebScript("window.location.hash = '';");
+            // windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
 
         }
     });
