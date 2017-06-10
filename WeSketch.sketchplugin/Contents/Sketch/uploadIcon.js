@@ -85,6 +85,10 @@ var onRun = function(context){
             if(data.type == 'link'){
                 openUrlInBrowser(data.link);
                 return;
+            }else if(data.type == 'loginout'){
+                NSUserDefaults.standardUserDefaults().setObject_forKey('',loginNameKey);
+                NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);
+                return;
             }
             var result = uploadIconFunc(data);
             if(result.status == 200){
@@ -97,13 +101,13 @@ var onRun = function(context){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             var reuslt = iconLogin(data);
             if(reuslt.status == 200){
-                project = queryProject().list;
-                reuslt.project = project;
                 var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
                 var b = '';
                 b += username;
                 reuslt.nametest = b;
                 NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
+                project = queryProject().list;
+                reuslt.project = project;
             }
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
         },pushdataCallback:function(data ,windowObject){

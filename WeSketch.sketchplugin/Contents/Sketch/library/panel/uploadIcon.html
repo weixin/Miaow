@@ -135,6 +135,11 @@
       font-size: 12px;
       cursor: pointer;
     }
+    .a-link{
+      margin-left:-50px;
+      cursor: pointer;
+      color:#08B3F6;
+    }
     </style>
   </head>
   <body >
@@ -155,6 +160,7 @@
         <div class="ui-item">
           <input readonly="readonly" id="upload-username" class="input-width" type="text" />
         </div>
+        <div class="a-link">更换用户</div>
       </div>
       <div class="label-wrap">
         <label>名称</label>
@@ -286,6 +292,13 @@
 
     $('.register').on('click',function(){
       SMAction('submit',{type:'link',link:'http://www.baidu.com'});
+      return;
+    })
+
+    $('.a-link').on('click',function(){
+      $('.wrap').hide();
+      $('.login-mag').show();
+      SMAction('submit',{type:'loginout'});
       return;
     })
     

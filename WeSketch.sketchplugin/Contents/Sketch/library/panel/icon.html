@@ -34,7 +34,7 @@
       width:100%;
       box-sizing:border-box;
       position: fixed;
-      top:30px;
+      top:28px;
       display: flex;
       align-items: center;
       padding:0 10px 12px 10px;
@@ -149,8 +149,10 @@
     }
     .content-title{
       font-size: 12px;
-      padding:6px 0 12px 0;
-
+      padding:6px 0 6px 0;
+      overflow: hidden;
+      margin-top:5px;
+      overflow: hidden;
       border-top:1px solid #D8D8D8;
     }
     .content-body{
@@ -160,7 +162,7 @@
       display:flex;
       justify-content:center;
       align-items: center;
-      background-color:#F6F6F6;
+      background-color:#bebebe;
       position: relative;
     }
     .content-body_active:before{
@@ -175,7 +177,7 @@
     }
     .content-body{
       cursor: pointer;
-      margin:20px 20px 35px 20px;
+      margin:20px 20px 55px 20px;
       position: relative;
     }
     .content-view{
@@ -186,7 +188,7 @@
       padding:43px 0 69px 0;
     }
     .content-wrap{
-      padding:90px 20px 137px 20px;
+      padding:70px 20px 107px 20px;
       overflow: auto;
     }
     .btn-active{
@@ -209,10 +211,11 @@
       position: absolute;
       top:70px;
       left:0;
-      width:64px;
+      word-break:break-all;
+      width:62px;
       text-overflow:ellipsis;
       display:-webkit-box;
-      -webkit-line-clamp:2;
+      -webkit-line-clamp:3;
       -webkit-box-orient:vertical;
       overflow: hidden;
     }
@@ -231,10 +234,12 @@
       cursor: pointer;
       flex:1;
       text-align: right;
+      font-size: 15px;
     }
     .person{
       display: none;
       flex:1;
+      font-size: 15px;
       text-align: right;
     }
     .login>div{
@@ -330,12 +335,10 @@
     <div class="icon-mag">
       <div class="toolbar">
         <div class="login">
-          <div></div>
           <span>登陆</span>
         </div>
         <div class="person">
           <span id="username-show"></span>
-          <div></div>
           <span id="exit">退出</span>
         </div>
       </div>
@@ -420,44 +423,64 @@
 
   function appendDom(data){
     $('.content-wrap').empty();
-    var title = $('#selecttype').find("option:selected").text();
     var dom = [];
-    dom.push('<div class="content-title">'+ title +'</div>');
     for(var i = 0;i < data.length;i++){
       dom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
+  function appendDom2(data){
+    var typecount = -1;
+    var dom = [];
+    var typeobj = {};
+    var leavedom = [];
+    leavedom.push('<div class="content-title">未分类</div><div style="overflow:hidden">');
+    for(var i = 0;i < data.length;i++){
+      var firstname = data[i].name.split('_');
+      if(firstname.length>1){
+        firstname = firstname[0];
+        if(typeobj[firstname] != undefined){
+          dom[typeobj[firstname]].push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+        }else{
+          typecount++;
+          typeobj[firstname] = typecount;
+          dom[typecount] = [];
+          dom[typecount].push('<div class="content-title">'+firstname+'</div><div style="overflow:hidden">');
+          dom[typecount].push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+        }
+      }else{
+        leavedom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+      }
+    }
+    $('.content-wrap').empty();
+    for(var i = 0;i<dom.length;i++){
+      dom[i] = dom[i].join('') + '</div>';
+    }
+    $('.content-wrap').append(dom.join('') + leavedom.join('')+'</div>');
+  }
   
   $('.content-wrap').on('click','.content-body',function(){
     $('.content-body').removeClass('btn-active');
+    $(this).addClass('btn-active');
+    var i = parseInt($(this).attr('data-i'));
+    choicedata = savedata[i];
+    var twh = decodeURIComponent(choicedata.content).match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
 
     if(projectID == ''){
-      var i = parseInt($(this).attr('data-i'));
-      choicedata = savedata[i];
-      choicedata.width = $('#size').val();
-      choicedata.height =  $('#size').val();
-      var width = choicedata.content.match(/viewBox=\".*?\"/)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
-      var height = width[1];
-      var width = width[0];
-
+      var width = $('#size').val();
+      choicedata.width = parseInt(width);
+      choicedata.height = parseInt(width * twh[1] / twh[0]);
       choicedata.color = $('#color').val();
       choicedata.type = 'public';
-      $(this).addClass('btn-active');
       SMAction('submit',choicedata);
     }else{
-      $('.messagebox').hide();
       $('.messagebox2').show();
-      var i = parseInt($(this).attr('data-i'));
-      choicedata = savedata[i];
       choicedata.type = 'private';
-      var width = choicedata.content.match(/viewBox=\".*?\"/)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
-      var height = width[1];
-      var width = width[0];
-      
+      choicedata.height = parseInt(twh[1]);
+      choicedata.width = parseInt(twh[0]);
       SMAction('submit',choicedata);
-      $(this).addClass('btn-active');
     }
+
   })
 
   function searchK(inputKey){
@@ -471,7 +494,11 @@
       appendDom(searchData);
 
     }else{
-      appendDom(savedata);
+      if(projectID!=''){
+        appendDom2(savedata);
+      }else{
+        appendDom(savedata);
+      }
     }
   }
 
@@ -587,7 +614,7 @@
     if(isLogin){
       $('.login').hide();
       $('.person').show();
-      $('.person #username-show').text(data.nametest);
+      $('.person #username-show').text('（'+data.nametest+'）');
       project = data.project;
       appendType();
     }
@@ -599,7 +626,7 @@
     if(data.status == 200){
       $('.login').hide();
       $('.person').show();
-      $('.person #username-show').text(data.nametest);
+      $('.person #username-show').text('（'+data.nametest + '）');
       project = data.project;
       appendType();
     }else{
@@ -609,7 +636,7 @@
   function pushdata(data){
     getData = data.list;
     savedata = data.list;
-    appendDom(savedata);
+    appendDom2(savedata);
   }
   $('body').on('click',function(){
     return false;
