@@ -233,6 +233,9 @@ function paste(text){
 }
 
 var onRun = function (context) {
+    if(context.selection.count()<1){
+        return context.document.showMessage("请先选择要获取样式的元素");
+    }
     var selection = context.selection[0];
     var artboard = selection.parentArtboard().absoluteRect();
     if((artboard.size().width > 414 && artboard.size().width < 751) || (artboard.size().width > 1332 && artboard.size().width<1336)){

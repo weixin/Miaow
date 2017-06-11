@@ -112,7 +112,23 @@ var onRun = function(context){
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
         },pushdataCallback:function(data ,windowObject){
             var result = svgExist(data);
-            windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
+            if(result){
+                var settingsWindow = COSAlertWindow.new();
+                settingsWindow.addButtonWithTitle("上传");
+                settingsWindow.addButtonWithTitle("取消");
+                var tip = '';
+                if(result.code == 1){
+                    tip += '存在历史版本，是否上传覆盖？';
+                }
+                settingsWindow.setMessageText(tip);
+                var response = settingsWindow.runModal();
+                if(response == "1000"){
+                    windowObject.evaluateWebScript("pushdata()");
+                }else{
+                    windowObject.evaluateWebScript("window.location.hash = '';");
+
+                }
+            }
         }
     });
 }

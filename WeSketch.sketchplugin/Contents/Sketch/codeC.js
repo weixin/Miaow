@@ -133,6 +133,9 @@ var onRun = function (context) {
             context.document.showMessage("您选择的元素无法获取颜色");
         }
     }
+    if(context.selection.count()<1){
+        return context.document.showMessage("请先选择要获取颜色的元素");
+    }
     var selection = context.selection[0];
     getColor(selection);
 }

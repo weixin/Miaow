@@ -272,10 +272,7 @@
     $('#type').on('change',function(){
       typeID = $(this).val();
     })
-    $('.savebutton').on('click',function(){
-      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
-      return;
-    })
+    
 
     function sLogin(data){
       if(data.status == 200){
@@ -310,6 +307,18 @@
         password:password
       });
     })
+
+    $('.savebutton').on('click',function(){
+      SMAction('pushdata',{
+        projectid:projectID,
+        svgname:$('#svg-name').val(),
+        content:encodeSVG
+      })
+      return;
+    })
+    function pushdata(){
+      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
+    }
 
   </script>
   </body>

@@ -34,7 +34,7 @@
     }
     .inputwrap input{
       height:14px;
-      width:210px;
+      width:70%;
     }
     .cancelbutton{
       border:1px solid #cacaca;
@@ -60,9 +60,11 @@
       background:#3485f0;
     }
     .buttonwrap{
+      left:0;
       bottom:0;
       padding: 10px 0;
       width:100%;
+      border-top:1px solid #bebebe;
       background: #f1f1f1;
       position: fixed;
       box-sizing:border-box;
@@ -137,6 +139,7 @@
         keybody.push('<div class="keywrap">')
         keybody.push('<div class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
         keybody.push('<div class="inputwrap"><input data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');
+        // keybody.push('<div style="width:80px;text-align:center;"><input style="margin-top:5px" type="checkbox" '+(command[i].istool == 'true'?'checked="checked"':'')+' /></div>')
         keybody.push('</div>')
       }
       $('.key-setting').append(keybody.join(''));

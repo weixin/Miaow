@@ -51,7 +51,7 @@ var onRun = function(context) {
 	settingsWindow.addButtonWithTitle("取消");
 	settingsWindow.setMessageText("交互功能设置");
 
-    settingsWindow.addTextLabelWithValue("箭头线色值             箭头线粗细             标记色值");
+    settingsWindow.addTextLabelWithValue("箭头线颜色             箭头线粗细");
 
 	var flowIndicatorColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	var flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
@@ -71,17 +71,19 @@ var onRun = function(context) {
 	flowIndicatorThicknessWell.setStringValue(flowIndicatorThicknessNum);
 	// 将文本输入框放在 NSView 中
 	flowIndicatorOptionsView.addSubview(flowIndicatorThicknessWell);
+	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
 
-	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(210,0,44,23));
+	settingsWindow.addTextLabelWithValue('标记功能颜色');
+	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(flagColorKey) || "#1AAD19";
 	var flowIndicatorColorAlpha = 1;
 	var flowIndicatorMSColor = MSImmutableColor.colorWithSVGString(flowIndicatorColorHex);
 	flowIndicatorMSColor.setAlpha(flowIndicatorColorAlpha);
 	var flowIndicatorColor = flowIndicatorMSColor.NSColorWithColorSpace(NSColorSpace.deviceRGBColorSpace())
 	flowIndicatorColorWell2.setColor(flowIndicatorColor);
-	flowIndicatorOptionsView.addSubview(flowIndicatorColorWell2);
-
-	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
+	var flowIndicatorOptionsView2 = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
+	flowIndicatorOptionsView2.addSubview(flowIndicatorColorWell2);
+	settingsWindow.addAccessoryView(flowIndicatorOptionsView2);
 
 
 	var response = settingsWindow.runModal();

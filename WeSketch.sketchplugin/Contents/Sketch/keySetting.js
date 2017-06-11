@@ -11,7 +11,7 @@ var onRun = function(context){
     var obj = [];
     for(var i = 0;i < commands.length;i++){
         if(!commands[i].noshortcut){
-            obj.push({name:encodeURIComponent(commands[i].name),shortcut:encodeURIComponent(commands[i].shortcut)})
+            obj.push({name:encodeURIComponent(commands[i].name),shortcut:encodeURIComponent(commands[i].shortcut),istool:encodeURIComponent(commands[i].istool)})
         }
     }
 
@@ -30,6 +30,7 @@ var onRun = function(context){
                 for(var k = 0; k < data.length;k++){
                     if(decodeURIComponent(data[k].name) == (commands[i].name)){
                         commands[i].shortcut = decodeURIComponent(data[k].shortcut);
+                        // commands[i].istool = (data[k].istool);
                     }
                 }
             }
