@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "doubleluo maybexia shenfeili",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -205,7 +205,8 @@
     }
   ],
   "menu": {
-    "items": ["link","flag","toolSetting","-","findtextandselect","findfontandselect","findcolorandreplace","-","uploadIcon","iconQ","-",
+    "items": [
+    "uploadIcon","iconQ","-",
     {
         "title": "管理 UI Kit",
         "items": [
@@ -224,6 +225,8 @@
     },
     "syncSetting",
     "-",
+    "link","flag","toolSetting","-",
+    "findtextandselect","findfontandselect","findcolorandreplace","-",
     "codeS",
     "codeC",
     "-",

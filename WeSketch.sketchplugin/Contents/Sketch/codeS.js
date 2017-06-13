@@ -1,4 +1,4 @@
-var Rate = 1;
+var Rate = 2;
 var BorderPositions = ["center", "inside", "outside"],
     FillTypes = ["color", "gradient"],
     GradientTypes = ["linear", "radial", "angular"],
@@ -166,8 +166,12 @@ function exportText(selection){
     var lineHeight = (selection.lineHeight() || selection.font().defaultLineHeightForFont())/Rate;
     returnText.push('line-height: ' + parseInt(lineHeight) + 'px;');
     returnText.push('color: ' +　colorToJSON(selection.textColor()) + ';');
-    if(selection.font().fontName().indexOf('Medium')>0 || selection.font().fontName().indexOf('Semibold')>0){
+    var fontName = selection.font().fontName().toLocaleUpperCase();
+    if(fontName.indexOf('MEDIUM')>0 || fontName.indexOf('SEMIBOLD')>0 || fontName.indexOf('BOLD')>0){
         returnText.push('font-weight: bold;');
+    }
+    if(fontName.indexOf('ITALIC')>0){
+        returnText.push('font-style: italic;');
     }
     return returnText.join('\n');
 }
@@ -236,14 +240,20 @@ var onRun = function (context) {
     if(context.selection.count()<1){
         return context.document.showMessage("请先选择要获取样式的元素");
     }
+    var showMessage = '代码已复制到剪贴板';
     var selection = context.selection[0];
     var artboard = selection.parentArtboard().absoluteRect();
-    if((artboard.size().width > 414 && artboard.size().width < 751) || (artboard.size().width > 1332 && artboard.size().width<1336)){
+    var size = artboard.size().width;
+    if(size  == 750 || size == 1334 || size == 720){
         Rate = 2;
-    }else if((artboard.size().width > 750 && artboard.size().width < 1243) || artboard.size().width > 2200 ){
+    }else if(size == 320 || size == 414 || size == 375){
+        Rate = 1;
+    }
+    else if(size == 1242 || size == 2208 || size == 1080){
         Rate = 3;
+    }else{
+        showMessage += '，此元素所在artboard为非标准尺寸，按默认2倍图处理'
     }
     getCode(selection);
-    context.document.showMessage("代码已复制到剪贴板");
-
+    context.document.showMessage(showMessage);
 }

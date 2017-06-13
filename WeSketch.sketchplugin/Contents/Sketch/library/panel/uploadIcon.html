@@ -309,6 +309,11 @@
     })
 
     $('.savebutton').on('click',function(){
+      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
+      return;
+    })
+
+    $('#svg-name').on('change',function(){
       SMAction('pushdata',{
         projectid:projectID,
         svgname:$('#svg-name').val(),
@@ -316,8 +321,9 @@
       })
       return;
     })
+
     function pushdata(){
-      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
+      
     }
 
   </script>

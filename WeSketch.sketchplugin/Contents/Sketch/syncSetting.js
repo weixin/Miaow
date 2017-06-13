@@ -41,7 +41,7 @@ var onRun = function(context){
 
 	var windowObject = SMPanel({
         url: pluginSketch + "/panel/syncSetting.html",
-        width: 362,
+        width: 462,
         height: 548,
         data:{
             list:obj
