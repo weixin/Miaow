@@ -1,4 +1,6 @@
+var codeKey = "com.sketchplugins.wechat.codetype";
 var Rate = 2;
+var keyCode = 'px';
 var BorderPositions = ["center", "inside", "outside"],
     FillTypes = ["color", "gradient"],
     GradientTypes = ["linear", "radial", "angular"],
@@ -162,9 +164,9 @@ function exportText(selection){
     if(layerStyle.contextSettings().opacity() != 1){
         returnText.push('opacity: ' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
     }
-    returnText.push('font-size: ' +　(selection.fontSize()/Rate) + 'px;');
+    returnText.push('font-size: ' +　parseInt((selection.fontSize()/Rate)) + keyCode + ';');
     var lineHeight = (selection.lineHeight() || selection.font().defaultLineHeightForFont())/Rate;
-    returnText.push('line-height: ' + parseInt(lineHeight) + 'px;');
+    returnText.push('line-height: ' + parseInt(lineHeight) + keyCode + ';');
     returnText.push('color: ' +　colorToJSON(selection.textColor()) + ';');
     var fontName = selection.font().fontName().toLocaleUpperCase();
     if(fontName.indexOf('MEDIUM')>0 || fontName.indexOf('SEMIBOLD')>0 || fontName.indexOf('BOLD')>0){
@@ -180,7 +182,7 @@ function exportSize(selection){
     var returnText = [];
     
     if(getRadius(selection) != 0){
-        returnText.push('border-radius: ' + (getRadius(selection)/Rate) + 'px;');
+        returnText.push('border-radius: ' + parseInt(getRadius(selection)/Rate) + 'px;');
     }
     var backgroundColor = getFills(layerStyle);
     var getBorder = getBorders(layerStyle);
@@ -195,13 +197,13 @@ function exportSize(selection){
             borderless = getBorder[0].thickness * 2 / rateX;
         }
         if(getBorder[0].fillType == 'color'){
-            returnText.push('border: ' + (getBorder[0].thickness /rateX) + 'px solid ' + (getBorder[0].color) + ';');
+            returnText.push('border: ' + parseInt(getBorder[0].thickness /rateX) + keyCode + ' solid ' + (getBorder[0].color) + ';');
         }
     }
     var width = selection.rect().size.width/Rate;
     var height = selection.rect().size.height/Rate;
-    returnText.push('width: '+parseInt(width - borderless) + 'px;');
-    returnText.push('height: ' + parseInt(height - borderless) + 'px;');
+    returnText.push('width: '+parseInt(width - borderless) + keyCode + ';');
+    returnText.push('height: ' + parseInt(height - borderless) + keyCode + ';');
 
     if(backgroundColor.length>0){
         if(backgroundColor[0].fillType == 'color'){
@@ -237,6 +239,7 @@ function paste(text){
 }
 
 var onRun = function (context) {
+    keyCode = NSUserDefaults.standardUserDefaults().objectForKey(codeKey) || 'px';
     if(context.selection.count()<1){
         return context.document.showMessage("请先选择要获取样式的元素");
     }
@@ -253,6 +256,13 @@ var onRun = function (context) {
         Rate = 3;
     }else{
         showMessage += '，此元素所在artboard为非标准尺寸，按默认2倍图处理'
+    }
+    if(keyCode == 'rpx'){
+        if(size == 750 || size == 1334 || size == 720 || size == 320 || size == 414 || size == 375 || size == 1242 || size == 2208 || size == 1080){
+            Rate = parseFloat((size/750).toFixed(2));
+        }else{
+            Rate = 1;
+        }
     }
     getCode(selection);
     context.document.showMessage(showMessage);

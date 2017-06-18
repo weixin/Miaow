@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "doubleluo maybexia shenfeili",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -119,12 +119,29 @@
       "handler" : "onRun"
     },
     {
+      "name" : "补齐宽高",
+      "identifier" : "exportSlice",
+      "script" : "exportSlice.js",
+      "shortcut": "command shift u",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "获取颜色",
       "identifier" : "codeC",
       "script" : "codeC.js",
       "shortcut": "command shift c",
       "istool":"true",
       "handler" : "onRun"
+    },
+    {
+      "name" : "获取代码设置",
+      "identifier" : "codeSetting",
+      "script" : "codeSetting.js",
+      "shortcut": "",
+      "handler" : "onRun",
+      "istool":"true",
+      "noshortcut":"true"
     },
     {
       "name" : "同步源设置",
@@ -227,8 +244,10 @@
     "-",
     "link","flag","toolSetting","-",
     "findtextandselect","findfontandselect","findcolorandreplace","-",
-    "codeS",
+    "exportSlice",
     "codeC",
+    "codeS",
+    "codeSetting",
     "-",
     "keySetting",
     {

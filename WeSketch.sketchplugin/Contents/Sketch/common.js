@@ -101,6 +101,10 @@ function openUrlInBrowser(url) {
 }
 
 function createRadioButtons(options, selectedItem) {
+
+    var ui = NSRadioButton;
+    var type = NSRadioModeMatrix;
+    
     var rows = Math.ceil(options.length / 2);
     var columns = ((options.length < 2) ? 1 : 2);
     
@@ -108,9 +112,10 @@ function createRadioButtons(options, selectedItem) {
     var selectedColumn = selectedItem - (selectedRow * 2);
     
     var buttonCell = [[NSButtonCell alloc] init];
-        [buttonCell setButtonType:NSRadioButton]
+        [buttonCell setButtonType:ui];
     
-    var buttonMatrix = [[NSMatrix alloc] initWithFrame: NSMakeRect(20.0, 20.0, 300.0, rows * 25) mode:NSRadioModeMatrix prototype:buttonCell numberOfRows:rows numberOfColumns:columns];
+    
+    var buttonMatrix = [[NSMatrix alloc] initWithFrame: NSMakeRect(20.0, 20.0, 300.0, rows * 25) mode:type prototype:buttonCell numberOfRows:rows numberOfColumns:columns];
         [buttonMatrix setCellSize: NSMakeSize(140, 20)];
 
     for (i = 0; i < options.length; i++) {
@@ -127,6 +132,26 @@ function createRadioButtons(options, selectedItem) {
     return buttonMatrix;
 }
 
+
+
+function createArtboard (context,obj) {
+  var doc = context.document;
+
+  var artboard = [MSArtboardGroup new];
+
+  [artboard setName: obj.name];
+
+  var frame = [artboard frame];
+
+  [frame setX: obj.x];
+  [frame setY: obj.y];
+  [frame setWidth: obj.width];
+  [frame setHeight: obj.height];
+
+  [[doc currentPage] addLayer:artboard];
+
+  return artboard;
+}
 
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
