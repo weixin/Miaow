@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "doubleluo maybexia shenfeili",
-  "version": "1.6.6",
+  "version": "1.7.0",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -21,6 +21,14 @@
       "shortcut": "command shift 2",
       "handler" : "onRun",
       "istool":"true",
+    },
+    {
+      "name" : "图标库",
+      "identifier" : "iconQ",
+      "script" : "iconQ.js",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
       "name" : "字体批量替换",
@@ -52,14 +60,7 @@
       "script" : "uploadIcon.js",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "图标管理",
-      "identifier" : "iconQ",
-      "script" : "iconQ.js",
-      "shortcut": "",
-      "istool":"true",
+      "noshortcut":"true",
       "handler" : "onRun"
     },
     {
@@ -223,7 +224,6 @@
   ],
   "menu": {
     "items": [
-    "uploadIcon","iconQ","-",
     {
         "title": "管理 UI Kit",
         "items": [
@@ -242,8 +242,14 @@
     },
     "syncSetting",
     "-",
-    "link","flag","toolSetting","-",
-    "findtextandselect","findfontandselect","findcolorandreplace","-",
+    "link","flag",
+    "iconQ",
+    "toolSetting",
+    "-",
+    "findtextandselect",
+    "findfontandselect",
+    "findcolorandreplace",
+    "-",
     "exportSlice",
     "codeC",
     "codeS",
@@ -255,8 +261,7 @@
         "items": [
             "about",
             "issues",
-            "checkforupdate",
-            "donation"
+            "checkforupdate"
         ]
     }],
     "title":"WeSketch"

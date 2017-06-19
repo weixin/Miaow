@@ -37,7 +37,7 @@ var onRun = function (context) {
     settingsWindow.addTextLabelWithValue("选择尺寸");
 
     var items = ['@1x','@2x','@3x'];
-    var state = ['1','2','3'];
+    var state = [1,2,3];
 
     var w = 400, h = items.length * 30;
     var view = [[NSView alloc] initWithFrame:NSMakeRect(20.0, 20.0, 400, h)];
@@ -61,9 +61,7 @@ var onRun = function (context) {
         frame.origin.y += frame.size.height;
     }
     settingsWindow.addAccessoryView(view); 
-
     settingsWindow.addTextLabelWithValue("选择格式");
-
 	var ButtonList2 = [];
 	ButtonList2.push('PNG');
     ButtonList2.push('JPG');
@@ -75,66 +73,67 @@ var onRun = function (context) {
 
 	var response = settingsWindow.runModal();
 	if (response == "1000") {
-		var saveartboard = [];
-		var cell2 = scaleOptionsMatrix2.selectedCell();
-		cell2 = cell2.tag();
-		if(cell2 == 0){
-			imagetype = 'png';
-		}else if(cell2 == 1){
-			imagetype = 'jpg';
-		}else if(cell2 == 2){
-			imagetype = 'svg';
-		}else if(cell2 == 3){
-			imagetype = 'pdf';
-		}
 
-		var pages = context.document.pages();
-		for(var i = 0;i<pages.length;i++){
-			if(pages[i].name() == '__wesketch_export'){
-				context.document.removePage(pages[i]);
-			}
-		}
-	   	var newPage = context.document.addBlankPage();
-	    newPage.setName('__wesketch_export');
-		context.document.setCurrentPage(newPage);
-		var width = flowIndicatorThicknessWell.stringValue();
-		var height = flowIndicatorThicknessWell2.stringValue();
-		var lastwidth = 0;
-		for(var i = 0;i < selection.length;i++){
-			width = flowIndicatorThicknessWell.stringValue();
-			height = flowIndicatorThicknessWell2.stringValue();
-			var name = selection[i].name();
-			var icon = selection[i].copy();
-			if(width < selection[i].rect().size.width){
-				width = selection[i].rect().size.width;
-			}
-			if(height < selection[i].rect().size.height){
-				height = selection[i].rect().size.height;
-			}
-			var frame = icon.frame();
-			var y = 0;
-			var iconx = (width - selection[i].rect().size.width)/2;
-			if(iconx<0){
-				iconx = 0;
-			}
-			var icony = (height - selection[i].rect().size.height)/2;
-			if(icony<0){
-				icony = 0;
-			}
-			frame.setX(iconx);
-			frame.setY(icony);
-	   		var artboard = createArtboard(context,{width:parseInt(width),height:parseInt(height),name:name,x:lastwidth,y:y});
-			lastwidth = lastwidth + parseInt(width) + 50;
-	   		artboard.addLayers([icon]);
-	   		artboard.select_byExpandingSelection(true, true);
-	   		saveartboard.push(artboard);
-		}
 		var panel = NSOpenPanel.openPanel();
 		panel.setCanChooseDirectories(true);
 		panel.setAllowsMultipleSelection(true);
 		panel.setCanCreateDirectories(true);
 		panel.setMessage("选择你要导出图片的目录");
 		if (panel.runModal() == NSOKButton) {
+			var saveartboard = [];
+			var cell2 = scaleOptionsMatrix2.selectedCell();
+			cell2 = cell2.tag();
+			if(cell2 == 0){
+				imagetype = 'png';
+			}else if(cell2 == 1){
+				imagetype = 'jpg';
+			}else if(cell2 == 2){
+				imagetype = 'svg';
+			}else if(cell2 == 3){
+				imagetype = 'pdf';
+			}
+
+			var pages = context.document.pages();
+			for(var i = 0;i<pages.length;i++){
+				if(pages[i].name() == '__wesketch_export'){
+					context.document.removePage(pages[i]);
+				}
+			}
+		   	var newPage = context.document.addBlankPage();
+		    newPage.setName('__wesketch_export');
+			context.document.setCurrentPage(newPage);
+			var width = flowIndicatorThicknessWell.stringValue();
+			var height = flowIndicatorThicknessWell2.stringValue();
+			var lastwidth = 0;
+			for(var i = 0;i < selection.length;i++){
+				width = flowIndicatorThicknessWell.stringValue();
+				height = flowIndicatorThicknessWell2.stringValue();
+				var name = selection[i].name();
+				var icon = selection[i].copy();
+				if(width < selection[i].rect().size.width){
+					width = selection[i].rect().size.width;
+				}
+				if(height < selection[i].rect().size.height){
+					height = selection[i].rect().size.height;
+				}
+				var frame = icon.frame();
+				var y = 0;
+				var iconx = (width - selection[i].rect().size.width)/2;
+				if(iconx<0){
+					iconx = 0;
+				}
+				var icony = (height - selection[i].rect().size.height)/2;
+				if(icony<0){
+					icony = 0;
+				}
+				frame.setX(iconx);
+				frame.setY(icony);
+		   		var artboard = createArtboard(context,{width:parseInt(width),height:parseInt(height),name:name,x:lastwidth,y:y});
+				lastwidth = lastwidth + parseInt(width) + 50;
+		   		artboard.addLayers([icon]);
+		   		artboard.select_byExpandingSelection(true, true);
+		   		saveartboard.push(artboard);
+			}
 			var path = panel.URL().path();
 			for(var i = 0;i<buttons.length;i++){
 				if(buttons[i].state() == true){

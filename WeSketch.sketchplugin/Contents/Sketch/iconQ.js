@@ -95,8 +95,10 @@ var onRun = function(context){
                 var importedSVGLayer = svgImporter.importAsLayer();
                 var svgFrame = importedSVGLayer.frame();
                 importedSVGLayer.name = data.name;
+                var oldWidth = svgFrame.width();
+                var oldHeight = svgFrame.height();
                 [svgFrame setWidth:data.width];
-                [svgFrame setHeight:data.height];
+                svgFrame.setHeight(data.width*oldHeight/oldWidth);
                 if(data.type == 'public'){
                     var children = importedSVGLayer.children();
                     var colorToReplace = hexToRgb(data.color);
@@ -110,7 +112,13 @@ var onRun = function(context){
                 [svgFrame setX:x];
                 [svgFrame setY:y];
                 page.addLayers([importedSVGLayer]);
+                if(context.selection>0){
+                    for(var i = 0;i<context.selection.length;i++){
+                        context.selection[i].select_byExpandingSelection(false,false);
+                    }
+                }
                 importedSVGLayer.select_byExpandingSelection(true, true);
+                context.document.showMessage('图标已导入到画板中央');
             }else if(data.type == 'loginout'){
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginNameKey);
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);

@@ -14,7 +14,9 @@ var onSelectionChanged = function(context) {
 
     if (count != 0) {
     	if (count == 1) {
-    		 message = selection[0].objectID();
+    		message = selection[0].objectID();
+            context.command.setValue_forKey_onLayer_forPluginIdentifier(selection[0].objectID(), "selection1", selection[0], selectionDom1);
+
         } else if(count == 2){
         	for(var i = 0;i<count;i++){
                 if(oldSelection == selection[i].objectID()){
@@ -28,7 +30,6 @@ var onSelectionChanged = function(context) {
             message = '';
         }
     }
-    // document.showMessage(message);
     NSUserDefaults.standardUserDefaults().setObject_forKey(message, selectionDom);
     if(saveMessage.length > 1){
         context.command.setValue_forKey_onLayer_forPluginIdentifier(saveMessage[0].objectID(), "selection1", saveMessage[0], selectionDom1);

@@ -34,10 +34,10 @@
       width:100%;
       box-sizing:border-box;
       position: fixed;
-      top:28px;
+      top:0;
       display: flex;
       align-items: center;
-      padding:0 10px 12px 10px;
+      padding:3px 10px 12px 10px;
       background-color:#F1F1F1;
     }
     .search-inputwrap{
@@ -204,6 +204,20 @@
       height:100%;
       box-sizing:border-box;
     }
+    .content-body:hover:before{
+      content: "导入";
+      color:#1AAD19;
+      text-align: center;
+      font-size: 14px;
+      line-height: 60px;
+      position: absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background-color: rgba(0,0,0,0.3);
+      box-sizing:border-box;
+    }
     .content-name{
       text-align: center;
       color:black;
@@ -333,7 +347,7 @@
   </head>
   <body>
     <div class="icon-mag">
-      <div class="toolbar">
+      <div class="toolbar" style="display:none">
         <div class="login">
           <span>登陆</span>
         </div>
