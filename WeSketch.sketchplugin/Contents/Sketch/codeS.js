@@ -1,3 +1,4 @@
+@import "common.js";
 var codeKey = "com.sketchplugins.wechat.codetype";
 var Rate = 2;
 var keyCode = 'px';
@@ -232,11 +233,7 @@ function exportSize(selection){
     }
     return returnText.join('\n');
 }
-function paste(text){
-    var pasteBoard = [NSPasteboard generalPasteboard];
-    [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
-    [pasteBoard setString:text forType:NSPasteboardTypeString];
-}
+
 
 var onRun = function (context) {
     keyCode = NSUserDefaults.standardUserDefaults().objectForKey(codeKey) || 'px';

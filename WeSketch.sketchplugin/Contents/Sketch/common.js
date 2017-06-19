@@ -23,6 +23,12 @@ function initDefaults(pluginDomain, initialValues) {
 	return defaultValues
 }
 
+function paste(text){
+    var pasteBoard = [NSPasteboard generalPasteboard];
+    [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
+    [pasteBoard setString:text forType:NSPasteboardTypeString];
+}
+
 function rgb(a){
 	var sColor = a.toLowerCase();
 	if(sColor.length === 4){

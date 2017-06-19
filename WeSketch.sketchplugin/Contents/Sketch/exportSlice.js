@@ -14,11 +14,13 @@ var onRun = function (context) {
 		scale = 0;
 	}
 	var imagetype = 'png';
+	var addressname = [];
 	var settingsWindow = COSAlertWindow.new();
 	settingsWindow.addButtonWithTitle("保存");
 	settingsWindow.addButtonWithTitle("取消");
 	settingsWindow.setMessageText("补齐宽高导出图片");
 
+    settingsWindow.addTextLabelWithValue("图片尺寸小于填写宽高部分用透明色补充，图片居中不会被拉伸");
     settingsWindow.addTextLabelWithValue("宽                            高");
 
 	var flowIndicatorThicknessWell = NSTextField.alloc().initWithFrame(NSMakeRect(0, 0, 44, 23));
@@ -121,8 +123,8 @@ var onRun = function (context) {
 			}
 			frame.setX(iconx);
 			frame.setY(icony);
-	   		var artboard = createArtboard(context,{width:width,height:height,name:name,x:lastwidth,y:y});
-			lastwidth = lastwidth + selection[i].rect().size.width + 50;
+	   		var artboard = createArtboard(context,{width:parseInt(width),height:parseInt(height),name:name,x:lastwidth,y:y});
+			lastwidth = lastwidth + parseInt(width) + 50;
 	   		artboard.addLayers([icon]);
 	   		artboard.select_byExpandingSelection(true, true);
 	   		saveartboard.push(artboard);
@@ -136,16 +138,21 @@ var onRun = function (context) {
 			var path = panel.URL().path();
 			for(var i = 0;i<buttons.length;i++){
 				if(buttons[i].state() == true){
+					addressname = [];
 					for(var k = 0;k<saveartboard.length;k++){
 						var sliceFormat = MSExportRequest.exportRequestsFromExportableLayer(saveartboard[k]).firstObject();
 				        sliceFormat.scale = i+1;
 				        sliceFormat.format = imagetype;
 						context.document.saveArtboardOrSlice_toFile(sliceFormat,path + '/' + saveartboard[k].name() + buttons[i].title().replace('@1x','') + '.' + imagetype);
+						addressname.push(saveartboard[k].name() + buttons[i].title().replace('@1x','') + '.' + imagetype);
 					}
-				}	
+				}
+
 			}
+			paste(addressname.join('\n'));
+			context.document.removePage(newPage);
+			context.document.showMessage('导出成功，图片名称已放入你的剪贴板');
 		}
-		context.document.removePage(newPage);
-		NSApp.displayDialog('导出成功');
+
 	}
 }
