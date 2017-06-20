@@ -220,15 +220,15 @@ function exportSize(selection){
                     return z;
                 }
             }
-            var midColor = bzone6(parseInt((parseInt('0x'+backgroundColor[0].gradient.colorStops[0].color.replace('#','')) + parseInt('0x'+backgroundColor[0].gradient.colorStops[1].color.replace('#','')))/2).toString(16));
-            returnText.push('background-color: #' + midColor + ';');
             var param = [];
-            param.push(backgroundColor[0].gradient.type);
-            param.push(' left top');
-            param.push(' left bottom');
-            param.push('color-stop(0, '+ backgroundColor[0].gradient.colorStops[0].color +')');
-            param.push('color-stop(0, '+ backgroundColor[0].gradient.colorStops[1].color +')');
-            returnText.push('background-color: ' + param.join(',') + ';');
+            var to = backgroundColor[0].gradient.to;
+            var from = backgroundColor[0].gradient.from;
+            param.push(parseInt(90-180*Math.atan(Math.abs((to.y-from.y))/Math.abs((to.x-from.x)))/Math.PI)+'deg');
+            var colorStops = backgroundColor[0].gradient.colorStops;
+            for(var i = 0;i<colorStops.length;i++){
+                param.push(colorStops[i].color + ' ' + parseInt(colorStops[i].position*100) + '%');
+            }
+            returnText.push('background: linear-gradient(' + param.join(',') + ');');
         }
     }
     return returnText.join('\n');
