@@ -82,10 +82,10 @@ var onRun = function(context){
                 data.name = data.name.replace('.svg','');
                 page.setCurrentArtboard(null);
                 var contentDrawView = context.document.currentView();
-                var midX = Math.round((contentDrawView.frame().size.width/2 - contentDrawView.horizontalRuler().baseLine())/contentDrawView.zoomValue());
-                var midY = Math.round((contentDrawView.frame().size.height/2 - contentDrawView.verticalRuler().baseLine())/contentDrawView.zoomValue());
-                var x = midX - data.width/2;
-                var y = midY - data.height/2;
+                var midX = parseInt(Math.round((contentDrawView.frame().size.width/2 - contentDrawView.horizontalRuler().baseLine())/contentDrawView.zoomValue()));
+                var midY = parseInt(Math.round((contentDrawView.frame().size.height/2 - contentDrawView.verticalRuler().baseLine())/contentDrawView.zoomValue()));
+                var x = parseInt(midX - data.width/2);
+                var y = parseInt(midY - data.height/2);
                 var logo = decodeURIComponent(data.content);
                 logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
                 logo = NSString.stringWithString(logo);
@@ -112,13 +112,18 @@ var onRun = function(context){
                 [svgFrame setX:x];
                 [svgFrame setY:y];
                 page.addLayers([importedSVGLayer]);
-                if(context.selection>0){
+                if(context.selection.length>0){
+                    [svgFrame setX:context.selection[0].absoluteRect().x()];
+                    [svgFrame setY:context.selection[0].absoluteRect().y()];
+                    context.document.showMessage('图标已导入到'+context.selection[0].name());
+
                     for(var i = 0;i<context.selection.length;i++){
                         context.selection[i].select_byExpandingSelection(false,false);
                     }
+                }else{
+                    context.document.showMessage('图标已导入到画板中央');
                 }
                 importedSVGLayer.select_byExpandingSelection(true, true);
-                context.document.showMessage('图标已导入到画板中央');
             }else if(data.type == 'loginout'){
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginNameKey);
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);
