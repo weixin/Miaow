@@ -133,7 +133,6 @@ var onRun = function (context) {
                     selectingFontName.push([[[modal viewAtIndex: i+1] selectedCell] title]);
                 }
             }
-            NSApp.displayDialog(selectingFontName);
 
             featureSelectSpecificFontTextLayer();
 

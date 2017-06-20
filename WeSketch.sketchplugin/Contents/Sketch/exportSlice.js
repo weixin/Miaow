@@ -13,6 +13,9 @@ var onRun = function (context) {
 	}else if(selecWidth == 750 || selecWidth == 1242){
 		scale = 0;
 	}
+	var selectionWidth = selection[0].rect().size.width;
+	var selectionHeight = selection[0].rect().size.height;
+
 	var imagetype = 'png';
 	var addressname = [];
 	var settingsWindow = COSAlertWindow.new();
@@ -24,12 +27,12 @@ var onRun = function (context) {
     settingsWindow.addTextLabelWithValue("宽                            高");
 
 	var flowIndicatorThicknessWell = NSTextField.alloc().initWithFrame(NSMakeRect(0, 0, 44, 23));
-	flowIndicatorThicknessWell.setStringValue('64');
+	flowIndicatorThicknessWell.setStringValue(selectionWidth);
 	var flowIndicatorOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,23));
 	flowIndicatorOptionsView.addSubview(flowIndicatorThicknessWell);
 
 	var flowIndicatorThicknessWell2 = NSTextField.alloc().initWithFrame(NSMakeRect(105, 0, 44, 23));
-	flowIndicatorThicknessWell2.setStringValue('64');
+	flowIndicatorThicknessWell2.setStringValue(selectionHeight);
 	flowIndicatorOptionsView.addSubview(flowIndicatorThicknessWell2);
 
 	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
