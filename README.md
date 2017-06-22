@@ -9,7 +9,13 @@
 
 ## 界面预览
 
-![Screenshot](https://user-images.githubusercontent.com/1049575/27429061-7b60327c-5776-11e7-8689-91b4334d51cd.png)
+#### 菜单选项
+
+![Screenshot1](https://user-images.githubusercontent.com/1049575/27429245-1a7258cc-5777-11e7-9818-3b311a2af1fc.png)
+
+#### 使用工具栏
+
+![Screenshot2](https://user-images.githubusercontent.com/1049575/27429370-6f27035e-5777-11e7-91e4-56e49aac5d9d.png)
 
 ## 功能介绍
 
