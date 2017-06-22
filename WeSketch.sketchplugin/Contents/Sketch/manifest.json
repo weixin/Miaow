@@ -23,7 +23,7 @@
       "istool":"true",
     },
     {
-      "name" : "素材库",
+      "name" : "图标库",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "shortcut": "",
