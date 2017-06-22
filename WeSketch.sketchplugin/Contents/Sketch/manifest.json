@@ -23,7 +23,7 @@
       "istool":"true",
     },
     {
-      "name" : "图标库",
+      "name" : "素材库",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "shortcut": "",
@@ -112,23 +112,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "获取样式",
-      "identifier" : "codeS",
-      "script" : "codeS.js",
-      "shortcut": "command shift d",
-      "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "补齐宽高",
-      "identifier" : "exportSlice",
-      "script" : "exportSlice.js",
-      "shortcut": "command shift u",
-      "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "获取颜色",
+      "name" : "快捷取色",
       "identifier" : "codeC",
       "script" : "codeC.js",
       "shortcut": "command shift c",
@@ -136,7 +120,23 @@
       "handler" : "onRun"
     },
     {
-      "name" : "获取代码设置",
+      "name" : "生成代码",
+      "identifier" : "codeS",
+      "script" : "codeS.js",
+      "shortcut": "command shift d",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "自定义宽高导出",
+      "identifier" : "exportSlice",
+      "script" : "exportSlice.js",
+      "shortcut": "command shift u",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "代码设置",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
       "shortcut": "",
@@ -145,7 +145,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "同步源设置",
+      "name" : "设置",
       "identifier" : "syncSetting",
       "script" : "syncSetting.js",
       "shortcut": "",
@@ -164,7 +164,7 @@
       }
     },
     {
-      "name" : "快捷键设置",
+      "name" : "设置",
       "identifier" : "keySetting",
       "script" : "keySetting.js",
       "shortcut": "",
@@ -173,7 +173,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "交互设置",
+      "name" : "外观设置",
       "identifier" : "toolSetting",
       "script" : "toolSetting.js",
       "shortcut": "",
@@ -190,7 +190,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "关于",
+      "name" : "官网",
       "identifier" : "about",
       "script" : "about.js",
       "shortcut": "",
@@ -229,7 +229,8 @@
         "items": [
             "syncuikit",
             "importuikit",
-            "exportuikit"
+            "exportuikit",
+            "syncSetting"
         ]
     },
     {
@@ -237,33 +238,37 @@
         "items": [
             "synccolor",
             "importcolor",
-            "exportcolor"
+            "exportcolor",
+            "syncSetting"
         ]
     },
-    "syncSetting",
-    "-",
-    "link","flag",
     "iconQ",
+    "-",
+    "link",
+    "flag",
     "toolSetting",
     "-",
     "findtextandselect",
     "findfontandselect",
     "findcolorandreplace",
     "-",
-    "exportSlice",
     "codeC",
+    "exportSlice",
     "codeS",
     "codeSetting",
     "-",
+    "toolbar",
+    "-",
     "keySetting",
     {
-        "title": "帮助",
+        "title": "关于",
         "items": [
             "about",
-            "issues",
-            "checkforupdate"
+            "issues"
         ]
-    }],
+    },
+    "checkforupdate",
+    ],
     "title":"WeSketch"
   }
 }
