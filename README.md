@@ -4,13 +4,13 @@
 
 ## 下载&安装
 
-下载解压后，双击 `wesketch.sketchplugin` 安装  
-[下载地址](https://github.com/weixin/WeSketch/releases)  
+[下载地址](https://github.com/weixin/WeSketch/releases)   
 (支持 Sketch 44+)
+下载解压后，双击 `wesketch.sketchplugin` 安装  
 
 ## 界面预览
 
-![Screenshot](http://ww1.sinaimg.cn/large/644eac00gy1fgu4woxm7gj211o0pbq6x.jpg)
+![shot](http://ww1.sinaimg.cn/large/644eac00gy1fgu4woxm7gj211o0pbq6x.jpg)
 
 ## 功能介绍
 
