@@ -14,6 +14,7 @@ var onRun = function (context) {
     var searchList = [];
     var searchButtonType = 1;
     var fontRpleaceCount = 0;
+    var replaceCount = 0;
 
     featureSearchFontName();
     userInterfaceLoop();
@@ -130,13 +131,14 @@ var onRun = function (context) {
 
             for (var i = 0; i < includedFontName.length; i++) {
                 if ([[[modal viewAtIndex: i+1] selectedCell] state] == true) {
+                    replaceCount ++;
                     selectingFontName.push([[[modal viewAtIndex: i+1] selectedCell] title]);
                 }
             }
 
             featureSelectSpecificFontTextLayer();
 
-            NSApp.displayDialog("字体批量替换成功"); 
+            context.document.showMessage("字体批量替换成功，"+fontRpleaceCount+'个文字被替换'); 
 
         }
     }

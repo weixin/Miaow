@@ -71,7 +71,7 @@ var onRun = function(context){
                 manifest.COLOR = COLOR;
                 NSUserDefaults.standardUserDefaults().setObject_forKey(UIKIT, uiKitUrlKey);
                 NSUserDefaults.standardUserDefaults().setObject_forKey(COLOR, colorUrlKey);
-                NSApp.displayDialog('同步源设置成功');
+                context.document.showMessage('同步源设置成功');
 
             }
         }

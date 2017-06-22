@@ -127,7 +127,7 @@ var onRun = function (context) {
     processButtonClick();
     doFindAndReplace();
     if(replaceCount){
-        NSApp.displayDialog('替换成功，共找到' + replaceCount + '处\r\n"' + textToFind2 + '"替换为"' + textToReplace + '"');
+        context.document.showMessage('替换成功，共找到' + replaceCount + '处\r\n"' + textToFind2 + '"替换为"' + textToReplace + '"');
     }else{
         NSApp.displayDialog('没有找到"' + textToFind + '"');
     }

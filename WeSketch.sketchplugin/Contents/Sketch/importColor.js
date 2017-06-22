@@ -55,7 +55,7 @@ var onRun = function(context){
     doc.documentData().assets().setColors(colors);
     
     app.refreshCurrentDocument();
-    NSApp.displayDialog("色板已导入 Document Colors，请重新打开色板查看");
+    context.document.showMessage("色板已导入 Document Colors，请重新打开色板查看");
   }
 
 }

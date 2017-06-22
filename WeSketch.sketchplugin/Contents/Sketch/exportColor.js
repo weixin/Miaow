@@ -37,7 +37,7 @@ var onRun = function (context) {
 			var file = NSString.stringWithString(JSON.stringify(fileData));
 			
 			[file writeToFile:filePath atomically:true encoding:NSUTF8StringEncoding error:null];
-			NSApp.displayDialog("色板导出成功"); 
+			context.document.showMessage("色板导出成功"); 
 
 		}
 		

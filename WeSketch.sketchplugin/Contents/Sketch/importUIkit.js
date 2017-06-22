@@ -159,7 +159,7 @@ var onRun = function(context){
     context.document.removePage(context.document.pages()[0]);
   }
 
-  NSApp.displayDialog(alertData);
+  context.document.showMessage(alertData);
 }
 
 function isSame(a,b){

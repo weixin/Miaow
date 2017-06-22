@@ -181,11 +181,11 @@ var onRun = function(context){
 		doc.setCurrentPage(savePage);
 		Organizer(context);
 	}
-	if(context.document.pages()[0].artboards().count() == 0){
+	if(context.document.pages()[0].children().count() == 1){
 		context.document.removePage(context.document.pages()[0]);
 	}
 
-	NSApp.displayDialog(alertData + tbColor);
+	context.document.showMessage(alertData + tbColor);
 }
 
 function isSame(a,b){

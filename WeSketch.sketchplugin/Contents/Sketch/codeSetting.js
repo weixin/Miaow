@@ -33,6 +33,6 @@ var onRun = function(context) {
 		}else{
   			NSUserDefaults.standardUserDefaults().setObject_forKey('px', codeKey);
 		}
-       	NSApp.displayDialog('设置成功');
+       	context.document.showMessage('设置成功');
 	}
 }

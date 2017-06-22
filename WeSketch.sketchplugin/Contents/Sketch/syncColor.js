@@ -75,5 +75,5 @@ var onRun = function (context) {
 	var index = [uikit tag];
 	var UIKITURL = List[index].url;
 	SyncColor(context,UIKITURL);
-	NSApp.displayDialog("色板已同步到 Document Colors，请重新打开色板查看");
+	context.document.showMessage("色板已同步到 Document Colors，请重新打开色板查看");
 }
