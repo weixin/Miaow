@@ -23,6 +23,13 @@ function initDefaults(pluginDomain, initialValues) {
 	return defaultValues
 }
 
+function uploadContext(context){
+    var contextNow = context;
+    contextNow.document = NSDocumentController.sharedDocumentController().currentDocument();
+    contextNow.selection = context.document.selectedLayers().layers();
+    return contextNow;
+}
+
 function paste(text){
     var pasteBoard = [NSPasteboard generalPasteboard];
     [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];

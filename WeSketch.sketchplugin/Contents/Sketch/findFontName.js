@@ -1,4 +1,4 @@
-var onRun = function (context) {
+function findFontName(context){
     var doc = context.document;
     var doctype = 0;
     var page = doc.currentPage();
@@ -227,6 +227,9 @@ var onRun = function (context) {
         textLayer.setFontSize(fontSize);
         textLayer.adjustFrameToFit();
     }
-    
+}
+
+var onRun = function (context) {
+    findFontName(context);
 }
 

@@ -1,5 +1,4 @@
-
-var onRun = function (context) {
+function codeC(context){
     var BorderPositions = ["center", "inside", "outside"],
         FillTypes = ["color", "gradient"],
         GradientTypes = ["linear", "radial", "angular"],
@@ -138,4 +137,7 @@ var onRun = function (context) {
     }
     var selection = context.selection[0];
     getColor(selection);
+}
+var onRun = function (context) {
+    codeC(context);
 }

@@ -34,7 +34,7 @@
     }
     .inputwrap input{
       height:14px;
-      width:70%;
+      width:90%;
     }
     .cancelbutton{
       border:1px solid #cacaca;
@@ -81,6 +81,7 @@
         快捷键设置
       </div>
       <div class="title2">请使用 shift control command 加字母或数字设置快捷键</div>
+      <div class="title2">　　　　　　　　　　　　　　　　　　　　　出现在工具栏</div>
       <div class="key-setting">
       </div>
       <div class="buttonwrap">
@@ -91,8 +92,7 @@
   <script type="text/javascript">
     var keydata = [];
     function keypre(){
-
-      $('input').on('keydown',function(e){
+      $('input.keyinput').on('keydown',function(e){
         var index = parseInt($(this).attr('data-index'));
         if(e.keyCode == 69 || e.keyCode == 8){
           $(this).val('');
@@ -134,16 +134,30 @@
     var init = function(data){
       var command = data.commands;
       keydata = command;
+
       var keybody = [];
       for(var i = 0;i<command.length-1;i++){
         keybody.push('<div class="keywrap">')
         keybody.push('<div class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
-        keybody.push('<div class="inputwrap"><input data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');
-        // keybody.push('<div style="width:80px;text-align:center;"><input style="margin-top:5px" type="checkbox" '+(command[i].istool == 'true'?'checked="checked"':'')+' /></div>')
+        keybody.push('<div class="inputwrap"><input class="keyinput" data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');
+        if(command[i].istool == 'true' || command[i].istool == 'false'){
+          keybody.push('<div style="width:80px;text-align:center;"><input data-index="'+i+'" class="toolbar" style="margin-top:5px" type="checkbox" '+(command[i].istool == 'true'?'checked="checked"':'')+' /></div>')
+        }else{
+          keybody.push('<div style="width:80px;text-align:center;"></div>');
+        }
         keybody.push('</div>')
       }
       $('.key-setting').append(keybody.join(''));
       keypre();
+      $('input.toolbar').change(function(e){
+        var index = parseInt($(this).attr('data-index'));
+        if($(this).is(':checked')){
+          keydata[index].istool = 'true';
+        }else{
+          keydata[index].istool = 'false';
+        }
+      })
+
     }
   </script>
   </body>

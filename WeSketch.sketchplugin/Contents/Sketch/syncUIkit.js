@@ -2,34 +2,79 @@
 @import "organizer.js"
 @import "syncColor.js"
 
-var scaleOptionsMatrix;
-var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
-var colorUrlKey = "com.sketchplugins.wechat.colorurl";
+function syncUIkit(context){
 
-function chooseKit(context){
-	var settingsWindow = COSAlertWindow.new();
-	settingsWindow.addButtonWithTitle("同步");
-	settingsWindow.addButtonWithTitle("取消");
+	var scaleOptionsMatrix;
+	var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
+	var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
-	settingsWindow.setMessageText("请选择需要同步的 UI Kit 来源");
-	settingsWindow.setInformativeText("请勿同步多个 UI Kit，以免发生错误");
-    
-	var ButtonList = [];
-	var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
+	function chooseKit(context){
+		var settingsWindow = COSAlertWindow.new();
+		settingsWindow.addButtonWithTitle("同步");
+		settingsWindow.addButtonWithTitle("取消");
 
-	for(var i = 0;i < List.length;i++){
-		if(List[i].title != '' && List[i].url != ''){
-			var key = List[i].title;
-			ButtonList.push(key);
+		settingsWindow.setMessageText("请选择需要同步的 UI Kit 来源");
+		settingsWindow.setInformativeText("请勿同步多个 UI Kit，以免发生错误");
+	    
+		var ButtonList = [];
+		var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
+
+		for(var i = 0;i < List.length;i++){
+			if(List[i].title != '' && List[i].url != ''){
+				var key = List[i].title;
+				ButtonList.push(key);
+			}
+			
 		}
+		scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
+		settingsWindow.addAccessoryView(scaleOptionsMatrix);
+		return settingsWindow.runModal();
+	}
+
+	function isSame(a,b){
+		var layers = a.layers();
+		if(layers.count() != b.layers().count()){
+			return false;
+		}
+		// if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
+		// 	return false;
+		// }
+		for(var i = 0;i < layers.count(); i++){
+			var layer = layers[i];
+
+			//名字顺序也会变
+			if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
+				return false;
+			}
+			if(encodeURIComponent(layer.rect().toString()) != encodeURIComponent(b.layers()[i].rect().toString())){
+				return false;
+			}
+			
+			if(layer.class() == 'MSTextLayer'){
+				if(encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
+					return false;
+				}
+			}
+			// if(layer.class() == 'MSRectangleShape' || layer.class() == 'MSOvalShape' || layer.class() == 'MSShapePathLayer'){
+				
+			// }
+			if(layer.class() == 'MSLayerGroup' && layer.style().fills().count() != 0){
+				if(encodeURIComponent(layer.style().fills()[0].color().toString()) != encodeURIComponent(b.layers()[i].style().fills()[0].color().toString())){
+					return false;
+				}
+			}
+			if(layer.class() == 'MSLayerGroup' || layer.class() ==  'MSShapeGroup'){
+				var boolChild = isSame(layer,b.layers()[i]);
+				if(!boolChild){
+					return false;
+				}
+			}
+			
+		}
+		return true;
 		
 	}
-	scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
-	settingsWindow.addAccessoryView(scaleOptionsMatrix);
-	return settingsWindow.runModal();
-}
 
-var onRun = function(context){
 	var dialog = chooseKit(context);
 	if(dialog != '1000'){
 		return;
@@ -188,46 +233,6 @@ var onRun = function(context){
 	context.document.showMessage(alertData + tbColor);
 }
 
-function isSame(a,b){
-	var layers = a.layers();
-	if(layers.count() != b.layers().count()){
-		return false;
-	}
-	// if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
-	// 	return false;
-	// }
-	for(var i = 0;i < layers.count(); i++){
-		var layer = layers[i];
-
-		//名字顺序也会变
-		if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
-			return false;
-		}
-		if(encodeURIComponent(layer.rect().toString()) != encodeURIComponent(b.layers()[i].rect().toString())){
-			return false;
-		}
-		
-		if(layer.class() == 'MSTextLayer'){
-			if(encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
-				return false;
-			}
-		}
-		// if(layer.class() == 'MSRectangleShape' || layer.class() == 'MSOvalShape' || layer.class() == 'MSShapePathLayer'){
-			
-		// }
-		if(layer.class() == 'MSLayerGroup' && layer.style().fills().count() != 0){
-			if(encodeURIComponent(layer.style().fills()[0].color().toString()) != encodeURIComponent(b.layers()[i].style().fills()[0].color().toString())){
-				return false;
-			}
-		}
-		if(layer.class() == 'MSLayerGroup' || layer.class() ==  'MSShapeGroup'){
-			var boolChild = isSame(layer,b.layers()[i]);
-			if(!boolChild){
-				return false;
-			}
-		}
-		
-	}
-	return true;
-	
+var onRun = function(context){
+	syncUIkit(context);
 }

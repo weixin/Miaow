@@ -1,6 +1,6 @@
 @import "common.js"
 
-var onRun = function (context) {
+function textReplace(context){
     var textToFind = '',textToReplace = '';
     var textToFind2;
     var selection = context.selection;
@@ -131,4 +131,8 @@ var onRun = function (context) {
     }else{
         NSApp.displayDialog('没有找到"' + textToFind + '"');
     }
+}
+
+var onRun = function (context) {
+    textReplace(context);
 }

@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "doubleluo maybexia shenfeili",
-  "version": "1.7.0",
+  "version": "1.0.0",
   "identifier": "cn.wechat",
   "commands" : [
     {
@@ -59,7 +59,7 @@
       "identifier" : "uploadIcon",
       "script" : "uploadIcon.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "noshortcut":"true",
       "handler" : "onRun"
     },
@@ -76,7 +76,7 @@
       "identifier" : "importuikit",
       "script" : "importUIkit.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -84,7 +84,7 @@
       "identifier" : "exportuikit",
       "script" : "exportUIkit.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -100,7 +100,7 @@
       "identifier" : "exportcolor",
       "script" : "exportColor.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -108,7 +108,7 @@
       "identifier" : "importcolor",
       "script" : "importColor.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -141,7 +141,7 @@
       "script" : "codeSetting.js",
       "shortcut": "",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"",
       "noshortcut":"true"
     },
     {
@@ -150,7 +150,7 @@
       "script" : "syncSetting.js",
       "shortcut": "",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"",
       "noshortcut":"true"
     },
     {
@@ -158,18 +158,18 @@
       "identifier" : "toolbar",
       "script" : "toolbar.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handlers" : {
         "run" : "onRun"
       }
     },
     {
       "name" : "设置",
-      "identifier" : "keySetting",
-      "script" : "keySetting.js",
+      "identifier" : "setting",
+      "script" : "setting.js",
       "shortcut": "",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"",
       "noshortcut":"true"
     },
     {
@@ -178,7 +178,7 @@
       "script" : "toolSetting.js",
       "shortcut": "",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"",
       "noshortcut":"true"
     },
     {
@@ -186,6 +186,7 @@
       "identifier" : "checkforupdate",
       "script" : "checkForUpdate.js",
       "shortcut": "",
+      "istool":"",
       "handler" : "onRun",
       "noshortcut":"true"
     },
@@ -195,6 +196,7 @@
       "script" : "about.js",
       "shortcut": "",
       "handler" : "onRun",
+      "istool":"",
       "noshortcut":"true"
     },
     {
@@ -203,6 +205,7 @@
       "script" : "donation.js",
       "shortcut": "",
       "handler" : "onRun",
+      "istool":"",
       "noshortcut":"true"
     },
     {
@@ -210,6 +213,7 @@
       "identifier" : "issues",
       "script" : "issues.js",
       "shortcut": "",
+      "istool":"",
       "handler" : "onRun",
       "noshortcut":"true"
     },
@@ -259,7 +263,7 @@
     "-",
     "toolbar",
     "-",
-    "keySetting",
+    "setting",
     {
         "title": "关于",
         "items": [

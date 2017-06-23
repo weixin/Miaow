@@ -1,6 +1,6 @@
 @import "common.js"
 
-var onRun = function (context) {
+function exportSlice(context){
 	var selection = context.selection;
 	if(selection.count() == 0){
 		return NSApp.displayDialog('请选择需要导出的icon');
@@ -157,4 +157,8 @@ var onRun = function (context) {
 		}
 
 	}
+}
+
+var onRun = function (context) {
+	exportSlice(context);
 }

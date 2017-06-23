@@ -1,43 +1,43 @@
 @import "common.js";
 
-var usualKey = "com.sketchplugins.wechat.iconusual";
-var loginKey = "com.sketchplugins.wechat.iconLogin";
-var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
-var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+function iconQ(context){
+    var usualKey = "com.sketchplugins.wechat.iconusual";
+    var loginKey = "com.sketchplugins.wechat.iconLogin";
+    var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
+    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
 
 
-function iconLogin(data){
-    var r = post(['/users/login','username='+data.username + '&password='+data.password]);
-    if(r.status == 200){
-        NSUserDefaults.standardUserDefaults().setObject_forKey(data.username,loginNameKey);
+    function iconLogin(data){
+        var r = post(['/users/login','username='+data.username + '&password='+data.password]);
+        if(r.status == 200){
+            NSUserDefaults.standardUserDefaults().setObject_forKey(data.username,loginNameKey);
+        }
+        return r;
     }
-    return r;
-}
 
-function getSvg(){
-    return post(['/users/getFiles']);
-}
+    function getSvg(){
+        return post(['/users/getFiles']);
+    }
 
-function getLogin(){
-    return post(['/users/login']);
-}
+    function getLogin(){
+        return post(['/users/login']);
+    }
 
-function queryProject(){
-   var r = post(['/users/queryProject']);
-   return r;
-}
+    function queryProject(){
+       var r = post(['/users/queryProject']);
+       return r;
+    }
 
-function queryProjectIcon(projectid){
-   var r = post(['/users/queryIconByProId','projectid='+projectid]);
-   return r;
-}
+    function queryProjectIcon(projectid){
+       var r = post(['/users/queryIconByProId','projectid='+projectid]);
+       return r;
+    }
 
-function queryTypeIcon(categoryid){
-   var r = post(['/users/queryIconByCateId','categoryid='+categoryid]);
-   return r;
-}
+    function queryTypeIcon(categoryid){
+       var r = post(['/users/queryIconByCateId','categoryid='+categoryid]);
+       return r;
+    }
 
-var onRun = function(context){
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
@@ -65,7 +65,7 @@ var onRun = function(context){
         initData.isLogin = true;
     }
 
-	SMPanel({
+    SMPanel({
         url: pluginSketch + "/panel/icon.html?12",
         width: 562,
         height: 548,
@@ -78,10 +78,12 @@ var onRun = function(context){
                 openUrlInBrowser(data.link);
                 return;
             }else if(data.type == 'public' || data.type == 'private'){
-                var page = context.document.currentPage();
+                var nowcontext = uploadContext(context);
+
+                var page = nowcontext.document.currentPage();
                 data.name = data.name.replace('.svg','');
                 page.setCurrentArtboard(null);
-                var contentDrawView = context.document.currentView();
+                var contentDrawView = nowcontext.document.currentView();
                 var midX = parseInt(Math.round((contentDrawView.frame().size.width/2 - contentDrawView.horizontalRuler().baseLine())/contentDrawView.zoomValue()));
                 var midY = parseInt(Math.round((contentDrawView.frame().size.height/2 - contentDrawView.verticalRuler().baseLine())/contentDrawView.zoomValue()));
                 var x = parseInt(midX - data.width/2);
@@ -112,16 +114,16 @@ var onRun = function(context){
                 [svgFrame setX:x];
                 [svgFrame setY:y];
                 page.addLayers([importedSVGLayer]);
-                if(context.selection.length>0){
-                    [svgFrame setX:context.selection[0].absoluteRect().x()];
-                    [svgFrame setY:context.selection[0].absoluteRect().y()];
-                    context.document.showMessage('图标已导入到'+context.selection[0].name());
+                if(nowcontext.selection.length>0){
+                    [svgFrame setX:nowcontext.selection[0].absoluteRect().x()];
+                    [svgFrame setY:nowcontext.selection[0].absoluteRect().y()];
+                    nowcontext.document.showMessage('图标已导入到'+nowcontext.selection[0].name());
 
-                    for(var i = 0;i<context.selection.length;i++){
-                        context.selection[i].select_byExpandingSelection(false,false);
+                    for(var i = 0;i<nowcontext.selection.length;i++){
+                        nowcontext.selection[i].select_byExpandingSelection(false,false);
                     }
                 }else{
-                    context.document.showMessage('图标已导入到画板中央');
+                    nowcontext.document.showMessage('图标已导入到画板中央');
                 }
                 importedSVGLayer.select_byExpandingSelection(true, true);
             }else if(data.type == 'loginout'){
@@ -155,4 +157,8 @@ var onRun = function(context){
 
         }
     });
+}
+
+var onRun = function(context){
+    iconQ(context);
 }

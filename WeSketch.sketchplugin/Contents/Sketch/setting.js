@@ -15,6 +15,7 @@ var onRun = function(context){
         }
     }
 
+
 	SMPanel({
         url: pluginSketch + "/panel/keySetting.html",
         width: 362,
@@ -30,7 +31,7 @@ var onRun = function(context){
                 for(var k = 0; k < data.length;k++){
                     if(decodeURIComponent(data[k].name) == (commands[i].name)){
                         commands[i].shortcut = decodeURIComponent(data[k].shortcut);
-                        // commands[i].istool = (data[k].istool);
+                        commands[i].istool = (data[k].istool);
                     }
                 }
             }
@@ -38,7 +39,7 @@ var onRun = function(context){
 
             NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
             AppController.sharedInstance().pluginManager().reloadPlugins();
-            context.document.showMessage("快捷键设置成功");
+            context.document.showMessage("设置成功");
 
         }
     });
