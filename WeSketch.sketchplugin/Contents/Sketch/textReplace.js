@@ -47,7 +47,7 @@ function textReplace(context){
         userInterface.addAccessoryView(createRadioButtons(options, options[0]));
 
         userInterface.addTextLabelWithValue("图层生效范围：");
-        var options2 = ["整个 Page（含元素名）","仅元素中的正文内容"];
+        var options2 = ["整个 Page(含元素名)","仅元素中的正文内容"];
         userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
         
         userInterface.addButtonWithTitle('确定');

@@ -11,6 +11,7 @@ function syncColor(context){
 
 		settingsWindow.setMessageText("请选择同步的色板来源");
 		settingsWindow.setInformativeText("本次同步会覆盖当前画板");
+		settingsWindow.setInformativeText("在管理色板 -》 设置中修改同步源");
 		var ButtonList = [];
 		var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
 

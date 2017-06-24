@@ -185,7 +185,7 @@ function codeS(context){
         var returnText = [];
         
         if(getRadius(selection) != 0){
-            returnText.push('border-radius: ' + parseInt(getRadius(selection)/Rate) + 'px;');
+            returnText.push('border-radius: ' + parseInt(getRadius(selection)/Rate) + keyCode +';');
         }
         var backgroundColor = getFills(layerStyle);
         var getBorder = getBorders(layerStyle);

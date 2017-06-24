@@ -14,7 +14,8 @@ function syncUIkit(context){
 		settingsWindow.addButtonWithTitle("取消");
 
 		settingsWindow.setMessageText("请选择需要同步的 UI Kit 来源");
-		settingsWindow.setInformativeText("请勿同步多个 UI Kit，以免发生错误");
+		settingsWindow.setInformativeText("请勿在同一画板同步多个 UI Kit，以免发生错误");
+		settingsWindow.setInformativeText("在管理 UI Kit -》 设置中修改同步源");
 	    
 		var ButtonList = [];
 		var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;

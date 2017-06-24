@@ -12,7 +12,7 @@
 @import 'codeC.js';
 
 
-function toolbar(context){
+function toolbar(context,auto){
     var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
 
@@ -69,8 +69,17 @@ function toolbar(context){
 
 
         var toolbarwidth = (obj.length * 53) + 46;
-        var view = context.document.currentView();
-        Toolbar.setFrame_display(NSMakeRect(283, view.frame().size.height-5, toolbarwidth, 63), false);
+
+        var locationx = 0;
+        if(!auto){
+            var view = context.document.currentView();
+            locationx = view.frame().size.height - 5;
+        }else{
+            // locationx = 300;
+            locationx = NSScreen.mainScreen().frame().size.height - 162;
+        }   
+        
+        Toolbar.setFrame_display(NSMakeRect(285, locationx, toolbarwidth, 63), false);
         Toolbar.setMovableByWindowBackground(true);
         Toolbar.becomeKeyWindow();
         Toolbar.setLevel(NSFloatingWindowLevel);
@@ -85,8 +94,8 @@ function toolbar(context){
                         Toolbar.close();
                         if(toolbarAuto != 'false'){
                             var settingsWindow = COSAlertWindow.new();
-                            settingsWindow.addButtonWithTitle("确定");
-                            settingsWindow.addButtonWithTitle("取消");
+                            settingsWindow.addButtonWithTitle("更换手动");
+                            settingsWindow.addButtonWithTitle("保持自动");
                             settingsWindow.setMessageText("提示");
                             settingsWindow.addTextLabelWithValue("下次不再希望启动 Sketch 时自动打开工具栏？");
                             settingsWindow.addTextLabelWithValue("(可在设置中自定义配置工具栏)");
@@ -218,8 +227,6 @@ function toolbar(context){
 
 
         threadDictionary[identifier] = Toolbar;
-
-        // Toolbar.center();
         Toolbar.makeKeyAndOrderFront(nil);
     }
 }

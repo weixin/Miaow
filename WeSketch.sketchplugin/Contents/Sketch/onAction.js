@@ -49,7 +49,7 @@ var onOpenDocument = function(context) {
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
     var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || '';
     if(toolbarAuto != 'false'){
-        toolbar(context);
+        toolbar(context,true);
     }
     if(updateAuto != 'false'){
         checkForUpdate(context,true);

@@ -23,7 +23,8 @@ function exportSlice(context){
 	settingsWindow.addButtonWithTitle("取消");
 	settingsWindow.setMessageText("补齐宽高导出图片");
 
-    settingsWindow.addTextLabelWithValue("图片尺寸小于填写宽高部分用透明色补充，图片居中不会被拉伸");
+    settingsWindow.addTextLabelWithValue("图片尺寸小于填写宽高部分用透明色补充");
+    settingsWindow.addTextLabelWithValue("选中元素居中于导出图片且不会被拉伸");
     settingsWindow.addTextLabelWithValue("宽                            高");
 
 	var flowIndicatorThicknessWell = NSTextField.alloc().initWithFrame(NSMakeRect(0, 0, 44, 23));
