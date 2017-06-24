@@ -19,6 +19,7 @@
     }
     .title{
       font-size: 14px;
+      margin: 10px 0;
     }
     .keytitle{
       width:95px;
@@ -34,7 +35,7 @@
     }
     .inputwrap input{
       height:14px;
-      width:90%;
+      width:100%;
     }
     .cancelbutton{
       border:1px solid #cacaca;
@@ -70,6 +71,7 @@
       box-sizing:border-box;
     }
     .title2{
+      font-size: 12px;
       margin:10px 0;
     }
 
@@ -78,10 +80,22 @@
   <body >
     <div class="body">
       <div class="title">
-        快捷键设置
+        自动更新
       </div>
-      <div class="title2">请使用 shift control command 加字母或数字设置快捷键</div>
-      <div class="title2">　　　　　　　　　　　　　　　　　　　　　出现在工具栏</div>
+      <div>
+        <input type="checkbox" id="updateauto"/><label for="updateauto">　Sketch 打开时自动检查更新</label>
+      </div>
+
+      <div class="title">
+        工具栏
+      </div>
+      <div>
+        <input type="checkbox" id="toolbarauto"/><label for="toolbarauto">　Sketch 打开时自动开启工具栏</label>
+      </div>
+      <div class="title">
+        快捷键
+      </div>
+      <div class="title2">功能名称　　　　快捷键　　　　　　　　　出现在工具栏</div>
       <div class="key-setting">
       </div>
       <div class="buttonwrap">
@@ -127,7 +141,13 @@
     }
 
     $('.savebutton').on('click',function(){
-      SMAction('submit',keydata);
+      var updateauto = $('#updateauto').is(':checked')?'true':'false';
+      var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
+      var obj = {};
+      obj.keydata = keydata;
+      obj.updateAuto = updateauto;
+      obj.toolbarAuto = toolbarauto;
+      SMAction('submit',obj);
       SMAction('close');
     })
     
@@ -146,6 +166,12 @@
           keybody.push('<div style="width:80px;text-align:center;"></div>');
         }
         keybody.push('</div>')
+      }
+      if(data.toolbarAuto != 'false'){
+        $('#toolbarauto').attr('checked','checked');
+      }
+      if(data.updateAuto != 'false'){
+        $('#updateauto').attr('checked','checked');
       }
       $('.key-setting').append(keybody.join(''));
       keypre();

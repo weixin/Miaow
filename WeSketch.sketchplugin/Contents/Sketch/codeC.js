@@ -60,6 +60,37 @@ function codeC(context){
 
         return fillsData;
     }
+    function getBorders(style) {
+        var bordersData = [],
+            border, borderIter = style.borders().objectEnumerator();
+        while (border = borderIter.nextObject()) {
+            if (border.isEnabled()) {
+                var fillType = FillTypes[border.fillType()],
+                    borderData = {
+                        fillType: fillType,
+                        position: BorderPositions[border.position()],
+                        thickness: border.thickness()
+                    };
+
+                switch (fillType) {
+                    case "color":
+                        borderData.color = colorToJSON(border.color());
+                        break;
+
+                    case "gradient":
+                        borderData.gradient = gradientToJSON(border.gradient());
+                        break;
+
+                    default:
+                        continue;
+                }
+
+                bordersData.push(borderData);
+            }
+        }
+
+        return bordersData;
+    }
     function colorToJSON(color) {
         var obj =  {
             r: Math.round(color.red() * 255),
@@ -101,6 +132,7 @@ function codeC(context){
         var layerStyle = selection.style();
         var returnText = [];
         var backgroundColor = getFills(layerStyle);
+        var borderColor = getBorders(layerStyle);
        
         if(backgroundColor.length>0){
             if(backgroundColor[0].fillType == 'color'){
@@ -116,10 +148,20 @@ function codeC(context){
                         return z;
                     }
                 }
-                var midColor = bzone6(parseInt((parseInt('0x'+backgroundColor[0].gradient.colorStops[0].color.replace('#','')) + parseInt('0x'+backgroundColor[0].gradient.colorStops[1].color.replace('#','')))/2).toString(16));
-                returnText.push('#'+midColor);
+                var param = [];
+                var to = backgroundColor[0].gradient.to;
+                var from = backgroundColor[0].gradient.from;
+                param.push(parseInt(90-180*Math.atan(Math.abs((to.y-from.y))/Math.abs((to.x-from.x)))/Math.PI)+'deg');
+                var colorStops = backgroundColor[0].gradient.colorStops;
+                for(var i = 0;i<colorStops.length;i++){
+                    param.push(colorStops[i].color + ' ' + parseInt(colorStops[i].position*100) + '%');
+                }
+                returnText.push('linear-gradient(' + param.join(',') + ')');
             }
+        }else if(borderColor.length>0){
+            returnText.push(borderColor[0].color);
         }
+
         return returnText.join('');
     }
     function paste(text){

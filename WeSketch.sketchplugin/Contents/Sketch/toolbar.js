@@ -11,7 +11,11 @@
 @import 'codeS.js';
 @import 'codeC.js';
 
-var onRun = function(context){
+
+function toolbar(context){
+    var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
+    var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
+
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library");
 
@@ -65,7 +69,8 @@ var onRun = function(context){
 
 
         var toolbarwidth = (obj.length * 53) + 46;
-        Toolbar.setFrame_display(NSMakeRect(0, 0, toolbarwidth, 63), false);
+        var view = context.document.currentView();
+        Toolbar.setFrame_display(NSMakeRect(283, view.frame().size.height-5, toolbarwidth, 63), false);
         Toolbar.setMovableByWindowBackground(true);
         Toolbar.becomeKeyWindow();
         Toolbar.setLevel(NSFloatingWindowLevel);
@@ -78,6 +83,19 @@ var onRun = function(context){
                         coscript.setShouldKeepAround(false);
                         threadDictionary.removeObjectForKey(identifier);
                         Toolbar.close();
+                        if(toolbarAuto != 'false'){
+                            var settingsWindow = COSAlertWindow.new();
+                            settingsWindow.addButtonWithTitle("确定");
+                            settingsWindow.addButtonWithTitle("取消");
+                            settingsWindow.setMessageText("提示");
+                            settingsWindow.addTextLabelWithValue("下次不再希望启动 Sketch 时自动打开工具栏？");
+                            settingsWindow.addTextLabelWithValue("(可在设置中自定义配置工具栏)");
+                            var response = settingsWindow.runModal();
+                            if (response == "1000") {
+                                NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
+                            }
+                        }
+                        
                     });
         contentView.addSubview(closeButton);
 
@@ -201,7 +219,11 @@ var onRun = function(context){
 
         threadDictionary[identifier] = Toolbar;
 
-        Toolbar.center();
+        // Toolbar.center();
         Toolbar.makeKeyAndOrderFront(nil);
     }
+}
+
+var onRun = function(context){
+    toolbar(context);
 }

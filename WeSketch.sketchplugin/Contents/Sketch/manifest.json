@@ -1,6 +1,6 @@
 {
   "name": "WeSketch",
-  "author": "doubleluo maybexia shenfeili",
+  "author": "wechat",
   "version": "1.0.0",
   "identifier": "cn.wechat",
   "commands" : [
@@ -220,10 +220,11 @@
     {
       "handlers": {
               "actions": {
-                  "SelectionChanged.finish" : "onSelectionChanged"
+                  "SelectionChanged.finish" : "onSelectionChanged",
+                  "OpenDocument" : "onOpenDocument"
               }
           },
-      "script": "selectionChanged.js"
+      "script": "onAction.js"
     }
   ],
   "menu": {

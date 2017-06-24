@@ -1,7 +1,8 @@
 @import "common.js";
 
-
 var onRun = function(context){
+    var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
+    var updateAutoShow = "com.sketchplugins.wechat.updateAutoShow";
 
     var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path(),
         manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil),
@@ -15,30 +16,39 @@ var onRun = function(context){
         }
     }
 
+    var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
+    var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || '';
+
 
 	SMPanel({
-        url: pluginSketch + "/panel/keySetting.html",
+        url: pluginSketch + "/panel/setting.html",
         width: 362,
         height: 548,
         data:{
-            commands:obj
+            commands:obj,
+            toolbarAuto:encodeURIComponent(toolbarAuto),
+            updateAuto:encodeURIComponent(updateAuto)
         },
         hiddenClose: false,
         floatWindow: true,
-        identifier: "keySetting",
+        identifier: "setting",
         callback: function( data ){
+            var keydata = data.keydata;
             for(var i = 0;i < commands.length;i++){
-                for(var k = 0; k < data.length;k++){
-                    if(decodeURIComponent(data[k].name) == (commands[i].name)){
-                        commands[i].shortcut = decodeURIComponent(data[k].shortcut);
-                        commands[i].istool = (data[k].istool);
+                for(var k = 0; k < keydata.length;k++){
+                    if(decodeURIComponent(keydata[k].name) == (commands[i].name)){
+                        commands[i].shortcut = decodeURIComponent(keydata[k].shortcut);
+                        commands[i].istool = (keydata[k].istool);
                     }
                 }
             }
             manifest.commands = commands;
-
             NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
             AppController.sharedInstance().pluginManager().reloadPlugins();
+            
+            NSUserDefaults.standardUserDefaults().setObject_forKey(data.updateAuto, updateAutoShow);
+            NSUserDefaults.standardUserDefaults().setObject_forKey(data.toolbarAuto, toolbarAutoShow);
+
             context.document.showMessage("设置成功");
 
         }
