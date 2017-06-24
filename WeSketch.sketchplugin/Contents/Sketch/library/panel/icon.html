@@ -340,8 +340,18 @@
       font-size: 12px;
       cursor: pointer;
     }
+    .author{
+      flex:1;
+      text-align: right;
+      font-size: 13px;
+      color:#555555;
+    }
     #exit{
       cursor: pointer;
+    }
+    .bqts{
+      margin-left: 15px;
+      font-size: 12px;
     }
     </style>
   </head>
@@ -380,6 +390,9 @@
           <div class="messagebox-content2">大小</div>
           <div class="">
             <input id="size" class="tools-input" type="text" value="64" />
+          </div>
+          <div class="author" >
+            <span id="author"></span>
           </div>
         </div>
       </div>
@@ -436,14 +449,17 @@
   var isLogin = false;
 
   function appendDom(data){
+    $('.bqts').remove();
     $('.content-wrap').empty();
     var dom = [];
+    dom.push('<div class="bqts">公共 icon 收集自网络，版权归作者所有</div>');
     for(var i = 0;i < data.length;i++){
       dom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
   function appendDom2(data){
+    $('.bqts').remove();
     var typecount = -1;
     var dom = [];
     var typeobj = {};
@@ -494,7 +510,9 @@
       choicedata.width = parseInt(twh[0]);
       SMAction('submit',choicedata);
     }
-
+  }).on('mouseenter mouseout','.content-body',function(){
+    var i = parseInt($(this).attr('data-i'));
+    $('#author').text('作者：'+savedata[i].author);
   })
 
   function searchK(inputKey){
@@ -538,9 +556,11 @@
       $('svg').css('color','#' + val);
     }
   }).on('blur',function(){
+    var val = $(this).val();
     if(val.length == 3){
-      $('#color').val(a[0] + a[0] + a[1] + a[1] + a[2] + a[2]);
+      $('#color').val(val[0]+val[0]+val[1]+val[1]+val[2]+val[2]);
     }else if(val.length == 6){
+      
     }else{
       $('#color').val('000000');
     }
