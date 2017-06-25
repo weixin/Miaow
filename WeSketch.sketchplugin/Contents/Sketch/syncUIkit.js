@@ -89,7 +89,7 @@ function syncUIkit(context){
 	var tbColor = '';
 	for(var co = 0;co<colorList.length;co ++){
 		if(colorList[co].title == List[index].title){
-			SyncColor(context,colorList[co].url);
+			SyncColor2(context,colorList[co].url);
 			tbColor = '\r\n色板已同步到 Document Colors，请重新打开色板查看';
 			break;
 		}

@@ -1,5 +1,42 @@
 @import "common.js"
 
+var SyncColor2 = function(context,UIKITURL) {
+	var app = NSApp.delegate();
+	var doc = context.document;
+	var theResponseData = request(UIKITURL);
+	
+	var colorContents = "";
+
+	theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
+	
+	var dataPre = [theText substringToIndex:1];
+	if (dataPre == "<"){
+		NSApp.displayDialog("数据出错，请检查json文件");
+		return;
+	}else{
+		colorContents = theText		
+	}
+
+	var paletteContents = JSON.parse(colorContents.toString());
+	var palette = paletteContents.colors;
+		
+	var colors = [];
+	
+	for (var i = 0; i < palette.length; i++) {
+		colors.push(MSColor.colorWithRed_green_blue_alpha(
+			palette[i].red/255,
+			palette[i].green/255,
+			palette[i].blue/255,
+			palette[i].alpha
+		));	
+	}
+	
+	doc.documentData().assets().setColors(colors);
+	
+	app.refreshCurrentDocument();
+
+}
+
 function syncColor(context){
 	var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 	var scaleOptionsMatrix;
@@ -26,42 +63,7 @@ function syncColor(context){
 		return settingsWindow.runModal();
 	}
 
-	var SyncColor = function(context,UIKITURL) {
-		var app = NSApp.delegate();
-		var doc = context.document;
-		var theResponseData = request(UIKITURL);
-		
-		var colorContents = "";
 
-		theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
-		
-		var dataPre = [theText substringToIndex:1];
-		if (dataPre == "<"){
-			NSApp.displayDialog("数据出错，请检查json文件");
-			return;
-		}else{
-			colorContents = theText		
-		}
-
-		var paletteContents = JSON.parse(colorContents.toString());
-		var palette = paletteContents.colors;
-			
-		var colors = [];
-		
-		for (var i = 0; i < palette.length; i++) {
-			colors.push(MSColor.colorWithRed_green_blue_alpha(
-				palette[i].red/255,
-				palette[i].green/255,
-				palette[i].blue/255,
-				palette[i].alpha
-			));	
-		}
-		
-		doc.documentData().assets().setColors(colors);
-		
-		app.refreshCurrentDocument();
-
-	}
 
 	var app = NSApp.delegate();
 	var doc = context.document;
@@ -75,7 +77,7 @@ function syncColor(context){
 	
 	var index = [uikit tag];
 	var UIKITURL = List[index].url;
-	SyncColor(context,UIKITURL);
+	SyncColor2(context,UIKITURL);
 	context.document.showMessage("色板已同步到 Document Colors，请重新打开色板查看");
 }
 

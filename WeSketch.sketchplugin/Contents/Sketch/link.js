@@ -905,7 +905,7 @@ function getLink(context,refursh){
 	if (selection.count() != 1 && selection.count() != 2) {
 		redrawConnections(context);
 		if(!refursh){
-			return NSApp.displayDialog('画板已刷新，请同时选中元素和 Artboard 添加连线，只选中元素可删除连线');
+			return NSApp.displayDialog('画板已刷新\n同时选中两个元素添加连线，只选中一个元素可删除连线');
 		}
 	}
 

@@ -279,7 +279,7 @@ function getFlag(context,refrush){
 	if (context.selection.count()!=1) {
 		flags = drawFunction(doc,null);
 		if(!refrush){
-			NSApp.displayDialog('画板已刷新，请只选择一个元素增删标志位');
+			NSApp.displayDialog('画板已刷新\n请选择一个元素增删标志位');
 		}
 	}else{
 		flags = drawFunction(doc,context.selection[0]);
