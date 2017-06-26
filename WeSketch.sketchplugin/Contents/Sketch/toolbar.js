@@ -68,7 +68,7 @@ function toolbar(context,auto){
         Toolbar.setTitlebarAppearsTransparent(true);
 
 
-        var toolbarwidth = (obj.length * 53) + 46;
+        var toolbarwidth = (obj.length * 53) + 52;
 
         var locationx = 0;
         if(!auto){
@@ -79,7 +79,7 @@ function toolbar(context,auto){
             locationx = NSScreen.mainScreen().frame().size.height - 162;
         }   
         
-        Toolbar.setFrame_display(NSMakeRect(285, locationx, toolbarwidth, 63), false);
+        Toolbar.setFrame_display(NSMakeRect(285, locationx, toolbarwidth, 65), false);
         Toolbar.setMovableByWindowBackground(true);
         Toolbar.becomeKeyWindow();
         Toolbar.setLevel(NSFloatingWindowLevel);
@@ -87,7 +87,7 @@ function toolbar(context,auto){
 
 
         var contentView = Toolbar.contentView();
-        var closeButton = addButton( NSMakeRect(14, 22, 18, 18), "close",
+        var closeButton = addButton( NSMakeRect(20, 24, 18, 18), "close",
                     function(sender){
                         coscript.setShouldKeepAround(false);
                         threadDictionary.removeObjectForKey(identifier);
@@ -111,7 +111,7 @@ function toolbar(context,auto){
         var xlocation = 46;
 
         if(obj.indexOf('link') > -1){
-            var linkButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "link",
+            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "link",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             getLink(nowcontext);      
@@ -123,7 +123,7 @@ function toolbar(context,auto){
 
         if(obj.indexOf('flag') > -1){
 
-            var flagButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "flag",
+            var flagButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "flag",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             getFlag(nowcontext);
@@ -133,7 +133,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('findfontandselect') > -1){
-            var fontButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "font",
+            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "font",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             findFontName(nowcontext);
@@ -143,7 +143,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('findtextandselect') > -1){
-            var textButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "text",
+            var textButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "text",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             textReplace(nowcontext);
@@ -154,7 +154,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('findcolorandreplace') > -1){
-            var colorButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "color",
+            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "color",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             colorReplace(nowcontext);
@@ -165,7 +165,7 @@ function toolbar(context,auto){
 
 
         if(obj.indexOf('iconQ') > -1){
-            var iconButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "icon",
+            var iconButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "icon",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             iconQ(nowcontext);
@@ -175,7 +175,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('syncuikit') > -1){
-            var syncuiButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "syncui",
+            var syncuiButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "syncui",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             syncUIkit(nowcontext);
@@ -186,7 +186,7 @@ function toolbar(context,auto){
 
 
         if(obj.indexOf('synccolor') > -1){
-            var synccolorButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "synccolor",
+            var synccolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "synccolor",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             syncColor(nowcontext);
@@ -197,7 +197,7 @@ function toolbar(context,auto){
 
 
         if(obj.indexOf('exportSlice') > -1){
-            var cutButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "cut",
+            var cutButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "cut",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             exportSlice(nowcontext);
@@ -207,7 +207,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('codeC') > -1){
-            var codecolorButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "codecolor",
+            var codecolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codecolor",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             codeC(nowcontext);
@@ -217,7 +217,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('codeS') > -1){
-            var codestyleButton = addButton( NSMakeRect(xlocation+3, 10, 45, 45), "codestyle",
+            var codestyleButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codestyle",
                         function(sender){
                             var nowcontext = uploadContext(context);
                             codeS(nowcontext);

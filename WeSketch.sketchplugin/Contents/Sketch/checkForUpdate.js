@@ -4,9 +4,11 @@ function checkForUpdate(context,auto){
 	if(!auto){
 		context.document.showMessage("正在检查更新...");
 	}
-	var json = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfURL(NSURL.URLWithString(getConfig('config',context).VERSION)), 0, nil),
-	currentVersion = json.valueForKey("currentVersion"),
-	message = json.valueForKey("message"),
+	var returnData = networkRequest([getConfig('config',context).VERSION])
+	var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+	jsonData = JSON.parse(jsonData);
+	var currentVersion = jsonData.currentVersion,
+	message = jsonData.message,
 	installedVersion = context.plugin.version();
 	var updateAvailable = true;
 	if(currentVersion == installedVersion){
@@ -31,7 +33,7 @@ function checkForUpdate(context,auto){
 
 	var response = updateAlert.runModal();
 	if (updateAvailable && response == "1000") {
-		var websiteURL = NSURL.URLWithString(json.valueForKey("websiteURL"));
+		var websiteURL = NSURL.URLWithString(jsonData.websiteURL);
 		NSWorkspace.sharedWorkspace().openURL(websiteURL);
 	}
 }
