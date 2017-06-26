@@ -1,8 +1,11 @@
 # WeSketch [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
-> 一个强大的 Sketch 插件合集，由微信设计团队量身打造，让设计师和开发者更佳高效的使用 Sketch，  
+> 一个强大的 Sketch 插件合集，由微信设计团队量身打造，让设计师和开发者更佳高效的使用 Sketch。
+
 > 致力于更好的设计团队协作功能，如：UI Kit 同步、色板同步等。
+
 > 致力于更快速的交互设计，如：图标库、自动连线、标记注释、全局替换文字、字体、颜色。
+
 > 致力于更好的重构还原，如：补齐宽高导出图片、导出对应小程序代码等。
 
 ## 下载 & 安装
