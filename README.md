@@ -15,7 +15,7 @@
 
 #### 菜单栏
 
-![Screenshot1](https://user-images.githubusercontent.com/1049575/27523987-c77cd47c-5a63-11e7-8a18-4931c995ebd9.png)
+![Screenshot1](https://user-images.githubusercontent.com/1049575/27524016-00be162e-5a64-11e7-8e00-fb2ec1521c66.png)
 
 #### 工具栏
 
