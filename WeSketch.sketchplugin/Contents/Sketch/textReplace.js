@@ -103,6 +103,7 @@ function textReplace(context){
             case MSPage:
             case MSLayerGroup:
             case MSArtboardGroup:
+            case MSSymbolMaster:
                 var sublayers = [layer layers];
                 for (var i = 0; i < [sublayers count]; i++) {
                     var sublayer = [sublayers objectAtIndex: i];

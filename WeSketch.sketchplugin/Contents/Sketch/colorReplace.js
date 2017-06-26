@@ -5,6 +5,7 @@ function colorReplace(context){
    var document    = context.document;
    var currentPage = [document currentPage];
    var layerCount  = selection.count();
+   var selectedLayer;
 
    var colorToFind = '',
        colorToFind2 = '',
@@ -21,7 +22,7 @@ function colorReplace(context){
     colorToFind = colorToFind2 = '';
    }
    else {
-     var selectedLayer = getSelectedLayer(selection.firstObject());
+     selectedLayer = getSelectedLayer(selection.firstObject());
      var selectedLayerType = selectedLayer.class();
      colorToFind = colorToFind2 = getColour(selectedLayer);
      if(colorToFind == undefined){
@@ -116,7 +117,6 @@ function colorReplace(context){
      }
      function setBorderColor(layer,hexColour){
        if (hexColour == colorToFind) {
-         log(layer.style().borders());
          var fill = layer.style().borders().firstObject();
          if (fill != undefined) {
            replaceCount++;
@@ -125,7 +125,6 @@ function colorReplace(context){
        }
      }
      var layerColour = getColour(layer);
-     log(layerColour);
      var borderColour = getboderColor(layer);
      if(!layerColour && !borderColour){
        return;
@@ -144,8 +143,18 @@ function colorReplace(context){
    }
 
    function setTextColor(layer,colorToReplace){
-     replaceCount++;
-     layer.textColor = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+    var textcolor = layer.textColor();
+    var fill = layer.style().fills().firstObject();
+    if (fill != undefined && fill.isEnabled()) {
+      textcolor = fill.color();
+    }
+    if (textcolor != undefined) {
+      textcolor = textcolor.immutableModelObject();
+    }
+    if('#'+textcolor.hexValue() == colorToFind){
+      replaceCount++;
+      layer.textColor = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+    }
    }
 
    function getSelectedLayer(selectedLayer) {
@@ -243,6 +252,7 @@ function colorReplace(context){
       case MSPage:
       case MSLayerGroup:
       case MSArtboardGroup:
+      case MSSymbolMaster:
         var sublayers = [layer layers];
         for (var i = 0; i < [sublayers count]; i++) {
           var sublayer = [sublayers objectAtIndex: i];

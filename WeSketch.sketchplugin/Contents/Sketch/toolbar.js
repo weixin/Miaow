@@ -94,13 +94,15 @@ function toolbar(context,auto){
                         Toolbar.close();
                         if(toolbarAuto != 'false'){
                             var settingsWindow = COSAlertWindow.new();
-                            settingsWindow.addButtonWithTitle("更换手动");
-                            settingsWindow.addButtonWithTitle("保持自动");
-                            settingsWindow.setMessageText("提示");
-                            settingsWindow.addTextLabelWithValue("下次不再希望启动 Sketch 时自动打开工具栏？");
+                            settingsWindow.addButtonWithTitle("开启");
+                            settingsWindow.addButtonWithTitle("不开启");
+                            settingsWindow.setMessageText("下次不再希望启动 Sketch 时自动打开工具栏？");
+                            settingsWindow.addTextLabelWithValue("Sketch 启动时，是否自动开启工具栏？");
                             settingsWindow.addTextLabelWithValue("(可在设置中自定义配置工具栏)");
                             var response = settingsWindow.runModal();
                             if (response == "1000") {
+                                NSUserDefaults.standardUserDefaults().setObject_forKey('true',toolbarAutoShow);
+                            }else{
                                 NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
                             }
                         }
