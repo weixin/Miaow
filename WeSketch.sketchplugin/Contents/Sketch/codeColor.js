@@ -1,4 +1,7 @@
+@import "common.js"
+
 function codeC(context){
+    var i18 = _(context).codeColor;
     var BorderPositions = ["center", "inside", "outside"],
         FillTypes = ["color", "gradient"],
         GradientTypes = ["linear", "radial", "angular"],
@@ -169,13 +172,13 @@ function codeC(context){
             var pasteBoard = [NSPasteboard generalPasteboard];
             [pasteBoard declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
             [pasteBoard setString:text forType:NSPasteboardTypeString];
-            context.document.showMessage("颜色已复制到剪贴板");
+            context.document.showMessage(i18.m1);
         }else{
-            context.document.showMessage("您选择的元素无法获取颜色");
+            context.document.showMessage(i18.m2);
         }
     }
     if(context.selection.count()<1){
-        return context.document.showMessage("请先选择要获取颜色的元素");
+        return context.document.showMessage(i18.m3);
     }
     var selection = context.selection[0];
     getColor(selection);

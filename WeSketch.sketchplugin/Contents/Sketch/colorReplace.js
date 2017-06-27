@@ -1,6 +1,8 @@
 @import "common.js"
 
 function colorReplace(context){
+  var i18 = _(context).colorReplace;
+   
    var selection   = context.selection;
    var document    = context.document;
    var currentPage = [document currentPage];
@@ -170,9 +172,9 @@ function colorReplace(context){
    function createUserInterface(colorToFind) {
      userInterface = COSAlertWindow.new(); // 创建弹框
 
-     userInterface.setMessageText("颜色批量替换");
+     userInterface.setMessageText(i18.m1);
 
-     userInterface.addTextLabelWithValue("查找颜色(默认值为当前选中元素颜色)：");
+     userInterface.addTextLabelWithValue(i18.m2+"：");
      findedColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
      var findedColorHex = colorToFind ? '#' + colorToFind.hexValue() : "#1AAD19";
      var findedColorAlpha = 1;
@@ -184,7 +186,7 @@ function colorReplace(context){
      findedColorView.addSubview(findedColorWell);
      userInterface.addAccessoryView(findedColorView);
 
-     userInterface.addTextLabelWithValue("替换为：");
+     userInterface.addTextLabelWithValue(i18.m3+"：");
      replaceColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0, 0, 50, 25));
      var replaceColorHex = colorToFind ? '#' + colorToFind.hexValue() : "#1AAD19"; // #1AAD19 同设置中的默认值
      var replaceColorAlpha = 1;
@@ -196,16 +198,16 @@ function colorReplace(context){
      replaceColorView.addSubview(replaceColorWell);
      userInterface.addAccessoryView(replaceColorView);
 
-     userInterface.addTextLabelWithValue("生效范围：");
-     var options = ["所有 Page","当前工作 Page"];
+     userInterface.addTextLabelWithValue(i18.m4+"：");
+     var options = [i18.m5,i18.m6];
      userInterface.addAccessoryView(createRadioButtons(options, options[0]));
 
-     userInterface.addTextLabelWithValue("生效元素：");
-     var options2 = ["同类型元素","所有元素"];
+     userInterface.addTextLabelWithValue(i18.m7+"：");
+     var options2 = [i18.m8,i18.m9];
      userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
 
-     userInterface.addButtonWithTitle('确定');
-     userInterface.addButtonWithTitle('取消');
+     userInterface.addButtonWithTitle(i18.m10);
+     userInterface.addButtonWithTitle(i18.m11);
 
      return userInterface.runModal();
    }

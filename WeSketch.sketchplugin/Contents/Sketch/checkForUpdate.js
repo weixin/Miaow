@@ -1,8 +1,8 @@
 @import "common.js"
-
 function checkForUpdate(context,auto){
+	var i18 = _(context).checkForUpdate;
 	if(!auto){
-		context.document.showMessage("正在检查更新...");
+		context.document.showMessage(i18.m1 + '...');
 	}
 	var returnData = networkRequest([getConfig('config',context).VERSION])
 	var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
@@ -19,16 +19,16 @@ function checkForUpdate(context,auto){
 	}
 	var updateAlert = COSAlertWindow.new();
 
-	updateAlert.setMessageText(updateAvailable ? "发现新版本" : "已经是最新版啦 👍");
+	updateAlert.setMessageText(updateAvailable ? i18.m2 : i18.m3);
 	if (updateAvailable) {
-		updateAlert.setInformativeText("WeSketch 最新版本为 " + currentVersion + " 当前版本为 " + installedVersion + "，是否自动下载更新？");
+		updateAlert.setInformativeText(i18.m4 + currentVersion + i18.m5 + installedVersion + "，" + i18.m6 + "？");
 		if(message){
 			updateAlert.setInformativeText(message);
 		}
-		updateAlert.addButtonWithTitle("升级");
-		updateAlert.addButtonWithTitle("暂不");
+		updateAlert.addButtonWithTitle(i18.m7);
+		updateAlert.addButtonWithTitle(i18.m8);
 	} else {
-		updateAlert.addButtonWithTitle("确定");
+		updateAlert.addButtonWithTitle(i18.m9);
 	}
 
 	var response = updateAlert.runModal();

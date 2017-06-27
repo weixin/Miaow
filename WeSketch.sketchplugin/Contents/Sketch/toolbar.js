@@ -1,18 +1,20 @@
 @import 'common.js';
 @import 'flag.js';
 @import 'link.js';
-@import 'findFontName.js';
+@import 'fontReplace.js';
 @import 'textReplace.js';
 @import 'colorReplace.js';
 @import 'iconQ.js';
 @import 'syncUIkit.js';
 @import 'syncColor.js';
 @import 'exportSlice.js';
-@import 'codeS.js';
-@import 'codeC.js';
+@import 'codeStyle.js';
+@import 'codeColor.js';
 
 
 function toolbar(context,auto){
+    var i18 = _(context).toolbar;
+
     var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
 
@@ -94,11 +96,11 @@ function toolbar(context,auto){
                         Toolbar.close();
                         if(toolbarAuto != 'false'){
                             var settingsWindow = COSAlertWindow.new();
-                            settingsWindow.addButtonWithTitle("开启");
-                            settingsWindow.addButtonWithTitle("不开启");
-                            settingsWindow.setMessageText("下次不再希望启动 Sketch 时自动打开工具栏？");
-                            settingsWindow.addTextLabelWithValue("Sketch 启动时，是否自动开启工具栏？");
-                            settingsWindow.addTextLabelWithValue("(可在设置中自定义配置工具栏)");
+                            settingsWindow.addButtonWithTitle(i18.m1);
+                            settingsWindow.addButtonWithTitle(i18.m2);
+                            settingsWindow.setMessageText(i18.m3);
+                            settingsWindow.addTextLabelWithValue(i18.m4);
+                            settingsWindow.addTextLabelWithValue(i18.m5);
                             var response = settingsWindow.runModal();
                             if (response == "1000") {
                                 NSUserDefaults.standardUserDefaults().setObject_forKey('true',toolbarAutoShow);
@@ -134,17 +136,17 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('findfontandselect') > -1){
+        if(obj.indexOf('fontReplace') > -1){
             var fontButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "font",
                         function(sender){
                             var nowcontext = uploadContext(context);
-                            findFontName(nowcontext);
+                            fontReplace(nowcontext);
                         });
             contentView.addSubview(fontButton);
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('findtextandselect') > -1){
+        if(obj.indexOf('textReplace') > -1){
             var textButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "text",
                         function(sender){
                             var nowcontext = uploadContext(context);
@@ -155,7 +157,7 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('findcolorandreplace') > -1){
+        if(obj.indexOf('colorReplace') > -1){
             var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "color",
                         function(sender){
                             var nowcontext = uploadContext(context);
@@ -208,7 +210,7 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('codeC') > -1){
+        if(obj.indexOf('codeColor') > -1){
             var codecolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codecolor",
                         function(sender){
                             var nowcontext = uploadContext(context);
@@ -218,7 +220,7 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('codeS') > -1){
+        if(obj.indexOf('codeStyle') > -1){
             var codestyleButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codestyle",
                         function(sender){
                             var nowcontext = uploadContext(context);

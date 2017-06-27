@@ -1,6 +1,8 @@
 @import "common.js";
 
 function iconQ(context){
+    var i18 = _(context).iconQ;
+
     var usualKey = "com.sketchplugins.wechat.iconusual";
     var loginKey = "com.sketchplugins.wechat.iconLogin";
     var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
@@ -52,7 +54,7 @@ function iconQ(context){
     }
      
 
-    var initData = {data:baseSvg,isLogin:isLogin};
+    var initData = {data:baseSvg,isLogin:isLogin,i18:i18};
     if(isLogin == false || isLogin.status != 200){
         initData.isLogin = false;
     }else{
@@ -117,13 +119,13 @@ function iconQ(context){
                 if(nowcontext.selection.length>0){
                     [svgFrame setX:nowcontext.selection[0].absoluteRect().x()];
                     [svgFrame setY:nowcontext.selection[0].absoluteRect().y()];
-                    nowcontext.document.showMessage('图标已导入到'+nowcontext.selection[0].name());
+                    nowcontext.document.showMessage(i18.m1+nowcontext.selection[0].name());
 
                     for(var i = 0;i<nowcontext.selection.length;i++){
                         nowcontext.selection[i].select_byExpandingSelection(false,false);
                     }
                 }else{
-                    nowcontext.document.showMessage('图标已导入到画板中央');
+                    nowcontext.document.showMessage(i18.m2);
                 }
                 importedSVGLayer.select_byExpandingSelection(true, true);
             }else if(data.type == 'loginout'){

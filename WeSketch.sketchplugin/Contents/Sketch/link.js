@@ -2,6 +2,8 @@
 
 
 function getLink(context,refursh){
+ 	var i18 = _(context).link;
+
 	var kPluginDomain = "com.sketchplugins.wechat.link";
 	var lineColorKeyLink = "com.sketchplugins.wechat.linecolor";
 	var lineThicknessLinkKey = "com.sketchplugins.wechat.lineThicknessLink";
@@ -542,7 +544,7 @@ function getLink(context,refursh){
 			}
 		}
 		if(iFlag == 16){
-			NSApp.displayDialog(pca.name() + '和' + pcb.name() + '之间生成连线太过复杂，请调整它们之间的摆放顺序再进行连接');
+			NSApp.displayDialog(pca.name() + i18.m1 + pcb.name() + i18.m2);
 		}
 
 		return {
@@ -905,7 +907,7 @@ function getLink(context,refursh){
 	if (selection.count() != 1 && selection.count() != 2) {
 		redrawConnections(context);
 		if(!refursh){
-			return NSApp.displayDialog('画板已刷新\n同时选中两个元素添加连线，只选中一个元素可删除连线');
+			return NSApp.displayDialog(i18.m3);
 		}
 	}
 

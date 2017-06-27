@@ -1,9 +1,11 @@
+@import "common.js";
 @import "link.js";
 @import "flag.js";
 
 var lineColorKey = "com.sketchplugins.wechat.linecolor";
 var flagColorKey = "com.sketchplugins.wechat.flagcolor";
 var lineThicknessKey = "com.sketchplugins.wechat.lineThicknessLink";
+var i18t = _(context).toolSetting;
 
 function drawIcon(sender){
     var size = sender.frame().size;
@@ -47,11 +49,11 @@ function addButton(index,func){
 
 var onRun = function(context) {
 	var settingsWindow = COSAlertWindow.new();
-	settingsWindow.addButtonWithTitle("保存");
-	settingsWindow.addButtonWithTitle("取消");
-	settingsWindow.setMessageText("交互功能设置");
+	settingsWindow.addButtonWithTitle(i18t.m1);
+	settingsWindow.addButtonWithTitle(i18t.m2);
+	settingsWindow.setMessageText(i18t.m3);
 
-    settingsWindow.addTextLabelWithValue("箭头线颜色             箭头线粗细");
+    settingsWindow.addTextLabelWithValue(i18t.m4);
 
 	var flowIndicatorColorWell = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	var flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKey) || "#1AAD19";
@@ -73,7 +75,7 @@ var onRun = function(context) {
 	flowIndicatorOptionsView.addSubview(flowIndicatorThicknessWell);
 	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
 
-	settingsWindow.addTextLabelWithValue('标记功能颜色');
+	settingsWindow.addTextLabelWithValue(i18t.m5);
 	var flowIndicatorColorWell2 = NSColorWell.alloc().initWithFrame(NSMakeRect(0,0,44,23));
 	flowIndicatorColorHex = NSUserDefaults.standardUserDefaults().objectForKey(flagColorKey) || "#1AAD19";
 	var flowIndicatorColorAlpha = 1;
@@ -99,7 +101,7 @@ var onRun = function(context) {
 		var flowIndicatorThickness = flowIndicatorThicknessWell.stringValue();
 		NSUserDefaults.standardUserDefaults().setObject_forKey(flowIndicatorThickness, lineThicknessKey);
 
-		context.document.showMessage("设置成功");
+		context.document.showMessage(i18t.m6);
 		getLink(context,true);
 		getFlag(context,true);
 	}

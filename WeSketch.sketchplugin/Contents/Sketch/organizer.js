@@ -1,5 +1,6 @@
 //by Symobl Organizer
-
+//author sonburn
+//https://github.com/sonburn/symbol-organizer
 
 var Organizer = function(context) {
 	// Document variables
@@ -13,7 +14,6 @@ var Organizer = function(context) {
 	// If there are no symbols...
 	if (!symbolCount) {
 		// Feedback to user
-		displayDialog("没有需要整理的 Layers");
 	}
 	// If there are symbols...
 	else {

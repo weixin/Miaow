@@ -1,6 +1,7 @@
 @import "common.js"
 
 var onRun = function (context) {
+	var i18 = _(context).exportUIkit;
 
 	var save = NSSavePanel.savePanel();
 	save.setNameFieldStringValue("uikit.sketch");
@@ -47,7 +48,7 @@ var onRun = function (context) {
 		var filePath = NSURL.fileURLWithPath(save.URL().path());
 		newDoc.writeToURL_ofType_forSaveOperation_originalContentsURL_error_(filePath, "com.bohemiancoding.sketch.drawing", 
 		NSSaveOperation, nil, nil);
-  		context.document.showMessage('导出 UIKit 成功');
+  		context.document.showMessage(i18.m1);
 
 	}
 }

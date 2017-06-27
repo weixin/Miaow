@@ -4,6 +4,8 @@ var importUrlKey = "com.sketchplugins.wechat.importcolorurl";
 
 
 var onRun = function(context){
+  var i18 = _(context).importColor;
+
   var doc = context.document;
   var app = NSApp.delegate();
   var getLocal = NSUserDefaults.standardUserDefaults().objectForKey(importUrlKey);
@@ -32,7 +34,7 @@ var onRun = function(context){
     var theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
     var dataPre = [theText substringToIndex:1];
     if (dataPre == "<"){
-      NSApp.displayDialog("导入失败，请检查色板文件");
+      NSApp.displayDialog(i18.m1);
       return;
     }else{
       colorContents = theText   
@@ -55,7 +57,7 @@ var onRun = function(context){
     doc.documentData().assets().setColors(colors);
     
     app.refreshCurrentDocument();
-    context.document.showMessage("色板已导入 Document Colors，请重新打开色板查看");
+    context.document.showMessage(i18.m2);
   }
 
 }

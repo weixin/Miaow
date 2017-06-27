@@ -3,6 +3,8 @@
 var importUrlKey = "com.sketchplugins.wechat.importuikiturl";
 
 var onRun = function(context){
+  var i18 = _(context).importColor;
+
   var doc = context.document;
   var app = NSApp.delegate();
   var panel = [NSOpenPanel openPanel];
@@ -137,17 +139,17 @@ var onRun = function(context){
   }
   sourceDoc.close();
   sourceDoc = nil;
-  var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，';
+  var alertData = i18.m1+ addPageCount + i18.m2 +'，' + addSymbolCount + i18.m3 + '，';
   if(saveArtBoard.length != 0){
-    alertData += '有'+ saveArtBoard.length + '个冲突，请在冲突文件page查看';
+    alertData += i18.m4 + saveArtBoard.length + i18.m5;
   }
-  alertData += 'UIKIT已经导入成功！';
+  alertData += (i18.m6+'！');
   if(addPageCount == 0 && addSymbolCount == 0 && saveArtBoard.length == 0){
-    alertData = '没有新的更新！';
+    alertData = i18.m7+'！';
   }
   if(saveArtBoard.length>0){
     var savePage = doc.addBlankPage();
-    savePage.setName('更新冲突');
+    savePage.setName(i18.m8);
     for(var i=0;i<saveArtBoard.length;i++){
       saveArtBoard[i].setName(saveArtBoard[i].name()+ '(Old)');
       saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);

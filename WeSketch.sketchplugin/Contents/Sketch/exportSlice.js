@@ -1,9 +1,11 @@
 @import "common.js"
 
 function exportSlice(context){
+	var i18 = _(context).exportSlice;
+
 	var selection = context.selection;
 	if(selection.count() == 0){
-		return NSApp.displayDialog('请选择需要导出的icon');
+		return NSApp.displayDialog(i18.m1);
 	}
 	var scale = 0;
 	var parent = selection[0].parentArtboard();
@@ -19,13 +21,13 @@ function exportSlice(context){
 	var imagetype = 'png';
 	var addressname = [];
 	var settingsWindow = COSAlertWindow.new();
-	settingsWindow.addButtonWithTitle("保存");
-	settingsWindow.addButtonWithTitle("取消");
-	settingsWindow.setMessageText("补齐宽高导出图片");
+	settingsWindow.addButtonWithTitle(i18.m2);
+	settingsWindow.addButtonWithTitle(i18.m3);
+	settingsWindow.setMessageText(i18.m4);
 
-    settingsWindow.addTextLabelWithValue("图片尺寸小于填写宽高部分用透明色补充");
-    settingsWindow.addTextLabelWithValue("选中元素居中于导出图片且不会被拉伸");
-    settingsWindow.addTextLabelWithValue("宽                            高");
+    settingsWindow.addTextLabelWithValue(i18.m5);
+    settingsWindow.addTextLabelWithValue(i18.m6);
+    settingsWindow.addTextLabelWithValue(i18.m7);
 
 	var flowIndicatorThicknessWell = NSTextField.alloc().initWithFrame(NSMakeRect(0, 0, 44, 23));
 	flowIndicatorThicknessWell.setStringValue(selectionWidth);
@@ -38,7 +40,7 @@ function exportSlice(context){
 
 	settingsWindow.addAccessoryView(flowIndicatorOptionsView);
 
-    settingsWindow.addTextLabelWithValue("选择尺寸");
+    settingsWindow.addTextLabelWithValue(i18.m8);
 
     var items = ['@1x','@2x','@3x'];
     var state = [1,2,3];
@@ -65,7 +67,7 @@ function exportSlice(context){
         frame.origin.y += frame.size.height;
     }
     settingsWindow.addAccessoryView(view); 
-    settingsWindow.addTextLabelWithValue("选择格式");
+    settingsWindow.addTextLabelWithValue(i18.m9);
 	var ButtonList2 = [];
 	ButtonList2.push('PNG');
     ButtonList2.push('JPG');
@@ -82,7 +84,7 @@ function exportSlice(context){
 		panel.setCanChooseDirectories(true);
 		panel.setAllowsMultipleSelection(true);
 		panel.setCanCreateDirectories(true);
-		panel.setMessage("选择你要导出图片的目录");
+		panel.setMessage(i18.m10);
 		if (panel.runModal() == NSOKButton) {
 			var saveartboard = [];
 			var cell2 = scaleOptionsMatrix2.selectedCell();
@@ -154,7 +156,7 @@ function exportSlice(context){
 			}
 			paste(addressname.join('\n'));
 			context.document.removePage(newPage);
-			context.document.showMessage('导出成功，图片名称已放入你的剪贴板');
+			context.document.showMessage(i18.m11);
 		}
 
 	}

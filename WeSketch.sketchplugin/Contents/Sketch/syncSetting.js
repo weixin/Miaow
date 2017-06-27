@@ -3,6 +3,9 @@ var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
 var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
 var onRun = function(context){
+
+    var i18 = _(context).syncSetting;
+
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 
     var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path(),
@@ -44,7 +47,8 @@ var onRun = function(context){
         width: 462,
         height: 548,
         data:{
-            list:obj
+            list:obj,
+            i18:i18
         },
         hiddenClose: false,
         floatWindow: true,
@@ -71,7 +75,7 @@ var onRun = function(context){
                 manifest.COLOR = COLOR;
                 NSUserDefaults.standardUserDefaults().setObject_forKey(UIKIT, uiKitUrlKey);
                 NSUserDefaults.standardUserDefaults().setObject_forKey(COLOR, colorUrlKey);
-                context.document.showMessage('同步源设置成功');
+                context.document.showMessage(i18.m1);
 
             }
         }

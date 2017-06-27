@@ -1,6 +1,8 @@
 @import "common.js";
 
 function codeS(context){
+    var i18 = _(context).codeStyle;
+
     var codeKey = "com.sketchplugins.wechat.codetype";
     var Rate = 2;
     var keyCode = 'px';
@@ -238,9 +240,9 @@ function codeS(context){
 
     keyCode = NSUserDefaults.standardUserDefaults().objectForKey(codeKey) || 'px';
     if(context.selection.count()<1){
-        return context.document.showMessage("请先选择要获取样式的元素");
+        return context.document.showMessage(i18.m1);
     }
-    var showMessage = '代码已复制到剪贴板';
+    var showMessage = i18.m2;
     var selection = context.selection[0];
     var artboard = selection.parentArtboard().absoluteRect();
     var size = artboard.size().width;
@@ -252,7 +254,7 @@ function codeS(context){
     else if(size == 1242 || size == 2208 || size == 1080){
         Rate = 3;
     }else{
-        showMessage += '，此元素所在artboard为非标准尺寸，按默认2倍图处理'
+        showMessage += ('，' + i18.m3);
     }
     if(keyCode == 'rpx'){
         if(size == 750 || size == 1334 || size == 720 || size == 320 || size == 414 || size == 375 || size == 1242 || size == 2208 || size == 1080){

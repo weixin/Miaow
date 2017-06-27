@@ -1,6 +1,8 @@
 @import "common.js";
 
 var onRun = function(context){
+    var i18 = _(context).setting;
+
     var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
     var updateAutoShow = "com.sketchplugins.wechat.updateAutoShow";
 
@@ -27,7 +29,8 @@ var onRun = function(context){
         data:{
             commands:obj,
             toolbarAuto:encodeURIComponent(toolbarAuto),
-            updateAuto:encodeURIComponent(updateAuto)
+            updateAuto:encodeURIComponent(updateAuto),
+            i18:i18
         },
         hiddenClose: false,
         floatWindow: true,
@@ -49,7 +52,7 @@ var onRun = function(context){
             NSUserDefaults.standardUserDefaults().setObject_forKey(data.updateAuto, updateAutoShow);
             NSUserDefaults.standardUserDefaults().setObject_forKey(data.toolbarAuto, toolbarAutoShow);
 
-            context.document.showMessage("设置成功");
+            context.document.showMessage(i18.m1);
 
         }
     });

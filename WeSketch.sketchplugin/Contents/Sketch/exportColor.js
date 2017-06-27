@@ -1,6 +1,7 @@
 @import "common.js"
 
-var onRun = function (context) {	
+var onRun = function (context) {
+	var i18 = _(context).exportColor;
 	var doc = context.document;
 	var colors = doc.documentData().assets().colors();
 	
@@ -37,11 +38,11 @@ var onRun = function (context) {
 			var file = NSString.stringWithString(JSON.stringify(fileData));
 			
 			[file writeToFile:filePath atomically:true encoding:NSUTF8StringEncoding error:null];
-			context.document.showMessage("色板导出成功"); 
+			context.document.showMessage(i18.m1); 
 
 		}
 		
 	} else { 
-		NSApp.displayDialog("请先在 Document Colors 创建你想建立的公共色"); 
+		NSApp.displayDialog(i18.m2); 
 	}
 }

@@ -3,6 +3,7 @@
 @import "syncColor.js"
 
 function syncUIkit(context){
+ 	var i18 = _(context).syncUIkit;
 
 	var scaleOptionsMatrix;
 	var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
@@ -10,12 +11,12 @@ function syncUIkit(context){
 
 	function chooseKit(context){
 		var settingsWindow = COSAlertWindow.new();
-		settingsWindow.addButtonWithTitle("同步");
-		settingsWindow.addButtonWithTitle("取消");
+		settingsWindow.addButtonWithTitle(i18.m1);
+		settingsWindow.addButtonWithTitle(i18.m2);
 
-		settingsWindow.setMessageText("请选择需要同步的 UI Kit 来源");
-		settingsWindow.setInformativeText("请勿在同一画板同步多个 UI Kit，以免发生错误");
-		settingsWindow.setInformativeText("在管理 UI Kit -》 设置中修改同步源");
+		settingsWindow.setMessageText(i18.m3);
+		settingsWindow.setInformativeText(i18.m4);
+		settingsWindow.setInformativeText(i18.m5);
 	    
 		var ButtonList = [];
 		var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
@@ -90,12 +91,12 @@ function syncUIkit(context){
 	for(var co = 0;co<colorList.length;co ++){
 		if(colorList[co].title == List[index].title){
 			SyncColor2(context,colorList[co].url);
-			tbColor = '\r\n色板已同步到 Document Colors，请重新打开色板查看';
+			tbColor = i18.m6;
 			break;
 		}
 	}
 
-	context.document.showMessage("下载更新中...");
+	context.document.showMessage(i18.m7+"...");
 	var theResponseData = networkRequest([UIKITURL]);
 
 	var save = NSSavePanel.savePanel();
@@ -209,17 +210,17 @@ function syncUIkit(context){
     fm.removeItemAtPath_error(databasePath,nil);
 	sourceDoc.close();
 	sourceDoc = nil;
-	var alertData = '新增'+ addPageCount + '个页面，' + addSymbolCount + '个组，';
+	var alertData = i18.m8 + addPageCount + i18.m9 + '，' + addSymbolCount + i18.m10 +'，';
 	if(saveArtBoard.length != 0){
-		alertData += '有'+ saveArtBoard.length + '个冲突，请在冲突文件page查看';
+		alertData += (i18.m11 + saveArtBoard.length + i18.m12);
 	}
-	alertData += 'UIKIT已经导入成功！';
+	alertData += (i18.m13+'！');
 	if(addPageCount == 0 && addSymbolCount == 0 && saveArtBoard.length == 0){
-		alertData = '没有新的更新！';
+		alertData = (i18.m14+'！');
 	}
 	if(saveArtBoard.length>0){
 		var savePage = doc.addBlankPage();
-		savePage.setName('更新冲突');
+		savePage.setName(i18.m15);
 		for(var i=0;i<saveArtBoard.length;i++){
 			saveArtBoard[i].setName(saveArtBoard[i].name()+ '(Old)');
 			saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);

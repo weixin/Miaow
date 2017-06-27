@@ -356,84 +356,6 @@
     </style>
   </head>
   <body>
-    <div class="icon-mag">
-      <div class="toolbar" style="display:none">
-        <div class="login">
-          <span>登陆</span>
-        </div>
-        <div class="person">
-          <span id="username-show"></span>
-          <span id="exit">退出</span>
-        </div>
-      </div>
-      <div class="toolbar2">
-        <select class="content-type" name="" id="selectproject">
-          <option value="">公共</option>
-        </select>
-        <select style="margin:0 4px;" class="content-type" name="" id="selecttype2">
-          <option value="">全部</option>
-        </select>
-        <div class="search-inputwrap">
-          <div class="search-icon"></div>
-          <input class="search-input" type="text">
-        </div>
-      </div>
-      <div class="content-wrap">
-      </div>
-      <div class="messagebox">
-        <div class="messagebox-content">
-          <div class="messagebox-content2">颜色 #</div>
-          <div class="">
-            <input id="color" class="tools-input" type="text" value="000000" />
-          </div> 
-          <div class="color-box"></div>
-          <div class="messagebox-content2">大小</div>
-          <div class="">
-            <input id="size" class="tools-input" type="text" value="64" />
-          </div>
-          <div class="author" >
-            <span id="author"></span>
-          </div>
-        </div>
-      </div>
-      <div class="messagebox2" style="display:none">
-        <div class="messagebox-content">
-          <div class="messagebox-content1">
-            
-          </div>
-          <div class="messagebox-content2">
-            
-          </div>
-        </div>
-        <div class="messagebox-content3">
-          查看更多
-        </div>
-
-      </div>
-      
-    </div>
-    <div class="login-mag">
-      <div class="cell">
-        <div class="cell-title">
-          用户
-        </div>
-        <div class="cell-input">
-          <input id="username" type="text" />          
-        </div>
-      </div>
-      <div class="cell">
-        <div class="cell-title">
-          密码
-        </div>
-        <div class="cell-input">
-          <input id="password" type="password" />          
-        </div>
-      </div>
-      <span class="register">申请帐号</span>
-      <div class="loginbtnwrap">
-        <div class="loginbutton">登录</div> 
-      </div>
-    </div>
 
   </body>
   <script type="text/javascript">
@@ -446,13 +368,14 @@
   var typeID = '';
   var baseData;
   var getData;
+  var i18;
   var isLogin = false;
 
   function appendDom(data){
     $('.bqts').remove();
     $('.content-wrap').empty();
     var dom = [];
-    dom.push('<div class="bqts">公共 icon 收集自网络，版权归作者所有</div>');
+    dom.push('<div class="bqts">'+i18.m3+'</div>');
     for(var i = 0;i < data.length;i++){
       dom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
@@ -488,32 +411,130 @@
     }
     $('.content-wrap').append(dom.join('') + leavedom.join('')+'</div>');
   }
-  
-  $('.content-wrap').on('click','.content-body',function(){
-    $('.content-body').removeClass('btn-active');
-    $(this).addClass('btn-active');
-    var i = parseInt($(this).attr('data-i'));
-    choicedata = savedata[i];
-    var twh = decodeURIComponent(choicedata.content).match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
 
-    if(projectID == ''){
-      var width = $('#size').val();
-      choicedata.width = parseInt(width);
-      choicedata.height = parseInt(width * twh[1] / twh[0]);
-      choicedata.color = $('#color').val();
-      choicedata.type = 'public';
-      SMAction('submit',choicedata);
-    }else{
-      $('.messagebox2').show();
-      choicedata.type = 'private';
-      choicedata.height = parseInt(twh[1]);
-      choicedata.width = parseInt(twh[0]);
-      SMAction('submit',choicedata);
-    }
-  }).on('mouseenter mouseout','.content-body',function(){
-    var i = parseInt($(this).attr('data-i'));
-    $('#author').text('作者：'+savedata[i].author);
-  })
+  function domEvent(){
+    $('.content-wrap').on('click','.content-body',function(){
+      $('.content-body').removeClass('btn-active');
+      $(this).addClass('btn-active');
+      var i = parseInt($(this).attr('data-i'));
+      choicedata = savedata[i];
+      var twh = decodeURIComponent(choicedata.content).match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
+
+      if(projectID == ''){
+        var width = $('#size').val();
+        choicedata.width = parseInt(width);
+        choicedata.height = parseInt(width * twh[1] / twh[0]);
+        choicedata.color = $('#color').val();
+        choicedata.type = 'public';
+        SMAction('submit',choicedata);
+      }else{
+        $('.messagebox2').show();
+        choicedata.type = 'private';
+        choicedata.height = parseInt(twh[1]);
+        choicedata.width = parseInt(twh[0]);
+        SMAction('submit',choicedata);
+      }
+    }).on('mouseenter mouseout','.content-body',function(){
+      var i = parseInt($(this).attr('data-i'));
+      $('#author').text('作者：'+savedata[i].author);
+    })
+
+    $('.login').click(function(){
+      $('.icon-mag').hide();
+      $('.login-mag').show();
+    })
+
+    $('.register').click(function(){
+      SMAction('submit',{type:'link',link:'http://www.baidu.com'});
+      return;
+    })
+
+    $('.search-input').on('input',function(e){
+      var inputKey = $(this).val();
+      searchK(inputKey);
+    })
+    $('#color').on('input',function(){
+      var val = $(this).val();
+      if(val.length == 6 || val.length == 3){
+        $('.color-box').css('background','#'+val);
+        $('path').attr('fill','#' + val);
+        $('svg').css('color','#' + val);
+      }
+    }).on('blur',function(){
+      var val = $(this).val();
+      if(val.length == 3){
+        $('#color').val(val[0]+val[0]+val[1]+val[1]+val[2]+val[2]);
+      }else if(val.length == 6){
+        
+      }else{
+        $('#color').val('000000');
+      }
+    })
+    $('#size').on('input',function(){
+      var val = $(this).val();
+      $('svg').width(val);
+    })
+    $('.loginbutton').on('click',function(){
+      var username = $('#username').val();
+      var password = $('#password').val();
+      SMAction('login',{
+        username:username,
+        password:password
+      });
+    })
+
+    $('body').on('change','#selectproject',function(){
+      projectID = $('#selectproject').val();
+      var typeDom = [];
+      typeDom.push('<option value="">'+'全部'+'</option>')
+      if(projectID != ''){
+        for(var i = 0 ;i<project.length;i++){
+          if(project[i].projectId == projectID){
+            for(var k = 0;k<project[i].categoryList.length;k++){
+              typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+            }
+          }
+        }
+      }
+      $('#selecttype2').empty().append(typeDom);
+      if(projectID != ''){
+        $('.messagebox').hide();
+        SMAction('pushdata',{
+          type:'project',
+          id:projectID
+        })
+      }else{
+        $('.messagebox2').hide();
+        $('.messagebox').show();
+        savedata = baseData;
+        appendDom(savedata);
+      }
+    })
+    $('body').on('change','#selecttype2',function(){
+      typeID = $('#selecttype2').val();
+      if(typeID != ''){
+        SMAction('pushdata',{
+          type:'type',
+          id:typeID
+        })
+      }else{
+        SMAction('pushdata',{
+          type:'project',
+          id:projectID
+        })
+      }
+    })
+
+    $('#exit').on('click',function(){
+      $('.login').show();
+      $('.person').hide();
+      SMAction('submit',{
+        type:'loginout'
+      })
+    })
+  }
+  
+  
 
   function searchK(inputKey){
     searchData = [];
@@ -534,49 +555,7 @@
     }
   }
 
-  $('.login').click(function(){
-    $('.icon-mag').hide();
-    $('.login-mag').show();
-  })
-
-  $('.register').click(function(){
-    SMAction('submit',{type:'link',link:'http://www.baidu.com'});
-    return;
-  })
-
-  $('.search-input').on('input',function(e){
-    var inputKey = $(this).val();
-    searchK(inputKey);
-  })
-  $('#color').on('input',function(){
-    var val = $(this).val();
-    if(val.length == 6 || val.length == 3){
-      $('.color-box').css('background','#'+val);
-      $('path').attr('fill','#' + val);
-      $('svg').css('color','#' + val);
-    }
-  }).on('blur',function(){
-    var val = $(this).val();
-    if(val.length == 3){
-      $('#color').val(val[0]+val[0]+val[1]+val[1]+val[2]+val[2]);
-    }else if(val.length == 6){
-      
-    }else{
-      $('#color').val('000000');
-    }
-  })
-  $('#size').on('input',function(){
-    var val = $(this).val();
-    $('svg').width(val);
-  })
-  $('.loginbutton').on('click',function(){
-    var username = $('#username').val();
-    var password = $('#password').val();
-    SMAction('login',{
-      username:username,
-      password:password
-    });
-  })
+  
   function appendType(){
     var projectDom = [];
     projectDom.push('<option value="">公共</option>')
@@ -590,70 +569,8 @@
     $('#selecttype2').empty().append(typeDom);
     typeID = $('#selecttype2').val();
   }
-  $('body').on('change','#selectproject',function(){
-    projectID = $('#selectproject').val();
-    var typeDom = [];
-    typeDom.push('<option value="">'+'全部'+'</option>')
-    if(projectID != ''){
-      for(var i = 0 ;i<project.length;i++){
-        if(project[i].projectId == projectID){
-          for(var k = 0;k<project[i].categoryList.length;k++){
-            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
-          }
-        }
-      }
-    }
+  
 
-    $('#selecttype2').empty().append(typeDom);
-
-    if(projectID != ''){
-      $('.messagebox').hide();
-      SMAction('pushdata',{
-        type:'project',
-        id:projectID
-      })
-    }else{
-      $('.messagebox2').hide();
-      $('.messagebox').show();
-      savedata = baseData;
-      appendDom(savedata);
-    }
-  })
-  $('body').on('change','#selecttype2',function(){
-    typeID = $('#selecttype2').val();
-    if(typeID != ''){
-      SMAction('pushdata',{
-        type:'type',
-        id:typeID
-      })
-    }else{
-      SMAction('pushdata',{
-        type:'project',
-        id:projectID
-      })
-    }
-  })
-
-  $('#exit').on('click',function(){
-    $('.login').show();
-    $('.person').hide();
-    SMAction('submit',{
-      type:'loginout'
-    })
-  })
-  init = function(data){
-    baseData = data.data;
-    savedata = data.data;
-    isLogin = data.isLogin;
-    if(isLogin){
-      $('.login').hide();
-      $('.person').show();
-      $('.person #username-show').text('（'+data.nametest+'）');
-      project = data.project;
-      appendType();
-    }
-    appendDom(baseData);
-  }
   function sLogin(data){
     $('.login-mag').hide();
     $('.icon-mag').show();
@@ -675,8 +592,103 @@
   $('body').on('click',function(){
     return false;
   })
+
+  function initDomTree(){
+    var dom = ['<div class="icon-mag">',
+      '<div class="toolbar" style="display:none">',
+        '<div class="login">',
+          '<span>'+i18.m4+'</span>',
+        '</div>',
+        '<div class="person">',
+          '<span id="username-show"></span>',
+          '<span id="exit">'+i18.m5+'</span>',
+        '</div>',
+      '</div>',
+      '<div class="toolbar2">',
+        '<select class="content-type" name="" id="selectproject">',
+          '<option value="">'+i18.m6+'</option>',
+        '</select>',
+        '<select style="margin:0 4px;" class="content-type" name="" id="selecttype2">',
+          '<option value="">'+i18.m7+'</option>',
+        '</select>',
+        '<div class="search-inputwrap">',
+          '<div class="search-icon"></div>',
+          '<input class="search-input" type="text">',
+        '</div>',
+      '</div>',
+      '<div class="content-wrap">',
+      '</div>',
+      '<div class="messagebox">',
+        '<div class="messagebox-content">',
+          '<div class="messagebox-content2">'+i18.m8+' #</div>',
+          '<div class="">',
+            '<input id="color" class="tools-input" type="text" value="000000" />',
+          '</div> ',
+          '<div class="color-box"></div>',
+          '<div class="messagebox-content2">'+i18.m9+'</div>',
+          '<div class="">',
+            '<input id="size" class="tools-input" type="text" value="64" />',
+          '</div>',
+          '<div class="author" >',
+            '<span id="author"></span>',
+          '</div>',
+        '</div>',
+      '</div>',
+      '<div class="messagebox2" style="display:none">',
+        '<div class="messagebox-content">',
+          '<div class="messagebox-content1">',
+          '</div>',
+          '<div class="messagebox-content2">',
+          '</div>',
+        '</div>',
+        '<div class="messagebox-content3">',
+          i18.m10,
+        '</div>',
+      '</div>',
+    '</div>',
+    '<div class="login-mag">',
+      '<div class="cell">',
+        '<div class="cell-title">',
+          i18.m11,
+        '</div>',
+        '<div class="cell-input">',
+          '<input id="username" type="text" />',
+        '</div>',
+      '</div>',
+      '<div class="cell">',
+        '<div class="cell-title">',
+          i18.m12,
+        '</div>',
+        '<div class="cell-input">',
+          '<input id="password" type="password" />',
+        '</div>',
+      '</div>',
+      '<span class="register">'+i18.m13+'</span>',
+      '<div class="loginbtnwrap">',
+        '<div class="loginbutton">'+i18.m4+'</div>',
+      '</div>',
+    '</div>'];
+    $('body').append(dom.join(''));
+  }
+
   window.addEventListener('hashchange', function(e) {
     return false;
   }, false);
+  init = function(data){
+    i18 = data.i18;
+    initDomTree();
+    baseData = data.data;
+    savedata = data.data;
+    isLogin = data.isLogin;
+    if(isLogin){
+      $('.login').hide();
+      $('.person').show();
+      $('.person #username-show').text('（'+data.nametest+'）');
+      project = data.project;
+      appendType();
+    }
+    appendDom(baseData);
+    domEvent();
+  }
   </script>
 </html>

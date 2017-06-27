@@ -1,4 +1,6 @@
-function findFontName(context){
+function fontReplace(context){
+    var i18 = _(context).fontReplace;
+
     var doc = context.document;
     var doctype = 0;
     var page = doc.currentPage();
@@ -29,11 +31,11 @@ function findFontName(context){
 
     function createUserInterface() {
         if (includedFontName.length == 0) {
-            doc.showMessage("本页面没有任何可以选择的字体");
+            doc.showMessage(i18.m1);
         } else {
             userInterface = COSAlertWindow.new();
-            userInterface.setMessageText('字体批量替换');
-            userInterface.addTextLabelWithValue("请选择页面中需要替换的字体：");
+            userInterface.setMessageText(i18.m2);
+            userInterface.addTextLabelWithValue(i18.m3+"：");
 
             var k = 0;
             for (var i = 0; i < includedFontName.length; i++) {
@@ -48,7 +50,7 @@ function findFontName(context){
             separator.setBoxType(2);
             userInterface.addAccessoryView(separator);
 
-            userInterface.addTextLabelWithValue("替换为：");
+            userInterface.addTextLabelWithValue(i18.m4+"：");
 
             var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, k*24 + 40, 300.0, 30))
 
@@ -59,10 +61,10 @@ function findFontName(context){
             var button = [[NSButton alloc] initWithFrame:NSMakeRect(240,-3,60,30)];
             [button setButtonType:2];
             button.bezelStyle = 1;
-            button.title = '搜索';
+            button.title = i18.m5;
             [button setCOSJSTargetFunction:function(sender) {
                  if(searchButtonType == 1){
-                    button.title = '重置';
+                    button.title = i18.m6;
                     var value = accessoryList.objectValue().toLocaleLowerCase();
                     searchButtonType = 2;
                     searchList = [];
@@ -77,7 +79,7 @@ function findFontName(context){
 
                  }else{
                     searchButtonType = 1;
-                    button.title = '搜索';
+                    button.title = i18.m7;
                     accessoryList.removeAllItems();
                     accessoryList.addItemsWithObjectValues(options);
 
@@ -91,7 +93,7 @@ function findFontName(context){
             separator.setBoxType(2);
             userInterface.addAccessoryView(separator);
 
-            userInterface.addTextLabelWithValue("生效范围：");
+            userInterface.addTextLabelWithValue(i18.m8+"：");
             var scaleOptions = [1, 2];
             var numOptions = scaleOptions.length;
             var exportScale = 1;
@@ -102,8 +104,8 @@ function findFontName(context){
             scaleOptionsMatrix.setAutorecalculatesCellSize(true);
             scaleOptionsMatrix.setIntercellSpacing(NSMakeSize(10,0));
             var cells = scaleOptionsMatrix.cells();
-            cells.objectAtIndex(0).setTitle('全文件');
-            cells.objectAtIndex(1).setTitle('选中的 Page');
+            cells.objectAtIndex(0).setTitle(i18.m9);
+            cells.objectAtIndex(1).setTitle(i18.m10);
             var scaleOption;
 
             var exportOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,30));
@@ -115,8 +117,8 @@ function findFontName(context){
             userInterface.addAccessoryView(separator);
 
 
-            userInterface.addButtonWithTitle('确定');
-            userInterface.addButtonWithTitle('取消');
+            userInterface.addButtonWithTitle(i18.m11);
+            userInterface.addButtonWithTitle(i18.m12);
             return userInterface;
         }
     }
@@ -138,7 +140,7 @@ function findFontName(context){
 
             featureSelectSpecificFontTextLayer();
 
-            context.document.showMessage("字体批量替换成功，"+fontRpleaceCount+'个文字被替换'); 
+            context.document.showMessage(i18.m13+"，"+fontRpleaceCount+i18.m14); 
 
         }
     }
@@ -152,7 +154,7 @@ function findFontName(context){
 
 
     function featureSelectSpecificFontTextLayer () {
-        if(scaleOptionsMatrix.selectedCell().title() == '全文件'){
+        if(scaleOptionsMatrix.selectedCell().title() == i18.m9){
             doctype = 0;
         }else{
             doctype = 1;
@@ -230,6 +232,6 @@ function findFontName(context){
 }
 
 var onRun = function (context) {
-    findFontName(context);
+    fontReplace(context);
 }
 

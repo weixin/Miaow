@@ -1,5 +1,7 @@
 @import "common.js"
 
+var i18c = _(context).syncColor
+
 var SyncColor2 = function(context,UIKITURL) {
 	var app = NSApp.delegate();
 	var doc = context.document;
@@ -11,7 +13,7 @@ var SyncColor2 = function(context,UIKITURL) {
 	
 	var dataPre = [theText substringToIndex:1];
 	if (dataPre == "<"){
-		NSApp.displayDialog("数据出错，请检查json文件");
+		NSApp.displayDialog(i18c.m1);
 		return;
 	}else{
 		colorContents = theText		
@@ -43,12 +45,12 @@ function syncColor(context){
 
 	function chooseKit(context){
 		var settingsWindow = COSAlertWindow.new();
-		settingsWindow.addButtonWithTitle("同步");
-		settingsWindow.addButtonWithTitle("取消");
+		settingsWindow.addButtonWithTitle(i18c.m2);
+		settingsWindow.addButtonWithTitle(i18c.m3);
 
-		settingsWindow.setMessageText("请选择同步的色板来源");
-		settingsWindow.setInformativeText("本次同步会覆盖当前画板");
-		settingsWindow.setInformativeText("在管理色板 -》 设置中修改同步源");
+		settingsWindow.setMessageText(i18c.m4);
+		settingsWindow.setInformativeText(i18c.m5);
+		settingsWindow.setInformativeText(i18.m6);
 		var ButtonList = [];
 		var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
 
@@ -78,7 +80,7 @@ function syncColor(context){
 	var index = [uikit tag];
 	var UIKITURL = List[index].url;
 	SyncColor2(context,UIKITURL);
-	context.document.showMessage("色板已同步到 Document Colors，请重新打开色板查看");
+	context.document.showMessage(i18c.m7);
 }
 
 

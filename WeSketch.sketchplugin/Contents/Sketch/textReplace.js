@@ -1,6 +1,8 @@
 @import "common.js"
 
 function textReplace(context){
+    var i18 = _(context).textReplace;
+
     var textToFind = '',textToReplace = '';
     var textToFind2;
     var selection = context.selection;
@@ -33,25 +35,25 @@ function textReplace(context){
         }
         userInterface = COSAlertWindow.new();
 
-        userInterface.setMessageText("文本批量替换");
-        userInterface.setInformativeText("注：区分大小写，如需忽略大小写请使用正则表达式");
+        userInterface.setMessageText(i18.m1);
+        userInterface.setInformativeText(i18.m2);
 
-        userInterface.addTextLabelWithValue("查找文本（支持正则表达式）：");
+        userInterface.addTextLabelWithValue(i18.m3);
         userInterface.addTextFieldWithValue(textToFind);
 
-        userInterface.addTextLabelWithValue("替换为：");
+        userInterface.addTextLabelWithValue(i18.m4);
         userInterface.addTextFieldWithValue('');
 
-        userInterface.addTextLabelWithValue("Page 生效范围：");
-        var options = ["所有 Page","当前工作 Page"];
+        userInterface.addTextLabelWithValue(i18.m5);
+        var options = [i18.m6,i18.m7];
         userInterface.addAccessoryView(createRadioButtons(options, options[0]));
 
-        userInterface.addTextLabelWithValue("图层生效范围：");
-        var options2 = ["整个 Page(含元素名)","仅元素中的正文内容"];
+        userInterface.addTextLabelWithValue(i18.m8);
+        var options2 = [i18.m9,i18.m10];
         userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
         
-        userInterface.addButtonWithTitle('确定');
-        userInterface.addButtonWithTitle('取消');
+        userInterface.addButtonWithTitle(i18.m11);
+        userInterface.addButtonWithTitle(i18.m12);
 
         return userInterface.runModal();
     }
@@ -128,9 +130,9 @@ function textReplace(context){
     processButtonClick();
     doFindAndReplace();
     if(replaceCount){
-        context.document.showMessage('替换成功，共找到' + replaceCount + '处\r\n"' + textToFind2 + '"替换为"' + textToReplace + '"');
+        context.document.showMessage(i18.m13 + replaceCount + i18.m14 +'\r\n"' + textToFind2 + i18.m15 + textToReplace + '"');
     }else{
-        NSApp.displayDialog('没有找到"' + textToFind + '"');
+        NSApp.displayDialog(i18.m16+'"' + textToFind + '"');
     }
 }
 

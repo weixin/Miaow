@@ -78,33 +78,39 @@
     </style>
   </head>
   <body >
-    <div class="body">
-      <div class="title">
-        自动更新
-      </div>
-      <div>
-        <input type="checkbox" id="updateauto"/><label for="updateauto">　Sketch 打开时自动检查更新</label>
-      </div>
-
-      <div class="title">
-        工具栏
-      </div>
-      <div>
-        <input type="checkbox" id="toolbarauto"/><label for="toolbarauto">　Sketch 打开时自动开启工具栏</label>
-      </div>
-      <div class="title">
-        快捷键
-      </div>
-      <div class="title2">功能名称　　　　快捷键　　　　　　　　　　在工具栏显示</div>
-      <div class="key-setting">
-      </div>
-      <div class="buttonwrap">
-        <div class="savebutton">保存</div>
-      </div>
-    </div>
+    
     
   <script type="text/javascript">
     var keydata = [];
+    var i18;
+
+    function initDom(){
+      var dom = ['<div class="body">',
+        '<div class="title">',
+          i18.m3,
+        '</div>',
+        '<div>',
+          '<input type="checkbox" id="updateauto"/><label for="updateauto">'+i18.m4+'</label>',
+        '</div>',
+        '<div class="title">',
+          i18.m5,
+        '</div>',
+        '<div>',
+          '<input type="checkbox" id="toolbarauto"/><label for="toolbarauto">'+i18.m6+'</label>',
+        '</div>',
+        '<div class="title">',
+          i18.m7,
+        '</div>',
+        '<div class="title2">'+i18.m8+'</div>',
+        '<div class="key-setting">',
+        '</div>',
+        '<div class="buttonwrap">',
+          '<div class="savebutton">'+i18.m9+'</div>',
+        '</div>',
+      '</div>'];
+      $('body').append(dom.join(''));
+    }
+
     function keypre(){
       $('input.keyinput').on('keydown',function(e){
         var index = parseInt($(this).attr('data-index'));
@@ -140,18 +146,25 @@
       })
     }
 
-    $('.savebutton').on('click',function(){
-      var updateauto = $('#updateauto').is(':checked')?'true':'false';
-      var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
-      var obj = {};
-      obj.keydata = keydata;
-      obj.updateAuto = updateauto;
-      obj.toolbarAuto = toolbarauto;
-      SMAction('submit',obj);
-      SMAction('close');
-    })
+    function domEvent(){
+      $('.savebutton').on('click',function(){
+        var updateauto = $('#updateauto').is(':checked')?'true':'false';
+        var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
+        var obj = {};
+        obj.keydata = keydata;
+        obj.updateAuto = updateauto;
+        obj.toolbarAuto = toolbarauto;
+        SMAction('submit',obj);
+        SMAction('close');
+      })
+    }
+
+
     
     var init = function(data){
+      i18 = data.i18;
+      initDom();
+      domEvent();
       var command = data.commands;
       keydata = command;
 

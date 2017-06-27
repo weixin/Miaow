@@ -1,6 +1,8 @@
 @import "common.js"
 
 function getFlag(context,refrush){
+    var i18 = _(context).flag;
+
 	var kPluginDomainFlag = "com.sketchplugins.wechat.flag";
 	var lineColorKey = "com.sketchplugins.wechat.flagcolor";
 	var textCount = 1;
@@ -17,12 +19,12 @@ function getFlag(context,refrush){
 	var colorLineB = rgb(colorLine)[2];
 	function deleteDialog(context){
 		var settingsWindow = COSAlertWindow.new();
-		settingsWindow.addButtonWithTitle("确定");
-		settingsWindow.addButtonWithTitle("取消");
+		settingsWindow.addButtonWithTitle(i18.m1);
+		settingsWindow.addButtonWithTitle(i18.m2);
 
-		settingsWindow.setMessageText("请选择您要进行的操作");
+		settingsWindow.setMessageText(i18.m3);
 	    
-		var ButtonList = ['删除标记并保留排序','删除标记并重新排序'];
+		var ButtonList = [i18.m4,i18.m5];
 
 		scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
 		settingsWindow.addAccessoryView(scaleOptionsMatrix);
@@ -279,7 +281,7 @@ function getFlag(context,refrush){
 	if (context.selection.count()!=1) {
 		flags = drawFunction(doc,null);
 		if(!refrush){
-			NSApp.displayDialog('画板已刷新\n请选择一个元素增删标志位');
+			NSApp.displayDialog(i18.m6);
 		}
 	}else{
 		flags = drawFunction(doc,context.selection[0]);
