@@ -4,7 +4,6 @@
 
 function syncUIkit(context){
  	var i18 = _(context).syncUIkit;
-
 	var scaleOptionsMatrix;
 	var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
 	var colorUrlKey = "com.sketchplugins.wechat.colorurl";

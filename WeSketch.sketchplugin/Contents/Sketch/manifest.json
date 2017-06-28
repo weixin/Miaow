@@ -160,7 +160,7 @@
       "shortcut": "",
       "istool":"",
       "handlers" : {
-        "run" : "onRun"
+        "run" : "onRunToolBar"
       }
     },
     {

@@ -3,7 +3,52 @@
 var importUrlKey = "com.sketchplugins.wechat.importuikiturl";
 
 var onRun = function(context){
-  var i18 = _(context).importColor;
+
+  function isSame(a,b){
+    var layers = a.layers();
+    if(layers.count() != b.layers().count()){
+      return false;
+    }
+    // if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
+    //  return false;
+    // }
+    for(var i = 0;i < layers.count(); i++){
+      var layer = layers[i];
+
+      //名字顺序也会变
+      if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
+        return false;
+      }
+      if(encodeURIComponent(layer.rect().toString()) != encodeURIComponent(b.layers()[i].rect().toString())){
+        return false;
+      }
+      
+      if(layer.class() == 'MSTextLayer'){
+        if(encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
+          return false;
+        }
+      }
+      // if(layer.class() == 'MSRectangleShape' || layer.class() == 'MSOvalShape' || layer.class() == 'MSShapePathLayer'){
+        
+      // }
+      if(layer.class() == 'MSLayerGroup' && layer.style().fills().count() != 0){
+        if(encodeURIComponent(layer.style().fills()[0].color().toString()) != encodeURIComponent(b.layers()[i].style().fills()[0].color().toString())){
+          return false;
+        }
+      }
+      if(layer.class() == 'MSLayerGroup' || layer.class() ==  'MSShapeGroup'){
+        var boolChild = isSame(layer,b.layers()[i]);
+        if(!boolChild){
+          return false;
+        }
+      }
+      
+    }
+    return true;
+    
+  }
+
+  var i18 = _(context).importUIkit;
 
   var doc = context.document;
   var app = NSApp.delegate();
@@ -35,7 +80,6 @@ var onRun = function(context){
       var doc = context.document;
       var savePage;
       var pages = doc.pages();
-      var deletePageNum = {};
 
       var sourcePages = sourceDoc.documentData().pages();
 
@@ -61,7 +105,6 @@ var onRun = function(context){
         for(var k=0;k<pages.count();k++){
           //如果有同一个page名
           if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
-            deletePageNum['d_'+k] = true;
             flagForOldPage = true;
 
             //比对一下
@@ -74,6 +117,7 @@ var onRun = function(context){
               var flagForNewSymbol = false;
               for(var g=0;g<localSymobl.count();g++){
                 if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
+              context.document.removePage(pages[k]);
                   
                   flagForNewSymbol = true;
 
@@ -130,22 +174,16 @@ var onRun = function(context){
           i = -1;
         }
       }
-      for(var i = 0;i<pages.count().i++){
-        if(deletePageNum['d_'+i]){
-          context.document.removePage(pages[i]);
-        }
-      }
-
   }
   sourceDoc.close();
   sourceDoc = nil;
-  var alertData = i18.m1+ addPageCount + i18.m2 +'，' + addSymbolCount + i18.m3 + '，';
+  var alertData = (i18.m1+ addPageCount + i18.m2 +'，' + addSymbolCount + i18.m3 + '，');
   if(saveArtBoard.length != 0){
-    alertData += i18.m4 + saveArtBoard.length + i18.m5;
+    alertData += (i18.m4 + saveArtBoard.length + i18.m5);
   }
   alertData += (i18.m6+'！');
   if(addPageCount == 0 && addSymbolCount == 0 && saveArtBoard.length == 0){
-    alertData = i18.m7+'！';
+    alertData = (i18.m7+'！');
   }
   if(saveArtBoard.length>0){
     var savePage = doc.addBlankPage();
@@ -157,53 +195,9 @@ var onRun = function(context){
     doc.setCurrentPage(savePage);
     Organizer(context);
   }
-  if(context.document.pages()[0].artboards().count() == 0){
+  if(context.document.pages()[0].children().count() == 1){
     context.document.removePage(context.document.pages()[0]);
   }
 
   context.document.showMessage(alertData);
-}
-
-function isSame(a,b){
-  var layers = a.layers();
-  if(layers.count() != b.layers().count()){
-    return false;
-  }
-  // if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
-  //  return false;
-  // }
-  for(var i = 0;i < layers.count(); i++){
-    var layer = layers[i];
-
-    //名字顺序也会变
-    if(encodeURIComponent(layer.name()) != encodeURIComponent(b.layers()[i].name())){
-      return false;
-    }
-    if(encodeURIComponent(layer.rect().toString()) != encodeURIComponent(b.layers()[i].rect().toString())){
-      return false;
-    }
-    
-    if(layer.class() == 'MSTextLayer'){
-      if(encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())){
-        return false;
-      }
-    }
-    // if(layer.class() == 'MSRectangleShape' || layer.class() == 'MSOvalShape' || layer.class() == 'MSShapePathLayer'){
-      
-    // }
-    if(layer.class() == 'MSLayerGroup' && layer.style().fills().count() != 0){
-      if(encodeURIComponent(layer.style().fills()[0].color().toString()) != encodeURIComponent(b.layers()[i].style().fills()[0].color().toString())){
-        return false;
-      }
-    }
-    if(layer.class() == 'MSLayerGroup' || layer.class() ==  'MSShapeGroup'){
-      var boolChild = isSame(layer,b.layers()[i]);
-      if(!boolChild){
-        return false;
-      }
-    }
-    
-  }
-  return true;
-  
 }

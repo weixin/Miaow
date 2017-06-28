@@ -1,8 +1,9 @@
 @import "common.js"
 
-var i18c = _(context).syncColor
 
 var SyncColor2 = function(context,UIKITURL) {
+	var i18c = _(context).syncColor;
+
 	var app = NSApp.delegate();
 	var doc = context.document;
 	var theResponseData = request(UIKITURL);
@@ -40,6 +41,8 @@ var SyncColor2 = function(context,UIKITURL) {
 }
 
 function syncColor(context){
+	var i18c = _(context).syncColor;
+
 	var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 	var scaleOptionsMatrix;
 
@@ -50,7 +53,7 @@ function syncColor(context){
 
 		settingsWindow.setMessageText(i18c.m4);
 		settingsWindow.setInformativeText(i18c.m5);
-		settingsWindow.setInformativeText(i18.m6);
+		settingsWindow.setInformativeText(i18c.m6);
 		var ButtonList = [];
 		var List = NSUserDefaults.standardUserDefaults().objectForKey(colorUrlKey) || getConfig('config',context).COLOR;
 

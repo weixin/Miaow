@@ -4,7 +4,7 @@
 @import 'fontReplace.js';
 @import 'textReplace.js';
 @import 'colorReplace.js';
-@import 'iconQ.js';
+// @import 'iconQ.js';
 @import 'syncUIkit.js';
 @import 'syncColor.js';
 @import 'exportSlice.js';
@@ -14,6 +14,7 @@
 
 function toolbar(context,auto){
     var i18 = _(context).toolbar;
+
 
     var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
@@ -235,6 +236,6 @@ function toolbar(context,auto){
     }
 }
 
-var onRun = function(context){
+var onRunToolBar = function(context){
     toolbar(context);
 }
