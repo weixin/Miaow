@@ -4,7 +4,7 @@
 @import 'fontReplace.js';
 @import 'textReplace.js';
 @import 'colorReplace.js';
-// @import 'iconQ.js';
+@import 'iconQ.js';
 @import 'syncUIkit.js';
 @import 'syncColor.js';
 @import 'exportSlice.js';
