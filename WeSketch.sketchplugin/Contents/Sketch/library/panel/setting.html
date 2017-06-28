@@ -87,6 +87,12 @@
     function initDom(){
       var dom = ['<div class="body">',
         '<div class="title">',
+         i18.m10,
+        '</div>',
+        '<div>',
+        '<input type="radio" value="en" name="language" id="en" /><label for="en">　'+ i18.m11 +'</label>　　<input type="radio" name="language" value="zh" id="zh"/><label for="zh">　'+ i18.m12 +'</label>',
+        '</div>',
+        '<div class="title">',
           i18.m3,
         '</div>',
         '<div>',
@@ -150,10 +156,12 @@
       $('.savebutton').on('click',function(){
         var updateauto = $('#updateauto').is(':checked')?'true':'false';
         var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
+        var language = $("input[name='language']:checked").val();
         var obj = {};
         obj.keydata = keydata;
         obj.updateAuto = updateauto;
         obj.toolbarAuto = toolbarauto;
+        obj.language = language;
         SMAction('submit',obj);
         SMAction('close');
       })
@@ -165,13 +173,15 @@
       i18 = data.i18;
       initDom();
       domEvent();
+      var language = data.language;
+      $('#'+language).prop('checked',true);
       var command = data.commands;
       keydata = command;
 
       var keybody = [];
       for(var i = 0;i<command.length-1;i++){
         keybody.push('<div class="keywrap">')
-        keybody.push('<div class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
+        keybody.push('<div data-identifier='+decodeURIComponent(command[i].identifier)+' class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
         keybody.push('<div class="inputwrap"><input class="keyinput" data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');
         if(command[i].istool == 'true' || command[i].istool == 'false'){
           keybody.push('<div style="width:80px;text-align:center;"><input data-index="'+i+'" class="toolbar" style="margin-top:5px" type="checkbox" '+(command[i].istool == 'true'?'checked="checked"':'')+' /></div>')
@@ -196,8 +206,8 @@
           keydata[index].istool = 'false';
         }
       })
-
     }
+    init();
   </script>
   </body>
 </html>

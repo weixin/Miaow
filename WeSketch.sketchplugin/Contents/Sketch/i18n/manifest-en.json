@@ -2,10 +2,10 @@
   "name": "WeSketch",
   "author": "wechat",
   "version": "1.0.0",
-  "identifier": "cn.wechat",
+  "identifier": "wechat.WeSketch",
   "commands" : [
     {
-      "name" : "交互连线",
+      "name" : "1交互连线",
       "identifier" : "link",
       "script" : "link.js",
       "shortcut": "command shift 1",
@@ -15,7 +15,7 @@
       }
     },
     {
-      "name" : "注释标记",
+      "name" : "2注释标记",
       "identifier" : "flag",
       "script" : "flag.js",
       "shortcut": "command shift 2",
@@ -23,7 +23,7 @@
       "istool":"true",
     },
     {
-      "name" : "图标库",
+      "name" : "3图标库",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "shortcut": "",
@@ -160,7 +160,7 @@
       "shortcut": "",
       "istool":"",
       "handlers" : {
-        "run" : "onRun"
+        "run" : "onRunToolBar"
       }
     },
     {

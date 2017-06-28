@@ -2,7 +2,7 @@
   "name": "WeSketch",
   "author": "wechat",
   "version": "1.0.0",
-  "identifier": "cn.wechat",
+  "identifier": "wechat.WeSketch",
   "commands" : [
     {
       "name" : "交互连线",
@@ -160,7 +160,7 @@
       "shortcut": "",
       "istool":"",
       "handlers" : {
-        "run" : "onRun"
+        "run" : "onRunToolBar"
       }
     },
     {
