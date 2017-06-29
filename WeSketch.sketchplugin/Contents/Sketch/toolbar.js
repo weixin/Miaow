@@ -13,6 +13,24 @@
 
 
 function toolbar(context,auto){
+    var i18nKey = "com.sketchplugins.wechat.i18n";
+    var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
+
+    if(lang == undefined){
+        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
+        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
+        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
+        if(lang.indexOf('zh') > -1){
+            lang = 'zh';
+        }else{
+            lang = 'en';
+        }
+    }
+    var prefix = '';
+    if(lang == 'en'){
+        prefix = '-en';
+    }
+
     var i18 = _(context).toolbar;
 
 
@@ -109,14 +127,13 @@ function toolbar(context,auto){
                                 NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
                             }
                         }
-                        
                     });
         contentView.addSubview(closeButton);
 
         var xlocation = 46;
 
         if(obj.indexOf('link') > -1){
-            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "link",
+            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "link"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             getLink(nowcontext);      
@@ -128,7 +145,7 @@ function toolbar(context,auto){
 
         if(obj.indexOf('flag') > -1){
 
-            var flagButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "flag",
+            var flagButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "flag"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             getFlag(nowcontext);
@@ -138,7 +155,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('fontReplace') > -1){
-            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "font",
+            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "font"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             fontReplace(nowcontext);
@@ -148,7 +165,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('textReplace') > -1){
-            var textButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "text",
+            var textButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "text"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             textReplace(nowcontext);
@@ -159,7 +176,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('colorReplace') > -1){
-            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "color",
+            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codecolor"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             colorReplace(nowcontext);
@@ -170,7 +187,7 @@ function toolbar(context,auto){
 
 
         if(obj.indexOf('iconQ') > -1){
-            var iconButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "icon",
+            var iconButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "icon"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             iconQ(nowcontext);
@@ -180,7 +197,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('syncuikit') > -1){
-            var syncuiButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "syncui",
+            var syncuiButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "syncui"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             syncUIkit(nowcontext);
@@ -191,7 +208,7 @@ function toolbar(context,auto){
 
 
         if(obj.indexOf('synccolor') > -1){
-            var synccolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "synccolor",
+            var synccolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "synccolor"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             syncColor(nowcontext);
@@ -202,7 +219,7 @@ function toolbar(context,auto){
 
 
         if(obj.indexOf('exportSlice') > -1){
-            var cutButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "cut",
+            var cutButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "cut"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             exportSlice(nowcontext);
@@ -212,7 +229,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('codeColor') > -1){
-            var codecolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codecolor",
+            var codecolorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codecolor"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             codeC(nowcontext);
@@ -222,7 +239,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('codeStyle') > -1){
-            var codestyleButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codestyle",
+            var codestyleButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codestyle"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             codeS(nowcontext);
@@ -233,6 +250,24 @@ function toolbar(context,auto){
 
         threadDictionary[identifier] = Toolbar;
         Toolbar.makeKeyAndOrderFront(nil);
+    }else{
+        coscript.setShouldKeepAround(false);
+        threadDictionary.removeObjectForKey(identifier);
+        Toolbar.close();
+        if(toolbarAuto != 'false'){
+            var settingsWindow = COSAlertWindow.new();
+            settingsWindow.addButtonWithTitle(i18.m1);
+            settingsWindow.addButtonWithTitle(i18.m2);
+            settingsWindow.setMessageText(i18.m3);
+            settingsWindow.addTextLabelWithValue(i18.m4);
+            settingsWindow.addTextLabelWithValue(i18.m5);
+            var response = settingsWindow.runModal();
+            if (response == "1000") {
+                NSUserDefaults.standardUserDefaults().setObject_forKey('true',toolbarAutoShow);
+            }else{
+                NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
+            }
+        }
     }
 }
 

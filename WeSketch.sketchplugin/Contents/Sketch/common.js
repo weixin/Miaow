@@ -147,7 +147,6 @@ function openUrlInBrowser(url) {
 }
 
 function createRadioButtons(options, selectedItem) {
-
     var ui = NSRadioButton;
     var type = NSRadioModeMatrix;
     
@@ -178,7 +177,36 @@ function createRadioButtons(options, selectedItem) {
     return buttonMatrix;
 }
 
+function createRadioButtons2(options, selectedItem) {
+    var ui = NSRadioButton;
+    var type = NSRadioModeMatrix;
+    
+    var rows = Math.ceil(options.length / 3);
+    var columns = 3;
+    
+    var selectedRow = Math.floor(selectedItem / 3);
+    var selectedColumn = selectedItem - (selectedRow * 3);
+    
+    var buttonCell = [[NSButtonCell alloc] init];
+        [buttonCell setButtonType:ui];
+    
+    
+    var buttonMatrix = [[NSMatrix alloc] initWithFrame: NSMakeRect(20.0, 20.0, 300.0, rows * 25) mode:type prototype:buttonCell numberOfRows:rows numberOfColumns:columns];
+        [buttonMatrix setCellSize: NSMakeSize(90, 20)];
 
+    for (i = 0; i < options.length; i++) {
+        [[[buttonMatrix cells] objectAtIndex: i] setTitle: options[i]];
+        [[[buttonMatrix cells] objectAtIndex: i] setTag: i];
+    }
+    
+    if (rows*columns > options.length) {
+        [[[buttonMatrix cells] objectAtIndex:(options.length)] setTransparent: true];
+        [[[buttonMatrix cells] objectAtIndex:(options.length)] setEnabled: false];
+
+    }
+    [buttonMatrix selectCellAtRow: selectedRow column: selectedColumn]
+    return buttonMatrix;
+}
 
 function createArtboard (context,obj) {
   var doc = context.document;

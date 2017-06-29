@@ -2,7 +2,7 @@
   "name": "WeSketch",
   "author": "wechat",
   "version": "1.0.0",
-  "identifier": "wechat.WeSketch",
+  "identifier": "cn.wechat",
   "commands" : [
     {
       "name" : "Create Relationship",

@@ -54,7 +54,7 @@ function colorReplace(context){
     }
 
     return result;
-    }
+  }
 
    function getColour(layer) {
     var colour;

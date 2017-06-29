@@ -61,8 +61,8 @@ var onRun = function(context){
                     }
                 }
             }
-            manifest.commands = commandsLang;
-            NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
+            manifestLang.commands = commandsLang;
+            NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLang, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
             AppController.sharedInstance().pluginManager().reloadPlugins();
             
             NSUserDefaults.standardUserDefaults().setObject_forKey(data.updateAuto, updateAutoShow);

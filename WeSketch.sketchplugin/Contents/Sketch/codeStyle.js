@@ -244,25 +244,32 @@ function codeS(context){
     }
     var showMessage = i18.m2;
     var selection = context.selection[0];
-    var artboard = selection.parentArtboard().absoluteRect();
-    var size = artboard.size().width;
-    if(size  == 750 || size == 1334 || size == 720){
-        Rate = 2;
-    }else if(size == 320 || size == 414 || size == 375){
+    var artboard = selection.parentArtboard();
+    if(artboard == null){
         Rate = 1;
-    }
-    else if(size == 1242 || size == 2208 || size == 1080){
-        Rate = 3;
+        showMessage += ('，' + i18.m4);
     }else{
-        showMessage += ('，' + i18.m3);
-    }
-    if(keyCode == 'rpx'){
-        if(size == 750 || size == 1334 || size == 720 || size == 320 || size == 414 || size == 375 || size == 1242 || size == 2208 || size == 1080){
-            Rate = parseFloat((size/750).toFixed(2));
-        }else{
+        artboard = artboard.absoluteRect();
+        var size = artboard.size().width;
+        if(size  == 750 || size == 1334 || size == 720){
+            Rate = 2;
+        }else if(size == 320 || size == 414 || size == 375){
             Rate = 1;
         }
+        else if(size == 1242 || size == 2208 || size == 1080){
+            Rate = 3;
+        }else{
+            showMessage += ('，' + i18.m3);
+        }
+        if(keyCode == 'rpx'){
+            if(size == 750 || size == 1334 || size == 720 || size == 320 || size == 414 || size == 375 || size == 1242 || size == 2208 || size == 1080){
+                Rate = parseFloat((size/750).toFixed(2));
+            }else{
+                Rate = 1;
+            }
+        }
     }
+    
     getCode(selection);
     context.document.showMessage(showMessage);
 }
