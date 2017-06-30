@@ -176,7 +176,7 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('colorReplace') > -1){
-            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "codecolor"+prefix,
+            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "color"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             colorReplace(nowcontext);

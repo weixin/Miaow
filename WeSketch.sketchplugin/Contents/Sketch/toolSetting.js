@@ -5,7 +5,6 @@
 var lineColorKey = "com.sketchplugins.wechat.linecolor";
 var flagColorKey = "com.sketchplugins.wechat.flagcolor";
 var lineThicknessKey = "com.sketchplugins.wechat.lineThicknessLink";
-var i18t = _(context).toolSetting;
 
 function drawIcon(sender){
     var size = sender.frame().size;
@@ -48,6 +47,7 @@ function addButton(index,func){
 }
 
 var onRun = function(context) {
+	var i18t = _(context).toolSetting;
 	var settingsWindow = COSAlertWindow.new();
 	settingsWindow.addButtonWithTitle(i18t.m1);
 	settingsWindow.addButtonWithTitle(i18t.m2);
