@@ -3,17 +3,19 @@ var codeKey = "com.sketchplugins.wechat.codetype";
 
 
 var onRun = function(context) {
-	var settingsWindow = COSAlertWindow.new();
-	settingsWindow.addButtonWithTitle("保存");
-	settingsWindow.addButtonWithTitle("取消");
-	settingsWindow.setMessageText("获取代码设置");
+    var i18 = _(context).codeSetting;
 
-    settingsWindow.addTextLabelWithValue("代码类型");
+	var settingsWindow = COSAlertWindow.new();
+	settingsWindow.addButtonWithTitle(i18.m1);
+	settingsWindow.addButtonWithTitle(i18.m2);
+	settingsWindow.setMessageText(i18.m3);
+
+    settingsWindow.addTextLabelWithValue(i18.m4);
 	var key = NSUserDefaults.standardUserDefaults().objectForKey(codeKey) || '';
 
     var ButtonList = [];
-    ButtonList.push('标准 px');
-    ButtonList.push('小程序 rpx');
+    ButtonList.push(i18.m5);
+    ButtonList.push(i18.m6);
 
     var choice = 0;
     if(key == 'rpx'){
@@ -33,6 +35,6 @@ var onRun = function(context) {
 		}else{
   			NSUserDefaults.standardUserDefaults().setObject_forKey('px', codeKey);
 		}
-       	context.document.showMessage('设置成功');
+       	context.document.showMessage(i18.m7);
 	}
 }

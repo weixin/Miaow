@@ -5,7 +5,7 @@
   "identifier": "cn.wechat",
   "commands" : [
     {
-      "name" : "交互连线",
+      "name" : "Create Relationship",
       "identifier" : "link",
       "script" : "link.js",
       "shortcut": "command shift 1",
@@ -15,7 +15,7 @@
       }
     },
     {
-      "name" : "注释标记",
+      "name" : "Mark Index",
       "identifier" : "flag",
       "script" : "flag.js",
       "shortcut": "command shift 2",
@@ -23,7 +23,7 @@
       "istool":"true",
     },
     {
-      "name" : "图标库",
+      "name" : "Icon Manager",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "shortcut": "",
@@ -31,7 +31,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "字体批量替换",
+      "name" : "Advanced Font Replace",
       "identifier" : "fontReplace",
       "script" : "fontReplace.js",
       "shortcut": "",
@@ -39,7 +39,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "文本批量替换",
+      "name" : "Advanced Text Relpace",
       "identifier" : "textReplace",
       "script" : "textReplace.js",
       "shortcut": "command shift f",
@@ -47,7 +47,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "颜色批量替换",
+      "name" : "Advanced Color Replace",
       "identifier" : "colorReplace",
       "script" : "colorReplace.js",
       "shortcut": "",
@@ -55,7 +55,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "上传图标",
+      "name" : "Upload",
       "identifier" : "uploadIcon",
       "script" : "uploadIcon.js",
       "shortcut": "",
@@ -64,7 +64,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "同步 UI Kit",
+      "name" : "Sync UI Kit",
       "identifier" : "syncuikit",
       "script" : "syncUIkit.js",
       "shortcut": "",
@@ -72,7 +72,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导入 UI Kit",
+      "name" : "Import UI Kit",
       "identifier" : "importuikit",
       "script" : "importUIkit.js",
       "shortcut": "",
@@ -80,7 +80,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导出 UI Kit",
+      "name" : "Export UI Kit",
       "identifier" : "exportuikit",
       "script" : "exportUIkit.js",
       "shortcut": "",
@@ -88,7 +88,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "同步色板",
+      "name" : "Sync Colors",
       "identifier" : "synccolor",
       "script" : "syncColor.js",
       "shortcut": "",
@@ -96,7 +96,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导出色板",
+      "name" : "Export Colors",
       "identifier" : "exportcolor",
       "script" : "exportColor.js",
       "shortcut": "",
@@ -104,7 +104,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导入色板",
+      "name" : "Import Colors",
       "identifier" : "importcolor",
       "script" : "importColor.js",
       "shortcut": "",
@@ -112,7 +112,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "快捷取色",
+      "name" : "Color Picker",
       "identifier" : "codeColor",
       "script" : "codeColor.js",
       "shortcut": "command shift c",
@@ -120,7 +120,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "生成代码",
+      "name" : "Copy CSS Style",
       "identifier" : "codeStyle",
       "script" : "codeStyle.js",
       "shortcut": "command shift d",
@@ -128,7 +128,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "自定义宽高导出",
+      "name" : "Advanced Export",
       "identifier" : "exportSlice",
       "script" : "exportSlice.js",
       "shortcut": "command shift u",
@@ -136,7 +136,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "代码设置",
+      "name" : " └─ Settings",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
       "shortcut": "",
@@ -145,7 +145,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "设置",
+      "name" : " └─ Settings",
       "identifier" : "syncSetting",
       "script" : "syncSetting.js",
       "shortcut": "",
@@ -154,7 +154,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "工具栏",
+      "name" : "Show Toolbar",
       "identifier" : "toolbar",
       "script" : "toolbar.js",
       "shortcut": "",
@@ -164,7 +164,7 @@
       }
     },
     {
-      "name" : "设置",
+      "name" : "Settings",
       "identifier" : "setting",
       "script" : "setting.js",
       "shortcut": "",
@@ -173,7 +173,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "外观设置",
+      "name" : " └─ Settings",
       "identifier" : "toolSetting",
       "script" : "toolSetting.js",
       "shortcut": "",
@@ -182,7 +182,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "检查更新",
+      "name" : "Check Update",
       "identifier" : "checkforupdate",
       "script" : "checkForUpdate.js",
       "shortcut": "",
@@ -191,7 +191,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "官网",
+      "name" : "Website",
       "identifier" : "about",
       "script" : "about.js",
       "shortcut": "",
@@ -200,16 +200,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "捐赠",
-      "identifier" : "donation",
-      "script" : "donation.js",
-      "shortcut": "",
-      "handler" : "onRun",
-      "istool":"",
-      "noshortcut":"true"
-    },
-    {
-      "name" : "反馈",
+      "name" : "Feedback",
       "identifier" : "issues",
       "script" : "issues.js",
       "shortcut": "",
@@ -230,23 +221,23 @@
   "menu": {
     "items": [
     {
-        "title": "管理 UI Kit",
+        "title": "UI Kit",
         "items": [
             "syncuikit",
             "importuikit",
-            "exportuikit",
-            "syncSetting"
+            "exportuikit"
         ]
     },
     {
-        "title": "管理色板",
+        "title": "Color Set",
         "items": [
             "synccolor",
             "importcolor",
-            "exportcolor",
-            "syncSetting"
+            "exportcolor"
         ]
     },
+    "syncSetting",
+    "-",
     "iconQ",
     "-",
     "link",
@@ -266,7 +257,7 @@
     "-",
     "setting",
     {
-        "title": "关于",
+        "title": "About",
         "items": [
             "about",
             "issues"

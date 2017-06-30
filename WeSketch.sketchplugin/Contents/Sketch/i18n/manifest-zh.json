@@ -145,7 +145,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "设置",
+      "name" : " └─ 设置",
       "identifier" : "syncSetting",
       "script" : "syncSetting.js",
       "shortcut": "",
@@ -226,7 +226,6 @@
             "syncuikit",
             "importuikit",
             "exportuikit",
-            "syncSetting"
         ]
     },
     {
@@ -234,10 +233,11 @@
         "items": [
             "synccolor",
             "importcolor",
-            "exportcolor",
-            "syncSetting"
+            "exportcolor"
         ]
     },
+    "syncSetting",
+    "-",
     "iconQ",
     "-",
     "link",

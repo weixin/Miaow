@@ -129,11 +129,11 @@
 		"m5":"Toolbar",
 		"m6":" Show toolbar when Sketch open",
 		"m7":"Shortcuts",
-		"m8":"Feature　　　　Shortcuts　　　　　　　　　　Toolbar",
+		"m8":"Feature　　　　　Shortcuts　　　　　　　　　　Toolbar",
 		"m9":"Save",
 		"m10":"Language settings",
-		"m11":"English",
-		"m12":"Chinese"
+		"m11":" English",
+		"m12":" Chinese"
 	},
 	"syncColor":{
 		"m1":"Error data, please check json file",
@@ -199,6 +199,15 @@
 		"m3":"Line & Mark Style",
 		"m4":"Line color             Line weight",
 		"m5":"Mark color",
-		"m6":"Saved"
+		"m6":""
+	},
+	"codeSetting":{
+		"m1":"Save",
+		"m2":"Cancel",
+		"m3":"Code Setting",
+		"m4":"format",
+		"m5":"px（Web）",
+		"m6":"rpx（Mini App）",
+		"m7":"Saved"
 	}
 }

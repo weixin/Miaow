@@ -4,22 +4,17 @@ var kPluginDomain;
 var iconQueryUrl = 'http://123.207.94.56:3000';
 var loginKey = "com.sketchplugins.wechat.iconLogin";
 var i18nKey = "com.sketchplugins.wechat.i18n";
-var i18Content = {};
-var i18Flag = false;
 
 
 var _= function(context){
-    if(i18Flag){
-        return i18Content;
-    }
     function get_(json,context) {
             var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json+".json").path();
             var jsonData = NSData.dataWithContentsOfFile(manifestPath);
             jsonData = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             return JSON.parse(jsonData);
     }
+    var i18Content = {};
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-    i18Flag = true;
     if(lang == undefined){
         var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
         lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);

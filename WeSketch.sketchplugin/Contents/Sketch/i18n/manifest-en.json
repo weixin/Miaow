@@ -145,7 +145,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "Settings",
+      "name" : " └─ Settings",
       "identifier" : "syncSetting",
       "script" : "syncSetting.js",
       "shortcut": "",
@@ -225,8 +225,7 @@
         "items": [
             "syncuikit",
             "importuikit",
-            "exportuikit",
-            "syncSetting"
+            "exportuikit"
         ]
     },
     {
@@ -234,10 +233,11 @@
         "items": [
             "synccolor",
             "importcolor",
-            "exportcolor",
-            "syncSetting"
+            "exportcolor"
         ]
     },
+    "syncSetting",
+    "-",
     "iconQ",
     "-",
     "link",

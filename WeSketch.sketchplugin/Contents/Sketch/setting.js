@@ -49,20 +49,37 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "setting",
         callback: function( data ){
-            var manifestPathLang = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-"+data.language+".json").path(),
-            manifestLang = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPathLang), NSJSONReadingMutableContainers, nil),
-            commandsLang = manifestLang.commands;
-            var keydata = data.keydata;
-            for(var i = 0;i < commandsLang.length;i++){
-                for(var k = 0; k < keydata.length;k++){
-                    if(decodeURIComponent(keydata[k].identifier) == (commandsLang[i].identifier)){
-                        commandsLang[i].shortcut = decodeURIComponent(keydata[k].shortcut);
-                        commandsLang[i].istool = (keydata[k].istool);
+            function setKey(manifestPath,data){
+                var manifestLang = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
+                var commandsLang = manifestLang.commands;
+                var keydata = data.keydata;
+                for(var i = 0;i < commandsLang.length;i++){
+                    for(var k = 0; k < keydata.length;k++){
+                        if(decodeURIComponent(keydata[k].identifier) == (commandsLang[i].identifier)){
+                            commandsLang[i].shortcut = decodeURIComponent(keydata[k].shortcut);
+                            commandsLang[i].istool = (keydata[k].istool);
+                        }
                     }
                 }
+                manifestLang.commands = commandsLang;
+                NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLang, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
             }
-            manifestLang.commands = commandsLang;
-            NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLang, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
+
+            var zhManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-zh.json").path();
+            var enManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-en.json").path();
+            setKey(zhManifestPath,data);
+            setKey(enManifestPath,data);
+
+            var manifestLangData;
+            if(data.language == 'zh'){
+                manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(zhManifestPath), NSJSONReadingMutableContainers, nil);
+            }else{
+                manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(enManifestPath), NSJSONReadingMutableContainers, nil);
+            }
+
+            var localManiFest = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path();
+            NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLangData, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(localManiFest, true, NSUTF8StringEncoding, nil);
+            
             AppController.sharedInstance().pluginManager().reloadPlugins();
             
             NSUserDefaults.standardUserDefaults().setObject_forKey(data.updateAuto, updateAutoShow);
