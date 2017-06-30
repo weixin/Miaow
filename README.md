@@ -1,17 +1,14 @@
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/1049575/27729923-23de4ec2-5dba-11e7-92d1-616e721da6ef.png" width=91 height=75>
-  <h3 align="center">WeSketh</h3>
-  <p align="center">v1.0.0</p>
-</p>
-<br>
+<img src="https://user-images.githubusercontent.com/1049575/27730202-10ee250c-5dbb-11e7-8b2d-327005125a8d.png" width=450 height=75>
 
-</center>
+[![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
 > A set of powerful plugins for Sketch, made by Tencent WeChat Team, include:
 
 * UI Kit & Color Set Sync for design team
 * Icon Manager, Create Relationship, Mark Index, Advanced Font & Color replacement
 * Advanced image export and Copy CSS for web developer
+
+[中文版 >](https://github.com/weixin/WeSketch/blob/master/README-zhCN.md)
 
 ## Download & Install
 
@@ -22,11 +19,11 @@
 
 #### Menu Bar
 
-![Screenshot1](https://user-images.githubusercontent.com/1049575/27524016-00be162e-5a64-11e7-8e00-fb2ec1521c66.png)
+![Screenshot1](https://user-images.githubusercontent.com/1049575/27730314-5ad18858-5dbb-11e7-811f-48914de53021.png)
 
 #### Tool Bar
 
-![Screenshot2](https://user-images.githubusercontent.com/1049575/27429370-6f27035e-5777-11e7-91e4-56e49aac5d9d.png)
+![Screenshot2](https://user-images.githubusercontent.com/1049575/27730321-5f6ddd62-5dbb-11e7-8e2e-08f263761c13.png)
 
 ## Features & Instruction
 
