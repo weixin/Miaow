@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/1049575/27730202-10ee250c-5dbb-11e7-8b2d-327005125a8d.png" width=450 height=75>
+<img src="https://user-images.githubusercontent.com/1049575/27730899-8c16e708-5dbd-11e7-98fa-466d674e9fd0.png" width=413 height=75>
 
 [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
