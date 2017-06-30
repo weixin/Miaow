@@ -1,6 +1,6 @@
 {
   "name": "WeSketch",
-  "author": "wechat",
+  "author": "Tencent WeChat",
   "version": "1.0.0",
   "identifier": "cn.wechat",
   "commands" : [
@@ -128,7 +128,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Advanced Export(Resize)",
+      "name" : "Advanced Export",
       "identifier" : "exportSlice",
       "script" : "exportSlice.js",
       "shortcut": "command shift u",
@@ -136,7 +136,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Code Settings",
+      "name" : " └─ Settings",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
       "shortcut": "",
@@ -173,7 +173,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "UI Setting",
+      "name" : " └─ Settings",
       "identifier" : "toolSetting",
       "script" : "toolSetting.js",
       "shortcut": "",
@@ -194,15 +194,6 @@
       "name" : "Website",
       "identifier" : "about",
       "script" : "about.js",
-      "shortcut": "",
-      "handler" : "onRun",
-      "istool":"",
-      "noshortcut":"true"
-    },
-    {
-      "name" : "Donate",
-      "identifier" : "donation",
-      "script" : "donation.js",
       "shortcut": "",
       "handler" : "onRun",
       "istool":"",
@@ -239,7 +230,7 @@
         ]
     },
     {
-        "title": "Colors",
+        "title": "Color Set",
         "items": [
             "synccolor",
             "importcolor",

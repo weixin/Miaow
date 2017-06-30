@@ -1,6 +1,6 @@
 {
   "name": "WeSketch",
-  "author": "wechat",
+  "author": "Tencent WeChat",
   "version": "1.0.0",
   "identifier": "cn.wechat",
   "commands" : [
@@ -136,7 +136,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "代码设置",
+      "name" : " └─ 设置",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
       "shortcut": "",
@@ -173,7 +173,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "外观设置",
+      "name" : " └─ 设置",
       "identifier" : "toolSetting",
       "script" : "toolSetting.js",
       "shortcut": "",
@@ -194,15 +194,6 @@
       "name" : "官网",
       "identifier" : "about",
       "script" : "about.js",
-      "shortcut": "",
-      "handler" : "onRun",
-      "istool":"",
-      "noshortcut":"true"
-    },
-    {
-      "name" : "捐赠",
-      "identifier" : "donation",
-      "script" : "donation.js",
       "shortcut": "",
       "handler" : "onRun",
       "istool":"",
