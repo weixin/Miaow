@@ -337,17 +337,19 @@ function SMPanel(options){
                         var panel = [NSOpenPanel openPanel];
                         [panel setCanChooseDirectories:false];
                         [panel setCanCreateDirectories:false];
-                        panel.setAllowedFileTypes([@"sketch"]);
+                        panel.setAllowedFileTypes(["sketch","json"]);
                         panel.setAllowsOtherFileTypes(false);
                         panel.setExtensionHidden(false);
                         var clicked = [panel runModal];
                         if (clicked != NSFileHandlingPanelOKButton) {
+                            windowObject.evaluateWebScript("inputFile('"+''+"')");
                             return;
                         }
                         var firstURL = [[panel URLs] objectAtIndex:0];
                         var unformattedURL = [NSString stringWithFormat:@"%@", firstURL];
                         var file_path = [unformattedURL stringByRemovingPercentEncoding];
                         windowObject.evaluateWebScript("inputFile('"+file_path+"')");
+                        windowObject.evaluateWebScript("window.location.hash = '';");
                     }else if(request == 'login'){
                         options.loginCallback(windowObject);
                     }else if(request == 'pushdata'){

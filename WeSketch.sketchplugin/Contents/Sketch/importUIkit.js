@@ -87,6 +87,7 @@ var onRun = function(context){
       var addPageCount = 0;
 
       var firstSymbols = false;
+      var deleteFlag = [];
 
       for(var i=0;i<sourcePages.count();i++){
         if(sourcePages[i].name() != 'Symbols' && firstSymbols == false){
@@ -105,6 +106,7 @@ var onRun = function(context){
         for(var k=0;k<pages.count();k++){
           //如果有同一个page名
           if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
+            deleteFlag.push(pages[k]);
             flagForOldPage = true;
 
             //比对一下
@@ -117,7 +119,7 @@ var onRun = function(context){
               var flagForNewSymbol = false;
               for(var g=0;g<localSymobl.count();g++){
                 if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
-              context.document.removePage(pages[k]);
+              
                   
                   flagForNewSymbol = true;
 
@@ -158,8 +160,6 @@ var onRun = function(context){
           }
         }
         
-        //如果没有直接添加一个新的page
-        // 不行，直接新增page有bug
 
         if(!flagForOldPage){
           addPageCount++; 
@@ -173,6 +173,9 @@ var onRun = function(context){
           firstSymbols = true;
           i = -1;
         }
+      }
+      for(var i = 0;i<deleteFlag.length;i++){
+        context.document.removePage(deleteFlag[i]);
       }
   }
   sourceDoc.close();

@@ -37,9 +37,6 @@ function syncUIkit(context){
 		if(layers.count() != b.layers().count()){
 			return false;
 		}
-		// if(a.rect() && b.rect() && a.rect().toString() != b.rect().toString()){
-		// 	return false;
-		// }
 		for(var i = 0;i < layers.count(); i++){
 			var layer = layers[i];
 
@@ -56,10 +53,7 @@ function syncUIkit(context){
 					return false;
 				}
 			}
-			// if(layer.class() == 'MSRectangleShape' || layer.class() == 'MSOvalShape' || layer.class() == 'MSShapePathLayer'){
-				
-			// }
-			if(layer.class() == 'MSLayerGroup' && layer.style().fills().count() != 0){
+			if((layer.class() == 'MSLayerGroup' || layer.class() == 'MSShapeGroup') && layer.style().fills().count() != 0){
 				if(encodeURIComponent(layer.style().fills()[0].color().toString()) != encodeURIComponent(b.layers()[i].style().fills()[0].color().toString())){
 					return false;
 				}
@@ -117,6 +111,7 @@ function syncUIkit(context){
 	    var addPageCount = 0;
 
 	    var firstSymbols = false;
+	    var deleteFlag = [];
 
 	    for(var i=0;i<sourcePages.count();i++){
 	    	if(sourcePages[i].name() != 'Symbols' && firstSymbols == false){
@@ -135,6 +130,7 @@ function syncUIkit(context){
 	      for(var k=0;k<pages.count();k++){
 	        //如果有同一个page名
 	        if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
+	      	  deleteFlag.push(pages[k]);
 	          flagForOldPage = true;
 
 	          //比对一下
@@ -147,7 +143,7 @@ function syncUIkit(context){
 	            var flagForNewSymbol = false;
 	            for(var g=0;g<localSymobl.count();g++){
 	              if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
-	      			context.document.removePage(pages[k]);
+	      			
 	                
 	                flagForNewSymbol = true;
 
@@ -188,8 +184,6 @@ function syncUIkit(context){
 	        }
 	      }
 	      
-	      //如果没有直接添加一个新的page
-	      // 不行，直接新增page有bug
 
 	      if(!flagForOldPage){
 	        addPageCount++; 
@@ -203,6 +197,9 @@ function syncUIkit(context){
 	      	firstSymbols = true;
 	      	i = -1;
 	      }
+	    }
+	    for(var i = 0;i<deleteFlag.length;i++){
+	    	context.document.removePage(deleteFlag[i]);
 	    }
 	}
 	var fm  =[NSFileManager defaultManager];

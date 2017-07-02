@@ -54,11 +54,11 @@ function fontReplace(context){
 
             var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, k*24 + 40, 300.0, 30))
 
-            accessoryList = NSComboBox.alloc().initWithFrame(NSMakeRect(0,0,230,25));
+            accessoryList = NSComboBox.alloc().initWithFrame(NSMakeRect(0,0,200,25));
             accessoryList.addItemsWithObjectValues(options);
             accessoryView.addSubview(accessoryList);
 
-            var button = [[NSButton alloc] initWithFrame:NSMakeRect(240,-3,60,30)];
+            var button = [[NSButton alloc] initWithFrame:NSMakeRect(220,-3,80,30)];
             [button setButtonType:2];
             button.bezelStyle = 1;
             button.title = i18.m5;

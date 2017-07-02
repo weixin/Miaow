@@ -31,8 +31,8 @@
 		"m7":"For",
 		"m8":"Same element",
 		"m9":"All element",
-		"m10":"Close",
-		"m11":"Replace"
+		"m10":"Replace",
+		"m11":"Close"
 	},
 	"exportColor":{
 		"m1":"Color Set exported",
@@ -83,13 +83,13 @@
 		"m1":"OK",
 		"m2":"Cancel",
 		"m3":"Choose your action",
-		"m4":"Delete and keep Index",
-		"m5":"Delete and reset Index",
+		"m4":"Delete,Keep Index",
+		"m5":"Delete,Reset Index",
 		"m6":"Artboard refreshed\nPlease select a element"
 	},
 	"iconQ":{
 		"m1":"Icon exported",
-		"m2":"Icon exported (Artboard Center)",
+		"m2":"Icon exported (Pages Center)",
 		"m3":"Icons from the internet, Copyright is owned by the author",
 		"m4":"Login",
 		"m5":"Exit",
@@ -145,7 +145,7 @@
 		"m7":"Imported successfully, Please re-open Document Colors"
 	},
 	"syncSetting":{
-		"m1":"Sync successfully",
+		"m1":"Sync setting successfully",
 		"m2":"Add",
 		"m3":"Project",
 		"m4":"Path",
