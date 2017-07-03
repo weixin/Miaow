@@ -8,11 +8,11 @@
 * Icon Manager, Create Relationship, Mark Index, Advanced Font & Color replacement
 * Advanced image export and Copy CSS for web developer
 
-[中文版 >](https://github.com/weixin/WeSketch/blob/master/README-zhCN.md)
+[中文(Chinese) >](https://github.com/weixin/WeSketch/blob/master/README-zhCN.md)
 
 ## Download & Install
 
-1. Click [Download](https://github.com/weixin/WeSketch/releases/download/1.0.0/WeSketch-1.0.0.sketchplugin.zip) and unzip。 *(Support Sketch 44+)*  
+1. Click [Download](https://github.com/weixin/WeSketch/archive/master.zip) and unzip。 *(Support Sketch 44+)*  
 2. Double click `wesketch.sketchplugin` to install
 
 ## Screenshots
