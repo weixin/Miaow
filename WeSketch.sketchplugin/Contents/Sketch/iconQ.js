@@ -6,7 +6,14 @@ function iconQ(context){
     var usualKey = "com.sketchplugins.wechat.iconusual";
     var loginKey = "com.sketchplugins.wechat.iconLogin";
     var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
+    var iconSaveKey = "com.sketchplugins.wechat.baseicon";
+    var iconVersionKey = "com.sketchplugins.wechat.baseiconversion";
     var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+
+    var returnData = networkRequest([getConfig('config',context).VERSION])
+    var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    jsonData = JSON.parse(jsonData);
+    var currentVersion = jsonData.currentIconVersion;
 
 
     function iconLogin(data){
@@ -44,7 +51,24 @@ function iconQ(context){
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 
-    var baseSvg = getSvg().data;
+    var baseSvg;
+    if(!NSUserDefaults.standardUserDefaults().objectForKey(iconSaveKey) || NSUserDefaults.standardUserDefaults().objectForKey(iconVersionKey) != currentVersion){
+        baseSvg = getSvg().data;
+        NSUserDefaults.standardUserDefaults().setObject_forKey(currentVersion,iconVersionKey);
+        NSUserDefaults.standardUserDefaults().setObject_forKey(baseSvg,iconSaveKey);
+    }else{
+        baseSvg = NSUserDefaults.standardUserDefaults().objectForKey(iconSaveKey);
+        var encodeBaseSvg = [];
+        for (var i = 0; i < baseSvg.length; i++) {
+            encodeBaseSvg.push({
+                author:decodeURIComponent(encodeURIComponent(baseSvg[i].author)),
+                content:decodeURIComponent(encodeURIComponent(baseSvg[i].content)),
+                name:decodeURIComponent(encodeURIComponent(baseSvg[i].name))
+            })
+        };
+        baseSvg = encodeBaseSvg;
+    }
+    
 
     var isLogin;
     if(!NSUserDefaults.standardUserDefaults().objectForKey(loginKey) || NSUserDefaults.standardUserDefaults().objectForKey(loginKey).length()  != 32){
@@ -66,6 +90,7 @@ function iconQ(context){
         initData.project = project;
         initData.isLogin = true;
     }
+
 
     SMPanel({
         url: pluginSketch + "/panel/icon.html?12",

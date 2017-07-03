@@ -436,7 +436,7 @@
       }
     }).on('mouseenter mouseout','.content-body',function(){
       var i = parseInt($(this).attr('data-i'));
-      $('#author').text('作者：'+savedata[i].author);
+      $('#author').text(i18.m16+'：'+savedata[i].author);
     })
 
     $('.login').click(function(){
@@ -486,7 +486,7 @@
     $('body').on('change','#selectproject',function(){
       projectID = $('#selectproject').val();
       var typeDom = [];
-      typeDom.push('<option value="">'+'全部'+'</option>')
+      typeDom.push('<option value="">'+i18.m14+'</option>')
       if(projectID != ''){
         for(var i = 0 ;i<project.length;i++){
           if(project[i].projectId == projectID){
@@ -558,14 +558,14 @@
   
   function appendType(){
     var projectDom = [];
-    projectDom.push('<option value="">公共</option>')
+    projectDom.push('<option value="">'+i18.m15+'</option>')
     for(var i = 0 ;i<project.length;i++){
       projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
     }
     $('#selectproject').empty().append(projectDom.join(''));
     var typeDom = [];
     projectID = $('#selectproject').val();
-    typeDom.push('<option value="">'+'全部'+'</option>');
+    typeDom.push('<option value="">'+i18.m14+'</option>');
     $('#selecttype2').empty().append(typeDom);
     typeID = $('#selecttype2').val();
   }

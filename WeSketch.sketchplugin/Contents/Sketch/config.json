@@ -1,5 +1,5 @@
 {
-  "VERSION": "http://tmtdemo.qq.com/sketch/config.json",
+  "VERSION": "http://wximg.qq.com/tmt/sketch/config.json",
   "UIKIT": [{"title":"WeUI","url":"http://tmtdemo.qq.com/sketch/weui.sketch"},
   			{"title":"AndroidDesign","url":"http://tmtdemo.qq.com/sketch/android.sketch"},
   			{"title":"iOSDesign","url":"http://tmtdemo.qq.com/sketch/iOS.sketch"}

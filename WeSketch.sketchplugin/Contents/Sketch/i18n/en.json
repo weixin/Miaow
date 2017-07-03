@@ -100,7 +100,10 @@
 		"m10":"More",
 		"m11":"User",
 		"m12":"Password",
-		"m13":"Register"
+		"m13":"Register",
+		"m14":"All",
+		"m15":"Public",
+		"m16":"Author"
 	},
 	"importColor":{
 		"m1":"Faild, Please checke Color Set",
