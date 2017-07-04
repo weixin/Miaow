@@ -254,6 +254,12 @@ function hexToRgb(hex) {
    return res;  
  }
 
+
+//  sketch-measure
+//  common.js
+//  github https://github.com/utom/sketch-measure
+//  Created by utom
+
 function SMPanel(options){
     coscript.setShouldKeepAround(true);
     var self = this,
