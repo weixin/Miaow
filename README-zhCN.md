@@ -13,6 +13,11 @@
 1. 点击 [下载地址](https://github.com/weixin/WeSketch/archive/master.zip) 并解压缩。 *(支持 Sketch 44+)*  
 2. 双击打开 `wesketch.sketchplugin` 安装使用
 
+## 使用 Sketch Runner 安装
+使用 Sketch Runner 在 `install` 命令下输入 `WeSketch` 即可安装。 Runner 可以帮助你管理插件以及做更多的事情来加速你的 Sketch 工作流。 [点此下载 Runner](http://www.sketchrunner.com).
+
+<a href="http://www.sketchrunner.com"><img src="Runner_badge_blue_160x40.png" width="160px"></a>
+
 ## 界面预览
 
 #### 菜单栏
