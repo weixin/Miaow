@@ -54,6 +54,12 @@ function textReplace(context){
         
         userInterface.addButtonWithTitle(i18.m11);
         userInterface.addButtonWithTitle(i18.m12);
+        
+        userInterface.alert().window().setInitialFirstResponder(userInterface.viewAtIndex(1))
+        userInterface.viewAtIndex(1).setNextKeyView(userInterface.viewAtIndex(3))
+        userInterface.viewAtIndex(3).setNextKeyView(userInterface.viewAtIndex(5))
+        userInterface.viewAtIndex(5).setNextKeyView(userInterface.viewAtIndex(7))
+        userInterface.viewAtIndex(7).setNextKeyView(userInterface.viewAtIndex(1))
 
         return userInterface.runModal();
     }
@@ -110,6 +116,17 @@ function textReplace(context){
                 for (var i = 0; i < [sublayers count]; i++) {
                     var sublayer = [sublayers objectAtIndex: i];
                     searchInLayer(sublayer);
+                }
+                break;
+            case MSSymbolInstance:
+                for (var key in layer.overrides()) {
+                    var value = layer.overrides()[key];
+                    if (value.isKindOfClass(NSString)) {
+                        if (value.trim().match(textToFind)) {
+                            layer.overrides()[key] = layer.overrides()[key].replace(textToFind,textToReplace); 
+                            replaceCount ++;
+                        }
+                    }
                 }
                 break;
         }
