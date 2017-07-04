@@ -3,6 +3,8 @@
   "author": "Tencent WeChat",
   "version": "1.0.0",
   "identifier": "cn.wechat",
+  "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
+  "icon" : "minicon.png",
   "commands" : [
     {
       "name" : "交互连线",

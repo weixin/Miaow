@@ -858,6 +858,8 @@ function getLink(context,refursh){
 
 	var redrawConnections = function(context) {
 		var doc = context.document || context.actionContext.document;
+		var selectionlayer = context.selection;
+
 		//var selectedLayers = doc.findSelectedLayers();
 
 		var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
@@ -891,7 +893,16 @@ function getLink(context,refursh){
 		connectionsGroup.setName("Connections");
 		connectionsGroup.setIsLocked(1);
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, kPluginDomain);
-		doc.currentPage().deselectAllLayers();
+		
+		for(var i = 0;i < context.selection.length;i++){
+			context.selection[i].select_byExpandingSelection(false,false);
+		}
+
+		for(var i = 0;i < selectionlayer.length;i++){
+			selectionlayer.select_byExpandingSelection(true, true);
+		}
+
+		// doc.currentPage().deselectAllLayers();
 
 		// var loop = selectedLayers.objectEnumerator(), selectedLayer;
 		// while (selectedLayer = loop.nextObject()) {

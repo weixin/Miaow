@@ -276,7 +276,7 @@ function getFlag(context,refrush){
 
 	var doc = context.document;
 	var flags = [];
-	// var selectedLayers = doc.findSelectedLayers();
+	var selectedLayers = context.selection;
 
 	if (context.selection.count()!=1) {
 		flags = drawFunction(doc,null);
@@ -299,11 +299,12 @@ function getFlag(context,refrush){
 	connectionsGroup.setName("___flags");
 	connectionsGroup.setIsLocked(1);
 	context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isflagContainer", connectionsGroup, kPluginDomainFlag);
-	doc.currentPage().deselectAllLayers();
-	// var loop = selectedLayers.objectEnumerator(), selectedLayer;
-	// while (selectedLayer = loop.nextObject()) {
-	// 	selectedLayer.select_byExpandingSelection(true, true);
-	// }
+
+	for(var i = 0;i<context.selection.length;i++){
+		context.selection[i].select_byExpandingSelection(false,false);
+	}
+
+	selectedLayers[0].select_byExpandingSelection(true, true);
 }
 
 var onRun = function(context){
