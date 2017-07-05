@@ -10,6 +10,7 @@
       "name" : "Draw Link",
       "identifier" : "link",
       "script" : "link.js",
+      "icon": "../Resources/icons/link.png",
       "shortcut": "command shift 1",
       "istool":"true",
       "handlers" : {
@@ -20,6 +21,7 @@
       "name" : "Mark Index",
       "identifier" : "flag",
       "script" : "flag.js",
+      "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
       "handler" : "onRun",
       "istool":"true",
@@ -28,6 +30,7 @@
       "name" : "Icon Manager",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
+      "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -36,6 +39,7 @@
       "name" : "Advanced Font Replace",
       "identifier" : "fontReplace",
       "script" : "fontReplace.js",
+      "icon": "../Resources/icons/font.png",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -44,6 +48,7 @@
       "name" : "Advanced Text Relpace",
       "identifier" : "textReplace",
       "script" : "textReplace.js",
+      "icon": "../Resources/icons/text.png",
       "shortcut": "command shift f",
       "istool":"true",
       "handler" : "onRun"
@@ -52,6 +57,7 @@
       "name" : "Advanced Color Replace",
       "identifier" : "colorReplace",
       "script" : "colorReplace.js",
+      "icon": "../Resources/icons/color.png",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -60,6 +66,7 @@
       "name" : "Upload",
       "identifier" : "uploadIcon",
       "script" : "uploadIcon.js",
+      "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"",
       "noshortcut":"true",
@@ -69,6 +76,7 @@
       "name" : "Sync UI Kit",
       "identifier" : "syncuikit",
       "script" : "syncUIkit.js",
+      "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -77,6 +85,7 @@
       "name" : "Import UI Kit",
       "identifier" : "importuikit",
       "script" : "importUIkit.js",
+      "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool":"",
       "handler" : "onRun"
@@ -85,6 +94,7 @@
       "name" : "Export UI Kit",
       "identifier" : "exportuikit",
       "script" : "exportUIkit.js",
+      "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool":"",
       "handler" : "onRun"
@@ -93,6 +103,7 @@
       "name" : "Sync Colors",
       "identifier" : "synccolor",
       "script" : "syncColor.js",
+      "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -101,6 +112,7 @@
       "name" : "Export Colors",
       "identifier" : "exportcolor",
       "script" : "exportColor.js",
+      "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
       "istool":"",
       "handler" : "onRun"
@@ -109,6 +121,7 @@
       "name" : "Import Colors",
       "identifier" : "importcolor",
       "script" : "importColor.js",
+      "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
       "istool":"",
       "handler" : "onRun"
@@ -117,6 +130,7 @@
       "name" : "Color Picker",
       "identifier" : "codeColor",
       "script" : "codeColor.js",
+      "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
       "handler" : "onRun"
@@ -125,6 +139,7 @@
       "name" : "Copy CSS Style",
       "identifier" : "codeStyle",
       "script" : "codeStyle.js",
+      "icon": "../Resources/icons/codeStyle.png",
       "shortcut": "command shift d",
       "istool":"true",
       "handler" : "onRun"
@@ -133,6 +148,7 @@
       "name" : "Advanced Export",
       "identifier" : "exportSlice",
       "script" : "exportSlice.js",
+      "icon": "../Resources/icons/cut.png",
       "shortcut": "command shift u",
       "istool":"true",
       "handler" : "onRun"

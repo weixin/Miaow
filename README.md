@@ -15,6 +15,11 @@
 1. Click [Download](https://github.com/weixin/WeSketch/archive/master.zip) and unzip。 *(Support Sketch 44+)*  
 2. Double click `wesketch.sketchplugin` to install
 
+## Install with Sketch Runner
+With Sketch Runner, just go to the `install` command and search for `WeSketch`. Runner allows you to manage plugins and do much more to speed up your workflow in Sketch. [Download Runner here](http://www.sketchrunner.com).
+
+<a href="http://www.sketchrunner.com"><img src="Runner_badge_blue_160x40.png" width="160px"></a>
+
 ## Screenshots
 
 #### Menu Bar
