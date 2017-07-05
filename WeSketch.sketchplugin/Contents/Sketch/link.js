@@ -898,7 +898,7 @@ function getLink(context,refursh){
 			context.selection[i].select_byExpandingSelection(false,false);
 		}
 
-		for(var i = 0;i < selectionlayer.count();i++){
+		for(var i = 0;i < selectionLayer.count();i++){
 			selectionLayer[i].select_byExpandingSelection(true, true);
 		}
 
