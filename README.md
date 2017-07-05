@@ -12,7 +12,7 @@
 
 ## Download & Install
 
-1. Click [Download](https://github.com/weixin/WeSketch/archive/master.zip) and unzip。 *(Support Sketch 44+)*  
+1. Click [Download](https://github.com/weixin/WeSketch/releases/download/1.0.0/WeSketch-1.0.0.sketchplugin.zip) and unzip。 *(Support Sketch 44+)*  
 2. Double click `wesketch.sketchplugin` to install
 
 ## Install with Sketch Runner

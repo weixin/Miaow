@@ -858,7 +858,7 @@ function getLink(context,refursh){
 
 	var redrawConnections = function(context) {
 		var doc = context.document || context.actionContext.document;
-		var selectionlayer = context.selection;
+		var selectionLayer = context.selection;
 
 		//var selectedLayers = doc.findSelectedLayers();
 
@@ -898,16 +898,9 @@ function getLink(context,refursh){
 			context.selection[i].select_byExpandingSelection(false,false);
 		}
 
-		for(var i = 0;i < selectionlayer.length;i++){
-			selectionlayer.select_byExpandingSelection(true, true);
+		for(var i = 0;i < selectionlayer.count();i++){
+			selectionLayer[i].select_byExpandingSelection(true, true);
 		}
-
-		// doc.currentPage().deselectAllLayers();
-
-		// var loop = selectedLayers.objectEnumerator(), selectedLayer;
-		// while (selectedLayer = loop.nextObject()) {
-		// 	selectedLayer.select_byExpandingSelection(true, true);
-		// }
 
 		return connectionsGroup;
 	}

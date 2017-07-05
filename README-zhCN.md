@@ -10,7 +10,7 @@
 
 ## 下载 & 安装
 
-1. 点击 [下载地址](https://github.com/weixin/WeSketch/archive/master.zip) 并解压缩。 *(支持 Sketch 44+)*  
+1. 点击 [下载地址](https://github.com/weixin/WeSketch/releases/download/1.0.0/WeSketch-1.0.0.sketchplugin.zip) 并解压缩。 *(支持 Sketch 44+)*  
 2. 双击打开 `wesketch.sketchplugin` 安装使用
 
 ## 使用 Sketch Runner 安装
