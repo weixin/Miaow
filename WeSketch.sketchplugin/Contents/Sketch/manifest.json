@@ -45,7 +45,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Advanced Text Relpace",
+      "name" : "Advanced Text Replace",
       "identifier" : "textReplace",
       "script" : "textReplace.js",
       "icon": "../Resources/icons/text.png",
