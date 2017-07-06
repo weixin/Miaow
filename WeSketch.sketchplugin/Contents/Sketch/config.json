@@ -1,6 +1,9 @@
 {
   "VERSION": "http://wximg.qq.com/tmt/sketch/config.json",
-  "i18n":["enUS","zhCN"],
+  "i18n":[
+	  {"key":"enUS","name":"English(US)"},
+	  {"key":"zhCN","name":"Chinese(CN)"}
+  ],
   "UIKIT": [{"title":"WeUI","url":"http://tmtdemo.qq.com/sketch/weui.sketch"},
   			{"title":"AndroidDesign","url":"http://tmtdemo.qq.com/sketch/android.sketch"},
   			{"title":"iOSDesign","url":"http://tmtdemo.qq.com/sketch/iOS.sketch"}

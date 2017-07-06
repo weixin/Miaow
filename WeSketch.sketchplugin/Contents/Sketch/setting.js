@@ -65,9 +65,9 @@ var onRun = function(context){
             var manifestLangData;
 
             for(var i = 0;i<i18nList.length;i++){
-                var allManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-"+ i18nList[i] +".json").path();
+                var allManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-"+ i18nList[i].key +".json").path();
                 setKey(allManifestPath,data);
-                if(i18nList[i] == data.language){
+                if(i18nList[i].key == data.language){
                     manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(allManifestPath), NSJSONReadingMutableContainers, nil)
                 }
             }

@@ -182,7 +182,7 @@
 
       var i18Dom = [];
       for(var i = 0;i<i18List.length;i++){
-        i18Dom.push('<option '+(i18List[i]==language?'selected="selected"':'')+' value="'+i18List[i]+'">'+i18List[i]+'</option>')
+        i18Dom.push('<option '+(i18List[i].key==language?'selected="selected"':'')+' value="'+i18List[i].key+'">'+i18List[i].name+'</option>')
       }
       $('#i18n').append(i18Dom.join(''));
 
