@@ -15,19 +15,10 @@ var _= function(context){
     }
     var i18Content = {};
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-    if(lang == undefined){
-        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
-        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
-        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
-        if(lang.indexOf('zh') > -1){
-            i18Content = get_('zh',context);
-        }else{
-            i18Content = get_('en',context);
-        }
-    }else if(lang == 'zh'){
-        i18Content = get_('zh',context);
+    if(lang == 'zhCN'){
+        i18Content = get_('zhCN',context);
     }else{
-        i18Content = get_('en',context);
+        i18Content = get_('enUS',context);
     }
     return i18Content;
 };

@@ -5,6 +5,8 @@
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
+  "language_name": "English(US)",
+  "language_author": "hzlzh",
   "commands" : [
     {
       "handlers": {
@@ -12,6 +14,7 @@
                   "OpenDocument" : "onOpenDocument"
               }
           },
+      "noshortcut":"true",
       "script": "onAction.js"
     },
     {

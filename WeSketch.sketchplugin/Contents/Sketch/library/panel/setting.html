@@ -48,8 +48,8 @@
       background-color: #fff;
     }
     .savebutton{
-      background: linear-gradient(0deg,#4c98fe 0%,#0466e3 100%);
       color:white;
+      background:#3485f0;
       border: 1px solid #237fff;
       border-radius: 4px;
       padding:0 15px;
@@ -57,8 +57,11 @@
       float:right;
       cursor: pointer;
     }
+    .key-setting{
+      padding-bottom:30px;
+    }
     .savebutton:active{
-      background:#3485f0;
+      background: linear-gradient(0deg,#4c98fe 0%,#0466e3 100%);
     }
     .buttonwrap{
       left:0;
@@ -90,7 +93,7 @@
          i18.m10,
         '</div>',
         '<div>',
-        '<input type="radio" value="en" name="language" id="en" /><label for="en">'+ i18.m11 +'</label>　　<input type="radio" name="language" value="zh" id="zh"/><label for="zh">'+ i18.m12 +'</label>',
+        '<select id="i18n"></select>',
         '</div>',
         '<div class="title">',
           i18.m3,
@@ -156,7 +159,7 @@
       $('.savebutton').on('click',function(){
         var updateauto = $('#updateauto').is(':checked')?'true':'false';
         var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
-        var language = $("input[name='language']:checked").val();
+        var language = $("#i18n").val();
         var obj = {};
         obj.keydata = keydata;
         obj.updateAuto = updateauto;
@@ -173,13 +176,20 @@
       i18 = data.i18;
       initDom();
       domEvent();
+      var i18List = data.i18nList;
       var language = data.language;
-      $('#'+language).prop('checked',true);
       var command = data.commands;
+
+      var i18Dom = [];
+      for(var i = 0;i<i18List.length;i++){
+        i18Dom.push('<option '+(i18List[i]==language?'selected="selected"':'')+' value="'+i18List[i]+'">'+i18List[i]+'</option>')
+      }
+      $('#i18n').append(i18Dom.join(''));
+
       keydata = command;
 
       var keybody = [];
-      for(var i = 0;i<command.length-1;i++){
+      for(var i = 0;i<command.length;i++){
         keybody.push('<div class="keywrap">')
         keybody.push('<div data-identifier='+decodeURIComponent(command[i].identifier)+' class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
         keybody.push('<div class="inputwrap"><input class="keyinput" data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');

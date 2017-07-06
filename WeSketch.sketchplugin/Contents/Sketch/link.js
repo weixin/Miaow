@@ -927,13 +927,12 @@ function getLink(context,refursh){
 	}else if(selection.count() == 2) {
 		if (selection.firstObject().className() == "MSArtboardGroup" || selection.firstObject().className() == "MSSymbolMaster") {
 			if((selection.firstObject().className() == "MSArtboardGroup" || selection.firstObject().className() == "MSSymbolMaster") && (selection.lastObject().className() == "MSArtboardGroup" || selection.lastObject().className() == "MSSymbolMaster")){
-				linkLayer = selection[0];
-				destArtboard = selection[1];
+				linkLayer = selection[1];
+				destArtboard = selection[0];
 			}else{
 				destArtboard = selection[0];
 				linkLayer = selection[1];
 			}
-
 		}
 		else if(selection.lastObject().className() == "MSArtboardGroup" || selection.lastObject().className() == "MSSymbolMaster") {
 			destArtboard = selection.lastObject();
