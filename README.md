@@ -31,6 +31,8 @@
 
 ## Features & Instruction
 
+*Note: English wiki comming soon.*
+
 1. [UI Kit Manager](https://github.com/weixin/WeSketch/wiki/%E2%92%88-UIkit-%E5%90%8C%E6%AD%A5%E7%AE%A1%E7%90%86)
 2. [Color Set](https://github.com/weixin/WeSketch/wiki/%E2%92%89-%E8%89%B2%E6%9D%BF%E5%90%8C%E6%AD%A5%E7%AE%A1%E7%90%86)
 3. [Advanced Replace](https://github.com/weixin/WeSketch/wiki/%E2%92%8A-%E6%89%B9%E9%87%8F%E6%9B%BF%E6%8D%A2%E6%96%87%E6%9C%AC%E3%80%81%E5%AD%97%E4%BD%93%E3%80%81%E9%A2%9C%E8%89%B2)
