@@ -10,13 +10,14 @@
 
 ## 下载 & 安装
 
-1. 点击 [下载地址](https://github.com/weixin/WeSketch/releases/download/1.0.0/WeSketch-1.0.0.sketchplugin.zip) 并解压缩。 *(支持 Sketch 44+)*  
-2. 双击打开 `wesketch.sketchplugin` 安装使用
+1.  [下载 Zip 安装包](https://github.com/weixin/WeSketch/archive/master.zip) 解压缩。 *(支持 Sketch v44 以上版本)*  
+2. 打开 `wesketch.sketchplugin` 安装使用
 
-## 使用 Sketch Runner 安装
-使用 Sketch Runner 在 `install` 命令下输入 `WeSketch` 即可安装。 Runner 可以帮助你管理插件以及做更多的事情来加速你的 Sketch 工作流。 [点此下载 Runner](http://www.sketchrunner.com).
+## 使用 Sketch Runner 或 Sketchpacks 安装
 
 <a href="http://www.sketchrunner.com"><img src="Runner_badge_blue_160x40.png" width="160px"></a>
+
+<a href="https://sketchpacks.com/weixin/WeSketch/install"><img src="http://sketchpacks-com.s3.amazonaws.com/assets/badges/sketchpacks-badge-install.png" width="160px"></a>
 
 ## 界面预览
 
@@ -46,5 +47,9 @@
 所有代码采用 [MIT License](http://opensource.org/licenses/MIT) 开源，可根据自身团队和项目特点 `fork` 进行定制。  
 
 ## 参与贡献
+
+帮助我们完善对多国家语言的支持，让更多用户受益。[了解更多](https://github.com/weixin/WeSketch/wiki/%E2%92%93-Contribution--to-lanauage)
  
-如果有 `Bug反馈` 或 `功能建议`，请创建 [Issue](https://github.com/weixin/WeSketch/issues) 或发送 [Pull Request](https://github.com/weixin/WeSketch/pulls)，感谢你的参与和贡献。
+如果有 `意见反馈` 或 `功能建议`，请创建 [Issue](https://github.com/weixin/WeSketch/issues) 或发送 [Pull Request](https://github.com/weixin/WeSketch/pulls)，感谢你的参与和贡献。
+
+

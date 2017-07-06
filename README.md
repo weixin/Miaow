@@ -2,23 +2,24 @@
 
 [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
-> A set of powerful plugins for Sketch, made by Tencent WeChat Team, include:
+> A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing made by Tencent WeChat Team, include:
 
 * UI Kit & Color Set Sync for design team
-* Icon Manager, Create Relationship, Mark Index, Advanced Font & Color replacement
+* Icon Manager, Draw Links, Mark Index, Advanced Font & Color replacement
 * Advanced image export and Copy CSS for web developer
 
 [中文(Chinese) >](https://github.com/weixin/WeSketch/blob/master/README-zhCN.md)
 
-## Download & Install
+## Install from download
 
-1. Click [Download](https://github.com/weixin/WeSketch/releases/download/1.0.0/WeSketch-1.0.0.sketchplugin.zip) and unzip。 *(Support Sketch 44+)*  
-2. Double click `wesketch.sketchplugin` to install
+1. [Download the Zip file](https://github.com/weixin/WeSketch/archive/master.zip) and unzip。 *(Support Sketch Version 44+)*  
+2. Open `wesketch.sketchplugin` to install
 
-## Install with Sketch Runner
-With Sketch Runner, just go to the `install` command and search for `WeSketch`. Runner allows you to manage plugins and do much more to speed up your workflow in Sketch. [Download Runner here](http://www.sketchrunner.com).
+## Install with Sketch Runner or Sketchpacks
 
-<a href="http://www.sketchrunner.com"><img src="Runner_badge_blue_160x40.png" width="160px"></a>
+<a href="http://www.sketchrunner.com"><img src="http://ww1.sinaimg.cn/large/644eac00gy1fha5h29dlcj208w02amxf.jpg" width="160px"></a>
+
+<a href="https://sketchpacks.com/weixin/WeSketch/install"><img src="http://sketchpacks-com.s3.amazonaws.com/assets/badges/sketchpacks-badge-install.png" width="160px"></a>
 
 ## Screenshots
 
@@ -48,5 +49,9 @@ With Sketch Runner, just go to the `install` command and search for `WeSketch`. 
 This is an open source project under [MIT License](http://opensource.org/licenses/MIT)，you can `fork` and rebuild for your own team.  
 
 ## Contribution
+
+Help us improve multi-language support. [Learn More](https://github.com/weixin/WeSketch/wiki/%E2%92%93-Contribution--to-lanauage)
  
-If you got `Bugs` or `feedbacks`，please make [Issues](https://github.com/weixin/WeSketch/issues) or send [Pull Request](https://github.com/weixin/WeSketch/pulls), thanks :)
+If you got `Feedbacks` or `Features Request`，please make [Issues](https://github.com/weixin/WeSketch/issues) or send [Pull Request](https://github.com/weixin/WeSketch/pulls), thanks :)
+
+
