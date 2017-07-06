@@ -17,7 +17,7 @@
 
 ## Install with Sketch Runner or Sketchpacks
 
-<a href="http://www.sketchrunner.com"><img src="http://ww1.sinaimg.cn/large/644eac00gy1fha5h29dlcj208w02amxf.jpg" width="160px"></a>
+<a href="http://www.sketchrunner.com"><img src="https://user-images.githubusercontent.com/1049575/27900476-1a3ea8a2-6261-11e7-8358-ab6e7f168886.jpg" width="160px"></a>
 
 <a href="https://sketchpacks.com/weixin/WeSketch/install"><img src="http://sketchpacks-com.s3.amazonaws.com/assets/badges/sketchpacks-badge-install.png" width="160px"></a>
 
