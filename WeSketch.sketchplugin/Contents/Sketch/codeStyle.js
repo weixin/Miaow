@@ -169,9 +169,9 @@ function codeS(context){
         if(layerStyle.contextSettings().opacity() != 1){
             returnText.push('opacity: ' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
         }
-        returnText.push('font-size: ' +　parseInt((selection.fontSize()/Rate)) + keyCode + ';');
+        returnText.push('font-size: ' +　Math.round((selection.fontSize()/Rate)) + keyCode + ';');
         var lineHeight = (selection.lineHeight() || selection.font().defaultLineHeightForFont())/Rate;
-        returnText.push('line-height: ' + parseInt(lineHeight) + keyCode + ';');
+        returnText.push('line-height: ' + Math.round(lineHeight) + keyCode + ';');
         returnText.push('color: ' +　colorToJSON(selection.textColor()) + ';');
         var fontName = selection.font().fontName().toLocaleUpperCase();
         if(fontName.indexOf('MEDIUM')>0 || fontName.indexOf('SEMIBOLD')>0 || fontName.indexOf('BOLD')>0){
@@ -187,7 +187,7 @@ function codeS(context){
         var returnText = [];
         
         if(getRadius(selection) != 0){
-            returnText.push('border-radius: ' + parseInt(getRadius(selection)/Rate) + keyCode +';');
+            returnText.push('border-radius: ' + Math.round(getRadius(selection)/Rate) + keyCode +';');
         }
         var backgroundColor = getFills(layerStyle);
         var getBorder = getBorders(layerStyle);
@@ -202,13 +202,13 @@ function codeS(context){
                 borderless = getBorder[0].thickness * 2 / rateX;
             }
             if(getBorder[0].fillType == 'color'){
-                returnText.push('border: ' + parseInt(getBorder[0].thickness /rateX) + keyCode + ' solid ' + (getBorder[0].color) + ';');
+                returnText.push('border: ' + Math.round(getBorder[0].thickness /rateX) + keyCode + ' solid ' + (getBorder[0].color) + ';');
             }
         }
         var width = selection.rect().size.width/Rate;
         var height = selection.rect().size.height/Rate;
-        returnText.push('width: '+parseInt(width - borderless) + keyCode + ';');
-        returnText.push('height: ' + parseInt(height - borderless) + keyCode + ';');
+        returnText.push('width: '+Math.round(width - borderless) + keyCode + ';');
+        returnText.push('height: ' + Math.round(height - borderless) + keyCode + ';');
 
         if(backgroundColor.length>0){
             if(backgroundColor[0].fillType == 'color'){
@@ -227,10 +227,10 @@ function codeS(context){
                 var param = [];
                 var to = backgroundColor[0].gradient.to;
                 var from = backgroundColor[0].gradient.from;
-                param.push(parseInt(90-180*Math.atan(Math.abs((to.y-from.y))/Math.abs((to.x-from.x)))/Math.PI)+'deg');
+                param.push(Math.round(90-180*Math.atan(Math.abs((to.y-from.y))/Math.abs((to.x-from.x)))/Math.PI)+'deg');
                 var colorStops = backgroundColor[0].gradient.colorStops;
                 for(var i = 0;i<colorStops.length;i++){
-                    param.push(colorStops[i].color + ' ' + parseInt(colorStops[i].position*100) + '%');
+                    param.push(colorStops[i].color + ' ' + Math.round(colorStops[i].position*100) + '%');
                 }
                 returnText.push('background: linear-gradient(' + param.join(',') + ');');
             }
