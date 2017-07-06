@@ -123,7 +123,7 @@
 		"m1":"and",
 		"m2":"got too complex lines, please adjust their order",
 		"m3":"refreshed\nChoose two elements to Create relationship, choose one element to delete links",
-		"m4":"Element and element link is turned off by default, please open in link settings"
+		"m4":"Element to element link is disabled by default, you can open in settings."
 	},
 	"setting":{
 		"m1":"Saved",
