@@ -15,9 +15,8 @@
 
 ## 使用 Sketch Runner 或 Sketchpacks 安装
 
-<a href="http://www.sketchrunner.com"><img src="Runner_badge_blue_160x40.png" width="160px"></a>
 
-<a href="https://sketchpacks.com/weixin/WeSketch/install"><img src="http://sketchpacks-com.s3.amazonaws.com/assets/badges/sketchpacks-badge-install.png" width="160px"></a>
+<a href="http://www.sketchrunner.com"><img src="https://user-images.githubusercontent.com/1049575/27900476-1a3ea8a2-6261-11e7-8358-ab6e7f168886.jpg" width="160px"></a> <a href="https://sketchpacks.com/weixin/WeSketch/install"><img src="http://sketchpacks-com.s3.amazonaws.com/assets/badges/sketchpacks-badge-install.png" width="160px"></a>
 
 ## 界面预览
 
