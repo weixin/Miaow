@@ -939,12 +939,19 @@ function getLink(context,refursh){
 			destArtboard = selection.lastObject();
 			linkLayer = selection.firstObject();
 		}else{
-			var Selection = NSUserDefaults.standardUserDefaults().objectForKey(selectionDom) || '';
-			Selection = Selection.split(',');
-			var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection1 == '"+ Selection[0] +"'", selectionDom1);
-			linkLayer = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
-			var linkLayersPredicate2 = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection2 == '"+ Selection[1] +"'", selectionDom2);
-			destArtboard = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate2).firstObject();
+			var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path(),
+			    manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
+
+			if(JSON.stringify(manifest.commands[0]).indexOf('SelectionChanged.finish')>-1){
+		    	var Selection = NSUserDefaults.standardUserDefaults().objectForKey(selectionDom) || '';
+		    	Selection = Selection.split(',');
+		    	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection1 == '"+ Selection[0] +"'", selectionDom1);
+		    	linkLayer = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+		    	var linkLayersPredicate2 = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).selection2 == '"+ Selection[1] +"'", selectionDom2);
+		    	destArtboard = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate2).firstObject();
+		    }else{
+		    	return context.document.showMessage(i18.m4);
+		    }
 		}
 		var artboardID = destArtboard.objectID();
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(artboardID, "artboardID", destArtboard, kPluginDomain);

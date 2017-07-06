@@ -278,7 +278,7 @@ function getFlag(context,refrush){
 	var flags = [];
 	var selectedLayers = context.selection;
 
-	if (context.selection.count()!=1) {
+	if (context.selection.count()!=1 || refrush) {
 		flags = drawFunction(doc,null);
 		if(!refrush){
 			NSApp.displayDialog(i18.m6);

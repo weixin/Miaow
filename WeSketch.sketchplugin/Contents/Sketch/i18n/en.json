@@ -122,7 +122,8 @@
 	"link":{
 		"m1":"and",
 		"m2":"got too complex lines, please adjust their order",
-		"m3":"refreshed\nChoose two elements to Create relationship, choose one element to delete links"
+		"m3":"refreshed\nChoose two elements to Create relationship, choose one element to delete links",
+		"m4":"Element and element link is turned off by default, please open in link settings"
 	},
 	"setting":{
 		"m1":"Saved",
@@ -202,7 +203,8 @@
 		"m3":"Line & Mark Style",
 		"m4":"Line color             Line weight",
 		"m5":"Mark color",
-		"m6":""
+		"m6":"setting successfully",
+		"m7":"Element link support (Maybe slow when choosing)"
 	},
 	"codeSetting":{
 		"m1":"Save",

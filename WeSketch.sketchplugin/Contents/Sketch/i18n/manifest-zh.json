@@ -7,6 +7,14 @@
   "icon" : "minicon.png",
   "commands" : [
     {
+      "handlers": {
+              "actions": {
+                  "OpenDocument" : "onOpenDocument"
+              }
+          },
+      "script": "onAction.js"
+    },
+    {
       "name" : "交互连线",
       "identifier" : "link",
       "script" : "link.js",
@@ -225,15 +233,6 @@
       "istool":"",
       "handler" : "onRun",
       "noshortcut":"true"
-    },
-    {
-      "handlers": {
-              "actions": {
-                  "SelectionChanged.finish" : "onSelectionChanged",
-                  "OpenDocument" : "onOpenDocument"
-              }
-          },
-      "script": "onAction.js"
     }
   ],
   "menu": {

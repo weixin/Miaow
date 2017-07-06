@@ -19,13 +19,14 @@ function colorReplace(context){
    var userInterface,
        findedColorWell,
        replaceColorWell;
+   var selectedLayerType;
 
    if (layerCount == 0) {
     colorToFind = colorToFind2 = '';
    }
    else {
      selectedLayer = getSelectedLayer(selection.firstObject());
-     var selectedLayerType = selectedLayer.class();
+     selectedLayerType = selectedLayer.class();
      colorToFind = colorToFind2 = getColour(selectedLayer);
      if(colorToFind == undefined){
        colorToFind = colorToFind2 = getboderColor(selectedLayer);
@@ -64,13 +65,13 @@ function colorReplace(context){
     if (selectedLayerType == 'MSTextLayer') {
      colour = layer.textColor();
 
-     fill = layer.style().fills().firstObject();
+     fill = layer.style().enabledFills().lastObject();
 
      if (fill != undefined && fill.isEnabled()) {
        colour = fill.color();
      }
     } else if (selectedLayerType == 'MSShapeGroup') {
-     fill = layer.style().fills().firstObject();
+     fill = layer.style().enabledFills().lastObject();
 
      if (fill != undefined && fill.isEnabled()) {
        colour = fill.color();
@@ -110,7 +111,7 @@ function colorReplace(context){
    function setColour(layer , colorToReplace) {
      function setColor(layer,hexColour){
       if (hexColour == colorToFind) {
-        var fill = layer.style().fills().firstObject();
+        var fill = layer.style().enabledFills().lastObject();
         if (fill != undefined) {
          replaceCount++;
          fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
@@ -146,7 +147,7 @@ function colorReplace(context){
 
    function setTextColor(layer,colorToReplace){
     var textcolor = layer.textColor();
-    var fill = layer.style().fills().firstObject();
+    var fill = layer.style().enabledFills().lastObject();
     if (fill != undefined && fill.isEnabled()) {
       textcolor = fill.color();
     }
@@ -202,9 +203,11 @@ function colorReplace(context){
      var options = [i18.m5,i18.m6];
      userInterface.addAccessoryView(createRadioButtons(options, options[0]));
 
-     userInterface.addTextLabelWithValue(i18.m7+"：");
-     var options2 = [i18.m8,i18.m9];
-     userInterface.addAccessoryView(createRadioButtons(options2, options2[0]));
+     if(selectedLayerType){
+      userInterface.addTextLabelWithValue(i18.m7+"：");
+      var options2 = [i18.m8,i18.m9];
+      userInterface.addAccessoryView(createRadioButtons(options2, 0));
+     }
 
      userInterface.addButtonWithTitle(i18.m10);
      userInterface.addButtonWithTitle(i18.m11);
@@ -216,7 +219,9 @@ function colorReplace(context){
      colorToFind = colorToFind2 = MSColor.colorWithNSColor(findedColorWell.color()).immutableModelObject().svgRepresentation();
      colorToReplace = hexToRgb(MSColor.colorWithNSColor(replaceColorWell.color()).immutableModelObject().svgRepresentation());
      searchScope = [[[userInterface viewAtIndex: 5] selectedCell] tag];
-     replaceElementTypeAll = [[[userInterface viewAtIndex: 7] selectedCell] tag];
+     if(replaceElementType){
+      replaceElementTypeAll = [[[userInterface viewAtIndex: 7] selectedCell] tag];
+     }
    }
 
    function doFindAndReplace() {
@@ -235,12 +240,12 @@ function colorReplace(context){
 
     switch (layerType) {
       case MSTextLayer:
-       if (layerType == selectedLayerType || replaceElementTypeAll == 1) {
+       if (selectedLayerType == undefined || layerType == selectedLayerType || replaceElementTypeAll == 1) {
          setTextColor(layer, colorToReplace);
        }
        break;
       case MSShapeGroup:
-        if (layerType == selectedLayerType || replaceElementTypeAll == 1) {
+        if (selectedLayerType == undefined || layerType == selectedLayerType || replaceElementTypeAll == 1) {
          setColour(layer, colorToReplace);
         }
         break;
