@@ -173,7 +173,7 @@ function syncUIkit(context){
 	              }
 	            }
 	            if(!flagForNewSymbol){
-	            	saveArtBoard2.push(sourceSymbol[f]);
+	            	// saveArtBoard2.push(sourceSymbol[f]);
 	              	addSymbolCount++;
 	            }
 	          }
@@ -188,7 +188,7 @@ function syncUIkit(context){
 	        newPage.setName(sourcePageName);
 	        newPage.addLayers(sourceSymbol);
 	      }
-	      newPage.addLayers(saveArtBoard2);
+	      // newPage.addLayers(saveArtBoard2);
 		  doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
 		  if(sourcePages[i].name() == 'Symbols'){
 		    firstSymbols = true;
