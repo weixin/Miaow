@@ -123,7 +123,16 @@ function syncUIkit(context){
 	var saveArtBoard = [];
 	var sourceDoc = MSDocument.new();
 	if(sourceDoc.readFromURL_ofType_error(NSURL.fileURLWithPath(databasePath), "com.bohemiancoding.sketch.drawing", nil)) {
+	    
+
 	    var doc = context.document;
+
+	    for(var i = 0;i<doc.pages().length;i++){
+	    	if(encodeURIComponent(doc.pages()[i].name()) == encodeURIComponent(i18.m15)){
+	    		doc.removePage(doc.pages()[i]);
+	    	}
+	    }
+	    
 	    var savePage;
 	    var pages = doc.pages();
 
@@ -160,7 +169,7 @@ function syncUIkit(context){
 	                if(!isSame(s,localSymobl[g])){
 	                	var scopy = s.copy();
 	                  saveArtBoard.push({oldA:localSymobl[g],newA:scopy});
-	                  pages[i].addLayers([scopy]);
+	                  pages[k].addLayers([scopy]);
 	                }
 	                deleteObject['g_'+g] = true;
 	                break;
