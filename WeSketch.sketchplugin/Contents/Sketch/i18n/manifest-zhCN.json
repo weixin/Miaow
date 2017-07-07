@@ -5,7 +5,7 @@
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
-  "language_name": "Chinese(CN)",
+  "language_name": "Simplified Chinese(zhCN)",
   "language_author": "doubleluo",
   "commands" : [
     {
