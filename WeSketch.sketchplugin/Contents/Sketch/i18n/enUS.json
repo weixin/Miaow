@@ -2,7 +2,7 @@
 	"checkForUpdate":{
 		"m1":"Checking update...",
 		"m2":"A new version is now available.",
-		"m3":"Already the newest version",
+		"m3":"Already the latest version",
 		"m4":"WeSketch version ",
 		"m5":" Current version ",
 		"m6":", download new version automaticly？",
@@ -12,17 +12,17 @@
 	},
 	"codeColor":{
 		"m1":"Color Copied",
-		"m2":"Can't get color from your choose",
+		"m2":"Can't get color from your chosen",
 		"m3":"Please select element first"
 	},
 	"codeStyle":{
 		"m1":"Please select element first",
 		"m2":"Code copied into clipboard",
-		"m3":"This element is not a standard size, use 2X by default",
-		"m4":"No parent artboard, use 1X by default"
+		"m3":"This element is not with standard size, use @2X by default",
+		"m4":"No parent artboard, use @1X by default"
 	},
 	"colorReplace":{
-		"m1":"Replace All colors",
+		"m1":"Replace all colors",
 		"m2":"Find color(current chosen)",
 		"m3":"Replace to",
 		"m4":"On",
@@ -36,14 +36,14 @@
 	},
 	"exportColor":{
 		"m1":"Color Set exported",
-		"m2":"Please create a pulbic color in Document Colors firstly"
+		"m2":"Please create a public color in Document Colors firstly"
 	},
 	"exportSlice":{
 		"m1":"Choose the icon to be exported",
 		"m2":"Save",
 		"m3":"Cancel",
 		"m4":"Export full-size image",
-		"m5":"Fill in background color (0 for transparent)",
+		"m5":"Fill in background color (0 = transparent)",
 		"m6":"Icon Position",
 		"m7":"Width                            Height",
 		"m8":"Choose size",
@@ -85,15 +85,15 @@
 		"m3":"Choose your action",
 		"m4":"Delete,Keep Index",
 		"m5":"Delete,Reset Index",
-		"m6":"Artboard refreshed\nPlease select a element"
+		"m6":"Artboard refreshed\nPlease select an element"
 	},
 	"iconQ":{
 		"m1":"Icon exported",
 		"m2":"Icon exported (Pages Center)",
-		"m3":"Icons from the internet, Copyright is owned by the author",
+		"m3":"Icons from the Internet, Copyright is owned by it's author",
 		"m4":"Login",
 		"m5":"Exit",
-		"m6":"Pulbic",
+		"m6":"Public",
 		"m7":"All",
 		"m8":"Color",
 		"m9":"Size",
@@ -107,7 +107,7 @@
 	},
 	"importColor":{
 		"m1":"Faild, Please checke Color Set",
-		"m2":"Imported successfully, Please re-open Document Colors"
+		"m2":"Imported successfully, re-open Document Colors to use"
 	},
 	"importUIkit":{
 		"m1":"Add",
@@ -121,13 +121,13 @@
 	},
 	"link":{
 		"m1":"and",
-		"m2":"got too complex lines, please adjust their order",
+		"m2":"too more complex lines, please adjust their order at first",
 		"m3":"refreshed\nChoose two elements to Create relationship, choose one element to delete links",
 		"m4":"Element to element link is disabled by default, you can open in settings."
 	},
 	"setting":{
 		"m1":"Saved",
-		"m2":"got too complex lines, please adjust their order",
+		"m2":"too more complex lines, please adjust their order",
 		"m3":"Auto Update",
 		"m4":" Check update when Sketch open",
 		"m5":"Toolbar",
@@ -135,7 +135,7 @@
 		"m7":"Shortcuts",
 		"m8":"Feature　　　　　Shortcuts　　　　　　　　　　Toolbar",
 		"m9":"Save",
-		"m10":"Language settings",
+		"m10":"Language Settings",
 		"m11":" English",
 		"m12":" Chinese"
 	},
@@ -145,7 +145,7 @@
 		"m3":"Cancel",
 		"m4":"Please choose Color Set source",
 		"m5":"Current Color Set will be covered",
-		"m6":"Edit Sync source in Color Set -> settings",
+		"m6":"Edit Sync source in Color Set -> [Settings]",
 		"m7":"Imported successfully, Please re-open Document Colors"
 	},
 	"syncSetting":{
@@ -211,7 +211,7 @@
 		"m2":"Cancel",
 		"m3":"Code Setting",
 		"m4":"format",
-		"m5":"px（Web）",
+		"m5":"px（Normal）",
 		"m6":"rpx（Mini App）",
 		"m7":"Saved"
 	}
