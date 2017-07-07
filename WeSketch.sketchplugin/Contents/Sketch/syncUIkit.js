@@ -5,6 +5,7 @@
 function syncUIkit(context){
  	var i18 = _(context).syncUIkit;
 	var scaleOptionsMatrix;
+	var scaleOptionsMatrix2;
 	var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
 	var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
@@ -15,7 +16,7 @@ function syncUIkit(context){
 
 		settingsWindow.setMessageText(i18.m3);
 		settingsWindow.setInformativeText(i18.m4);
-		settingsWindow.setInformativeText(i18.m5);
+		settingsWindow.addTextLabelWithValue(i18.m5);
 	    
 		var ButtonList = [];
 		var List = NSUserDefaults.standardUserDefaults().objectForKey(uiKitUrlKey) || getConfig('config',context).UIKIT;
@@ -28,7 +29,28 @@ function syncUIkit(context){
 			
 		}
 		scaleOptionsMatrix = createRadioButtons(ButtonList,ButtonList[0]);
+		
 		settingsWindow.addAccessoryView(scaleOptionsMatrix);
+		
+	    var items = [i18.m16];
+
+	    var w = 400, h = items.length * 30;
+	    var view = [[NSView alloc] initWithFrame:NSMakeRect(20.0, 20.0, 400, h)];
+
+	    var frame = NSMakeRect(0, 0, w, 30);
+	    var buttons = [];
+        var title = items[0];
+        var button = [[NSButton alloc] initWithFrame:frame];
+        [button setButtonType:NSSwitchButton];
+        button.bezelStyle = 0;
+
+        button.title = title;
+        button.state = true;
+        scaleOptionsMatrix2 = button;
+        [view addSubview:button];
+        frame.origin.y += frame.size.height;
+	    settingsWindow.addAccessoryView(view); 
+
 		return settingsWindow.runModal();
 	}
 
@@ -111,16 +133,8 @@ function syncUIkit(context){
 	    var addPageCount = 0;
 
 	    var firstSymbols = false;
-	    var deleteFlag = [];
 
 	    for(var i=0;i<sourcePages.count();i++){
-	    	if(sourcePages[i].name() != 'Symbols' && firstSymbols == false){
-	    		continue;
-	    	}
-	    	if(sourcePages[i].name() == 'Symbols' && firstSymbols == true){
-	    		continue;
-	    	}
-	    	// context.document.removePage(pages[i]);
 	      var saveArtBoard2 = [];
 	      var sourcePageName = sourcePages[i].name();
 	      var sourceSymbol = sourcePages[i].artboards();
@@ -130,7 +144,6 @@ function syncUIkit(context){
 	      for(var k=0;k<pages.count();k++){
 	        //如果有同一个page名
 	        if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
-	      	  deleteFlag.push(pages[k]);
 	          flagForOldPage = true;
 
 	          //比对一下
@@ -143,42 +156,20 @@ function syncUIkit(context){
 	            var flagForNewSymbol = false;
 	            for(var g=0;g<localSymobl.count();g++){
 	              if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
-	      			
-	                
 	                flagForNewSymbol = true;
-
-	                // 找出相同名字的，内容相同不处理，内容不同，使用source的，并把local的放到save
 	                if(!isSame(s,localSymobl[g])){
-	                  //添加现在画布上的到冲突
-	                  saveArtBoard.push(localSymobl[g]);
-	                  //删除画布上的
-	                  // localSymobl[g].moveToLayer(saveArtBoard);
-	                  // localSymobl[g].removeFromParent();
-	                  //添加线上的到画布
-	                  // pushAllArtboards.push(s);
+	                	var scopy = s.copy();
+	                  saveArtBoard.push({oldA:localSymobl[g],newA:scopy});
+	                  pages[i].addLayers([scopy]);
 	                }
 	                deleteObject['g_'+g] = true;
 	                break;
 	              }
 	            }
 	            if(!flagForNewSymbol){
-	              //没找着，直接添加source的到现有的画布
-	              // saveArtBoard2.push(s);
-	              // pushAllArtboards.push(s);
-	              
 	              addSymbolCount++;
 	            }
 	          }
-	          //线上源中没找着，直接添加source的到冲突画布
-	          for(var g=0;g<localSymobl.count();g++){
-	            if(!deleteObject['g_'+g]){
-	              saveArtBoard.push(localSymobl[g]);
-	              // localSymobl[g].removeFromParent();
-	            }
-	          }
-
-	          // 这里全部换一种实现，先将冲突提出来换到冲突画板，然后把整张画布删除再copy一份
-	          // pages[k].addLayers(pushAllArtboards);
 
 	          break;
 	        }
@@ -187,20 +178,44 @@ function syncUIkit(context){
 
 	      if(!flagForOldPage){
 	        addPageCount++; 
+	        var newPage = doc.addBlankPage();
+	        newPage.setName(sourcePageName);
+	        newPage.addLayers(sourceSymbol);
+	        newPage.addLayers(saveArtBoard2);
 	      }
-	      var newPage = doc.addBlankPage();
-	      newPage.setName(sourcePageName);
-	      newPage.addLayers(sourceSymbol);
-	      // newPage.addLayers(saveArtBoard2);
+	      
 	      doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
-	      if(sourcePages[i].name() == 'Symbols'){
-	      	firstSymbols = true;
-	      	i = -1;
-	      }
 	    }
-	    for(var i = 0;i<deleteFlag.length;i++){
-	    	context.document.removePage(deleteFlag[i]);
+	    var isChangeChild = scaleOptionsMatrix2.state();
+	    if(isChangeChild){
+	    	for(var i = 0;i<doc.pages().length;i++){
+	    		var p = doc.pages()[i];
+	    		var chi = p.children();
+	    		for(var k = 0;k<chi.length;k++){
+	    			if(chi[k].className() == 'MSSymbolInstance'){
+	    				var oldDad = chi[k].symbolMaster();
+	    				for(var l = 0;l<saveArtBoard.length;l++){
+	    					// 删掉稿中旧的添上新的
+	    					if(saveArtBoard[l].oldA == oldDad && saveArtBoard[l].newA){
+	    						var x = chi[k].absoluteRect().x();
+	    						var y = chi[k].absoluteRect().y();
+	    						var parartboard = chi[k].parentGroup();
+	    						var newlayer = saveArtBoard[l].newA.newSymbolInstance();
+	    						newlayer.absoluteRect().setX(x);
+	    						newlayer.absoluteRect().setY(y);
+	    						p.addLayers([newlayer]);
+	    						if(parartboard){
+	    							p.setCurrentArtboard(parartboard);
+	    						}
+	    						var baba = chi[k].parentGroup();
+	    						baba.removeLayer(chi[k]);
+	    					}
+	    				}
+	    			}
+	    		}
+	    	}
 	    }
+	    
 	}
 	var fm  =[NSFileManager defaultManager];
     fm.removeItemAtPath_error(databasePath,nil);
@@ -218,14 +233,23 @@ function syncUIkit(context){
 		var savePage = doc.addBlankPage();
 		savePage.setName(i18.m15);
 		for(var i=0;i<saveArtBoard.length;i++){
-			saveArtBoard[i].setName(saveArtBoard[i].name()+ '(Old)');
-			saveArtBoard[i].moveToLayer_beforeLayer(savePage,savePage);
+			if(saveArtBoard[i].newA){
+				saveArtBoard[i].oldA.setName(saveArtBoard[i].oldA.name()+ '(Old)');
+				saveArtBoard[i].oldA.moveToLayer_beforeLayer(savePage,savePage);
+			}
 		}
 		doc.setCurrentPage(savePage);
 		Organizer(context);
 	}
 	if(context.document.pages()[0].children().count() == 1){
 		context.document.removePage(context.document.pages()[0]);
+		var savePage = doc.addBlankPage();
+		savePage.setName('page 1');
+		doc.setCurrentPage(savePage);
+	}
+
+	if(isChangeChild){
+		NSApp.displayDialog(i18.m17);
 	}
 
 	context.document.showMessage(alertData + tbColor);
