@@ -123,77 +123,77 @@ function syncUIkit(context){
 	var saveArtBoard = [];
 	var sourceDoc = MSDocument.new();
 	if(sourceDoc.readFromURL_ofType_error(NSURL.fileURLWithPath(databasePath), "com.bohemiancoding.sketch.drawing", nil)) {
-	    
-
 	    var doc = context.document;
-
 	    for(var i = 0;i<doc.pages().length;i++){
 	    	if(encodeURIComponent(doc.pages()[i].name()) == encodeURIComponent(i18.m15)){
 	    		doc.removePage(doc.pages()[i]);
 	    	}
 	    }
-	    
 	    var savePage;
 	    var pages = doc.pages();
-
 	    var sourcePages = sourceDoc.documentData().pages();
-
 	    var addSymbolCount = 0;
 	    var addPageCount = 0;
-
 	    var firstSymbols = false;
-
 	    for(var i=0;i<sourcePages.count();i++){
+    	  if(sourcePages[i].name() != 'Symbols' && firstSymbols == false){
+    	    continue;
+    	  }
+    	  if(sourcePages[i].name() == 'Symbols' && firstSymbols == true){
+    	    continue;
+    	  }
 	      var saveArtBoard2 = [];
 	      var sourcePageName = sourcePages[i].name();
 	      var sourceSymbol = sourcePages[i].artboards();
 
 	      var flagForOldPage = false;
-	      var nowK = k;
 	      for(var k=0;k<pages.count();k++){
 	        //如果有同一个page名
 	        if(encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())){
 	          flagForOldPage = true;
-
+	          
 	          //比对一下
 	          var localSymobl = pages[k].artboards();
-	          var deleteObject = {};
-	          var pushAllArtboards = [];
 
 	          for(var f=0;f<sourceSymbol.count();f++){
 	            var s = sourceSymbol[f];
 	            var flagForNewSymbol = false;
 	            for(var g=0;g<localSymobl.count();g++){
 	              if(encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())){
+	  		        if(sourcePages[i].name() != 'Symbols'){
+	  	    	   		continue;
+	  		        }
 	                flagForNewSymbol = true;
 	                if(!isSame(s,localSymobl[g])){
-	                	var scopy = s.copy();
+	                  var scopy = s.copy();
 	                  saveArtBoard.push({oldA:localSymobl[g],newA:scopy});
 	                  pages[k].addLayers([scopy]);
 	                }
-	                deleteObject['g_'+g] = true;
 	                break;
 	              }
 	            }
 	            if(!flagForNewSymbol){
-	              addSymbolCount++;
+	            	saveArtBoard2.push(sourceSymbol[f]);
+	              	addSymbolCount++;
 	            }
 	          }
 
 	          break;
 	        }
 	      }
-	      
-
+	      var newPage;
 	      if(!flagForOldPage){
 	        addPageCount++; 
-	        var newPage = doc.addBlankPage();
+	        newPage = doc.addBlankPage();
 	        newPage.setName(sourcePageName);
 	        newPage.addLayers(sourceSymbol);
-	        newPage.addLayers(saveArtBoard2);
 	      }
-	      
-	      doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
+	      newPage.addLayers(saveArtBoard2);
+		  doc.setCurrentPage(doc.documentData().symbolsPageOrCreateIfNecessary());
+		  if(sourcePages[i].name() == 'Symbols'){
+		    firstSymbols = true;
+		    i = -1;
+		  }
 	    }
 	    var isChangeChild = scaleOptionsMatrix2.state();
 	    if(isChangeChild){
