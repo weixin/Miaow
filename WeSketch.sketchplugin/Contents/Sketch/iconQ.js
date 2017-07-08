@@ -180,7 +180,6 @@ function iconQ(context){
             }
             windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
             windowObject.evaluateWebScript("window.location.hash = '';");
-            // windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
 
         }
     });

@@ -11,18 +11,22 @@ function iconLogin(data){
     return r;
 }
 
-function choiceSVG(layer,doc){
-    var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
-    slice.scale = '1';
-    slice.format = 'svg';
-    var save = NSSavePanel.savePanel();
-    var savePath = save.URL().path() + '.svg';
-    doc.saveArtboardOrSlice_toFile(slice, savePath);
-    var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
-    var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
-    var fm  =[NSFileManager defaultManager];
-    fm.removeItemAtPath_error(savePath,nil);
-    return string;
+function choiceSVG(context){
+    var svgList = [];
+    for(var i = 0;i<context.selection.count();i++){
+        var slice = MSExportRequest.exportRequestsFromExportableLayer(context.selection[i]).firstObject();
+        slice.scale = '1';
+        slice.format = 'svg';
+        var save = NSSavePanel.savePanel();
+        var savePath = save.URL().path() + '.svg';
+        context.document.saveArtboardOrSlice_toFile(slice, savePath);
+        var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
+        var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
+        svgList.push({content:encodeURIComponent(string),name:encodeURIComponent(context.selection[i].name().toString())});
+        var fm  =[NSFileManager defaultManager];
+        fm.removeItemAtPath_error(savePath,nil);
+    }
+    return svgList;
 }
 
 function getLogin(){
@@ -51,16 +55,9 @@ var onRun = function(context){
     }else{
         isLogin = getLogin();
     }
-    var selection = context.selection;
-    if(selection.length == 1){
-        selection = selection[0];
-    }else{
-        return NSApp.displayDialog('请选中一个您需要上传到项目管理的图标');
-    }
     var project = [];
-    var svgname = encodeURIComponent(selection.name().toString());
-    var svg = encodeURIComponent(choiceSVG(selection,context.document));
-    var initData = {svg:svg,svgtest:svgname,isLogin:isLogin};
+    var svg = choiceSVG(context);
+    var initData = {svg:svg,isLogin:isLogin};
     if(isLogin == false || isLogin.status != 200){
         initData.isLogin = false;
     }else{
@@ -109,26 +106,65 @@ var onRun = function(context){
                 project = queryProject().list;
                 reuslt.project = project;
             }
-            windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
+            windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")"); 
         },pushdataCallback:function(data ,windowObject){
-            var result = svgExist(data);
-            if(result){
-                var settingsWindow = COSAlertWindow.new();
-                settingsWindow.addButtonWithTitle("上传");
-                settingsWindow.addButtonWithTitle("取消");
-                var tip = '';
-                if(result.code == 1){
-                    tip += '存在历史版本，是否上传覆盖？';
-                }
-                settingsWindow.setMessageText(tip);
-                var response = settingsWindow.runModal();
-                if(response == "1000"){
-                    windowObject.evaluateWebScript("pushdata()");
-                }else{
-                    windowObject.evaluateWebScript("window.location.hash = '';");
+            if(data.action == 'doubleconfirm'){
+                var result = svgExist(data);
+                if(result){
+                    var settingsWindow = COSAlertWindow.new();
+                    settingsWindow.addButtonWithTitle("上传");
+                    settingsWindow.addButtonWithTitle("取消");
+                    var tip = '';
+                    if(result.code == 1){
+                        tip += '存在历史版本，是否上传覆盖？';
+                    }
+                    settingsWindow.setMessageText(tip);
+                    var response = settingsWindow.runModal();
+                    if(response == "1000"){
+                        windowObject.evaluateWebScript("pushdata()");
+                    }else{
+                        windowObject.evaluateWebScript("window.location.hash = '';");
 
+                    }
                 }
+            }else if(data.action == 'boardsvg'){
+                var newContext = uploadContext(context);
+                if(newContext.selection.length == 0){
+                    return NSApp.displayDialog('请选中 Pages 中要上传的元素');
+                }
+                var svg = choiceSVG(newContext);
+                windowObject.evaluateWebScript("svgUpload("+JSON.stringify(svg)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+            }else if(data.action == 'filesvg'){
+                var panel = [NSOpenPanel openPanel];
+                [panel setCanChooseDirectories:false];
+                [panel setCanCreateDirectories:false];
+                [panel setAllowsMultipleSelection:true];
+                panel.setAllowedFileTypes([@"svg"]);
+                panel.setAllowsOtherFileTypes(false);
+                panel.setExtensionHidden(false);
+                var clicked = [panel runModal];
+                if (clicked != NSFileHandlingPanelOKButton) {
+                  return;
+                }
+                var urls = [panel URLs];
+                var svgList = [];
+                for(var i = 0;i<urls.length;i++){
+                    var unformattedURL = [NSString stringWithFormat:@"%@", urls[i]];
+                    var file_path = [unformattedURL stringByRemovingPercentEncoding];
+                    var theResponseData = request(file_path)
+                    var theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
+
+                    svgList.push({
+                        content:encodeURIComponent(theText),
+                        name:file_path.substr(file_path.lastIndexOf('/')+1).replace('.svg','')
+                    })
+                }
+                windowObject.evaluateWebScript("svgUpload("+JSON.stringify(svgList)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+
             }
+            
         }
     });
 }

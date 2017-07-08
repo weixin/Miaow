@@ -71,9 +71,19 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Upload",
+      "name" : "Icon Upload",
       "identifier" : "uploadIcon",
       "script" : "uploadIcon.js",
+      "icon": "../Resources/icons/icon.png",
+      "shortcut": "",
+      "istool":"",
+      "noshortcut":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Settings",
+      "identifier" : "iconSettings",
+      "script" : "iconSettings.js",
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"",
@@ -256,6 +266,8 @@
     "syncSetting",
     "-",
     "iconQ",
+    "uploadIcon",
+    "iconSettings",
     "-",
     "link",
     "flag",

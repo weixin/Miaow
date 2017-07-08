@@ -34,7 +34,7 @@
       width:100%;
       box-sizing:border-box;
       position: fixed;
-      top:0;
+      top:28px;
       display: flex;
       align-items: center;
       padding:3px 10px 12px 10px;
@@ -188,7 +188,7 @@
       padding:43px 0 69px 0;
     }
     .content-wrap{
-      padding:70px 20px 107px 20px;
+      padding:90px 20px 107px 20px;
       overflow: auto;
     }
     .btn-active{
@@ -595,7 +595,7 @@
 
   function initDomTree(){
     var dom = ['<div class="icon-mag">',
-      '<div class="toolbar" style="display:none">',
+      '<div class="toolbar" style="">',
         '<div class="login">',
           '<span>'+i18.m4+'</span>',
         '</div>',
@@ -663,7 +663,6 @@
           '<input id="password" type="password" />',
         '</div>',
       '</div>',
-      '<span class="register">'+i18.m13+'</span>',
       '<div class="loginbtnwrap">',
         '<div class="loginbutton">'+i18.m4+'</div>',
       '</div>',

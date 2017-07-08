@@ -140,58 +140,64 @@
       cursor: pointer;
       color:#08B3F6;
     }
+    .ui-flex{
+      display:flex;
+    }
+    .ui-flex__item{
+      flex:1;
+      text-align: center;
+    }
     </style>
   </head>
   <body >
     <div class="wrap">
-      <div class="svg-wrap">
-          <div>
-            <div class="svg-title" style="color:red;">待上传 icon</div>
-            <div class="svg-w" id="svg-wrap"></div>
-          </div>
-          <div style="display:none">
-            <div class="svg-title">历史 icon</div>
-            <div class="svg-w" id="history-wrap">
-            </div>
-          </div>
+      <div class="ui-flex">
+        <div class="ui-flex__item" id="board-svg">画板上传</div>
+        <div class="ui-flex__item" id="file-svg">从文件上传</div>
       </div>
-      <div class="label-wrap">
-        <label>上传者</label>
-        <div class="ui-item">
-          <input readonly="readonly" id="upload-username" class="input-width" type="text" />
-        </div>
-        <div class="a-link">更换用户</div>
-      </div>
-      <div class="label-wrap">
-        <label>名称</label>
-        <div class="ui-item">
-          <input id="svg-name" class="input-width" type="text" />
-        </div>
-      </div>
-      <div class="label-wrap">
-        <label>项目</label>
-        <div class="ui-item">
-          <select id="project" class="input-width" >
+      <div class="">
+        <div class="svg-wrap" id="svg-wrap">
             
-          </select>
+        </div>
+        <div class="label-wrap">
+          <label>上传者</label>
+          <div class="ui-item">
+            <input readonly="readonly" id="upload-username" class="input-width" type="text" />
+          </div>
+          <div class="a-link">更换用户</div>
+        </div>
+        <div class="label-wrap">
+          <label>名称</label>
+          <div class="ui-item">
+            <input id="svg-name" class="input-width" type="text" />
+          </div>
+        </div>
+        <div class="label-wrap">
+          <label>项目</label>
+          <div class="ui-item">
+            <select id="project" class="input-width" >
+              
+            </select>
+          </div>
+        </div>
+        <div class="label-wrap">
+          <label>分类</label>
+          <div class="ui-item">
+            <select id="type" class="input-width" >
+            </select>
+          </div>
+        </div>
+        <div class="label-wrap">
+          <label>备注</label>
+          <div class="ui-item">
+            <textarea class="input-width" id="bz" style="height:50px"></textarea>
+          </div>
+        </div>
+        <div class="buttonwrap">
+          <div class="savebutton">保存</div>
         </div>
       </div>
-      <div class="label-wrap">
-        <label>分类</label>
-        <div class="ui-item">
-          <select id="type" class="input-width" >
-          </select>
-        </div>
-      </div>
-      <div class="label-wrap">
-        <label>备注</label>
-        <div class="ui-item">
-          <textarea class="input-width" id="bz" style="height:50px"></textarea>
-        </div>
-      </div>
-      <div class="buttonwrap">
-        <div class="savebutton">保存</div>
-      </div>
+      
     </div>
     <div class="login-mag">
       <div class="cell">
@@ -210,7 +216,6 @@
           <input id="password" type="password" />          
         </div>
       </div>
-      <span class="register">申请帐号</span>
       <div class="loginbtnwrap">
         <div class="loginbutton">登录</div> 
       </div>
@@ -223,12 +228,22 @@
     var projectID = '';
     var typeID = '';
     var project = [];
+    function svgUpload(data){
+      var svgDom = [];
+      for(var i = 0;i<data.length;i++){
+        svgDom.push(
+          '<div>'+
+            '<div class="svg-w">'+decodeURIComponent(data[i].content)+'</div>'+
+            '<div class="svg-t">'+decodeURIComponent(data[i].name)+'</div>'+
+          '</div>'
+          );
+      }
+      $('#svg-wrap').append(svgDom.join(''));
+    }
     var init = function(data){
       encodeSVG = data.svg;
       svgtest = data.svgtest;
-
-      $('#svg-wrap').append($(decodeURIComponent(data.svg)));
-      $('#svg-name').val(decodeURIComponent(svgtest));
+      svgUpload(data.svg);
 
       if(data.isLogin){
         project = data.project;
@@ -244,7 +259,7 @@
       for(var i = 0 ;i<project.length;i++){
         projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
       }
-      $('#project').append(projectDom.join(''));
+      $('#project').empty().append(projectDom.join(''));
       var typeDom = [];
       projectID = $('#project').val();
       for(var i = 0 ;i<project.length;i++){
@@ -315,12 +330,29 @@
 
     $('#svg-name').on('change',function(){
       SMAction('pushdata',{
+        action:'doubleconfirm',
         projectid:projectID,
         svgname:$('#svg-name').val(),
         content:encodeSVG
       })
       return;
     })
+
+    $('#board-svg').click(function(){
+      SMAction('pushdata',{
+        action:'boardsvg'
+      });
+    })
+
+    $('#file-svg').click(function(){
+      SMAction('pushdata',{
+        action:'filesvg'
+      });
+    })
+
+    window.addEventListener('hashchange', function(e) {
+      return false;
+    }, false);
 
     function pushdata(){
       

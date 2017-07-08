@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <link href="css/normalize.css" rel="stylesheet">
+    <style type="text/css">
+    body,html{
+      height:100%;
+      background-color: #ececec;
+      font-size: 14px;
+    }
+    .login-mag{
+      height:100%;
+      box-sizing:border-box;
+      background-color: #ececec;
+      padding-top:50px;
+    }
+    .cell{
+      align-items:center;
+      position:relative;
+      display:flex;
+      padding:10px 30px;
+      width:100%;
+      box-sizing:border-box;
+      font-size:17px;
+      text-align:left;
+      text-decoration:none;
+      color:#555555;
+      background-color:white;
+      font-size: 17px;
+      border:0;
+    }
+    .cell + .cell:before{
+      position:absolute;
+      content:'';
+      left:15px;
+      top:0;
+      right:0;
+      border-top:1px solid #EEEEEE;
+    }
+    .cell-title{
+      width:50px;
+      margin-left:10px;
+      color:#555555;
+    }
+    .cell-input{
+      flex:1;
+    }
+    .cell-input input{
+      color:#555555;
+      border:0;
+      width:100%;
+    }
+    .login-mag{
+      height:100%;
+      box-sizing:border-box;
+      background-color: #ececec;
+      padding-top:50px;
+    }
+    .loginbtnwrap{
+      padding:40px 30px 0 30px;
+
+    }
+    .loginbutton{
+      border-radius:100px;
+      line-height:48px;
+      font-size:17px;
+      color:#ffffff;
+      background:#1A8CC2;
+      text-align:center;
+      cursor: pointer;
+    }
+    .toggle-button{
+      display: block;
+      margin:10px;
+      float:right;
+      color:#1A8CC2;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .setting-wrap{
+      display: none;
+    }
+    
+    </style>
+  </head>
+  <body >
+    <div class="wrap">
+      <div class="login-mag">
+        <div class="cell">
+          <div class="cell-title">
+            用户
+          </div>
+          <div class="cell-input">
+            <input id="username" type="text" />
+          </div>
+        </div>
+        <div class="cell">
+          <div class="cell-title">
+            密码
+          </div>
+          <div class="cell-input">
+            <input id="password" type="password" />
+          </div>
+        </div>
+        <span id="toggle-button" class="toggle-button">切换注册</span>
+        <div class="loginbtnwrap">
+          <div id="confirm-button" class="loginbutton">登录</div>
+        </div>
+      </div>
+      <div class="setting-wrap">
+        <div>
+          <div>用户名：
+            <span id="username-show"></span>
+          </div>
+          <div id="exit">退出</div>
+        </div>
+        <div>
+          <input type="text" id="project-input">
+          <div class="project-button" id="project-add-button">创建项目</div>
+
+          <select name="" id="selectproject"></select>
+          <input type="text" id="category-input">
+          <div class="project-button" id="category-add-button">创建分类</div>
+          <select name="" id="selecttype2"></select>
+        </div>
+      </div>
+    </div>
+    
+  <script type="text/javascript">
+    var project = [],isLogin;
+    $('#toggle-button').click(function(){
+      var action = $('.login-mag').attr('data-action');
+      if(action == undefined || action == 'login'){
+        $('.login-mag').attr('data-action','register');
+        $('#confirm-button').text('注册');
+        $('#toggle-button').text('切换'+'登录');
+      }else{
+        $('.login-mag').attr('data-action','login');
+        $('#confirm-button').text('登录');
+        $('#toggle-button').text('切换'+'注册');
+      }
+    })
+    $('#exit').on('click',function(){
+      $('.login-mag').show();
+      $('.setting-wrap').hide();
+      SMAction('submit',{
+        action:'loginout'
+      })
+    })
+    $('#confirm-button').click(function(){
+      var action = $('.login-mag').attr('data-action');
+      if(action == undefined || action == 'login'){
+        var username = $('#username').val();
+        var password = $('#password').val();
+        SMAction('login',{
+          username:username,
+          password:password,
+          action:'login'
+        });
+      }else{
+        var username = $('#username').val();
+        var password = $('#password').val();
+        SMAction('login',{
+          username:username,
+          password:password,
+          action:'register'
+        });
+      }
+    })
+    $('#project-add-button').click(function(){
+      var proname = $('#project-input').val();
+      SMAction('login',{action:'addProject',projectName:proname});
+    })
+    $('#category-add-button').click(function(){
+      var projectId = $('#selectproject').val();
+      var categoryName = $('#category-input').val();
+      SMAction('login',{action:'addCategory',projectId:projectId,categoryName:categoryName});
+    })
+
+    $('body').on('change','#selecttype2',function(){
+      typeID = $('#selecttype2').val();
+      if(typeID != ''){
+        SMAction('pushdata',{
+          type:'type',
+          id:typeID
+        })
+      }else{
+        SMAction('pushdata',{
+          type:'project',
+          id:projectID
+        })
+      }
+    })
+
+    $('body').on('change','#selectproject',function(){
+      projectID = $('#selectproject').val();
+      var typeDom = [];
+      if(projectID != ''){
+        for(var i = 0 ;i<project.length;i++){
+          if(project[i].projectId == projectID){
+            for(var k = 0;k<project[i].categoryList.length;k++){
+              typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+            }
+          }
+        }
+      }
+      $('#selecttype2').empty().append(typeDom);
+    })
+
+    function appendType(){
+      var projectDom = [];
+      for(var i = 0 ;i<project.length;i++){
+        projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
+      }
+      $('#selectproject').empty().append(projectDom.join('')).tigger('change');
+    }
+
+    function sLogin(data){
+      if(data.status == 200){
+        $('.login-mag').hide();
+        $('.setting-wrap').show();
+      }else{
+        $('#password').val('');
+      }
+    }
+    function refurshType(data){
+      project = data;
+      appendType();
+    } 
+    function init(data){
+      isLogin = data.isLogin;
+      project = data.project;
+      // $('body').empty().text(JSON.stringify(project));
+      if(isLogin){
+        $('.login-mag').hide();
+        $('.setting-wrap').show();
+        $('#username-show').text('（'+data.nametest+'）');
+        appendType();
+      }else{
+
+      }
+    }
+
+
+
+  </script>
+  </body>
+</html>
