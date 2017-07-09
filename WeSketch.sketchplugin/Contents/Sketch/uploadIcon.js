@@ -38,14 +38,18 @@ function queryProject(){
     return r;
 }
 
-function svgExist(data){
-    var r = post(['/users/svgExist','svgname=' + data.svgname + '&projectid=' + data.projectid]);
-    return r;
-}
-
-
 function uploadIconFunc(data){
     return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type + '&author='+data.author ]);
+}
+
+function uploadIconsFunc(data){
+    NSApp.displayDialog(JSON.stringify(data));
+    return post(['/users/batch_upload','list='+JSON.stringify(data)]);
+}
+
+function version_check(data){
+    var r = post(['/users/version_check','svgname='+JSON.stringify(data)]);
+    return r;
 }
 
 var onRun = function(context){
@@ -87,7 +91,8 @@ var onRun = function(context){
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);
                 return;
             }
-            var result = uploadIconFunc(data);
+            var result = uploadIconsFunc(data);
+            NSApp.displayDialog(JSON.stringify(result));
             if(result.status == 200){
                 NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
                 return true;
@@ -108,26 +113,7 @@ var onRun = function(context){
             }
             windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")"); 
         },pushdataCallback:function(data ,windowObject){
-            if(data.action == 'doubleconfirm'){
-                var result = svgExist(data);
-                if(result){
-                    var settingsWindow = COSAlertWindow.new();
-                    settingsWindow.addButtonWithTitle("上传");
-                    settingsWindow.addButtonWithTitle("取消");
-                    var tip = '';
-                    if(result.code == 1){
-                        tip += '存在历史版本，是否上传覆盖？';
-                    }
-                    settingsWindow.setMessageText(tip);
-                    var response = settingsWindow.runModal();
-                    if(response == "1000"){
-                        windowObject.evaluateWebScript("pushdata()");
-                    }else{
-                        windowObject.evaluateWebScript("window.location.hash = '';");
-
-                    }
-                }
-            }else if(data.action == 'boardsvg'){
+            if(data.action == 'boardsvg'){
                 var newContext = uploadContext(context);
                 if(newContext.selection.length == 0){
                     return NSApp.displayDialog('请选中 Pages 中要上传的元素');
@@ -160,6 +146,12 @@ var onRun = function(context){
                         name:file_path.substr(file_path.lastIndexOf('/')+1).replace('.svg','')
                     })
                 }
+                var ppp = [];
+
+                var version = version_check(svgList);
+                // for(var i = 0;i<svgList.length;i++){
+                //     svgList[i].version = version[i].version;
+                // }
                 windowObject.evaluateWebScript("svgUpload("+JSON.stringify(svgList)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
 

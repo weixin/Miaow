@@ -120,13 +120,27 @@
           <div id="exit">退出</div>
         </div>
         <div>
-          <input type="text" id="project-input">
-          <div class="project-button" id="project-add-button">创建项目</div>
-
+          <div>测试创建项目</div>
           <select name="" id="selectproject"></select>
-          <input type="text" id="category-input">
-          <div class="project-button" id="category-add-button">创建分类</div>
+          <div>
+            <span>项目名：</span><input type="text" id="project-input">
+          </div>
+          <button class="project-button" id="project-add-button">创建项目</button>
+          <div>
+            <span>邀请码：</span><input type="text" id="invate-key-input">
+          </div>
+        </div>
+        <div>
+          <div>测试创建分类</div>
           <select name="" id="selecttype2"></select>
+          <span>分类名：</span><input type="text" id="category-input">
+          <button class="project-button" id="category-add-button">创建分类</button>
+        </div>
+        <div>
+          测试加入项目
+        </div>
+        <div>
+        <span>邀请码：</span><input type="text" id="join-project-input"><button id="join-project-button">加入</button>
         </div>
       </div>
     </div>
@@ -171,6 +185,8 @@
           action:'register'
         });
       }
+      $('#username').val('');
+      $('#password').val('');
     })
     $('#project-add-button').click(function(){
       var proname = $('#project-input').val();
@@ -182,20 +198,6 @@
       SMAction('login',{action:'addCategory',projectId:projectId,categoryName:categoryName});
     })
 
-    $('body').on('change','#selecttype2',function(){
-      typeID = $('#selecttype2').val();
-      if(typeID != ''){
-        SMAction('pushdata',{
-          type:'type',
-          id:typeID
-        })
-      }else{
-        SMAction('pushdata',{
-          type:'project',
-          id:projectID
-        })
-      }
-    })
 
     $('body').on('change','#selectproject',function(){
       projectID = $('#selectproject').val();
@@ -203,6 +205,7 @@
       if(projectID != ''){
         for(var i = 0 ;i<project.length;i++){
           if(project[i].projectId == projectID){
+            $('#invate-key-input').val(project[i].invitedKey);
             for(var k = 0;k<project[i].categoryList.length;k++){
               typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
             }
@@ -210,6 +213,15 @@
         }
       }
       $('#selecttype2').empty().append(typeDom);
+    })
+
+    $('#join-project-button').click(function(){
+      var key = $('#join-project-input').val();
+      SMAction('login',{
+        action:'addMember',
+        invitedKey:key
+      })
+      return false;
     })
 
     function appendType(){
@@ -224,6 +236,8 @@
       if(data.status == 200){
         $('.login-mag').hide();
         $('.setting-wrap').show();
+        $('#username-show').text(data.nametest);
+        refurshType(data.project);
       }else{
         $('#password').val('');
       }
@@ -235,7 +249,6 @@
     function init(data){
       isLogin = data.isLogin;
       project = data.project;
-      // $('body').empty().text(JSON.stringify(project));
       if(isLogin){
         $('.login-mag').hide();
         $('.setting-wrap').show();

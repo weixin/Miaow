@@ -383,6 +383,11 @@
   }
   function appendDom2(data){
     $('.bqts').remove();
+    $('.content-wrap').empty();
+    if(!data){
+      $('.content-wrap').append('<div class="content-title">暂无图标</div>');
+      return;
+    }
     var typecount = -1;
     var dom = [];
     var typeobj = {};
@@ -405,7 +410,6 @@
         leavedom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
       }
     }
-    $('.content-wrap').empty();
     for(var i = 0;i<dom.length;i++){
       dom[i] = dom[i].join('') + '</div>';
     }

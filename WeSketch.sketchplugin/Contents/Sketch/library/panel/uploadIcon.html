@@ -223,12 +223,12 @@
     
     
   <script type="text/javascript">
-    var encodeSVG = '';
-    var svgtest = '';
+    var saveSvg = [];
     var projectID = '';
     var typeID = '';
     var project = [];
     function svgUpload(data){
+      saveSvg = saveSvg.concat(data);
       var svgDom = [];
       for(var i = 0;i<data.length;i++){
         svgDom.push(
@@ -241,8 +241,6 @@
       $('#svg-wrap').append(svgDom.join(''));
     }
     var init = function(data){
-      encodeSVG = data.svg;
-      svgtest = data.svgtest;
       svgUpload(data.svg);
 
       if(data.isLogin){
@@ -324,7 +322,8 @@
     })
 
     $('.savebutton').on('click',function(){
-      SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
+      SMAction('submit',saveSvg);
+      // SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
       return;
     })
 

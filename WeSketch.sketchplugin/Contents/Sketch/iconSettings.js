@@ -19,6 +19,11 @@ function iconRegister(data){
     return r;
 }
 
+function addMember(data){
+    var r = post(['/users/addMember','key='+data.invitedKey]);
+    return r;
+}
+
 function getLogin(){
     return post(['/users/login']);
 }
@@ -34,7 +39,6 @@ function addProject(data){
 }
 
 function addCategory(data){
-    NSApp.displayDialog(JSON.stringify(data));
     var r = post(['/users/createCategory','projectid='+data.projectId+'&categoryname='+data.categoryName]);
     return r;
 }
@@ -60,7 +64,6 @@ var onRun = function(context){
         initData.project = queryProject().list;
     }
 
-    NSApp.displayDialog(JSON.stringify(initData));
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 	var panel = SMPanel({
@@ -92,6 +95,7 @@ var onRun = function(context){
                         NSApp.displayDialog('创建成功');
                         var project = queryProject().list;
                         windowObject.evaluateWebScript("refurshType("+JSON.stringify(project)+")");
+                        windowObject.evaluateWebScript("window.location.hash = '';");
                     }
                 }
                 return;
@@ -104,8 +108,18 @@ var onRun = function(context){
                         NSApp.displayDialog('创建成功');
                         var project = queryProject().list;
                         windowObject.evaluateWebScript("refurshType("+JSON.stringify(project)+")");
+                        windowObject.evaluateWebScript("window.location.hash = '';");
+
                     }
                 }
+                return;
+            }else if(data.action == 'addMember'){
+                var result = addMember(data);
+                if(result.status == 200){
+                    NSApp.displayDialog('加入项目成功');
+                }
+                windowObject.evaluateWebScript("refurshType("+JSON.stringify(project)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
                 return;
             }
             if(reuslt.status == 200){
@@ -116,7 +130,10 @@ var onRun = function(context){
                 reuslt.nametest = b;
                 reuslt.project = queryProject().list;
                 windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
             }
+            windowObject.evaluateWebScript("window.location.hash = '';");
+
         }
     });
 }
