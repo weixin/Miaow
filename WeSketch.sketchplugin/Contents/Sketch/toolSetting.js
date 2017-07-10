@@ -161,13 +161,23 @@ var onRun = function(context) {
 			};
 		}
 
-		manifestEn.commands[0] = CommonAction;
-		manifestZh.commands[0] = CommonAction;
+		var i18nList = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path();
+
+		i18nList = NSData.dataWithContentsOfFile(i18nList);
+		i18nList = [[NSString alloc] initWithData:i18nList encoding:NSUTF8StringEncoding];
+		i18nList = JSON.parse(i18nList).i18n;
+
+		for(var i = 0;i<i18nList.length;i++){
+		    var allManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-"+ i18nList[i].key +".json").path();
+		    manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(allManifestPath), NSJSONReadingMutableContainers, nil);
+			manifestLangData.commands[0] = CommonAction;
+	   		NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLangData, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(allManifestPath, true, NSUTF8StringEncoding, nil);
+		}
+
+		
 		manifest.commands[0] = CommonAction;
 
 	    NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifest, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
-	    NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestZh, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPathZh, true, NSUTF8StringEncoding, nil);
-	    NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestEn, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPathEn, true, NSUTF8StringEncoding, nil);
 	    
 
 		context.document.showMessage(i18t.m6);

@@ -15,19 +15,8 @@
 function toolbar(context,auto){
     var i18nKey = "com.sketchplugins.wechat.i18n";
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-
-    if(lang == undefined){
-        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
-        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
-        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
-        if(lang.indexOf('zh') > -1){
-            lang = 'zh';
-        }else{
-            lang = 'en';
-        }
-    }
     var prefix = '';
-    if(lang == 'en'){
+    if(lang.indexOf('en')>-1){
         prefix = '-en';
     }
 
