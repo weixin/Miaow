@@ -1,61 +1,54 @@
 @import "common.js"
 
-function previewHtml(){
-	var nonbounce = function (elems) {
-	    var cont;
-	    var startY;
-	    var idOfContent = "";
-	    nonbounce_touchmoveBound = false;
-	    var isContent = function (elem) {
-	        var id = elem.getAttribute("id");
-	        while (id !== idOfContent && elem.nodeName.toLowerCase() !== "body") {
-	            elem = elem.parentNode;
-	            id = elem.getAttribute("id")
-	        }
-	        return (id === idOfContent)
-	    };
-	    var touchstart = function (evt) {
-	        if (!isContent(evt.target)) {
-	            evt.preventDefault();
-	            return false
-	        }
-	        startY = (evt.touches) ? evt.touches[0].screenY : evt.screenY
-	    };
-	    var touchmove = function (evt) {
-	        var elem = evt.target;
-	        var y = (evt.touches) ? evt.touches[0].screenY : evt.screenY;
-	        if (cont.scrollTop === 0 && startY <= y) {
-	            evt.preventDefault()
-	        }
-	        if (cont.scrollHeight - cont.offsetHeight === cont.scrollTop && startY >= y) {
-	            evt.preventDefault()
-	        }
-	    }
-	    if (typeof elems === "string") {
-	        cont = document.getElementById(elems);
-	        if (cont) {
-	            idOfContent = cont.getAttribute("id");
-	            window.addEventListener("touchstart", touchstart, false)
-	        }
-	    }
-	    if (!nonbounce_touchmoveBound) {
-	        window.addEventListener("touchmove", touchmove, false)
-	    }
-	};
-	nonbounce("content");
-}
-
 var onRun = function(context){
+	var exportSVGJson = {};
+	var pageCount = 1;
+
+	function relationship(doc){
+		var kPluginDomain = "com.sketchplugins.wechat.link";
+		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
+			linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
+			loop = linkLayers.objectEnumerator(),
+			connections = [],
+			linkLayer, destinationArtboardID, destinationArtboard, isCondition, linkRect;
+
+		while (linkLayer = loop.nextObject()) {
+			var children = {};
+			children.x = encodeURIComponent(linkLayer.rect().origin.x);
+			children.y = encodeURIComponent(linkLayer.rect().origin.y);
+			children.width = encodeURIComponent(linkLayer.absoluteRect().size().width);
+			children.height = encodeURIComponent(linkLayer.absoluteRect().size().height);
+			destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
+			var Message = destinationArtboardID.split('____');
+			destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
+
+			if (destinationArtboard && Message[0] == linkLayer.objectID()) {
+				children.to = encodeURIComponent(destinationArtboard.objectID());
+			}
+			exportSVGJson[linkLayer.parentArtboard().objectID()].children[linkLayer.objectID()] = children;
+		}
+	}
+
+	function exportHTML(filePath){
+    	var htmlPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("preview.html").path();
+        var previewData = NSData.dataWithContentsOfFile(htmlPath);
+        previewData = [[NSString alloc] initWithData:previewData encoding:NSUTF8StringEncoding];
+		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson));
+        writeFile({content:previewData,path:filePath,fileName:'index.html'})
+		NSApp.displayDialog('导出成功');
+
+	}
 
 	function exportSVG(layer,context,file,fileName,scale){
-		// 去头 算了不去了
 		var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
 	    slice.scale = scale;
 	    slice.format = 'png';
 	    var savePath = file + '/images/' + fileName + '.png';
 	    context.document.saveArtboardOrSlice_toFile(slice, savePath);
-	    linkJson[fileName] = {};
-	    linkJson[fileName].image = fileName;
+	    exportSVGJson[layer.objectID()] = {};
+	    exportSVGJson[layer.objectID()].name = fileName;
+	    exportSVGJson[layer.objectID()].width = encodeURIComponent(layer.absoluteRect().size().width);
+	    exportSVGJson[layer.objectID()].children = {};
 	}
 
 	function chooseFilePath(){
@@ -67,6 +60,22 @@ var onRun = function(context){
 		}else{
 			return false;
 		}
+	}
+
+	function writeFile(options) {
+	        var content = NSString.stringWithString(options.content),
+	        savePathName = [];
+	    NSFileManager
+	        .defaultManager()
+	        .createDirectoryAtPath_withIntermediateDirectories_attributes_error(options.path, true, nil, nil);
+
+	    savePathName.push(
+	        options.path,
+	        "/",
+	        options.fileName
+	    );
+	    savePathName = savePathName.join("");
+	    content.writeToFile_atomically_encoding_error(savePathName, false, 4, null);
 	}
 
 	function writeDirectory(filePath){
@@ -83,12 +92,13 @@ var onRun = function(context){
 	var nowPage = context.document.currentPage();
 	var artBoards = nowPage.artboards();
 	for(var i = 0;i<artBoards.length;i++){
-		var width = artboard.size().width;
+		var size = artBoards[i].absoluteRect().size().width;
 		if(size == 320 || size == 414 || size == 375){
 			scale = 2;
 		}
 		var fileName = 'page';
-		exportSVG(artBoards[i],context,filePath,fileName+'1',scale);
-		exportLink(artBoards[i],context);
+		exportSVG(artBoards[i],context,filePath,fileName+(pageCount++),scale);
 	}
+	relationship(context.document);
+	exportHTML(filePath);
 }
