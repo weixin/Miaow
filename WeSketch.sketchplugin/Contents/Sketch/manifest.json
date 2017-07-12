@@ -35,7 +35,7 @@
       "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"true"
     },
     {
       "name" : "Icon Manager",
@@ -144,6 +144,13 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "preview",
+      "identifier" : "preview",
+      "script" : "preview.js",
+      "shortcut": "",
       "handler" : "onRun"
     },
     {
@@ -262,6 +269,7 @@
     "-",
     "link",
     "flag",
+    "preview",
     "toolSetting",
     "-",
     "textReplace",
@@ -283,7 +291,7 @@
             "issues"
         ]
     },
-    "checkforupdate",
+    "checkforupdate"
     ],
     "title":"WeSketch"
   }
