@@ -173,7 +173,6 @@ function syncUIkit(context){
 	              }
 	            }
 	            if(!flagForNewSymbol){
-	            	// saveArtBoard2.push(sourceSymbol[f]);
 	              	addSymbolCount++;
 	            }
 	          }
@@ -206,18 +205,7 @@ function syncUIkit(context){
 	    				for(var l = 0;l<saveArtBoard.length;l++){
 	    					// 删掉稿中旧的添上新的
 	    					if(saveArtBoard[l].oldA == oldDad && saveArtBoard[l].newA){
-	    						var x = chi[k].absoluteRect().x();
-	    						var y = chi[k].absoluteRect().y();
-	    						var parartboard = chi[k].parentGroup();
-	    						var newlayer = saveArtBoard[l].newA.newSymbolInstance();
-	    						newlayer.absoluteRect().setX(x);
-	    						newlayer.absoluteRect().setY(y);
-	    						p.addLayers([newlayer]);
-	    						if(parartboard){
-	    							p.setCurrentArtboard(parartboard);
-	    						}
-	    						var baba = chi[k].parentGroup();
-	    						baba.removeLayer(chi[k]);
+	    						chi[k].changeInstanceToSymbol(saveArtBoard[l].newA);
 	    					}
 	    				}
 	    			}
@@ -243,8 +231,10 @@ function syncUIkit(context){
 		savePage.setName(i18.m15);
 		for(var i=0;i<saveArtBoard.length;i++){
 			if(saveArtBoard[i].newA){
-				saveArtBoard[i].oldA.setName(saveArtBoard[i].oldA.name()+ '(Old)');
-				saveArtBoard[i].oldA.moveToLayer_beforeLayer(savePage,savePage);
+				var ct = saveArtBoard[i].oldA.copy();
+				ct.setName(ct.name() + '(Old)');
+				savePage.addLayers([ct]);
+				saveArtBoard[i].oldA.removeFromParent();
 			}
 		}
 		doc.setCurrentPage(savePage);
