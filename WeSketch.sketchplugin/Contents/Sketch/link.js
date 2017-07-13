@@ -10,7 +10,7 @@ function getLink(context,refursh){
 	var selectionDom = "com.sketchplugins.wechat.selectionDom";
 	var selectionDom1 = "com.sketchplugins.wechat.selectionDom1";
 	var selectionDom2 = "com.sketchplugins.wechat.selectionDom2";
-	var LineToArtJL = 120;
+	var LineToArtJL = 200;
 	var lineCollections = []; // 所有线的集合 [{ x: 1; y: 2; direction: ‘l’; position: 3 },...]
 
 
@@ -857,7 +857,7 @@ function getLink(context,refursh){
 	}
 
 	var redrawConnections = function(context) {
-		var doc = context.document || context.actionContext.document;
+		var doc = context.document;
 		var selectionLayer = context.selection;
 
 		//var selectedLayers = doc.findSelectedLayers();
