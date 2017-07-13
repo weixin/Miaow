@@ -102,6 +102,16 @@ function networkRequest(args) {
   return responseData;
 }
 
+// zip(['-q','-r','-m','-o','-j','/Users/liuxinyu/Desktop/123.zip','/Users/liuxinyu/Desktop/123'])
+function zip(args) {
+  var task = NSTask.alloc().init();
+  task.setLaunchPath("/usr/bin/zip");
+  task.setArguments(args);
+  var outputPipe = [NSPipe pipe];
+  [task setStandardOutput:outputPipe];
+  task.launch();
+}
+
 function encodeData(jsonData){
     var result = {};
     for(var o in jsonData){

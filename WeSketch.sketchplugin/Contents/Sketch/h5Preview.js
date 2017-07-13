@@ -1,8 +1,15 @@
 @import "common.js"
+@import "link.js"
 
 var onRun = function(context){
 	var exportSVGJson = {};
 	var pageCount = 1;
+	var kPluginDomain = "com.sketchplugins.wechat.link";
+
+	var getConnectionsGroupInPage = function(page) {
+		var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isConnectionsContainer == true", kPluginDomain);
+		return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
+	}
 
 	function relationship(doc){
 		var kPluginDomain = "com.sketchplugins.wechat.link";
@@ -43,18 +50,32 @@ var onRun = function(context){
 		var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
 	    slice.scale = scale;
 	    slice.format = 'png';
-	    var savePath = file + '/images/' + fileName + '.png';
+	    var savePath = file + '/' + fileName + '.png';
 	    context.document.saveArtboardOrSlice_toFile(slice, savePath);
 	    exportSVGJson[layer.objectID()] = {};
 	    exportSVGJson[layer.objectID()].name = fileName;
 	    exportSVGJson[layer.objectID()].width = encodeURIComponent(layer.absoluteRect().size().width);
+	    exportSVGJson[layer.objectID()].height = encodeURIComponent(layer.absoluteRect().size().height);
 	    exportSVGJson[layer.objectID()].children = {};
+	    exportSVGJson[layer.objectID()].back = {};
+	    for(var i = 0;i < layer.children().length;i++){
+	    	var back = layer.children()[i];
+	    	if(back.name().indexOf('back')>-1){
+	    		var backObj = {};
+	    		backObj.x = encodeURIComponent(layer.children()[i].rect().origin.x);
+	    		backObj.y = encodeURIComponent(layer.children()[i].rect().origin.y);
+	    		backObj.width = encodeURIComponent(layer.children()[i].absoluteRect().size().width);
+	    		backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
+	    		exportSVGJson[layer.objectID()].back[back.objectID()] = backObj;
+	    	}
+	    }
 	}
 
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
 		save.setExtensionHidden(false);
+		// return save.URL().path()+'/'+Math.random();
 		if(save.runModal()){
 			return save.URL().path();
 		}else{
@@ -84,6 +105,11 @@ var onRun = function(context){
 	            .createDirectoryAtPath_withIntermediateDirectories_attributes_error(filePath, true, nil, nil);
 	}
 
+	var connectionsGroup = getConnectionsGroupInPage(context.document.currentPage());
+	if (connectionsGroup) {
+		connectionsGroup.removeFromParent();
+	}
+
 	var filePath = chooseFilePath();
 	writeDirectory(filePath);
 	var scale = 1;
@@ -101,4 +127,7 @@ var onRun = function(context){
 	}
 	relationship(context.document);
 	exportHTML(filePath);
+	getLink(context,true);
+    // zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
+    // networkRequest(['-F',filePath+'.zip',iconQueryUrl+'/users/uploadHtml']);
 }

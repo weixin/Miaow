@@ -44,67 +44,23 @@ var content = '{{json}}';
 content = JSON.parse(content);
 var dom = [];
 for(var i in content){
-    dom.push('<div style="background-image:url(./images/'+content[i].name+'.png);background-size:375px auto;">');
+    dom.push('<div style="background-image:url(./'+content[i].name+'.png);background-size:375px auto;width:375px;position:absolute;left:0;top:0;height:'+parseInt(375/content[i].width*content[i].height)+'px;">');
     dom.push('</div>');
 }
 $('#content').append(dom.join(''));
 
 </script>
 <script>
+    Bigger($('.container')[0],375,true);
+    FastClick.attach(document.body);
+    nonbounce("content");
+</script>
+<script>
 $(document).ready(function () {
     $('#content').css('height',window.innerHeight)
-
-
     var libao_head_y = 0;
     var isClose = false;
     var zindex = 920;
-
-    $('#js-libao-head').bind('touchstart', function (e) {
-        console.log('touchstart');
-        $('#js-libao-head').find('.libao-head-img').css({
-            '-webkit-transition': ''
-        });
-        e.preventDefault();
-
-    }).bind('touchmove', function (e) {
-
-        //触摸结束
-        libao_head_y = e.touches[0].clientY;
-
-        if(isClose && libao_head_y > 80){
-            return;
-        }else {
-            $('.libao-head-close').hide();
-            $('#js-libao-head').find('.libao-head-img').css('-webkit-transform', 'translateY(-' + (230 - libao_head_y) + 'px);')
-            isClose = false;
-        }
-
-
-    }).bind('touchend', function (e) {
-        if(isClose) {
-            return;
-        }
-        console.log('touchend');
-        //判断是要上移还是下移
-        if (libao_head_y < 150) {
-            $('#js-libao-head').find('.libao-head-img').css({
-                '-webkit-transform': 'translateY(-166px)',
-                '-webkit-transition': '0.2s ease-in'
-            });
-
-            setTimeout(function(){
-                $('.libao-head-close').show();
-            },180);
-            isClose = true;
-        } else {
-            $('#js-libao-head').find('.libao-head-img').css({
-                '-webkit-transform': 'translateY(0)',
-                '-webkit-transition': '0.1s ease-in'
-            });
-        }
-
-        libao_head_y = 0;
-    });
 
     $('.link-back').click(function () {
         setTimeout(function(){
@@ -183,7 +139,6 @@ $(document).ready(function () {
     $('.link').click(function () {
         setTimeout(function(){
             $('#content').scrollTop(0)
-
         },100)
         //$('.link').css('background','transparent')
         var target = $(this).attr('data-target');
@@ -203,7 +158,6 @@ $(document).ready(function () {
         eachHeight = parseInt($('#'+target +' > div').css('height'))
 
         setTimeout(function () {
-
             $('.container').css('height',eachHeight)
         },200)
 
@@ -318,11 +272,7 @@ $(document).ready(function () {
         }
     }
 
-    Bigger($('.container')[0],375,true);
-    Bigger($('.do-fixed')[0],375,true);
-
-    FastClick.attach(document.body);
-    nonbounce("content");
+    
 });
 </script>
 
