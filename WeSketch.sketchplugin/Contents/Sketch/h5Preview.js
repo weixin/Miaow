@@ -42,7 +42,6 @@ var onRun = function(context){
         previewData = [[NSString alloc] initWithData:previewData encoding:NSUTF8StringEncoding];
 		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson));
         writeFile({content:previewData,path:filePath,fileName:'index.html'})
-		NSApp.displayDialog('导出成功');
 
 	}
 
@@ -75,12 +74,12 @@ var onRun = function(context){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
 		save.setExtensionHidden(false);
-		// return save.URL().path()+'/'+Math.random();
-		if(save.runModal()){
-			return save.URL().path();
-		}else{
-			return false;
-		}
+		return save.URL().path()+'/'+(Math.random());
+		// if(save.runModal()){
+		// 	return save.URL().path();
+		// }else{
+		// 	return false;
+		// }
 	}
 
 	function writeFile(options) {
@@ -105,13 +104,17 @@ var onRun = function(context){
 	            .createDirectoryAtPath_withIntermediateDirectories_attributes_error(filePath, true, nil, nil);
 	}
 
+
+
+	var filePath = chooseFilePath();
+	if(filePath == false){
+		return;
+	}
+	writeDirectory(filePath);
 	var connectionsGroup = getConnectionsGroupInPage(context.document.currentPage());
 	if (connectionsGroup) {
 		connectionsGroup.removeFromParent();
 	}
-
-	var filePath = chooseFilePath();
-	writeDirectory(filePath);
 	var scale = 1;
 	var linkJson = {};
 
@@ -128,6 +131,10 @@ var onRun = function(context){
 	relationship(context.document);
 	exportHTML(filePath);
 	getLink(context,true);
-    // zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
-    // networkRequest(['-F',filePath+'.zip',iconQueryUrl+'/users/uploadHtml']);
+    zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
+    NSApp.displayDialog('页面生成完成，等待上传');
+    var returnData = networkRequest(['-F','image=@'+filePath+'.zip',iconQueryUrl+'/users/uploadHtml']);
+    var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    jsonData = JSON.parse(jsonData);
+    NSApp.displayDialog(jsonData.dir);
 }
