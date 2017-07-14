@@ -182,7 +182,8 @@ var onRun = function(context) {
 
 		context.document.showMessage(i18t.m6);
 
-		getLink(context,true);
+		var nowContext = uploadContext(context);
+		getLink(nowContext,true);
 		getFlag(context,true);
 	    AppController.sharedInstance().pluginManager().reloadPlugins();
 

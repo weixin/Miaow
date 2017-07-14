@@ -28,7 +28,7 @@ var onRun = function(context){
     i18nList = JSON.parse(i18nList).i18n;
 
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
-    var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || '';
+    var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || 'false';
 
 	SMPanel({
         url: pluginSketch + "/panel/setting.html",
