@@ -147,11 +147,47 @@
       "handler" : "onRun"
     },
     {
+      "name" : "local Preview",
+      "identifier" : "localPreview",
+      "script" : "localPreview.js",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "Web Preview",
       "identifier" : "h5Preview",
       "script" : "h5Preview.js",
       "shortcut": "",
       "handler" : "onRun"
+    },
+    {
+      "name" : "Set Dialog",
+      "identifier" : "setDialog",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setDialog"
+    },
+    {
+      "name" : "Set Fixed",
+      "identifier" : "setFixed",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setFixed"
+    },
+    {
+      "name" : "Set Back",
+      "identifier" : "setBack",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setBack"
+    },
+    {
+      "name" : "Set First Page",
+      "identifier" : "setFirstPage",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setIndex"
     },
     {
       "name" : "Copy CSS Style",
@@ -269,7 +305,17 @@
     "-",
     "link",
     "flag",
-    "h5Preview",
+    {
+      "title": "Preview",
+      "items": [
+        "setFirstPage",
+        "setDialog",
+        "setFixed",
+        "setBack",
+        "localPreview",
+        "h5Preview"
+      ]
+    },
     "toolSetting",
     "-",
     "textReplace",
