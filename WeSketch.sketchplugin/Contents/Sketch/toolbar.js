@@ -10,7 +10,7 @@
 @import 'exportSlice.js';
 @import 'codeStyle.js';
 @import 'codeColor.js';
-@import 'localPreview.js';
+@import 'previewToolbar.js';
 
 
 function toolbar(context,auto){
@@ -130,11 +130,11 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('localPreview') > -1){
+        if(obj.indexOf('previewToolbar') > -1){
             var codestyleButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
-                            localPreview(nowcontext);
+                            previewToolbar(nowcontext);
                         });
             contentView.addSubview(codestyleButton);
             xlocation = xlocation+53;

@@ -151,7 +151,7 @@
       "identifier" : "localPreview",
       "script" : "localPreview.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -224,6 +224,16 @@
       "handler" : "onRun",
       "istool":"",
       "noshortcut":"true"
+    },
+    {
+      "name" : "Show Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"true",
+      "handlers" : {
+        "run" : "onRunToolBar"
+      }
     },
     {
       "name" : "Show Toolbar",
@@ -313,7 +323,9 @@
         "setFixed",
         "setBack",
         "localPreview",
-        "h5Preview"
+        "h5Preview",
+        "-",
+        "previewToolbar"
       ]
     },
     "toolSetting",
