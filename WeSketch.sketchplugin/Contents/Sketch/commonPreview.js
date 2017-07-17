@@ -327,6 +327,7 @@ var commonCodeJson = function(context,filePath){
 	    		backObj.y = encodeURIComponent(layer.children()[i].rect().origin.y);
 	    		backObj.width = encodeURIComponent(layer.children()[i].absoluteRect().size().width);
 	    		backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
+	    		backObj.back = true;
 	    		exportSVGJson[layer.objectID()].children[child.objectID()] = backObj;
 	    	}
 	    	if(child.name().indexOf('fixed')>-1 && child.isVisible()){

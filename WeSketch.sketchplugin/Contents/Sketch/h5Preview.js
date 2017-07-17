@@ -2,7 +2,7 @@
 @import "link.js"
 @import "commonPreview.js"
 
-var onRun = function(context){
+function h5Preview(context){
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
@@ -42,6 +42,8 @@ var onRun = function(context){
 	var fm  =[NSFileManager defaultManager];
     fm.removeItemAtPath_error(filePath,nil);
     fm.removeItemAtPath_error(filePath+'.zip',nil);
+}
 
-
+var onRun = function(context){
+	h5Preview(context);
 }

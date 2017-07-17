@@ -55,17 +55,36 @@
 var content = '{{json}}';
 content = JSON.parse(content);
 var dom = [];
+var dom = [];
 for(var i in content){
     dom.push('<div style="position:relative;'+(content[i].name=='page1'?'z-index:1':'')+'" data-id="'+content[i].name+'">')
-    dom.push('<div style="background-image:url(./'+content[i].name+'.png);background-size:375px auto;width:375px;position:absolute;left:0;top:0;height:'+parseInt(375/content[i].width*content[i].height)+'px;">');
-    dom.push('</div>');
+    dom.push('<div style="background-image:url(./'+content[i].name+'.png);background-size:375px auto;width:375px;position:absolute;left:0;top:0;height:'+parseInt(375/content[i].width*content[i].height)+'px;');
+    if(content[i].firstPage){
+        dom.push('z-index:920;');
+    }
+    dom.push('"></div>');
     for(var k in content[i].children){
         if(content[i].children[k].to){
-            dom.push('<div class="link-to" data-to="' + content[content[i].children[k].to].name +'" style="position:absolute;width:'+ parseInt(375/content[i].width*content[i].children[k].width) +'px;height:'+ parseInt(375/content[i].width*content[i].children[k].height) +'px;top:'+ parseInt(375/content[i].width*content[i].children[k].y) +'px;left:'+ parseInt(375/content[i].width*content[i].children[k].x) +'px;"></div>')
+            dom.push('<div ');
+            if(content[i].children[k].to){
+                if(content[content[i].children[k].to].dialog){
+                    dom.push('class="link-dialog" data-to="' + content[content[i].children[k].to].dialog.name +'" ');
+                }else{
+                    dom.push('class="link-to" data-to="' + content[content[i].children[k].to].name +'" ');
+                }
+            }
+            if(content[i].children[k].back){
+                dom.push('class="link-back" ');
+            }
+
+            dom.push('style="position:absolute;width:'+ parseInt(375/content[i].width*content[i].children[k].width) +'px;height:'+ parseInt(375/content[i].width*content[i].children[k].height) +'px;top:'+ parseInt(375/content[i].width*content[i].children[k].y) +'px;left:'+ parseInt(375/content[i].width*content[i].children[k].x) +'px;');
+            if(content[i].children[k].image){
+                dom.push('background-image:'+content[i].children[k].image+'.png;');
+                dom.push('background-size:'+parseInt(375/content[i].width*content[i].children[k].width) +'px '+ parseInt(375/content[i].width*content[i].children[k].height) +'px;');
+                dom.push('position:fixed;');
+            }
+            dom.push('"></div>');
         }
-    }
-    for(var k in content[i].back){
-        dom.push('<div class="back-to" style="position:absolute;width:'+ parseInt(375/content[i].width*content[i].children[k].width) +'px;height:'+ parseInt(375/content[i].width*content[i].children[k].height) +'px;top:'+ parseInt(375/content[i].width*content[i].children[k].y) +'px;left:'+ parseInt(375/content[i].width*content[i].children[k].x) +'px;"></div>');
     }
     dom.push('</div>');
 }

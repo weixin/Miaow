@@ -48,16 +48,17 @@ function previewToolbar(context,auto){
 
 
 
-        var locationy = NSScreen.mainScreen().frame().size.height - 162;
+        var locationx = NSScreen.mainScreen().frame().size.width - 260;
+        var locationy = NSScreen.mainScreen().frame().size.height - 365;
         
-        Toolbar.setFrame_display(NSMakeRect(285, locationy, 150, 350), false);
+        Toolbar.setFrame_display(NSMakeRect(locationx, locationy, 45, 300), false);
         Toolbar.setMovableByWindowBackground(true);
         Toolbar.becomeKeyWindow();
         Toolbar.setLevel(NSFloatingWindowLevel);
 
 
         var contentView = Toolbar.contentView();
-        var closeButton = addButton( NSMakeRect(20, 350, 18, 18), "close",
+        var closeButton = addButton( NSMakeRect(13, 280, 18, 18), "close",
                     function(sender){
                         coscript.setShouldKeepAround(false);
                         threadDictionary.removeObjectForKey(identifier);
@@ -65,15 +66,54 @@ function previewToolbar(context,auto){
                     });
         contentView.addSubview(closeButton);
 
-        var xlocation = 46;
 
-        var linkButton = addButton( NSMakeRect(xlocation+3, 320, 45, 45), "link"+prefix,
+        var linkButton = addButton( NSMakeRect(0, 235, 0, 45), "link"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         setIndex(nowcontext);      
                     });
 
         contentView.addSubview(linkButton);
+
+        var linkButton2 = addButton( NSMakeRect(0, 190, 0, 45), "link"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        setDialog(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton2);
+
+        var linkButton3 = addButton( NSMakeRect(0, 145, 0, 45), "link"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        setFixed(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton3);
+
+        var linkButton4 = addButton( NSMakeRect(0, 100, 0, 45), "link"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        setBack(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton4);
+
+        var linkButton5 = addButton( NSMakeRect(0, 55, 0, 45), "link"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        localPreview(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton5);
+
+        var linkButton6 = addButton( NSMakeRect(0, 10, 0, 45), "link"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        h5Preview(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton6);
 
 
         threadDictionary[identifier] = Toolbar;
