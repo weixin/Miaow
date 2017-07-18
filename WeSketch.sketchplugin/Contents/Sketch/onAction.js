@@ -56,7 +56,7 @@ var onOpenDocument = function(context) {
         }
         NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
     }
-    if(lang.toString().length != 4){
+    if(encodeURIComponent(lang.toString()).length != 4){
         lang = 'enUS';
         NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
     }
