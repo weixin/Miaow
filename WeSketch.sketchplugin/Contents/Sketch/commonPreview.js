@@ -311,7 +311,6 @@ var commonCodeJson = function(context,filePath){
 
 	function exportPNG(layer,context,file,scale){
 	    exportSVGJson[layer.objectID()] = {};
-	    exportSVGJson[layer.objectID()].name = fileName;
 	    exportSVGJson[layer.objectID()].width = encodeURIComponent(layer.absoluteRect().size().width);
 	    exportSVGJson[layer.objectID()].height = encodeURIComponent(layer.absoluteRect().size().height);
 	    if(layer.name().indexOf('firstPage') > -1){
@@ -405,10 +404,12 @@ var commonCodeJson = function(context,filePath){
 	    		exportSVGJson[layer.objectID()].background = colorToJSON(layer.backgroundColor());
 	    	}
 	    }else{
+	    	var fileName = 'page' + (pageCount++);
+	    	exportSVGJson[layer.objectID()].name = fileName;
 	    	var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
 	    	slice.scale = scale;
 	    	slice.format = 'png';
-	    	var savePath = file + '/page' + (pageCount++) + '.png';
+	    	var savePath = file + '/' + fileName + '.png';
 	    	context.document.saveArtboardOrSlice_toFile(slice, savePath);
 	    } 
 	    for(var i = 0;i < saveChild.length;i++){
