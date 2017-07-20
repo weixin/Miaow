@@ -21,17 +21,29 @@ var onRun = function(context){
             
         },pushdataCallback:function(data ,windowObject ){
             if(data.action == 'insert'){
-                var ustr = '\\u'+data.chari;
-                var obj = '{"ustr": "'+ ustr +'"}';
-                obj = JSON.parse(obj);
+                
                 var nowcontext = uploadContext(context);
+                if(nowcontext.selection.length == 0){
+                    return;
+                }
                 var fontfamily = [NSFont fontWithName:data.fontFamily size:14.0];
                 var layer = nowcontext.selection[0];
                 var fontSize = layer.fontSize();
                 layer.setFont(fontfamily);
                 layer.setFontSize(fontSize);
+                function bzone(d){
+                    if(d.length != 4){
+                        d = '0' + d;
+                        return bzone(d);
+                    }else{
+                        return d;
+                    }
+                }
+                var ustr = '\\u'+bzone(data.chari);
+                var obj = '{"ustr": "'+ ustr +'"}';
+                obj = JSON.parse(obj);
                 layer.setStringValue(obj.ustr);
-                windowObject.evaluateWebScript("window.location.hash = '';");
+                // windowObject.evaluateWebScript("window.location.hash = '';");
             }else{
                 var font = [NSFont fontWithName:data.fontFamily size:14.0];
                 var set = [font coveredCharacterSet];
