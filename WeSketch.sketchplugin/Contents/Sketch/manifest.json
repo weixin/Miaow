@@ -47,6 +47,14 @@
       "handler" : "onRun"
     },
     {
+      "name" : "Font Set",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "Advanced Font Replace",
       "identifier" : "fontReplace",
       "script" : "fontReplace.js",
@@ -266,6 +274,7 @@
     "syncSetting",
     "-",
     "iconQ",
+    "fontSet",
     "-",
     "link",
     "flag",
