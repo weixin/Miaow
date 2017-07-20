@@ -42,7 +42,27 @@ var onRun = function(context){
                 var ustr = '\\u'+bzone(data.chari);
                 var obj = '{"ustr": "'+ ustr +'"}';
                 obj = JSON.parse(obj);
-                layer.setStringValue(obj.ustr);
+                if(layer.class() ==  'MSTextLayer'){
+                    if(layer.editingDelegate()){
+                        var range = layer.editingDelegate().textView().selectedRange();
+                        var value = layer.stringValue();
+                        var start = value.substr(0,range.location);
+                        var end = value.substr(range.length+range.location);
+                        var newLayer = layer.duplicate();
+                        newLayer.setStringValue(start + obj.ustr + end);
+                        newLayer.setName(start + obj.ustr + end);
+                        newLayer.setNameIsFixed(0);
+                        layer.removeFromParent();
+                        newLayer.adjustFrameToFit();
+                        layer.adjustFrameToFit();
+                        newLayer.select_byExpandingSelection(true,true);
+                    }else{
+                        layer.setStringValue(obj.ustr);
+                    }
+                }else{
+                    return NSApp.displayDialog('please choose Text');
+                }
+                
                 // windowObject.evaluateWebScript("window.location.hash = '';");
             }else{
                 var font = [NSFont fontWithName:data.fontFamily size:14.0];

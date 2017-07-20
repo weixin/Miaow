@@ -31,7 +31,13 @@ function textReplace(context){
     
     function createUserInterface() {
         if (selection && selection.count() == 1 && selection[0].class() == MSTextLayer) {
-            textToFind = selection[0].stringValue().trim();
+            if(selection[0].editingDelegate()){
+                var range = selection[0].editingDelegate().textView().selectedRange();
+                var value = selection[0].stringValue();
+                textToFind = value.substr(range.location,range.length+range.location);
+            }else{
+                textToFind = selection[0].stringValue().trim();
+            }
         }
         userInterface = COSAlertWindow.new();
 
@@ -96,8 +102,20 @@ function textReplace(context){
         switch ([layer class]) {
             case MSTextLayer:
                 if ([layer stringValue].trim().match(textToFind)) {
-                    layer.setStringValue(layer.stringValue().replace(textToFind,textToReplace)); 
-                    layer.setName(layer.stringValue().trim().replace(/(\r\n|\n|\r)/gm," "));
+                    if(selection[0].editingDelegate() && layer.objectID() == selection[0].objectID()){
+                        var newLayer = layer.duplicate();
+                        newLayer.setStringValue(layer.stringValue().replace(textToFind,textToReplace));
+                        newLayer.setName(layer.stringValue().replace(textToFind,textToReplace));
+                        newLayer.setNameIsFixed(0);
+                        layer.removeFromParent();
+                        newLayer.adjustFrameToFit();
+                        layer.adjustFrameToFit();
+                        newLayer.select_byExpandingSelection(true,true);
+                    }else{
+                        layer.setStringValue(layer.stringValue().replace(textToFind,textToReplace)); 
+                        layer.setName(layer.stringValue().trim().replace(/(\r\n|\n|\r)/gm," "));
+                    }
+                    
                     replaceCount ++;
                 }
                 break;
