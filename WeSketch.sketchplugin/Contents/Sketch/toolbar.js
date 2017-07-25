@@ -15,10 +15,7 @@
 function toolbar(context,auto){
     var i18nKey = "com.sketchplugins.wechat.i18n";
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-    var prefix = '';
-    if(lang.indexOf('en')>-1){
-        prefix = '-en';
-    }
+    var prefix = '-'+lang.toString();
 
     var i18 = _(context).toolbar;
 

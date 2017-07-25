@@ -50,10 +50,14 @@ var onOpenDocument = function(context) {
         lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
         lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
         if(lang.indexOf('zh') > -1){
-            lang = 'zh';
+            lang = 'zhCN';
         }else{
-            lang = 'en';
+            lang = 'enUS';
         }
+        NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
+    }
+    if(encodeURIComponent(lang.toString()).length != 4){
+        lang = 'enUS';
         NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
     }
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
@@ -61,7 +65,7 @@ var onOpenDocument = function(context) {
     if(toolbarAuto != 'false'){
         toolbar(context,true);
     }
-    if(updateAuto != 'false'){
+    if(updateAuto == 'true'){
         checkForUpdate(context,true);
-    }    
+    }
 };
