@@ -237,23 +237,7 @@ function toolbar(context,auto){
         threadDictionary[identifier] = Toolbar;
         Toolbar.makeKeyAndOrderFront(nil);
     }else{
-        coscript.setShouldKeepAround(false);
-        threadDictionary.removeObjectForKey(identifier);
-        Toolbar.close();
-        if(toolbarAuto != 'false'){
-            var settingsWindow = COSAlertWindow.new();
-            settingsWindow.addButtonWithTitle(i18.m1);
-            settingsWindow.addButtonWithTitle(i18.m2);
-            settingsWindow.setMessageText(i18.m3);
-            settingsWindow.addTextLabelWithValue(i18.m4);
-            settingsWindow.addTextLabelWithValue(i18.m5);
-            var response = settingsWindow.runModal();
-            if (response == "1000") {
-                NSUserDefaults.standardUserDefaults().setObject_forKey('true',toolbarAutoShow);
-            }else{
-                NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
-            }
-        }
+        
     }
 }
 
