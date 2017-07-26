@@ -47,6 +47,14 @@
       "handler" : "onRun"
     },
     {
+      "name" : "字符集",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "字体批量替换",
       "identifier" : "fontReplace",
       "script" : "fontReplace.js",
@@ -259,6 +267,7 @@
     "syncSetting",
     "-",
     "iconQ",
+    "fontSet",
     "-",
     "link",
     "flag",

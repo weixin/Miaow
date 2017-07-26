@@ -35,13 +35,21 @@
       "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"true"
     },
     {
       "name" : "Icon Manager",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "icon": "../Resources/icons/icon.png",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Font Set",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -144,6 +152,13 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "h5Preview",
+      "script" : "h5Preview.js",
+      "shortcut": "",
       "handler" : "onRun"
     },
     {
@@ -259,9 +274,11 @@
     "syncSetting",
     "-",
     "iconQ",
+    "fontSet",
     "-",
     "link",
     "flag",
+    "h5Preview",
     "toolSetting",
     "-",
     "textReplace",
@@ -283,7 +300,7 @@
             "issues"
         ]
     },
-    "checkforupdate",
+    "checkforupdate"
     ],
     "title":"WeSketch"
   }
