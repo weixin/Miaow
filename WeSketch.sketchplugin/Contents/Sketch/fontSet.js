@@ -45,17 +45,7 @@ var onRun = function(context){
                 if(layer.class() ==  'MSTextLayer'){
                     if(layer.editingDelegate()){
                         var range = layer.editingDelegate().textView().selectedRange();
-                        var value = layer.stringValue();
-                        var start = value.substr(0,range.location);
-                        var end = value.substr(range.length+range.location);
-                        var newLayer = layer.duplicate();
-                        newLayer.setStringValue(start + obj.ustr + end);
-                        newLayer.setName(start + obj.ustr + end);
-                        newLayer.setNameIsFixed(0);
-                        layer.removeFromParent();
-                        newLayer.adjustFrameToFit();
-                        layer.adjustFrameToFit();
-                        newLayer.select_byExpandingSelection(true,true);
+                        layer.editingDelegate().textView().replaceCharactersInRange_withString(range, obj.ustr);
                     }else{
                         layer.setStringValue(obj.ustr);
                     }
@@ -63,7 +53,7 @@ var onRun = function(context){
                     return NSApp.displayDialog('please choose Text');
                 }
                 
-                // windowObject.evaluateWebScript("window.location.hash = '';");
+                windowObject.evaluateWebScript("window.location.hash = '';");
             }else{
                 var font = [NSFont fontWithName:data.fontFamily size:14.0];
                 var set = [font coveredCharacterSet];

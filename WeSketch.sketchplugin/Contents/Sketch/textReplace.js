@@ -103,14 +103,11 @@ function textReplace(context){
             case MSTextLayer:
                 if ([layer stringValue].trim().match(textToFind)) {
                     if(selection[0].editingDelegate() && layer.objectID() == selection[0].objectID()){
-                        var newLayer = layer.duplicate();
-                        newLayer.setStringValue(layer.stringValue().replace(textToFind,textToReplace));
-                        newLayer.setName(layer.stringValue().replace(textToFind,textToReplace));
-                        newLayer.setNameIsFixed(0);
-                        layer.removeFromParent();
-                        newLayer.adjustFrameToFit();
-                        layer.adjustFrameToFit();
-                        newLayer.select_byExpandingSelection(true,true);
+                        var value = layer.stringValue();
+                        var result = value.replace(textToFind,textToReplace);
+                        var valueLength = value.length();
+                        layer.editingDelegate().textView().replaceCharactersInRange_withString({location:0,length:valueLength}, result);
+                        
                     }else{
                         layer.setStringValue(layer.stringValue().replace(textToFind,textToReplace)); 
                         layer.setName(layer.stringValue().trim().replace(/(\r\n|\n|\r)/gm," "));
