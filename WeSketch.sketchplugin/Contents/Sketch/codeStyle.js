@@ -186,6 +186,10 @@ function codeS(context){
         var layerStyle = selection.style();
         var returnText = [];
         
+        if(layerStyle.contextSettings().opacity() != 1){
+            returnText.push('opacity: ' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
+        }
+        
         if(getRadius(selection) != 0){
             returnText.push('border-radius: ' + Math.round(getRadius(selection)/Rate) + keyCode +';');
         }
