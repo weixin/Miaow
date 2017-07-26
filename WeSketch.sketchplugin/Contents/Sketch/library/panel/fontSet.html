@@ -11,10 +11,15 @@
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/select2.js"></script>
     <style>
-      .show-font{
-        padding-top: 40px;
+      html,body{
         overflow: hidden;
-        font-family: "wechat sans beta";
+        height:100%;
+      }
+      .show-font{
+        overflow: auto;
+        height:100%;
+        box-sizing: border-box;
+        padding-top: 40px;
       }
       .show-font div{
         width: 40px;
@@ -66,12 +71,21 @@
   var family = '';
   init = function(data){
     var select = [];
-    select.push('<option value=""></option>')
+    var flagInit = false;
+    select.push('<option value=""></option>');
     for(var i = 0;i<data.fontFamily.length;i++){
       fontFamily = decodeURIComponent(data.fontFamily[i]);
-      select.push('<option value="'+fontFamily+'">'+fontFamily+'</option>')
+      if(data.initFamily && decodeURIComponent(data.initFamily) == fontFamily){
+        flagInit = true;
+        select.push('<option selected="selected" value="'+fontFamily+'">'+fontFamily+'</option>')
+      }else{
+        select.push('<option value="'+fontFamily+'">'+fontFamily+'</option>')
+      }
     }
     $('#select').append(select.join('')).select2();
+    if(flagInit){
+      SMAction('pushdata',{fontFamily:decodeURIComponent(data.initFamily)});
+    }
   }
 
   $('#select').on('change',function(){
@@ -86,7 +100,6 @@
   })
 
   function pushdata(data){
-
     var dom = [];
     for(var i = 0;i < data.length;i++){
       var $dom = '<div data-char="'+data[i].toString(16)+'">'+'&#x' + data[i].toString(16) + '</div>';

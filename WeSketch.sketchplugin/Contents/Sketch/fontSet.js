@@ -1,5 +1,8 @@
 @import "common.js";
 
+var FontSetKey = "com.sketchplugins.wechat.fontsetkey";
+
+
 var onRun = function(context){
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
     var options = [[[NSFontManager sharedFontManager] availableFontFamilies]][0];
@@ -8,12 +11,17 @@ var onRun = function(context){
     for(var i = 0;i<options.length;i++){
         param.push(encodeURIComponent(options[i]));
     }
+    var initData = {fontFamily:param};
+    var initFamily = NSUserDefaults.standardUserDefaults().objectForKey(FontSetKey);
+    if(initFamily){
+        initData.initFamily = encodeURIComponent(initFamily);
+    }
 
 	SMPanel({
         url: pluginSketch + "/panel/fontSet.html",
         width: 362,
         height: 548,
-        data:{fontFamily:param},
+        data:initData,
         hiddenClose: false,
         floatWindow: true,
         identifier: "fontSet",
@@ -55,6 +63,9 @@ var onRun = function(context){
                 
                 windowObject.evaluateWebScript("window.location.hash = '';");
             }else{
+
+                NSUserDefaults.standardUserDefaults().setObject_forKey(data.fontFamily, FontSetKey);
+                
                 var font = [NSFont fontWithName:data.fontFamily size:14.0];
                 var set = [font coveredCharacterSet];
                 var chari = [];
