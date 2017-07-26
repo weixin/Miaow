@@ -31,11 +31,8 @@ var _= function(context){
             return JSON.parse(jsonData);
     }
     var i18Content = {};
-    if(lang == 'zhCN'){
-        i18Content = get_('zhCN',context);
-    }else{
-        i18Content = get_('enUS',context);
-    }
+    i18Content = get_(lang,context);
+    
     return i18Content;
 };
 

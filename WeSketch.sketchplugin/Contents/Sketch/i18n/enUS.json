@@ -214,5 +214,8 @@
 		"m5":"px（Normal）",
 		"m6":"rpx（Mini App）",
 		"m7":"Saved"
+	},
+	"fontSet":{
+		"m1":"Please select the text to add characters"
 	}
 }

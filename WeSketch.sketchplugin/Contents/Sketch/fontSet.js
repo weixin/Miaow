@@ -4,6 +4,8 @@ var FontSetKey = "com.sketchplugins.wechat.fontsetkey";
 
 
 var onRun = function(context){
+    var i18 = _(context).fontSet;
+
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
     var options = [[[NSFontManager sharedFontManager] availableFontFamilies]][0];
 
@@ -29,10 +31,9 @@ var onRun = function(context){
             
         },pushdataCallback:function(data ,windowObject ){
             if(data.action == 'insert'){
-                
                 var nowcontext = uploadContext(context);
                 if(nowcontext.selection.length == 0){
-                    return;
+                    return NSApp.displayDialog(i18.m1);
                 }
                 var fontfamily = [NSFont fontWithName:data.fontFamily size:14.0];
                 var layer = nowcontext.selection[0];
@@ -58,7 +59,7 @@ var onRun = function(context){
                         layer.setStringValue(obj.ustr);
                     }
                 }else{
-                    return NSApp.displayDialog('please choose Text');
+                    return NSApp.displayDialog(i18.m1);
                 }
                 
                 windowObject.evaluateWebScript("window.location.hash = '';");

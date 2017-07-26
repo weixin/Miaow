@@ -51,7 +51,7 @@
       "identifier" : "fontSet",
       "script" : "fontSet.js",
       "shortcut": "",
-      "istool":"true",
+      "istool":"",
       "handler" : "onRun"
     },
     {
