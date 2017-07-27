@@ -156,47 +156,11 @@
       "handler" : "onRun"
     },
     {
-      "name" : "local Preview",
-      "identifier" : "localPreview",
-      "script" : "localPreview.js",
-      "shortcut": "",
-      "istool":"",
-      "handler" : "onRun"
-    },
-    {
       "name" : "Web Preview",
       "identifier" : "h5Preview",
       "script" : "h5Preview.js",
       "shortcut": "",
       "handler" : "onRun"
-    },
-    {
-      "name" : "Set Dialog",
-      "identifier" : "setDialog",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setDialog"
-    },
-    {
-      "name" : "Set Fixed",
-      "identifier" : "setFixed",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setFixed"
-    },
-    {
-      "name" : "Set Back",
-      "identifier" : "setBack",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setBack"
-    },
-    {
-      "name" : "Set First Page",
-      "identifier" : "setFirstPage",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setIndex"
     },
     {
       "name" : "Copy CSS Style",
@@ -233,16 +197,6 @@
       "handler" : "onRun",
       "istool":"",
       "noshortcut":"true"
-    },
-    {
-      "name" : "Show Toolbar",
-      "identifier" : "previewToolbar",
-      "script" : "previewToolbar.js",
-      "shortcut": "",
-      "istool":"true",
-      "handlers" : {
-        "run" : "onRunToolBar"
-      }
     },
     {
       "name" : "Show Toolbar",
@@ -325,19 +279,7 @@
     "-",
     "link",
     "flag",
-    {
-      "title": "Preview",
-      "items": [
-        "setFirstPage",
-        "setDialog",
-        "setFixed",
-        "setBack",
-        "localPreview",
-        "h5Preview",
-        "-",
-        "previewToolbar"
-      ]
-    },
+    "h5Preview",
     "toolSetting",
     "-",
     "textReplace",
