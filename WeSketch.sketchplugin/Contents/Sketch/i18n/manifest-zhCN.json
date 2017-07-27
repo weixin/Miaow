@@ -7,6 +7,7 @@
   "icon" : "minicon.png",
   "language_name": "Simplified Chinese(zhCN)",
   "language_author": "doubleluo",
+  "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands" : [
     {
       "handlers": {

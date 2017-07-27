@@ -7,6 +7,7 @@
   "icon": "minicon.png",
   "language_name": "Traditional Chinese(zhTW)",
   "language_author": "Tencent WeChat Team",
+  "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands": [
     {
       "handlers": {
