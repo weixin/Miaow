@@ -894,13 +894,16 @@ function getLink(context,refursh){
 		connectionsGroup.setIsLocked(1);
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, kPluginDomain);
 		
-		for(var i = 0;i < context.selection.length;i++){
-			context.selection[i].select_byExpandingSelection(false,false);
-		}
+		if(!refursh){
+			for(var i = 0;i < context.selection.length;i++){
+				context.selection[i].select_byExpandingSelection(false,false);
+			}
 
-		for(var i = 0;i < selectionLayer.count();i++){
-			selectionLayer[i].select_byExpandingSelection(true, true);
+			for(var i = 0;i < selectionLayer.count();i++){
+				selectionLayer[i].select_byExpandingSelection(true, true);
+			}
 		}
+		
 
 		return connectionsGroup;
 	}
