@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/normalize.css" rel="stylesheet">
+    <link href="css/select2.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/select2.js"></script>
+    <style>
+      html,body{
+        overflow: hidden;
+        height:100%;
+      }
+      .show-font{
+        overflow: auto;
+        height:100%;
+        box-sizing: border-box;
+        padding-top: 40px;
+      }
+      .show-font div{
+        width: 40px;
+        height: 40px;
+        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #bebebe;
+        position: relative;
+        margin: 10px 10px 10px 10px;
+        color: black;
+        font-size: 24px;
+        cursor: pointer;
+        position: relative;
+      }
+      .show-font div.active:before{
+        content:" ";
+        position: absolute;
+        width:100%;
+        height:100%;
+        left:0;
+        top:0;
+        border:1px solid red;
+        box-sizing:border-box;
+      }
+      .header{
+        z-index: 9;
+        position: fixed;
+        left:0;
+        top:0;
+        box-sizing:border-box;
+        width:100%;
+        padding: 10px;
+        text-align: center;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <select id="select">
+      </select>
+    </div>
+    <div class="show-font" id="showFont">
+    </div>
+  </body>
+  <script type="text/javascript">
+  var family = '';
+  init = function(data){
+    var select = [];
+    var flagInit = false;
+    select.push('<option value=""></option>');
+    for(var i = 0;i<data.fontFamily.length;i++){
+      fontFamily = decodeURIComponent(data.fontFamily[i]);
+      if(data.initFamily && decodeURIComponent(data.initFamily) == fontFamily){
+        flagInit = true;
+        select.push('<option selected="selected" value="'+fontFamily+'">'+fontFamily+'</option>')
+      }else{
+        select.push('<option value="'+fontFamily+'">'+fontFamily+'</option>')
+      }
+    }
+    $('#select').append(select.join('')).select2();
+    if(flagInit){
+      SMAction('pushdata',{fontFamily:decodeURIComponent(data.initFamily)});
+    }
+  }
+
+  $('#select').on('change',function(){
+    family = $(this).val();
+    SMAction('pushdata',{fontFamily:family});
+  })
+
+  $('#showFont').on('click','>div',function(){
+    $('.active').removeClass('active');
+    $(this).addClass('active');
+    SMAction('pushdata',{action:'insert',fontFamily:family,chari:$(this).attr('data-char')});
+  })
+
+  function pushdata(data){
+    var dom = [];
+    for(var i = 0;i < data.length;i++){
+      var $dom = '<div data-char="'+data[i].toString(16)+'">'+'&#x' + data[i].toString(16) + '</div>';
+      dom.push($dom);
+    }
+    $('#showFont').css('font-family',family);
+    $('#showFont').empty().append(dom);
+  }
+  window.addEventListener('hashchange', function(e) {
+    return false;
+  }, false);
+
+  window.onhashchange = function(){
+    return false;
+  }
+  </script>
+</html>

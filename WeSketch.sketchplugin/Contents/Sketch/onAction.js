@@ -43,23 +43,6 @@ var onSelectionChanged = function(context) {
 
 
 var onOpenDocument = function(context) {
-    var i18nKey = "com.sketchplugins.wechat.i18n";
-    var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-    if(lang == undefined){
-        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
-        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
-        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
-        if(lang.indexOf('zh') > -1){
-            lang = 'zhCN';
-        }else{
-            lang = 'enUS';
-        }
-        NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
-    }
-    if(encodeURIComponent(lang.toString()).length != 4){
-        lang = 'enUS';
-        NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
-    }
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
     var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || '';
     if(toolbarAuto != 'false'){

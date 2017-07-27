@@ -12,22 +12,14 @@ var onRun = function (context) {
 		var pages = context.document.pages();
 		var newDoc = MSDocument.alloc().init();
 		var objec = {};
-		var firstSymbols = false;
 		for(var i = 0;i<pages.count();i++){
-			if(pages[i].name() != 'Symbols' && firstSymbols == false){
-			  continue;
-			}
-			if(pages[i].name() == 'Symbols' && firstSymbols == true){
+			if(pages[i].name() != 'Symbols'){
 			  continue;
 			}
 			var newPage = newDoc.addBlankPage();
 			newPage.setName(pages[i].name());
 			var artboards = pages[i].artboards();
 		    newPage.addLayers(artboards);
-		    if(pages[i].name() == 'Symbols'){
-		      firstSymbols = true;
-		      i = -1;
-		    }
 		}
 		var pages2 = newDoc.pages();
 		for(var i = 0;i<pages2.count();i++){
