@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
@@ -279,7 +279,6 @@
     "-",
     "link",
     "flag",
-    "h5Preview",
     "toolSetting",
     "-",
     "textReplace",
