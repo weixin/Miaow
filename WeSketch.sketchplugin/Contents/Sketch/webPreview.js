@@ -25,7 +25,7 @@ function webPreview(context){
     	jsonData = JSON.parse(jsonData);
 		var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 		SMPanel({
-	        url: pluginSketch + "/panel/preview.html",
+	        url: pluginSketch + "/panel/webPreview.html",
 	        width: 240,
 	        height: 280,
 	        data:{
@@ -36,6 +36,9 @@ function webPreview(context){
 	        identifier: "preview",
 	        callback: function( data ){
                 openUrlInBrowser(data.link);
+	        },
+	        closeCallback: function(){
+	        	// NSApp.displayDialog(1);
 	        }
 	    });
     }

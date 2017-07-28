@@ -6,6 +6,7 @@ var localPreview =function(context){
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
+		save.setNameFieldStringValue("preview");
 		save.setExtensionHidden(false);
 		if(save.runModal()){
 			return save.URL().path();

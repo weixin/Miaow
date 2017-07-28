@@ -395,10 +395,9 @@ function SMPanel(options){
     closeButton.setCOSJSTargetFunction(function(sender) {
         var request = NSURL.URLWithString(webView.mainFrameURL()).fragment();
 
-        // if(options.floatWindow && request == "submit"){
-        //     data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
-        //     options.callback(data);
-        // }
+        if(options.closeCallback){
+            options.closeCallback();
+        }
 
         if(options.identifier){
             threadDictionary.removeObjectForKey(options.identifier);

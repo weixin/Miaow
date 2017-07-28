@@ -380,6 +380,7 @@ var commonCodeJson = function(context,filePath){
 	    	dialogObj.width = encodeURIComponent(group.absoluteRect().size().width);
 	    	dialogObj.height = encodeURIComponent(group.absoluteRect().size().height);
 	    	dialogObj.name = name;
+	    	dialogObj.direction = 'b';
 	    	exportSVGJson[layer.objectID()].dialog = dialogObj;
 	    	
 
