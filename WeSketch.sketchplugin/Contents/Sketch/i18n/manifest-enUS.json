@@ -1,12 +1,13 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
   "language_name": "English(US)",
   "language_author": "hzlzh",
+  "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands" : [
     {
       "handlers": {
@@ -35,7 +36,7 @@
       "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"true"
     },
     {
       "name" : "Icon Manager",
@@ -44,6 +45,14 @@
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Font Set",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
+      "shortcut": "",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -144,6 +153,13 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "h5Preview",
+      "script" : "h5Preview.js",
+      "shortcut": "",
       "handler" : "onRun"
     },
     {
@@ -259,6 +275,7 @@
     "syncSetting",
     "-",
     "iconQ",
+    "fontSet",
     "-",
     "link",
     "flag",
@@ -283,7 +300,7 @@
             "issues"
         ]
     },
-    "checkforupdate",
+    "checkforupdate"
     ],
     "title":"WeSketch"
   }

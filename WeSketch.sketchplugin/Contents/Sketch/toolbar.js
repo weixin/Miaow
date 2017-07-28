@@ -10,7 +10,6 @@
 @import 'exportSlice.js';
 @import 'codeStyle.js';
 @import 'codeColor.js';
-@import 'previewToolbar.js';
 
 
 function toolbar(context,auto){
@@ -130,16 +129,6 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('previewToolbar') > -1){
-            var codestyleButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
-                        function(sender){
-                            var nowcontext = uploadContext(context);
-                            previewToolbar(nowcontext);
-                        });
-            contentView.addSubview(codestyleButton);
-            xlocation = xlocation+53;
-        }
-
         if(obj.indexOf('flag') > -1){
 
             var flagButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "flag"+prefix,
@@ -244,26 +233,11 @@ function toolbar(context,auto){
             contentView.addSubview(codestyleButton);
         }
 
+
         threadDictionary[identifier] = Toolbar;
         Toolbar.makeKeyAndOrderFront(nil);
     }else{
-        coscript.setShouldKeepAround(false);
-        threadDictionary.removeObjectForKey(identifier);
-        Toolbar.close();
-        if(toolbarAuto != 'false'){
-            var settingsWindow = COSAlertWindow.new();
-            settingsWindow.addButtonWithTitle(i18.m1);
-            settingsWindow.addButtonWithTitle(i18.m2);
-            settingsWindow.setMessageText(i18.m3);
-            settingsWindow.addTextLabelWithValue(i18.m4);
-            settingsWindow.addTextLabelWithValue(i18.m5);
-            var response = settingsWindow.runModal();
-            if (response == "1000") {
-                NSUserDefaults.standardUserDefaults().setObject_forKey('true',toolbarAutoShow);
-            }else{
-                NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
-            }
-        }
+        
     }
 }
 

@@ -129,7 +129,6 @@ function fontReplace(context){
         var result;
 
         if (buttonClick == '1000') {
-            page.deselectAllLayers()
 
             for (var i = 0; i < includedFontName.length; i++) {
                 if ([[[modal viewAtIndex: i+1] selectedCell] state] == true) {

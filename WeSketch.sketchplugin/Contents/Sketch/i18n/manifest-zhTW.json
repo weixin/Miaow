@@ -1,12 +1,13 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "identifier": "cn.wechat",
   "description": "A set of plugins for Sketch include drawing links & marks,UI Kit & Color sync,font & text replacing",
   "icon": "minicon.png",
   "language_name": "Traditional Chinese(zhTW)",
   "language_author": "Tencent WeChat Team",
+  "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands": [
     {
       "handlers": {
@@ -45,6 +46,14 @@
       "shortcut": "",
       "istool": "true",
       "handler": "onRun"
+    },
+    {
+      "name" : "字符集",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
     },
     {
       "name": "字體批量替換",
@@ -259,6 +268,7 @@
       "syncSetting",
       "-",
       "iconQ",
+      "fontSet",
       "-",
       "link",
       "flag",

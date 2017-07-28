@@ -1,12 +1,13 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
   "language_name": "English(US)",
   "language_author": "hzlzh",
+  "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands" : [
     {
       "handlers": {
@@ -44,6 +45,14 @@
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Font Set",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
+      "shortcut": "",
+      "istool":"",
       "handler" : "onRun"
     },
     {
@@ -147,47 +156,11 @@
       "handler" : "onRun"
     },
     {
-      "name" : "local Preview",
-      "identifier" : "localPreview",
-      "script" : "localPreview.js",
-      "shortcut": "",
-      "istool":"",
-      "handler" : "onRun"
-    },
-    {
       "name" : "Web Preview",
       "identifier" : "h5Preview",
       "script" : "h5Preview.js",
       "shortcut": "",
       "handler" : "onRun"
-    },
-    {
-      "name" : "Set Dialog",
-      "identifier" : "setDialog",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setDialog"
-    },
-    {
-      "name" : "Set Fixed",
-      "identifier" : "setFixed",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setFixed"
-    },
-    {
-      "name" : "Set Back",
-      "identifier" : "setBack",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setBack"
-    },
-    {
-      "name" : "Set First Page",
-      "identifier" : "setFirstPage",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setIndex"
     },
     {
       "name" : "Copy CSS Style",
@@ -224,16 +197,6 @@
       "handler" : "onRun",
       "istool":"",
       "noshortcut":"true"
-    },
-    {
-      "name" : "Show Toolbar",
-      "identifier" : "previewToolbar",
-      "script" : "previewToolbar.js",
-      "shortcut": "",
-      "istool":"true",
-      "handlers" : {
-        "run" : "onRunToolBar"
-      }
     },
     {
       "name" : "Show Toolbar",
@@ -312,22 +275,10 @@
     "syncSetting",
     "-",
     "iconQ",
+    "fontSet",
     "-",
     "link",
     "flag",
-    {
-      "title": "Preview",
-      "items": [
-        "setFirstPage",
-        "setDialog",
-        "setFixed",
-        "setBack",
-        "localPreview",
-        "h5Preview",
-        "-",
-        "previewToolbar"
-      ]
-    },
     "toolSetting",
     "-",
     "textReplace",
