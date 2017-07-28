@@ -121,8 +121,8 @@ function animate(dom,animation){
             css = {
                 '-webkit-transform': 'translateX(-375px)',
                 'transform': 'translateX(-375px)',
-                '-webkit-transition': '0.5s all',
-                'transition': '0.5s all',
+                '-webkit-transition': '0s all',
+                'transition': '0s all',
                 'opacity': '1',
                 'z-index': zindex++
             };
@@ -131,10 +131,9 @@ function animate(dom,animation){
             css = {
                 '-webkit-transform': 'translateX(0)',
                 'transform': 'translateX(0)',
-                '-webkit-transition': '0.5 all',
-                'transition': '0.5 all',
-                'opacity': '1',
-                'z-index': zindex++
+                '-webkit-transition': '0s all',
+                'transition': '0s all',
+                'opacity': '1'                
             };
             break;
         case "hide":
@@ -153,13 +152,17 @@ function animate(dom,animation){
         case "go":
             css = {
                 '-webkit-transform': 'translateX(0)',
-                'transform': 'translateX(0)'
+                'transform': 'translateX(0)',
+                '-webkit-transition': '0.2s all',
+                'transition': '0.2s all'
             };
             break;
         case "back":
             css = {
                 '-webkit-transform': 'translateX(-375px)',
-                'transform': 'translateX(-375px)'
+                'transform': 'translateX(-375px)',
+                '-webkit-transition': '0.2s all',
+                'transition': '0.2s all'
             };
             break;
         case "hide":
@@ -174,7 +177,7 @@ function animate(dom,animation){
     }
     setTimeout(function(){
         dom.css(css);
-    },10);
+    },30);
 }
 
 $(document).ready(function () {
@@ -189,12 +192,15 @@ $(document).ready(function () {
         animate($('[data-id="'+ to +'"]'),'go');
         return false;
     }).on('click','.link-back',function(){
+        animate($(this).parent(),'back');
         history.back();
     })
 
     window.addEventListener("popstate", function(e) {
         var search = window.location.search.replace('?page=','');
-        animate($('[data-id="'+ search +'"]'),'back');
+        setTimeout(function(){
+            $('[data-id="'+search+'"]').attr('z-index',zindex++);
+        },50)
     });
 
 });
