@@ -156,6 +156,15 @@
       "handler" : "onRun"
     },
     {
+      "name" : "preview Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"",
+      "istool":"true",
+      "handler" : "onRunPreviewToolBar"
+    },
+    {
       "name" : "local Preview",
       "identifier" : "localPreview",
       "script" : "localPreview.js",
@@ -197,13 +206,6 @@
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setIndex"
-    },
-    {
-      "name" : "Web Preview",
-      "identifier" : "h5Preview",
-      "script" : "h5Preview.js",
-      "shortcut": "",
-      "handler" : "onRun"
     },
     {
       "name" : "Copy CSS Style",

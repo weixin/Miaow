@@ -19,7 +19,7 @@ var localPreview =function(context){
     	return;
 	}
 	commonCodeJson(context,filePath);
-    NSApp.displayDialog('导出成功');
+    NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(NSArray.arrayWithObjects(NSURL.fileURLWithPath(filePath)));
 }
 
 var onRun = function(context){

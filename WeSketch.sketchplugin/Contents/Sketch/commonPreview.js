@@ -331,6 +331,11 @@ var commonCodeJson = function(context,filePath){
 	    	if(child.name().indexOf('fixed')>-1 && child.isVisible()){
 	    		var name = 'fixed'+(fixedCount++);
 	    		exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
+	    		var fixedDirection = child.name().match(/（_fixed_(.*?)）/)[1];
+	    		exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = fixedDirection;
+	    		if(fixedDirection == 'b'){
+	    			exportSVGJson[layer.objectID()].children[child.objectID()].y = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
+	    		}
 
 				var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
 			    fixedpng.scale = scale;

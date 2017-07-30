@@ -10,6 +10,7 @@
 @import 'exportSlice.js';
 @import 'codeStyle.js';
 @import 'codeColor.js';
+@import 'previewToolbar.js';
 
 
 function toolbar(context,auto){
@@ -123,6 +124,17 @@ function toolbar(context,auto){
                         function(sender){
                             var nowcontext = uploadContext(context);
                             getLink(nowcontext);      
+                        });
+
+            contentView.addSubview(linkButton);
+            xlocation = xlocation+53;
+        }
+
+        if(obj.indexOf('previewToolbar') > -1){
+            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            previewToolbar(nowcontext);      
                         });
 
             contentView.addSubview(linkButton);

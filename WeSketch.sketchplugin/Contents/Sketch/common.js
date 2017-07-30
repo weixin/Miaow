@@ -299,9 +299,9 @@ function SMPanel(options){
     Panel.setFrame_display(frame, false);
     Panel.setBackgroundColor(contentBgColor);
 
-    var contentView = Panel.contentView(),
-        webView = WebView.alloc().initWithFrame(NSMakeRect(0, 0, options.width, options.height)),
-        windowObject = webView.windowScriptObject(),
+    var contentView = Panel.contentView();
+    var webView = WebView.alloc().initWithFrame(NSMakeRect(options.showX?options.showX:0, options.showY?options.showY:0, options.width, options.height));
+    var windowObject = webView.windowScriptObject(),
         delegate = new MochaJSDelegate({
             "webView:didFinishLoadForFrame:": (function(webView, webFrame){
                     var SMAction = [
@@ -427,7 +427,9 @@ function SMPanel(options){
     if(options.floatWindow){
         Panel.becomeKeyWindow();
         Panel.setLevel(NSFloatingWindowLevel);
-        Panel.center();
+        if(!options.showX || !options.showY){
+            Panel.center();
+        }
         Panel.makeKeyAndOrderFront(nil);
         if(options.identifier){
             threadDictionary[options.identifier] = Panel;
