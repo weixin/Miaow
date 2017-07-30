@@ -351,72 +351,72 @@ var commonCodeJson = function(context,filePath){
 	    }
 	    
 	    var fileName;
-	    if(layer.name().indexOf('dialog')>-1){
-	    	//dialog 的逻辑，把除了背景之外的元素拿出来导出图片，然后再放回去
-	    	var group = MSLayerGroup.new();
-	    		    	layer.addLayers([group]);
+    	//把除了背景之外的元素拿出来导出图片，然后再放回去
+    	var group = MSLayerGroup.new();
+    		    	layer.addLayers([group]);
 
-	    	var count = 0;
-	    	var flagcount = 0;
-	    	var layersLength = layer.layers().length;
-	    	for(var i = 0;i<layersLength;i++){
-	    		if(layer.layers()[flagcount].objectID() != group.objectID()){
-		    	    if(layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height){
-		    	    	exportSVGJson[layer.objectID()].background = exportColor(layer.layers()[flagcount]);
-		    	    	flagcount++;
-			    	}else{
-			    	    layer.layers()[flagcount].moveToLayer_beforeLayer(group,group);
-			    	}
-	    		}else{
-		    	    flagcount++;
-	    		}
-	    	    
-	    	    count++;
-	    	    if(count+flagcount == layersLength){
-	    	        break;
-	    	    }
-	    	}
-	    	group.resizeToFitChildrenWithOption(1);
+    	var count = 0;
+    	var flagcount = 0;
+    	var layersLength = layer.layers().length;
+    	for(var i = 0;i<layersLength;i++){
+    		if(layer.layers()[flagcount].objectID() != group.objectID()){
+	    	    if(layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height){
+	    	    	exportSVGJson[layer.objectID()].background = exportColor(layer.layers()[flagcount]);
+	    	    	flagcount++;
+		    	}else{
+		    	    layer.layers()[flagcount].moveToLayer_beforeLayer(group,group);
+		    	}
+    		}else{
+	    	    flagcount++;
+    		}
+    	    
+    	    count++;
+    	    if(count+flagcount == layersLength){
+    	        break;
+    	    }
+    	}
+    	group.resizeToFitChildrenWithOption(1);
 
-	    	var name = 'dialog' + (dialogCount++);
-	    	var dialogObj = {};
-	    	dialogObj.x = encodeURIComponent(group.rect().origin.x);
-	    	dialogObj.y = encodeURIComponent(group.rect().origin.y);
-	    	dialogObj.width = encodeURIComponent(group.absoluteRect().size().width);
-	    	dialogObj.height = encodeURIComponent(group.absoluteRect().size().height);
-	    	dialogObj.name = name;
-	    	dialogObj.direction = 'b';
-	    	exportSVGJson[layer.objectID()].dialog = dialogObj;
-	    	
+    	
+    	var dialogObj = {};
+    	dialogObj.x = encodeURIComponent(group.rect().origin.x);
+    	dialogObj.y = encodeURIComponent(group.rect().origin.y);
+    	dialogObj.width = encodeURIComponent(group.absoluteRect().size().width);
+    	dialogObj.height = encodeURIComponent(group.absoluteRect().size().height);
+    	var name;
+    	if(layer.name().indexOf('dialog')>-1){
+    		exportSVGJson[layer.objectID()].type = 'dialog';
+    		name = 'dialog' + (dialogCount++);
+    		var dialogDirection = child.name().match(/（_dialog_(.*?)）/)[1];	    		
+    		dialogObj.direction = dialogDirection;
+    	}else{
+    		exportSVGJson[layer.objectID()].type = 'page';
+    		name = 'page' + (pageCount++);
+    	}
+    	dialogObj.name = name;
+    	exportSVGJson[layer.objectID()].content = dialogObj;
+    	
 
-	    	var slice = MSExportRequest.exportRequestsFromExportableLayer(group).firstObject();
-	    	slice.scale = scale;
-	    	slice.format = 'png';
-	    	var savePath = file + '/' + name + '.png';
-	    	context.document.saveArtboardOrSlice_toFile(slice, savePath);
+    	var slice = MSExportRequest.exportRequestsFromExportableLayer(group).firstObject();
+    	slice.scale = scale;
+    	slice.format = 'png';
+    	var savePath = file + '/' + name + '.png';
+    	context.document.saveArtboardOrSlice_toFile(slice, savePath);
 
-	    	count = 0;
-	    	layersLength = group.layers().length;
-	    	for(var i = 0;i<layersLength;i++){
-	    	    group.layers()[0].moveToLayer_beforeLayer(layer,layer);
-	    	    count++;
-	    	    if(count == layersLength){
-	    	        break;
-	    	    }
-	    	}
-	    	group.removeFromParent();
-	    	if(!exportSVGJson[layer.objectID()].background){
-	    		exportSVGJson[layer.objectID()].background = colorToJSON(layer.backgroundColor());
-	    	}
-	    }else{
-	    	var fileName = 'page' + (pageCount++);
-	    	exportSVGJson[layer.objectID()].name = fileName;
-	    	var slice = MSExportRequest.exportRequestsFromExportableLayer(layer).firstObject();
-	    	slice.scale = scale;
-	    	slice.format = 'png';
-	    	var savePath = file + '/' + fileName + '.png';
-	    	context.document.saveArtboardOrSlice_toFile(slice, savePath);
-	    } 
+    	count = 0;
+    	layersLength = group.layers().length;
+    	for(var i = 0;i<layersLength;i++){
+    	    group.layers()[0].moveToLayer_beforeLayer(layer,layer);
+    	    count++;
+    	    if(count == layersLength){
+    	        break;
+    	    }
+    	}
+    	group.removeFromParent();
+    	if(!exportSVGJson[layer.objectID()].background){
+    		exportSVGJson[layer.objectID()].background = colorToJSON(layer.backgroundColor());
+    	}
+	    
 	    for(var i = 0;i < saveChild.length;i++){
 	    	saveChild[i].setIsVisible(true);
 	    }

@@ -96,32 +96,34 @@ function moveinFixed(){
 content = JSON.parse(content);
 var dom = [];
 for(var i in content){
+	if(content[i].firstPage){
+        history.pushState(null, "", "?page=" + content[i].content.name);
+	}
     var rx = size/content[i].width;
-    if(content[i].dialog){
-        dom.push('<div class="dialog" style="position:absolute;'+ (content[i].background?('background:'+content[i].background+';'):'') +'" data-id="'+content[i].dialog.name+'">')
-        dom.push('<div style="background-image:url(./'+content[i].dialog.name+'.png);background-size:'+size+'px auto;position:absolute;'+
-            'left:'+parseInt(rx * content[i].dialog.x)+';'+
-            'top:'+(parseInt(rx * content[i].dialog.y)-20)+';'+
-            'width:'+parseInt(rx * content[i].dialog.width)+'px;'+
-            'height:'+parseInt(rx * content[i].dialog.height)+'px;'+
-            ' data-direction="'+ content[i].dialog.direction +'"');
-    }else{
-        dom.push('<div '+(content[i].firstPage==true?"data-first=true":"")+' style="position:absolute;'+(content[i].firstPage==true?'z-index:'+(zindex++)+';display:block;':'display:none;')+'" data-id="'+content[i].name+'">')
-        dom.push('<div style="background-image:url(./'+content[i].name+'.png);background-size:'+size+'px auto;width:'+size+'px;position:absolute;left:0;top:-20px;height:'+parseInt(rx * content[i].height)+'px;');
-    }
+    dom.push('<div '+
+    	(content[i].type=='dialog'?'class="dialog"':'')+
+    	' style="'+(content[i].firstPage==true?'z-index:'+(zindex++)+';display:block;':'display:none;')+'position:absolute;'+ 
+    	(content[i].background?('background-color:'+content[i].background+';'):'') +
+    	'" data-id="'+content[i].content.name+'">')
+    dom.push('<div style="background-image:url(./'+content[i].content.name+'.png);background-size:'+size+'px auto;position:absolute;background-repeat: no-repeat;'+
+        'left:'+parseInt(rx * content[i].content.x)+';'+
+        'top:'+(parseInt(rx * content[i].content.y)-20)+';'+
+        'width:'+parseInt(rx * content[i].content.width)+'px;'+
+        'height:'+parseInt(rx * content[i].content.height)+'px;'+
+        ' data-direction="'+ content[i].content.direction +'"');
     
     dom.push('"></div>');
     dom.push('<div class="statusbar"></div>')
     for(var k in content[i].children){
-        dom.push('<div data-parent="'+content[i].name+'"');
+        dom.push('<div data-parent="'+content[i].content.name+'"');
         if(content[i].children[k].back){
             dom.push('class="link-back" ');
         }
         if(content[i].children[k].to){
-            if(content[content[i].children[k].to].dialog){
-                dom.push('class="link-dialog" data-to="' + content[content[i].children[k].to].dialog.name +'" ');
+            if(content[content[i].children[k].to].type == 'dialog'){
+                dom.push('class="link-dialog" data-to="' + content[content[i].children[k].to].content.name +'" ');
             }else{
-                dom.push('class="link-to" data-to="' + content[content[i].children[k].to].name +'" ');
+                dom.push('class="link-to" data-to="' + content[content[i].children[k].to].content.name +'" ');
             }
         }
         
@@ -136,9 +138,9 @@ for(var i in content){
         if(content[i].children[k].fixedDirection == 'b'){
             dom.push('bottom:' + (parseInt(rx * content[i].children[k].y)-20) + 'px;');
         }else{
-            dom.push('top:'+ (parseInt(rx * content[i].children[k].y)-20) +'px');
+            dom.push('top:'+ (parseInt(rx * content[i].children[k].y)-20) +'px;');
         }
-        dom.push('"></div>');
+        dom.push('z-index:1"></div>');
     }
     dom.push('</div>');
 }
@@ -336,9 +338,6 @@ $(document).ready(function () {
 
     window.addEventListener("popstate", function(e) {
         var search = window.location.search.replace('?','').replace('page=','');
-        if(search == ''){
-        	search = $('[data-first=true]').attr('data-id');
-        }
         setTimeout(function(){
         	$('#content>div').each(function(){
         	    if($(this).attr('data-id') != search){
