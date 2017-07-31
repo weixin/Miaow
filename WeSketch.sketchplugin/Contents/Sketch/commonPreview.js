@@ -359,7 +359,7 @@ var commonCodeJson = function(context,filePath){
     	var flagcount = 0;
     	var layersLength = layer.layers().length;
     	for(var i = 0;i<layersLength;i++){
-    		if(layer.layers()[flagcount].objectID() != group.objectID()){
+    		if(layer.layers()[flagcount].objectID() != group.objectID() && layer.layers()[flagcount].isVisible()){
 	    	    if(layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height){
 	    	    	exportSVGJson[layer.objectID()].background = exportColor(layer.layers()[flagcount]);
 	    	    	flagcount++;

@@ -32,7 +32,7 @@ function webPreview(context){
 	        	link:iconQueryUrl.replace(':3000','')+'/'+jsonData.dir+'/index.html'
 	        },
 	        hiddenClose: false,
-	        floatWindow: true,
+	        floatWindow: false,
 	        identifier: "preview",
 	        callback: function( data ){
                 openUrlInBrowser(data.link);

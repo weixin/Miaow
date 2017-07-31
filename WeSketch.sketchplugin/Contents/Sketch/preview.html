@@ -39,8 +39,11 @@
         border-radius: 1px;
         border: 1px solid #f3e31a;
         background-color: rgba(255,250,172,0.35);
+        min-width: 25px;
     }
     .link-back{
+        min-width: 30px;
+        min-height: 20px;
         opacity: 0;
         border-radius: 5px;
         border: 1px solid #ff7c82;
@@ -52,7 +55,6 @@
         left:0;
         position: absolute;
         width:100%;
-        background-color: white;
     }
     #content{
         position: relative;
@@ -64,6 +66,28 @@
         top:0;
         left:0;
     }
+	@keyframes twinkling{
+	  0% {
+	    opacity: 0;
+	  }
+	  30% {
+	    opacity: 1;
+	  }
+	  100% {
+	      opacity: 0;
+	    }
+	 }
+	@-webkit-keyframes twinkling{
+	  0% {
+	    opacity: 0;
+	  }
+	  30% {
+	    opacity: 1;
+	  }
+	  100% {
+	      opacity: 0;
+	    }
+	 }
     </style>
 <body>
 <div id="wrapper" class="">
@@ -103,16 +127,19 @@ for(var i in content){
     dom.push('<div '+
     	(content[i].type=='dialog'?'class="dialog"':'')+
     	' style="'+(content[i].firstPage==true?'z-index:'+(zindex++)+';display:block;':'display:none;')+'position:absolute;'+ 
+        'height:'+parseInt(rx * content[i].height-20)+'px;'+
     	(content[i].background?('background-color:'+content[i].background+';'):'') +
-    	'" data-id="'+content[i].content.name+'">')
+    	'" data-id="'+content[i].content.name+'">');
+
+    //子图片
     dom.push('<div style="background-image:url(./'+content[i].content.name+'.png);background-size:'+size+'px auto;position:absolute;background-repeat: no-repeat;'+
-        'left:'+parseInt(rx * content[i].content.x)+';'+
-        'top:'+(parseInt(rx * content[i].content.y)-20)+';'+
+        'left:'+parseInt(rx * content[i].content.x)+'px;'+
+        'top:'+(parseInt(rx * content[i].content.y)-20)+'px;'+
         'width:'+parseInt(rx * content[i].content.width)+'px;'+
-        'height:'+parseInt(rx * content[i].content.height)+'px;'+
+        'height:'+parseInt(rx * content[i].content.height)+'px;"'+
         ' data-direction="'+ content[i].content.direction +'"');
     
-    dom.push('"></div>');
+    dom.push('></div>');
     dom.push('<div class="statusbar"></div>')
     for(var k in content[i].children){
         dom.push('<div data-parent="'+content[i].content.name+'"');
@@ -151,13 +178,13 @@ moveinFixed();
     Bigger($('.container')[0],size,true);
     FastClick.attach(document.body);
     nonbounce("content");
-    $('#content').css('height',window.innerHeight-20);
+    $('#content').css({'height':window.innerHeight,"overflow":"scroll","-webkit-overflow-scrolling": "touch"});
 </script>
 <script>
 
 function animate(dom,animation){
     setTimeout(function(){
-        $('#content').scrollTop(0);
+        $('#content,#content>div').scrollTop(0);
     },100);
     var css = {};
     
@@ -292,10 +319,10 @@ $(document).ready(function () {
         $('.icon').show();
     }
     $('body').on('click',function(){
-        $('.link-to,.link-back,.link-dialog').css('opacity','1');
+        $('.link-to,.link-back,.link-dialog').css('-webkit-animation','twinkling 1s ease-in-out;');
         setTimeout(function(){
-            $('.link-to,.link-back,.link-dialog').css('opacity','0');
-        },400)
+            $('.link-to,.link-back,.link-dialog').css('-webkit-animation','none');
+        },1000)
     })
     $('#content').on('click','.link-to',function(){
         var to = $(this).attr('data-to');
