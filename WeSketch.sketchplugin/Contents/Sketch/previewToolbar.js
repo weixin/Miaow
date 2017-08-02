@@ -29,7 +29,8 @@ function previewToolbar(context){
                 break;
 
                 case "back":
-                setBack(nowcontext);
+                NSApp.displayDialog(1);
+                setBacks(nowcontext);
                 break;
 
                 case "local":

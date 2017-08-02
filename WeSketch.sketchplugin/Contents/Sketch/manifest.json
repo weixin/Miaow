@@ -195,10 +195,31 @@
     },
     {
       "name" : "Set Back",
-      "identifier" : "setBack",
+      "identifier" : "setBacks",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "setBack"
+      "handler" : "setBacks"
+    },
+    {
+      "name" : "Clear",
+      "identifier" : "previewClear",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "clearPreview"
+    },
+    {
+      "name" : "Hide All",
+      "identifier" : "previewHide",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "hidePreview"
+    },
+    {
+      "name" : "Show All",
+      "identifier" : "previewShow",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "showPreview"
     },
     {
       "name" : "Set First Page",
@@ -330,7 +351,10 @@
         "setFirstPage",
         "setDialog",
         "setFixed",
-        "setBack",
+        "setBacks",
+        "previewClear",
+        "previewHide",
+        "previewShow",
         "localPreview",
         "webPreview",
         "-",

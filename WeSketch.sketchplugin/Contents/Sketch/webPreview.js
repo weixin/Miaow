@@ -1,6 +1,6 @@
 @import "common.js"
 @import "link.js"
-@import "commonPreview.js"
+@import "commonPreviewJson.js"
 
 function webPreview(context){
 	function chooseFilePath(){
@@ -10,7 +10,7 @@ function webPreview(context){
 		return save.URL().path()+'/'+(Math.random());
 	}
 	var filePath = chooseFilePath();
-	commonCodeJson(context,filePath);
+	commonPreviewJson(context,filePath);
     zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
     var settingsWindow = COSAlertWindow.new();
     settingsWindow.addButtonWithTitle('确定');

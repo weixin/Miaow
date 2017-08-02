@@ -1,34 +1,76 @@
 @import "common.js"
 
+var previewKey = "com.sketchplugins.wechat.preview.";
+var previewWrapKey = "com.sketchplugins.wechat.previewwrap";
+
+var getCurrentPagesObject = function(context){
+	return JSON.parse(NSUserDefaults.standardUserDefaults().objectForKey(previewKey+context.document.currentPage().objectID()) || "{}");
+}
+
+var getConnectionsInPage = function(page) {
+	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isConnectionsContainer == true", previewWrapKey);
+	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
+}
+
 var setIndex = function(context){
-	var firstKey = '（_firstPage）';
+	var newPreviewObject = getCurrentPagesObject(context);
+	var commonPreviewIndexKey = '#_*index__#';
 	if(context.selection.length==0){
 		return NSApp.displayDialog('请选中 artboard 进行设置');
 	}else{
-
 		var selection = context.selection[0];
 		if(selection.className() != 'MSArtboardGroup'){
 			return NSApp.displayDialog('请选中 artboard 进行设置');
 		}
-		if(selection.name().indexOf(firstKey) > -1){
-			selection.setName(selection.name().replace(firstKey));
-		}else{
-			var page = context.document.currentPage();
-			var artboards = page.artboards();
-			for(var i = 0;i<artboards.length;i++){
-				if(artboards[i].name().indexOf(firstKey)>-1){
-					artboards[i].setName(artboards[i].name().replace(firstKey,''));
-					break;
-				}
-			}
-			selection.setName(selection.name() + firstKey);
-		}
+
+		
+		var x = selection.absoluteRect().x() + selection.rect().size.width - 20;
+		var y = selection.absoluteRect().y() - 20;
+		// 删除页面中所有
+		var svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="#D43737"><path d="M10,8.66666667 C11.2866667,8.66666667 12.3333333,7.61966667 12.3333333,6.33333333 C12.3333333,5.047 11.2866667,4 10,4 C8.71333333,4 7.66666667,5.047 7.66666667,6.33333333 C7.66666667,7.61966667 8.71333333,8.66666667 10,8.66666667 Z M10,4.66666667 C10.919,4.66666667 11.6666667,5.41433333 11.6666667,6.33333333 C11.6666667,7.25233333 10.919,8 10,8 C9.081,8 8.33333333,7.25233333 8.33333333,6.33333333 C8.33333333,5.41433333 9.081,4.66666667 10,4.66666667 Z"/><path d="M9.941,18.2523333 L15.0546667,10.8666667 C16.9726667,8.30966667 16.6953333,4.10666667 14.461,1.87266667 C13.2536667,0.665 11.6483333,0 9.941,0 C8.23366667,0 6.62833333,0.665 5.421,1.87233333 C3.18666667,4.10633333 2.90933333,8.30933333 4.81966667,10.8563333 L9.941,18.2523333 Z M5.89233333,2.34366667 C6.974,1.26233333 8.41166667,0.666666667 9.941,0.666666667 C11.4703333,0.666666667 12.908,1.26233333 13.9896667,2.34366667 C16.0063333,4.36 16.2546667,8.156 14.514,10.4766667 L9.941,17.081 L5.36066667,10.4666667 C3.62733333,8.156 3.876,4.36 5.89233333,2.34366667 Z"/><path d="M14.039,14.3356667 C13.8556667,14.3133333 13.6903333,14.4446667 13.669,14.6276667 C13.6476667,14.8106667 13.7783333,14.9763333 13.961,14.9976667 C17.4663333,15.4103333 19.3333333,16.5223333 19.3333333,17.1666667 C19.3333333,18.0713333 15.7826667,19.3333333 10,19.3333333 C4.21733333,19.3333333 0.666666667,18.0713333 0.666666667,17.1666667 C0.666666667,16.5223333 2.53366667,15.4103333 6.039,14.9976667 C6.22166667,14.9763333 6.35233333,14.8103333 6.331,14.6276667 C6.30933333,14.4446667 6.144,14.3126667 5.961,14.3356667 C2.45133333,14.749 0,15.913 0,17.1666667 C0,18.5746667 3.435,20 10,20 C16.565,20 20,18.5746667 20,17.1666667 C20,15.913 17.5486667,14.749 14.039,14.3356667 Z"/></g></svg>';
+		svg = NSString.stringWithString(svg);
+		svg = [svg dataUsingEncoding: NSUTF8StringEncoding];
+		var svgImporter = MSSVGImporter.svgImporter();
+		svgImporter.prepareToImportFromData(svg);
+		var importedSVGLayer = svgImporter.importAsLayer();
+		var svgFrame = importedSVGLayer.frame();
+		importedSVGLayer.name = commonPreviewIndexKey + selection.objectID();
+		[svgFrame setX:x];
+		[svgFrame setY:y];
+		importedSVGLayer.setIsLocked(1);
+		
+        context.document.currentPage().addLayers([importedSVGLayer]);
+		var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+        if (connectionsGroup) {
+        	importedSVGLayer.moveToLayer_beforeLayer(connectionsGroup,connectionsGroup);
+        }else{
+        	var connectionLayers = MSLayerArray.arrayWithLayers([importedSVGLayer]);
+        	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+        	connectionsGroup.setName("Preview");
+        	connectionsGroup.setIsLocked(1);
+			context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, previewWrapKey);
+        }
+
+        if(newPreviewObject.index){
+        	for(var i in newPreviewObject.index){
+        		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).index == '"+ newPreviewObject['index'][i].vs +"'", previewKey+context.document.currentPage().objectID());
+        		var oldIndex = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+        		if(oldIndex){
+        			oldIndex.removeFromParent();
+        		}
+        	}
+        }else{
+			newPreviewObject['index'] = {};
+        }
+		newPreviewObject['index'][selection.objectID()] = {main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "index", importedSVGLayer, previewKey+context.document.currentPage().objectID());
+		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
 	}
 }
 
 var setDialog = function(context){
 	var fx = 0;
-	var dialogKey = '（_dialog_';
+	var dialogKey = '#_*dialog__';
 	function chooseDialog(){
 		var settingsWindow = COSAlertWindow.new();
 		settingsWindow.addButtonWithTitle('确定');
@@ -49,34 +91,74 @@ var setDialog = function(context){
 		if(selection.className() != 'MSArtboardGroup'){
 			return NSApp.displayDialog('请选中 artboard 进行设置');
 		}
-		if(selection.name().indexOf(dialogKey)>-1){
-			var name = selection.name().replace(/（_dialog_.*?）/,'');
-			selection.setName(name);
-		}else{
-			if(!chooseDialog()){
-				return;
-			}
-			fx = fx.selectedCell();
-			var index = [fx tag];
-			if(index == 0){
-				dialogKey += 'b';
-			}else if(index == 1){
-				dialogKey += 't';
-			}else if(index == 2){
-				dialogKey += 'l';
-			}else if(index == 3){
-				dialogKey += 'r';
-			}
-			dialogKey = dialogKey + '）';
-
-			selection.setName(selection.name() + dialogKey);
+		if(chooseDialog() != '1000'){
+			return;
 		}
+
+		var newPreviewObject = getCurrentPagesObject(context);
+
+		if(newPreviewObject.dialog){
+			for(var i in newPreviewObject.dialog){
+				if(i == selection.objectID()){
+					var dialogObj = newPreviewObject['dialog'][i];
+					var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).dialog == '"+ dialogObj.vs +"'", previewKey+context.document.currentPage().objectID());
+					var oldDialog = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+					if(oldDialog){
+						oldDialog.removeFromParent();
+					}
+					delete newPreviewObject['dialog'][i];
+				}
+			}
+		}else{
+			newPreviewObject.dialog = {};
+		}
+		fx = fx.selectedCell();
+		var index = [fx tag];
+		var direction = '';
+		if(index == 0){
+			direction = 'b';
+		}else if(index == 1){
+			direction = 't';
+		}else if(index == 2){
+			direction = 'l';
+		}else if(index == 3){
+			direction = 'r';
+		}
+		dialogKey = dialogKey + direction + '#';
+		var x = selection.absoluteRect().x() + selection.rect().size.width - 20;
+		var y = selection.absoluteRect().y() - 20;
+		// 删除页面中所有
+		var svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="#D43737"><path d="M10,8.66666667 C11.2866667,8.66666667 12.3333333,7.61966667 12.3333333,6.33333333 C12.3333333,5.047 11.2866667,4 10,4 C8.71333333,4 7.66666667,5.047 7.66666667,6.33333333 C7.66666667,7.61966667 8.71333333,8.66666667 10,8.66666667 Z M10,4.66666667 C10.919,4.66666667 11.6666667,5.41433333 11.6666667,6.33333333 C11.6666667,7.25233333 10.919,8 10,8 C9.081,8 8.33333333,7.25233333 8.33333333,6.33333333 C8.33333333,5.41433333 9.081,4.66666667 10,4.66666667 Z"/><path d="M9.941,18.2523333 L15.0546667,10.8666667 C16.9726667,8.30966667 16.6953333,4.10666667 14.461,1.87266667 C13.2536667,0.665 11.6483333,0 9.941,0 C8.23366667,0 6.62833333,0.665 5.421,1.87233333 C3.18666667,4.10633333 2.90933333,8.30933333 4.81966667,10.8563333 L9.941,18.2523333 Z M5.89233333,2.34366667 C6.974,1.26233333 8.41166667,0.666666667 9.941,0.666666667 C11.4703333,0.666666667 12.908,1.26233333 13.9896667,2.34366667 C16.0063333,4.36 16.2546667,8.156 14.514,10.4766667 L9.941,17.081 L5.36066667,10.4666667 C3.62733333,8.156 3.876,4.36 5.89233333,2.34366667 Z"/><path d="M14.039,14.3356667 C13.8556667,14.3133333 13.6903333,14.4446667 13.669,14.6276667 C13.6476667,14.8106667 13.7783333,14.9763333 13.961,14.9976667 C17.4663333,15.4103333 19.3333333,16.5223333 19.3333333,17.1666667 C19.3333333,18.0713333 15.7826667,19.3333333 10,19.3333333 C4.21733333,19.3333333 0.666666667,18.0713333 0.666666667,17.1666667 C0.666666667,16.5223333 2.53366667,15.4103333 6.039,14.9976667 C6.22166667,14.9763333 6.35233333,14.8103333 6.331,14.6276667 C6.30933333,14.4446667 6.144,14.3126667 5.961,14.3356667 C2.45133333,14.749 0,15.913 0,17.1666667 C0,18.5746667 3.435,20 10,20 C16.565,20 20,18.5746667 20,17.1666667 C20,15.913 17.5486667,14.749 14.039,14.3356667 Z"/></g></svg>';
+		svg = NSString.stringWithString(svg);
+		svg = [svg dataUsingEncoding: NSUTF8StringEncoding];
+		var svgImporter = MSSVGImporter.svgImporter();
+		svgImporter.prepareToImportFromData(svg);
+		var importedSVGLayer = svgImporter.importAsLayer();
+		var svgFrame = importedSVGLayer.frame();
+		importedSVGLayer.name = dialogKey + selection.objectID();
+		[svgFrame setX:x];
+		[svgFrame setY:y];
+        context.document.currentPage().addLayers([importedSVGLayer]);
+		var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+        if (connectionsGroup) {
+        	importedSVGLayer.moveToLayer_beforeLayer(connectionsGroup,connectionsGroup);
+        }else{
+        	var connectionLayers = MSLayerArray.arrayWithLayers([importedSVGLayer]);
+        	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+        	connectionsGroup.setName("Preview");
+        	connectionsGroup.setIsLocked(1);
+			context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, previewWrapKey);
+        }
+		importedSVGLayer.setIsLocked(1);
+		newPreviewObject.dialog[selection.objectID()] = {direction:direction,main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};;
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "dialog", importedSVGLayer, previewKey+context.document.currentPage().objectID());
+		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
 	}
 }
 
 var setFixed = function(context){
 	var fx = 0;
-	var fixedKey = '（_fixed_';
+	var fixedKey = '#_*fixed__';
 	function chooseDialog(){
 		var settingsWindow = COSAlertWindow.new();
 		settingsWindow.addButtonWithTitle('确定');
@@ -91,381 +173,185 @@ var setFixed = function(context){
 		return settingsWindow.runModal();
 	}
 	if(context.selection.length==0){
-		return NSApp.displayDialog('请选中一个元素进行设置');
+		return NSApp.displayDialog('请选中元素进行设置');
 	}else{
 		var selection = context.selection[0];
 		if(selection.className() == 'MSArtboardGroup'){
-			return NSApp.displayDialog('请选择元素进行设置');
+			return NSApp.displayDialog('请选中元素进行设置');
 		}
-		if(selection.name().indexOf(fixedKey)>-1){
-			var name = selection.name().replace(/（_fixed_.*?）/,'');
-			selection.setName(name);
-		}else{
-			var key = fixedKey;
-			if(!chooseDialog()){
-				return;
+		if(!chooseDialog()){
+			return;
+		}
+
+		var newPreviewObject = getCurrentPagesObject(context);
+		if(newPreviewObject.fixed){
+			for(var i in newPreviewObject.fixed){
+				if(i == selection.objectID()){
+					var dialogObj = newPreviewObject['fixed'][i];
+					var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).fixed == '"+ dialogObj.vs +"'", previewKey+context.document.currentPage().objectID());
+					var oldDialog = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+					if(oldDialog){
+						oldDialog.removeFromParent();
+					}
+					delete newPreviewObject['fixed'][i];
+				}
 			}
-			fx = fx.selectedCell();
-			var index = [fx tag];
-			if(index == 0){
-				key += 't';
-			}else if(index == 1){
-				key += 'b';
-			}
-			key = key + '）';
-
-			selection.setName(selection.name() + key);
-		}
-	}
-}
-
-var setBack = function(context){
-	var fx = 0;
-	var backKey = '（_back）';
-	if(context.selection.length==0){
-		return NSApp.displayDialog('请选中一个元素进行设置');
-	}else{
-		var selection = context.selection[0];
-		if(selection.className() == 'MSArtboardGroup'){
-			return NSApp.displayDialog('请选择元素进行设置');
-		}
-		if(selection.name().indexOf(backKey)>-1){
-			var name = selection.name().replace(backKey,'');
-			selection.setName(name);
 		}else{
-			var key = backKey;
-			selection.setName(selection.name() + key);
+			newPreviewObject.fixed = {};
 		}
-	}
-}
-
-var commonCodeJson = function(context,filePath){
-	var BorderPositions = ["center", "inside", "outside"],
-	    FillTypes = ["color", "gradient"],
-	    GradientTypes = ["linear", "radial", "angular"],
-	    ShadowTypes = ["outer", "inner"],
-	    TextAligns = ["left", "right", "center", "justify", "left"],
-	    ResizingType = ["stretch", "corner", "resize", "float"]; 
-    
-    function pointToJSON(point){
-        return {
-            x: parseFloat(point.x),
-            y: parseFloat(point.y)
-        };
-    }
-    function colorStopToJSON(colorStop) {
-        return {
-            color: colorToJSON(colorStop.color()),
-            position: colorStop.position()
-        };
-    }
-    function gradientToJSON(gradient) {
-        var stopsData = [],
-            stop, stopIter = gradient.stops().objectEnumerator();
-        while (stop = stopIter.nextObject()) {
-            stopsData.push(colorStopToJSON(stop));
+		fx = fx.selectedCell();
+		var index = [fx tag];
+		var direction = 't';
+		if(index == 0){
+			direction = 't';
+		}else if(index == 1){
+			direction = 'b';
+		}
+		fixedKey = fixedKey + direction + '#';
+		var x = selection.absoluteRect().x();
+		var y = selection.absoluteRect().y();
+		// 删除页面中所有
+		var svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="418" height="219" viewBox="0 0 418 219" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><rect id="rectangle-2-a" width="417.282" height="218.764" x="160" y="252"/></defs><g fill="none" fill-rule="evenodd" transform="translate(-160 -252)"><use fill="#FFFAAC" fill-opacity=".354" xlink:href="#rectangle-2-a"/><rect width="416.282" height="217.764" x="160.5" y="252.5" stroke="#F3E31A"/></g></svg>';
+		svg = NSString.stringWithString(svg);
+		svg = [svg dataUsingEncoding: NSUTF8StringEncoding];
+		var svgImporter = MSSVGImporter.svgImporter();
+		svgImporter.prepareToImportFromData(svg);
+		var importedSVGLayer = svgImporter.importAsLayer();
+		var svgFrame = importedSVGLayer.frame();
+		importedSVGLayer.name = fixedKey + selection.objectID();
+		[svgFrame setX:x];
+		[svgFrame setY:y];
+        [svgFrame setWidth:selection.rect().size.width];
+        [svgFrame setHeight:selection.rect().size.height];
+        context.document.currentPage().addLayers([importedSVGLayer]);
+		var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+        if (connectionsGroup) {
+        	importedSVGLayer.moveToLayer_beforeLayer(connectionsGroup,connectionsGroup);
+        }else{
+        	var connectionLayers = MSLayerArray.arrayWithLayers([importedSVGLayer]);
+        	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+        	connectionsGroup.setName("Preview");
+        	connectionsGroup.setIsLocked(1);
+			context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, previewWrapKey);
         }
+		importedSVGLayer.setIsLocked(1);
+		newPreviewObject.fixed[selection.objectID()] = {direction:direction,main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};;
+		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "fixed", importedSVGLayer, previewKey+context.document.currentPage().objectID());
+	}
+}
 
-        return {
-            type: GradientTypes[gradient.gradientType()],
-            from: pointToJSON(gradient.from()),
-            to: pointToJSON(gradient.to()),
-            colorStops: stopsData
-        };
-    }
-
-	function colorToJSON(color) {
-	    var obj =  {
-	        r: Math.round(color.red() * 255),
-	        g: Math.round(color.green() * 255),
-	        b: Math.round(color.blue() * 255),
-	        a: color.alpha()
-	    }
-	    function bzone(d){
-	        if(d.length == 1){
-	            d = '0' + d;
-	        }
-	        return d;
-	    }
-	    if(obj.a == 1){
-	        return '#' + bzone(obj.r.toString(16)) + bzone(obj.g.toString(16)) + bzone(obj.b.toString(16));
+var setBacks = function(context){
+	var setBack_ = function(context,selection){
+		var newPreviewObject = getCurrentPagesObject(context);
+		if(newPreviewObject.back){
+			for(var i in newPreviewObject.back){
+				if(i == selection.objectID()){
+					var dialogObj = newPreviewObject['back'][i];
+					var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).back == '"+ dialogObj.vs +"'", previewKey+context.document.currentPage().objectID());
+					var oldDialog = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+					if(oldDialog){
+						oldDialog.removeFromParent();
+					}
+					delete newPreviewObject['back'][i];
+				}
+			}
+		}else{
+			newPreviewObject.back = {};
+		}
+		var x = selection.absoluteRect().x();
+		var y = selection.absoluteRect().y();
+		var svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><rect id="rectangle-4-a" width="132.777" height="85.05" x="1" y="117" rx="10"/></defs><g fill="none" fill-rule="evenodd" transform="translate(-1 -117)"><use fill="#FF7979" fill-opacity=".3" xlink:href="#rectangle-4-a"/><rect width="131.777" height="84.05" x="1.5" y="117.5" stroke="#FF7C82" rx="10"/></g></svg>';
+		svg = NSString.stringWithString(svg);
+		svg = [svg dataUsingEncoding: NSUTF8StringEncoding];
+		var svgImporter = MSSVGImporter.svgImporter();
+		svgImporter.prepareToImportFromData(svg);
+		var importedSVGLayer = svgImporter.importAsLayer();
+		var svgFrame = importedSVGLayer.frame();
+		importedSVGLayer.name = backKey + selection.objectID();
+		[svgFrame setX:x];
+		[svgFrame setY:y];
+	    [svgFrame setWidth:selection.rect().size.width];
+	    [svgFrame setHeight:selection.rect().size.height];
+	    context.document.currentPage().addLayers([importedSVGLayer]);
+		importedSVGLayer.setIsLocked(1);
+		var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+	    if (connectionsGroup) {
+	    	importedSVGLayer.moveToLayer_beforeLayer(connectionsGroup,connectionsGroup);
 	    }else{
-	        return 'rgba(' + obj.r + ',' + obj.g + ',' + obj.b + ',' + obj.a.toFixed(2) + ')';
+	    	var connectionLayers = MSLayerArray.arrayWithLayers([importedSVGLayer]);
+	    	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+	    	connectionsGroup.setName("Preview");
+	    	connectionsGroup.setIsLocked(1);
+			context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, previewWrapKey);
 	    }
+		newPreviewObject.back[selection.objectID()] = {main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};;
+		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "back", importedSVGLayer, previewKey+context.document.currentPage().objectID());
 	}
-
-	function getFills(style) {
-	    var fillsData = [],
-	        fill, fillIter = style.fills().objectEnumerator();
-	    while (fill = fillIter.nextObject()) {
-	        if (fill.isEnabled()) {
-	            var fillType = FillTypes[fill.fillType()],
-	                fillData = {
-	                    fillType: fillType
-	                };
-
-	            switch (fillType) {
-	                case "color":
-	                    fillData.color = colorToJSON(fill.color());
-	                    break;
-
-	                case "gradient":
-	                    fillData.gradient = gradientToJSON(fill.gradient());
-	                    break;
-
-	                default:
-	                    continue;
-	            }
-
-	            fillsData.push(fillData);
-	        }
-	    }
-
-	    return fillsData;
+	var fx = 0;
+	var backKey = '#_*back__#';
+	function chooseDialog(n){
+		var settingsWindow = COSAlertWindow.new();
+		settingsWindow.addButtonWithTitle('确定');
+		settingsWindow.addButtonWithTitle('取消');
+		settingsWindow.setMessageText('页面中有 '+n+' 个和你设置相同的同名元素，是否都设置为 back？');
+		return settingsWindow.runModal();
 	}
-
-	function exportColor(selection){
-	    var layerStyle = selection.style();
-	    var returnText = [];
-	    var backgroundColor = getFills(layerStyle);
-	   
-	    if(backgroundColor.length>0){
-	        if(backgroundColor[0].fillType == 'color'){
-	            returnText.push(backgroundColor[0].color);
-	        }else if(backgroundColor[0].fillType == 'gradient'){
-	            function bzone6(z){
-	                if(z.length != 6){
-	                    z = '0' + z;
-	                }
-	                if(z.length != 6){
-	                    bzone6(z);
-	                }else{
-	                    return z;
-	                }
-	            }
-	            var param = [];
-	            var to = backgroundColor[0].gradient.to;
-	            var from = backgroundColor[0].gradient.from;
-	            param.push(parseInt(90-180*Math.atan(Math.abs((to.y-from.y))/Math.abs((to.x-from.x)))/Math.PI)+'deg');
-	            var colorStops = backgroundColor[0].gradient.colorStops;
-	            for(var i = 0;i<colorStops.length;i++){
-	                param.push(colorStops[i].color + ' ' + parseInt(colorStops[i].position*100) + '%');
-	            }
-	            returnText.push('linear-gradient(' + param.join(',') + ')');
-	        }
-	    }else if(borderColor.length>0){
-	        returnText.push(borderColor[0].color);
-	    }
-	    return returnText.join('');
-	}
-
-
-	var exportSVGJson = {};
-	var pageCount = 1;
-	var fixedCount = 1;
-	var dialogCount = 1;
-	var kPluginDomain = "com.sketchplugins.wechat.link";
-
-	var getConnectionsGroupInPage = function(page) {
-		var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isConnectionsContainer == true", kPluginDomain);
-		return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
-	}
-
-	function relationship(doc){
-		var kPluginDomain = "com.sketchplugins.wechat.link";
-		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
-			linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
-			loop = linkLayers.objectEnumerator(),
-			connections = [],
-			linkLayer, destinationArtboardID, destinationArtboard, isCondition, linkRect;
-
-		while (linkLayer = loop.nextObject()) {
-			var children = {};
-			children.x = encodeURIComponent(linkLayer.rect().origin.x);
-			children.y = encodeURIComponent(linkLayer.rect().origin.y);
-			children.width = encodeURIComponent(linkLayer.absoluteRect().size().width);
-			children.height = encodeURIComponent(linkLayer.absoluteRect().size().height);
-			destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
-			var Message = destinationArtboardID.split('____');
-			destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
-
-			if (destinationArtboard && Message[0] == linkLayer.objectID()) {
-				children.to = encodeURIComponent(destinationArtboard.objectID());
+	if(context.selection.length==0){
+		return NSApp.displayDialog('请选中元素进行设置');
+	}else{
+		var selection = context.selection[0];
+		if(selection.className() == 'MSArtboardGroup'){
+			return NSApp.displayDialog('请选中元素进行设置');
+		}
+		var lengthD = 0;
+		for(var i = 0;i < context.document.currentPage().children().length;i++){
+			if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
+				lengthD ++;
 			}
-			if(exportSVGJson[linkLayer.parentArtboard().objectID()].children[i]){
-				exportSVGJson[linkLayer.parentArtboard().objectID()].children[linkLayer.objectID()].to = children.to;
-			}else{
-				exportSVGJson[linkLayer.parentArtboard().objectID()].children[linkLayer.objectID()] = children;
+		}
+		if(chooseDialog(lengthD) != '1000'){
+			setBack_(context,selection);
+		}else{
+			for(var i = 0;i < context.document.currentPage().children().length;i++){
+				if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
+					setBack_(context,context.document.currentPage().children()[i]);
+				}
 			}
-			
 		}
 	}
+}
 
-	function exportHTML(filePath){
-    	var htmlPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("preview.html").path();
-        var previewData = NSData.dataWithContentsOfFile(htmlPath);
-        previewData = [[NSString alloc] initWithData:previewData encoding:NSUTF8StringEncoding];
-		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson));
-        writeFile({content:previewData,path:filePath,fileName:'index.html'})
-	}
-
-	function exportPNG(layer,context,file,scale){
-	    exportSVGJson[layer.objectID()] = {};
-	    exportSVGJson[layer.objectID()].width = encodeURIComponent(layer.absoluteRect().size().width);
-	    exportSVGJson[layer.objectID()].height = encodeURIComponent(layer.absoluteRect().size().height);
-	    if(layer.name().indexOf('firstPage') > -1){
-	    	exportSVGJson[layer.objectID()].firstPage = true;
-	    }
-	    exportSVGJson[layer.objectID()].children = {};
-	    var saveChild = [];
-	    for(var i = 0;i < layer.children().length;i++){
-	    	var child = layer.children()[i];
-	    	if((child.name().indexOf('back')>-1 || child.name().indexOf('fixed')>-1) && child.isVisible()){
-	    		var backObj = {};
-	    		backObj.x = encodeURIComponent(layer.children()[i].rect().origin.x);
-	    		backObj.y = encodeURIComponent(layer.children()[i].rect().origin.y);
-	    		backObj.width = encodeURIComponent(layer.children()[i].absoluteRect().size().width);
-	    		backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
-	    		exportSVGJson[layer.objectID()].children[child.objectID()] = backObj;
-	    	}
-	    	if(child.name().indexOf('fixed')>-1 && child.isVisible()){
-	    		var name = 'fixed'+(fixedCount++);
-	    		exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
-	    		var fixedDirection = child.name().match(/（_fixed_(.*?)）/)[1];
-	    		exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = fixedDirection;
-	    		if(fixedDirection == 'b'){
-	    			exportSVGJson[layer.objectID()].children[child.objectID()].y = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
-	    		}
-
-				var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
-			    fixedpng.scale = scale;
-			    fixedpng.format = 'png';
-			    var savePath = file + '/' + name + '.png';
-	    		context.document.saveArtboardOrSlice_toFile(fixedpng, savePath);
-	    		child.setIsVisible(false);
-	    		saveChild.push(child);
-	    	}
-	    	if(child.name().indexOf('back')>-1 && child.isVisible()){
-	    		exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
-	    	}
-	    }
-	    
-	    var fileName;
-    	//把除了背景之外的元素拿出来导出图片，然后再放回去
-    	var group = MSLayerGroup.new();
-    		    	layer.addLayers([group]);
-
-    	var count = 0;
-    	var flagcount = 0;
-    	var layersLength = layer.layers().length;
-    	for(var i = 0;i<layersLength;i++){
-    		if(layer.layers()[flagcount].objectID() != group.objectID() && layer.layers()[flagcount].isVisible()){
-	    	    if(layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height){
-	    	    	exportSVGJson[layer.objectID()].background = exportColor(layer.layers()[flagcount]);
-	    	    	flagcount++;
-		    	}else{
-		    	    layer.layers()[flagcount].moveToLayer_beforeLayer(group,group);
-		    	}
-    		}else{
-	    	    flagcount++;
-    		}
-    	    
-    	    count++;
-    	    if(count+flagcount == layersLength){
-    	        break;
-    	    }
-    	}
-    	group.resizeToFitChildrenWithOption(1);
-
-    	
-    	var dialogObj = {};
-    	dialogObj.x = encodeURIComponent(group.rect().origin.x);
-    	dialogObj.y = encodeURIComponent(group.rect().origin.y);
-    	dialogObj.width = encodeURIComponent(group.absoluteRect().size().width);
-    	dialogObj.height = encodeURIComponent(group.absoluteRect().size().height);
-    	var name;
-    	if(layer.name().indexOf('dialog')>-1){
-    		exportSVGJson[layer.objectID()].type = 'dialog';
-    		name = 'dialog' + (dialogCount++);
-    		var dialogDirection = child.name().match(/（_dialog_(.*?)）/)[1];	    		
-    		dialogObj.direction = dialogDirection;
-    	}else{
-    		exportSVGJson[layer.objectID()].type = 'page';
-    		name = 'page' + (pageCount++);
-    	}
-    	dialogObj.name = name;
-    	exportSVGJson[layer.objectID()].content = dialogObj;
-    	
-
-    	var slice = MSExportRequest.exportRequestsFromExportableLayer(group).firstObject();
-    	slice.scale = scale;
-    	slice.format = 'png';
-    	var savePath = file + '/' + name + '.png';
-    	context.document.saveArtboardOrSlice_toFile(slice, savePath);
-
-    	count = 0;
-    	layersLength = group.layers().length;
-    	for(var i = 0;i<layersLength;i++){
-    	    group.layers()[0].moveToLayer_beforeLayer(layer,layer);
-    	    count++;
-    	    if(count == layersLength){
-    	        break;
-    	    }
-    	}
-    	group.removeFromParent();
-    	if(!exportSVGJson[layer.objectID()].background){
-    		exportSVGJson[layer.objectID()].background = colorToJSON(layer.backgroundColor());
-    	}
-	    
-	    for(var i = 0;i < saveChild.length;i++){
-	    	saveChild[i].setIsVisible(true);
-	    }
-	}
-
-	function writeFile(options) {
-	        var content = NSString.stringWithString(options.content),
-	        savePathName = [];
-	    NSFileManager
-	        .defaultManager()
-	        .createDirectoryAtPath_withIntermediateDirectories_attributes_error(options.path, true, nil, nil);
-
-	    savePathName.push(
-	        options.path,
-	        "/",
-	        options.fileName
-	    );
-	    savePathName = savePathName.join("");
-	    content.writeToFile_atomically_encoding_error(savePathName, false, 4, null);
-	}
-
-	function writeDirectory(filePath){
-		NSFileManager
-	            .defaultManager()
-	            .createDirectoryAtPath_withIntermediateDirectories_attributes_error(filePath, true, nil, nil);
-	}
-
-
-	if(filePath == false){
-		return;
-	}
-	writeDirectory(filePath);
-	var connectionsGroup = getConnectionsGroupInPage(context.document.currentPage());
-	if (connectionsGroup) {
-		connectionsGroup.removeFromParent();
-	}
-	var scale = 1;
-	var linkJson = {};
-
-	var nowPage = context.document.currentPage();
-	var artBoards = nowPage.artboards();
-	for(var i = 0;i<artBoards.length;i++){
-		var size = artBoards[i].absoluteRect().size().width;
-		if(size == 320 || size == 414 || size == 375){
-			scale = 2;
+var clearPreview = function(context){
+	var newPreviewObject = getCurrentPagesObject(context);
+	for(var i in newPreviewObject){
+		for(var k in newPreviewObject[i]){
+			for(var l = 0;l < context.selection.length;l++){
+				if(k == context.selection[l].objectID()){
+					var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@)."+ i +" == '"+ newPreviewObject[i][k].vs +"'", previewKey+context.document.currentPage().objectID());
+					var oldDialog = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate).firstObject();
+					if(oldDialog){
+						oldDialog.removeFromParent();
+						delete newPreviewObject[i][k];
+						context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, i, context.selection[l], previewKey+context.document.currentPage().objectID());
+					}
+				}
+			}
 		}
-		exportPNG(artBoards[i],context,filePath,scale);
 	}
-	relationship(context.document);
-	exportHTML(filePath);
-	getLink(context,true);
+}
+
+var hidePreview = function(context){
+	var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+    if (connectionsGroup) {
+    	connectionsGroup.setIsVisible(false);
+    }
+}
+
+var showPreview = function(context){
+	var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+    if (connectionsGroup) {
+    	connectionsGroup.setIsVisible(true);
+    }
 }

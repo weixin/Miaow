@@ -1,6 +1,6 @@
 @import "common.js"
 @import "link.js"
-@import "commonPreview.js"
+@import "commonPreviewJson.js"
 
 var localPreview =function(context){
 	function chooseFilePath(){
@@ -18,7 +18,7 @@ var localPreview =function(context){
 	if(!filePath){
     	return;
 	}
-	commonCodeJson(context,filePath);
+	commonPreviewJson(context,filePath);
     NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(NSArray.arrayWithObjects(NSURL.fileURLWithPath(filePath)));
 }
 
