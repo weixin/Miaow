@@ -7,7 +7,7 @@ function webPreview(context){
 	if(!check){
 		return;
 	}
-	var webPreviewUrl = 'https://tools.weixin.qq.com';
+	var webPreviewUrl = 'https://tool.weixin.qq.com';
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
