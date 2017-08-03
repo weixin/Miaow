@@ -272,6 +272,9 @@ function codeS(context){
                 Rate = 1;
             }
         }
+        if(size > 1334 && size != 2208){
+            Rate = 1;
+        }
     }
     
     getCode(selection);
