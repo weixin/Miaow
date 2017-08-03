@@ -3,6 +3,10 @@
 @import "commonPreviewJson.js"
 
 var localPreview =function(context){
+	var check = checkPreviewJson(context);
+	if(!check){
+		return;
+	}
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);

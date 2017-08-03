@@ -1,3 +1,22 @@
+var checkPreviewJson = function(context){
+	var previewKey = "com.sketchplugins.wechat.preview.";
+	var getCurrentPagesObject = function(context){
+		return JSON.parse(NSUserDefaults.standardUserDefaults().objectForKey(previewKey+context.document.currentPage().objectID()) || "{}");
+	}
+	var flag = false;
+	var newPreviewObject = getCurrentPagesObject(context);
+
+	if(newPreviewObject.index){
+		for(var i in newPreviewObject.index){
+			flag = true;
+		}
+	}
+	if(!flag){
+		return NSApp.displayDialog('请先设置 index 页');
+	}
+	return flag;
+}
+
 var commonPreviewJson = function(context,filePath){
 	var BorderPositions = ["center", "inside", "outside"],
 	    FillTypes = ["color", "gradient"],
@@ -112,10 +131,10 @@ var commonPreviewJson = function(context,filePath){
 	            }
 	            returnText.push('linear-gradient(' + param.join(',') + ')');
 	        }
-	    }else if(borderColor.length>0){
-	        returnText.push(borderColor[0].color);
+	    	return returnText.join('');
+	    }else{
+	    	return '';
 	    }
-	    return returnText.join('');
 	}
 
 
@@ -167,6 +186,29 @@ var commonPreviewJson = function(context,filePath){
         previewData = [[NSString alloc] initWithData:previewData encoding:NSUTF8StringEncoding];
 		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson));
         writeFile({content:previewData,path:filePath,fileName:'index.html'})
+	}
+
+	function getSliceHeader(artboard,context,name,file,scale){
+		var msSlice =[MSSliceLayer new]
+		var frame = [msSlice frame];
+		[frame setX: artboard.absoluteRect().x()];
+		[frame setY: artboard.absoluteRect().y()];
+		[frame setWidth: 1];
+		var height = 20;
+		if(artboard.absoluteRect().size().width == 750){
+			height = 40;
+		}
+		if(artboard.absoluteRect().size().width == 1242){
+			height = 60;
+		}
+		[frame setHeight: height];
+		context.document.currentPage().addLayer(msSlice);
+		var slice = MSExportRequest.exportRequestsFromExportableLayer(msSlice).firstObject();
+		slice.scale = scale;
+		slice.format = 'png';
+		var savePath = file + '/' + name + '.png';
+		context.document.saveArtboardOrSlice_toFile(slice, savePath);
+		msSlice.removeFromParent();
 	}
 
 	function exportPNG(layer,context,file,scale,newPreviewObject){
@@ -222,8 +264,13 @@ var commonPreviewJson = function(context,filePath){
     	for(var i = 0;i<layersLength;i++){
     		if(layer.layers()[flagcount].objectID() != group.objectID() && layer.layers()[flagcount].isVisible()){
 	    	    if(layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height){
-	    	    	exportSVGJson[layer.objectID()].background = exportColor(layer.layers()[flagcount]);
-	    	    	flagcount++;
+	    	    	var backgroundColor = exportColor(layer.layers()[flagcount]);
+	    	    	if(backgroundColor){
+	    	    		exportSVGJson[layer.objectID()].background = backgroundColor;
+	    	    		flagcount++;
+	    	    	}else{
+		    	    	layer.layers()[flagcount].moveToLayer_beforeLayer(group,group);
+	    	    	}
 		    	}else{
 		    	    layer.layers()[flagcount].moveToLayer_beforeLayer(group,group);
 		    	}
@@ -276,7 +323,8 @@ var commonPreviewJson = function(context,filePath){
     	}
     	group.removeFromParent();
     	if(!exportSVGJson[layer.objectID()].background){
-    		exportSVGJson[layer.objectID()].background = colorToJSON(layer.backgroundColor());
+    		var background = layer.hasBackgroundColor() ? colorToJSON(layer.backgroundColor()) : '';
+    		exportSVGJson[layer.objectID()].background = background;
     	}
 	    
 	    for(var i = 0;i < saveChild.length;i++){
@@ -332,6 +380,7 @@ var commonPreviewJson = function(context,filePath){
 		if(size == 320 || size == 414 || size == 375){
 			scale = 2;
 		}
+		getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
 		exportPNG(artBoards[i],context,filePath,scale,newPreviewObject);
 	}
 	relationship(context.document);

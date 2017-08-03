@@ -3,6 +3,11 @@
 @import "commonPreviewJson.js"
 
 function webPreview(context){
+	var check = checkPreviewJson(context);
+	if(!check){
+		return;
+	}
+	var webPreviewUrl = 'https://tools.weixin.qq.com';
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
@@ -26,10 +31,10 @@ function webPreview(context){
 		var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 		SMPanel({
 	        url: pluginSketch + "/panel/webPreview.html",
-	        width: 240,
-	        height: 280,
+	        width: 280,
+	        height: 320,
 	        data:{
-	        	link:iconQueryUrl.replace(':3000','')+'/'+jsonData.dir+'/index.html'
+	        	link:webPreviewUrl+'/'+jsonData.dir+'/index.html'
 	        },
 	        hiddenClose: false,
 	        floatWindow: false,
@@ -38,7 +43,7 @@ function webPreview(context){
                 openUrlInBrowser(data.link);
 	        },
 	        closeCallback: function(){
-	        	// NSApp.displayDialog(1);
+	        	NSApp.displayDialog(1);
 	        }
 	    });
     }

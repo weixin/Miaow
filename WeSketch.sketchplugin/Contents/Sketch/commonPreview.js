@@ -335,6 +335,8 @@ var clearPreview = function(context){
 						oldDialog.removeFromParent();
 						delete newPreviewObject[i][k];
 						context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, i, context.selection[l], previewKey+context.document.currentPage().objectID());
+						NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
+
 					}
 				}
 			}
