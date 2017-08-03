@@ -76,8 +76,8 @@ var onRun = function(context){
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 	var panel = SMPanel({
         url: pluginSketch + "/panel/uploadIcon.html",
-        width: 300,
-        height: 430,
+        width: 680,
+        height: 310,
         data:initData,
         hiddenClose: false,
         floatWindow: true,

@@ -31,11 +31,16 @@
     }
     .svg-wrap{
       text-align: center;
+      background: white;
+      width: 350px;
+      padding: 20px;
+      float: left;
     }
-    .svg-wrap>div{
-      margin: 10px;
-      display:inline-block;
-      text-align: center;
+    .svg-message{
+      padding-left: 25px;
+      flex:1;
+      background: #EFEFEF;
+      border-left:1px solid #D8D7D8;
     }
     .svg-wrap svg{
       max-width: 64px;
@@ -45,23 +50,51 @@
       margin-bottom: 10px;
     }
     .svg-w{
+      border-radius: 5px;
+      float:left;
+      background: #bebebe;
+      width:80px;
+      height:80px;
       display: flex;
       justify-content:center;
       align-items: center;
+      position: relative;
+    }
+    .active.svg-w:before{
+      border-radius: 5px;
+      position: absolute;
+      content: " ";
+      width:100%;
+      height:100%;
+      box-sizing:border-box;
+      border:2px solid #79B7F4;
+      left:0;
+      top:0;
+    }
+    .svg-w+.svg-w{
+      margin-left: 10px;
+    }
+    .svg-w>svg{
+      max-width: 60px;
+      max-height: 60px; 
     }
     .input-width{
       width:140px;
       resize:none;
+      border:1px solid rgba(0,0,0,0.25);
     }
     .savebutton{
+      margin:0 5px;
       background:#4fa3f6;
       color:white;
       border: 1px solid #1465fb;
-      border-radius:5px;
-      padding:0 15px;
+      width:76px;
+      text-align: center;
       float:right;
       cursor: pointer;
       font-size: 12px;
+      border-radius: 2px;
+      background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
     }
     .savebutton:active{
       background:#3485f0;
@@ -69,63 +102,17 @@
     .buttonwrap{
       margin-top:10px;
     }
-    .login-mag{
-      display: none;
-    }
-    .cell{
-      align-items:center;
-      position:relative;
-      display:flex;
-      padding:10px 30px;
-      width:100%;
-      box-sizing:border-box;
-      font-size:17px;
-      text-align:left;
-      text-decoration:none;
-      color:#555555;
-      background-color:white;
-      font-size: 17px;
-      border:0;
-    }
-    .cell + .cell:before{
-      position:absolute;
-      content:'';
-      left:15px;
-      top:0;
-      right:0;
-      border-top:1px solid #EEEEEE;
-    }
-    .cell-title{
-      width:50px;
-      margin-left:10px;
-      color:#555555;
-    }
-    .cell-input{
-      flex:1;
-    }
-    .cell-input input{
-      color:#555555;
-      border:0;
-      width:100%;
-    }
-    .login-mag{
-      height:100%;
-      box-sizing:border-box;
-      background-color: #ececec;
-      padding-top:50px;
-    }
-    .loginbtnwrap{
-      padding:40px 30px 0 30px;
-
-    }
-    .loginbutton{
-      border-radius:100px;
-      line-height:48px;
-      font-size:17px;
-      color:#ffffff;
-      background:#1A8CC2;
-      text-align:center;
+    .cancelbutton{
+      margin:0 5px;
+      width:76px;
+      text-align: center;
+      border: 1px solid #D9D9D9;
+      border-radius: 2px;
+      color: #262626;
+      float:right;
       cursor: pointer;
+      font-size: 12px;
+      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
     }
     .register{
       display: block;
@@ -147,81 +134,67 @@
       flex:1;
       text-align: center;
     }
+    .svg-button{
+      padding: 10px 0;
+      border-top:1px solid #D8D7D8;
+    }
+    .button-title{
+      margin: 20px 0 15px 0;
+      font-size: 14px;
+      color: #000000;
+    }
+    .svg-upload{
+      display: flex;
+    }
     </style>
   </head>
   <body >
     <div class="wrap">
-      <div class="ui-flex">
-        <div class="ui-flex__item" id="board-svg">画板上传</div>
-        <div class="ui-flex__item" id="file-svg">从文件上传</div>
-      </div>
-      <div class="">
+      <div class="svg-upload">
         <div class="svg-wrap" id="svg-wrap">
-            
         </div>
-        <div class="label-wrap">
-          <label>上传者</label>
-          <div class="ui-item">
-            <input readonly="readonly" id="upload-username" class="input-width" type="text" />
+        <div class="svg-message">
+          <div class="label-wrap">
+            <label>Name：</label>
+            <div class="ui-item">
+              <input id="svg-name" class="input-width" type="text" />
+            </div>
           </div>
-          <div class="a-link">更换用户</div>
-        </div>
-        <div class="label-wrap">
-          <label>名称</label>
-          <div class="ui-item">
-            <input id="svg-name" class="input-width" type="text" />
+          <div class="label-wrap">
+            <label>Author：</label>
+            <div class="ui-item">
+              <input readonly="readonly" id="upload-username" class="input-width" type="text" />
+            </div>
           </div>
-        </div>
-        <div class="label-wrap">
-          <label>项目</label>
-          <div class="ui-item">
-            <select id="project" class="input-width" >
-              
-            </select>
+          <div class="label-wrap">
+            <label>Tag：</label>
+            <div class="ui-item">
+              <input  class="input-width" type="text" />
+            </div>
           </div>
-        </div>
-        <div class="label-wrap">
-          <label>分类</label>
-          <div class="ui-item">
-            <select id="type" class="input-width" >
-            </select>
+          <div class="label-wrap">
+            <label>Log：</label>
+            <div class="ui-item">
+              <textarea class="input-width" id="bz" style="height:80px"></textarea>
+            </div>
           </div>
-        </div>
-        <div class="label-wrap">
-          <label>备注</label>
-          <div class="ui-item">
-            <textarea class="input-width" id="bz" style="height:50px"></textarea>
-          </div>
-        </div>
-        <div class="buttonwrap">
-          <div class="savebutton">保存</div>
         </div>
       </div>
-      
-    </div>
-    <div class="login-mag">
-      <div class="cell">
-        <div class="cell-title">
-          用户
+      <div class="svg-button">
+        <span class="button-title">Project:</span>
+        <span>
+        <select id="project" class="input-width" ></select>
+        </span>
+        <span class="button-title">Category:</span>
+        <span>
+        <select id="type" class="input-width" ></select>
+        </span>
+        <div style="float:right;margin-right:20px;">
+            <div class="savebutton">Upload</div>
+            <div class="cancelbutton">Cancel</div>
         </div>
-        <div class="cell-input">
-          <input id="username" type="text" />          
-        </div>
-      </div>
-      <div class="cell">
-        <div class="cell-title">
-          密码
-        </div>
-        <div class="cell-input">
-          <input id="password" type="password" />          
-        </div>
-      </div>
-      <div class="loginbtnwrap">
-        <div class="loginbutton">登录</div> 
       </div>
     </div>
-    
-    
   <script type="text/javascript">
     var saveSvg = [];
     var projectID = '';
@@ -231,12 +204,15 @@
       saveSvg = saveSvg.concat(data);
       var svgDom = [];
       for(var i = 0;i<data.length;i++){
+        if(i % 4 == 0){
+          svgDom.push('<div>');
+        }
         svgDom.push(
-          '<div>'+
             '<div class="svg-w">'+decodeURIComponent(data[i].content)+'</div>'+
-            '<div class="svg-t">'+decodeURIComponent(data[i].name)+'</div>'+
-          '</div>'
           );
+        if(i % 4 == 0){
+          svgDom.push('<div>');
+        }
       }
       $('#svg-wrap').append(svgDom.join(''));
     }
