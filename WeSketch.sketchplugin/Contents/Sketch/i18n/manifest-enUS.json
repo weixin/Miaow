@@ -1,10 +1,13 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
+  "language_name": "English(US)",
+  "language_author": "hzlzh",
+  "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands" : [
     {
       "handlers": {
@@ -12,10 +15,11 @@
                   "OpenDocument" : "onOpenDocument"
               }
           },
+      "noshortcut":"true",
       "script": "onAction.js"
     },
     {
-      "name" : "交互连线",
+      "name" : "Draw Link",
       "identifier" : "link",
       "script" : "link.js",
       "icon": "../Resources/icons/link.png",
@@ -26,16 +30,16 @@
       }
     },
     {
-      "name" : "注释标记",
+      "name" : "Mark Index",
       "identifier" : "flag",
       "script" : "flag.js",
       "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
       "handler" : "onRun",
-      "istool":"true",
+      "istool":"true"
     },
     {
-      "name" : "图标库",
+      "name" : "Icon Manager",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "icon": "../Resources/icons/icon.png",
@@ -44,7 +48,15 @@
       "handler" : "onRun"
     },
     {
-      "name" : "字体批量替换",
+      "name" : "Font Set",
+      "identifier" : "fontSet",
+      "script" : "fontSet.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Advanced Font Replace",
       "identifier" : "fontReplace",
       "script" : "fontReplace.js",
       "icon": "../Resources/icons/font.png",
@@ -53,7 +65,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "文本批量替换",
+      "name" : "Advanced Text Replace",
       "identifier" : "textReplace",
       "script" : "textReplace.js",
       "icon": "../Resources/icons/text.png",
@@ -62,7 +74,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "颜色批量替换",
+      "name" : "Advanced Color Replace",
       "identifier" : "colorReplace",
       "script" : "colorReplace.js",
       "icon": "../Resources/icons/color.png",
@@ -71,7 +83,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "上传图标",
+      "name" : "Upload",
       "identifier" : "uploadIcon",
       "script" : "uploadIcon.js",
       "icon": "../Resources/icons/icon.png",
@@ -81,7 +93,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "同步 UI Kit",
+      "name" : "Sync UI Kit",
       "identifier" : "syncuikit",
       "script" : "syncUIkit.js",
       "icon": "../Resources/icons/syncui.png",
@@ -90,7 +102,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导入 UI Kit",
+      "name" : "Import UI Kit",
       "identifier" : "importuikit",
       "script" : "importUIkit.js",
       "icon": "../Resources/icons/syncui.png",
@@ -99,7 +111,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导出 UI Kit",
+      "name" : "Export UI Kit",
       "identifier" : "exportuikit",
       "script" : "exportUIkit.js",
       "icon": "../Resources/icons/syncui.png",
@@ -108,7 +120,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "同步色板",
+      "name" : "Sync Colors",
       "identifier" : "synccolor",
       "script" : "syncColor.js",
       "icon": "../Resources/icons/syncColor.png",
@@ -117,7 +129,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导出色板",
+      "name" : "Export Colors",
       "identifier" : "exportcolor",
       "script" : "exportColor.js",
       "icon": "../Resources/icons/syncColor.png",
@@ -126,7 +138,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "导入色板",
+      "name" : "Import Colors",
       "identifier" : "importcolor",
       "script" : "importColor.js",
       "icon": "../Resources/icons/syncColor.png",
@@ -135,7 +147,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "快捷取色",
+      "name" : "Color Picker",
       "identifier" : "codeColor",
       "script" : "codeColor.js",
       "icon": "../Resources/icons/codeColor.png",
@@ -144,7 +156,14 @@
       "handler" : "onRun"
     },
     {
-      "name" : "生成代码",
+      "name" : "Web Preview",
+      "identifier" : "h5Preview",
+      "script" : "h5Preview.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Copy CSS Style",
       "identifier" : "codeStyle",
       "script" : "codeStyle.js",
       "icon": "../Resources/icons/codeStyle.png",
@@ -153,7 +172,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : "自定义宽高导出",
+      "name" : "Advanced Export",
       "identifier" : "exportSlice",
       "script" : "exportSlice.js",
       "icon": "../Resources/icons/cut.png",
@@ -162,7 +181,7 @@
       "handler" : "onRun"
     },
     {
-      "name" : " └─ 设置",
+      "name" : " └─ Settings",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
       "shortcut": "",
@@ -171,7 +190,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : " └─ 设置",
+      "name" : " └─ Settings",
       "identifier" : "syncSetting",
       "script" : "syncSetting.js",
       "shortcut": "",
@@ -180,7 +199,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "工具栏",
+      "name" : "Show Toolbar",
       "identifier" : "toolbar",
       "script" : "toolbar.js",
       "shortcut": "",
@@ -190,7 +209,7 @@
       }
     },
     {
-      "name" : "设置",
+      "name" : "Settings",
       "identifier" : "setting",
       "script" : "setting.js",
       "shortcut": "",
@@ -199,7 +218,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : " └─ 设置",
+      "name" : " └─ Settings",
       "identifier" : "toolSetting",
       "script" : "toolSetting.js",
       "shortcut": "",
@@ -208,7 +227,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "检查更新",
+      "name" : "Check Update",
       "identifier" : "checkforupdate",
       "script" : "checkForUpdate.js",
       "shortcut": "",
@@ -217,7 +236,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "官网",
+      "name" : "Website",
       "identifier" : "about",
       "script" : "about.js",
       "shortcut": "",
@@ -226,7 +245,7 @@
       "noshortcut":"true"
     },
     {
-      "name" : "反馈",
+      "name" : "Feedback",
       "identifier" : "issues",
       "script" : "issues.js",
       "shortcut": "",
@@ -238,15 +257,15 @@
   "menu": {
     "items": [
     {
-        "title": "管理 UI Kit",
+        "title": "UI Kit",
         "items": [
             "syncuikit",
             "importuikit",
-            "exportuikit",
+            "exportuikit"
         ]
     },
     {
-        "title": "管理色板",
+        "title": "Color Set",
         "items": [
             "synccolor",
             "importcolor",
@@ -256,7 +275,11 @@
     "syncSetting",
     "-",
     "iconQ",
+<<<<<<< HEAD:WeSketch.sketchplugin/Contents/Sketch/i18n/manifest-en.json
     "uploadIcon",
+=======
+    "fontSet",
+>>>>>>> master:WeSketch.sketchplugin/Contents/Sketch/i18n/manifest-enUS.json
     "-",
     "link",
     "flag",
@@ -275,13 +298,13 @@
     "-",
     "setting",
     {
-        "title": "关于",
+        "title": "About",
         "items": [
             "about",
             "issues"
         ]
     },
-    "checkforupdate",
+    "checkforupdate"
     ],
     "title":"WeSketch"
   }

@@ -15,21 +15,7 @@
 function toolbar(context,auto){
     var i18nKey = "com.sketchplugins.wechat.i18n";
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-
-    if(lang == undefined){
-        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
-        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
-        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
-        if(lang.indexOf('zh') > -1){
-            lang = 'zh';
-        }else{
-            lang = 'en';
-        }
-    }
-    var prefix = '';
-    if(lang == 'en'){
-        prefix = '-en';
-    }
+    var prefix = '-'+lang.toString();
 
     var i18 = _(context).toolbar;
 
@@ -251,23 +237,7 @@ function toolbar(context,auto){
         threadDictionary[identifier] = Toolbar;
         Toolbar.makeKeyAndOrderFront(nil);
     }else{
-        coscript.setShouldKeepAround(false);
-        threadDictionary.removeObjectForKey(identifier);
-        Toolbar.close();
-        if(toolbarAuto != 'false'){
-            var settingsWindow = COSAlertWindow.new();
-            settingsWindow.addButtonWithTitle(i18.m1);
-            settingsWindow.addButtonWithTitle(i18.m2);
-            settingsWindow.setMessageText(i18.m3);
-            settingsWindow.addTextLabelWithValue(i18.m4);
-            settingsWindow.addTextLabelWithValue(i18.m5);
-            var response = settingsWindow.runModal();
-            if (response == "1000") {
-                NSUserDefaults.standardUserDefaults().setObject_forKey('true',toolbarAutoShow);
-            }else{
-                NSUserDefaults.standardUserDefaults().setObject_forKey('false',toolbarAutoShow);
-            }
-        }
+        
     }
 }
 

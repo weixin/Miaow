@@ -3,10 +3,27 @@
 var kPluginDomain;
 var iconQueryUrl = 'http://123.207.94.56:3000';
 var loginKey = "com.sketchplugins.wechat.iconLogin";
-var i18nKey = "com.sketchplugins.wechat.i18n";
 
 
 var _= function(context){
+    var i18nKey = "com.sketchplugins.wechat.i18n";
+    var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
+    if(lang == undefined){
+        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
+        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
+        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
+        if(lang.indexOf('zh') > -1){
+            lang = 'zhCN';
+        }else{
+            lang = 'enUS';
+        }
+        NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
+    }
+    if(encodeURIComponent(lang.toString()).length != 4){
+        lang = 'enUS';
+        NSUserDefaults.standardUserDefaults().setObject_forKey(lang,i18nKey);
+    }
+    
     function get_(json,context) {
             var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json+".json").path();
             var jsonData = NSData.dataWithContentsOfFile(manifestPath);
@@ -14,21 +31,8 @@ var _= function(context){
             return JSON.parse(jsonData);
     }
     var i18Content = {};
-    var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-    if(lang == undefined){
-        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
-        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
-        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
-        if(lang.indexOf('zh') > -1){
-            i18Content = get_('zh',context);
-        }else{
-            i18Content = get_('en',context);
-        }
-    }else if(lang == 'zh'){
-        i18Content = get_('zh',context);
-    }else{
-        i18Content = get_('en',context);
-    }
+    i18Content = get_(lang,context);
+    
     return i18Content;
 };
 
@@ -109,6 +113,16 @@ function networkRequest(args) {
   task.launch();
   var responseData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
   return responseData;
+}
+
+// zip(['-q','-r','-m','-o','-j','/Users/liuxinyu/Desktop/123.zip','/Users/liuxinyu/Desktop/123'])
+function zip(args) {
+  var task = NSTask.alloc().init();
+  task.setLaunchPath("/usr/bin/zip");
+  task.setArguments(args);
+  var outputPipe = [NSPipe pipe];
+  [task setStandardOutput:outputPipe];
+  task.launch();
 }
 
 function encodeData(jsonData){

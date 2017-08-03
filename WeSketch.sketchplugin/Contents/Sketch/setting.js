@@ -8,16 +8,6 @@ var onRun = function(context){
     var updateAutoShow = "com.sketchplugins.wechat.updateAutoShow";
 
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
-    if(lang == undefined){
-        var macOSVersion = NSDictionary.dictionaryWithContentsOfFile("/System/Library/CoreServices/SystemVersion.plist").objectForKey("ProductVersion") + "";
-        lang = NSUserDefaults.standardUserDefaults().objectForKey("AppleLanguages").objectAtIndex(0);
-        lang = (macOSVersion >= "10.12")? lang.split("-").slice(0, -1).join("-"): lang;
-        if(lang.indexOf('zh') > -1){
-            lang = 'zh';
-        }else{
-            lang = 'en';
-        }
-    }
 
     var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path(),
         manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil),
@@ -31,8 +21,14 @@ var onRun = function(context){
         }
     }
 
+    var i18nList = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("config.json").path();
+
+    i18nList = NSData.dataWithContentsOfFile(i18nList);
+    i18nList = [[NSString alloc] initWithData:i18nList encoding:NSUTF8StringEncoding];
+    i18nList = JSON.parse(i18nList).i18n;
+
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
-    var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || '';
+    var updateAuto = NSUserDefaults.standardUserDefaults().objectForKey(updateAutoShow) || 'false';
 
 	SMPanel({
         url: pluginSketch + "/panel/setting.html",
@@ -43,7 +39,8 @@ var onRun = function(context){
             toolbarAuto:encodeURIComponent(toolbarAuto),
             updateAuto:encodeURIComponent(updateAuto),
             i18:i18,
-            language:encodeURIComponent(lang)
+            language:encodeURIComponent(lang),
+            i18nList:i18nList
         },
         hiddenClose: false,
         floatWindow: true,
@@ -65,17 +62,16 @@ var onRun = function(context){
                 NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLang, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(manifestPath, true, NSUTF8StringEncoding, nil);
             }
 
-            var zhManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-zh.json").path();
-            var enManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-en.json").path();
-            setKey(zhManifestPath,data);
-            setKey(enManifestPath,data);
-
             var manifestLangData;
-            if(data.language == 'zh'){
-                manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(zhManifestPath), NSJSONReadingMutableContainers, nil);
-            }else{
-                manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(enManifestPath), NSJSONReadingMutableContainers, nil);
+
+            for(var i = 0;i<i18nList.length;i++){
+                var allManifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest-"+ i18nList[i].key +".json").path();
+                setKey(allManifestPath,data);
+                if(i18nList[i].key == data.language){
+                    manifestLangData = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(allManifestPath), NSJSONReadingMutableContainers, nil)
+                }
             }
+
 
             var localManiFest = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path();
             NSString.alloc().initWithData_encoding(NSJSONSerialization.dataWithJSONObject_options_error(manifestLangData, NSJSONWritingPrettyPrinted, nil), NSUTF8StringEncoding).writeToFile_atomically_encoding_error(localManiFest, true, NSUTF8StringEncoding, nil);
