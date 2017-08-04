@@ -14,7 +14,7 @@
       font-size: 14px;
     }
     .wrap{
-      padding: 10px 40px 0 40px;
+      padding: 0 0 0 0;
     }
     .label-wrap{
       margin-top: 20px;
@@ -45,6 +45,9 @@
     .svg-wrap svg{
       max-width: 64px;
       max-height: 64px;
+    }
+    .svg-wrap>div{
+      margin-bottom: 10px;
     }
     .svg-title{
       margin-bottom: 10px;
@@ -84,7 +87,6 @@
       border:1px solid rgba(0,0,0,0.25);
     }
     .savebutton{
-      margin:0 5px;
       background:#4fa3f6;
       color:white;
       border: 1px solid #1465fb;
@@ -95,6 +97,7 @@
       font-size: 12px;
       border-radius: 2px;
       background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
+      line-height: 20px;
     }
     .savebutton:active{
       background:#3485f0;
@@ -103,7 +106,7 @@
       margin-top:10px;
     }
     .cancelbutton{
-      margin:0 5px;
+      margin-right:10px;
       width:76px;
       text-align: center;
       border: 1px solid #D9D9D9;
@@ -112,6 +115,7 @@
       float:right;
       cursor: pointer;
       font-size: 12px;
+      line-height: 20px;
       background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
     }
     .register{
@@ -135,7 +139,7 @@
       text-align: center;
     }
     .svg-button{
-      padding: 10px 0;
+      padding: 10px 20px;
       border-top:1px solid #D8D7D8;
     }
     .button-title{
@@ -145,6 +149,7 @@
     }
     .svg-upload{
       display: flex;
+      height: 300px;
     }
     </style>
   </head>
@@ -167,9 +172,9 @@
             </div>
           </div>
           <div class="label-wrap">
-            <label>Tag：</label>
+            <label>Version：</label>
             <div class="ui-item">
-              <input  class="input-width" type="text" />
+              <input readonly="readonly"  class="input-width" type="text" />
             </div>
           </div>
           <div class="label-wrap">
@@ -189,7 +194,7 @@
         <span>
         <select id="type" class="input-width" ></select>
         </span>
-        <div style="float:right;margin-right:20px;">
+        <div style="float:right;">
             <div class="savebutton">Upload</div>
             <div class="cancelbutton">Cancel</div>
         </div>
@@ -200,6 +205,7 @@
     var projectID = '';
     var typeID = '';
     var project = [];
+    var controli = 0;
     function svgUpload(data){
       saveSvg = saveSvg.concat(data);
       var svgDom = [];
@@ -208,24 +214,22 @@
           svgDom.push('<div>');
         }
         svgDom.push(
-            '<div class="svg-w">'+decodeURIComponent(data[i].content)+'</div>'+
+            '<div data-i="'+i+'" class="svg-w">'+decodeURIComponent(data[i].content)+'</div>'
           );
-        if(i % 4 == 0){
-          svgDom.push('<div>');
+        if(i % 4 == 3){
+          svgDom.push('</div>');
         }
       }
       $('#svg-wrap').append(svgDom.join(''));
     }
     var init = function(data){
       svgUpload(data.svg);
+      versionRequest();
 
       if(data.isLogin){
         project = data.project;
         appendType();
         $('#upload-username').val(data.nametest);
-      }else{
-        $('.wrap').hide();
-        $('.login-mag').show();
       }
     }
     var appendType = function(){
@@ -261,57 +265,43 @@
     $('#type').on('change',function(){
       typeID = $(this).val();
     })
-    
 
-    function sLogin(data){
-      if(data.status == 200){
-        $('.login-mag').hide();
-        $('.wrap').show();
-        isLogin = true;
-        project = data.project;
-        $('#upload-username').val(data.nametest);
-        appendType();
-      }else{
-        $('#password').val('');
-      }
-    }
-
-    $('.register').on('click',function(){
-      SMAction('submit',{type:'link',link:'http://www.baidu.com'});
-      return;
-    })
-
-    $('.a-link').on('click',function(){
-      $('.wrap').hide();
-      $('.login-mag').show();
-      SMAction('submit',{type:'loginout'});
-      return;
+    $('body').on('click','.svg-w',function(){
+      $('.svg-w').removeClass('active');
+      $(this).addClass('active');
+      var i = parseInt($(this).attr('data-i'));
+      controli = i;
+      var message = saveSvg[i];
+      $('#svg-name').val(message.name||'');
+      $('#bz').val(message.remarks||'');
     })
     
-    $('.loginbutton').on('click',function(){
-      var username = $('#username').val();
-      var password = $('#password').val();
-      SMAction('login',{
-        username:username,
-        password:password
-      });
-    })
-
+    
     $('.savebutton').on('click',function(){
       SMAction('submit',saveSvg);
-      // SMAction('submitandclose',{name:$('#svg-name').val(),content:encodeSVG,project:projectID,type:typeID,author:$('#upload-username').val()});
       return;
     })
 
-    $('#svg-name').on('change',function(){
+    function versionRequest(){
+      var list = [];
+      for(var i = 0;i<saveSvg.length;i++){
+        list.push({name:saveSvg[i].name});
+      }
       SMAction('pushdata',{
-        action:'doubleconfirm',
-        projectid:projectID,
-        svgname:$('#svg-name').val(),
-        content:encodeSVG
+        action:'version',
+        list:list
       })
+    }
+
+    $('#svg-name').on('change',function(){
+      saveSvg[controli].name = $(this).val();
+      versionRequest();
       return;
     })
+
+    var versionCheck = function(data){
+      // $('body').empty().append(JSON.stringify(data));
+    }
 
     $('#board-svg').click(function(){
       SMAction('pushdata',{
@@ -328,10 +318,6 @@
     window.addEventListener('hashchange', function(e) {
       return false;
     }, false);
-
-    function pushdata(){
-      
-    }
 
   </script>
   </body>

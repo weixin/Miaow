@@ -48,7 +48,7 @@ function uploadIconsFunc(data){
 }
 
 function version_check(data){
-    var r = post(['/users/version_check','svgname='+JSON.stringify(data)]);
+    var r = post(['/users/version_check','list='+JSON.stringify(data)]);
     return r;
 }
 
@@ -73,11 +73,12 @@ var onRun = function(context){
         initData.project = queryProject().list;
     }
 
+
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 	var panel = SMPanel({
         url: pluginSketch + "/panel/uploadIcon.html",
         width: 680,
-        height: 310,
+        height: 346,
         data:initData,
         hiddenClose: false,
         floatWindow: true,
@@ -148,11 +149,13 @@ var onRun = function(context){
                 }
                 var ppp = [];
 
-                var version = version_check(svgList);
-                // for(var i = 0;i<svgList.length;i++){
-                //     svgList[i].version = version[i].version;
-                // }
                 windowObject.evaluateWebScript("svgUpload("+JSON.stringify(svgList)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+
+            }else if(data.action == 'version'){
+                var version = version_check(data.list);
+                NSApp.displayDialog(JSON.stringify(version));
+                windowObject.evaluateWebScript("versionCheck("+JSON.stringify(version)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
 
             }
