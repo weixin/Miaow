@@ -95,7 +95,7 @@
       float:right;
       cursor: pointer;
       font-size: 12px;
-      border-radius: 2px;
+      border-radius: 5px;
       background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
       line-height: 20px;
     }
@@ -110,7 +110,7 @@
       width:76px;
       text-align: center;
       border: 1px solid #D9D9D9;
-      border-radius: 2px;
+      border-radius: 5px;
       color: #262626;
       float:right;
       cursor: pointer;
@@ -174,13 +174,13 @@
           <div class="label-wrap">
             <label>Version：</label>
             <div class="ui-item">
-              <input readonly="readonly"  class="input-width" type="text" />
+              <input readonly="readonly" id="upload-version"  class="input-width" type="text" />
             </div>
           </div>
           <div class="label-wrap">
-            <label>Log：</label>
+            <label>Remark：</label>
             <div class="ui-item">
-              <textarea class="input-width" id="bz" style="height:80px"></textarea>
+              <textarea class="input-width" id="upload-mark" style="height:80px"></textarea>
             </div>
           </div>
         </div>
@@ -195,8 +195,8 @@
         <select id="type" class="input-width" ></select>
         </span>
         <div style="float:right;">
-            <div class="savebutton">Upload</div>
-            <div class="cancelbutton">Cancel</div>
+            <div id="upload" class="savebutton">Upload</div>
+            <div id="cancel" class="cancelbutton">Cancel</div>
         </div>
       </div>
     </div>
@@ -206,6 +206,7 @@
     var typeID = '';
     var project = [];
     var controli = 0;
+    var saveversion = 0;
     function svgUpload(data){
       saveSvg = saveSvg.concat(data);
       var svgDom = [];
@@ -222,14 +223,10 @@
       }
       $('#svg-wrap').append(svgDom.join(''));
     }
-    var init = function(data){
-      svgUpload(data.svg);
-      versionRequest();
 
-      if(data.isLogin){
-        project = data.project;
-        appendType();
-        $('#upload-username').val(data.nametest);
+    function setAllKey(k,value){
+      for(var i = 0;i < saveSvg.length;i++){
+        saveSvg[i][k] = value;
       }
     }
     var appendType = function(){
@@ -240,6 +237,7 @@
       $('#project').empty().append(projectDom.join(''));
       var typeDom = [];
       projectID = $('#project').val();
+      setAllKey('projectId',projectID);
       for(var i = 0 ;i<project.length;i++){
         if(project[i].projectId == projectID){
           for(var k = 0;k<project[i].categoryList.length;k++){
@@ -249,9 +247,11 @@
       }
       $('#type').empty().append(typeDom);
       typeID = $('#type').val();
+      setAllKey('categoryId',typeID);
     }
     $('#project').on('change',function(){
       projectID = $(this).val();
+      setAllKey('projectId',projectID);
       var typeDom = [];
       for(var i = 0 ;i<project.length;i++){
         if(project[i].projectId == projectID){
@@ -264,6 +264,15 @@
     });
     $('#type').on('change',function(){
       typeID = $(this).val();
+      setAllKey('categoryId',typeID);
+    })
+
+    $('#svg-name').change(function(){
+      saveSvg[controli].name = encodeURIComponent($(this).val());
+      versionRequest();
+    })
+    $('#upload-mark').change(function(){
+      saveSvg[controli].remarks = $(this).val();
     })
 
     $('body').on('click','.svg-w',function(){
@@ -272,25 +281,41 @@
       var i = parseInt($(this).attr('data-i'));
       controli = i;
       var message = saveSvg[i];
-      $('#svg-name').val(message.name||'');
-      $('#bz').val(message.remarks||'');
+      $('#svg-name').val(decodeURIComponent(message.name||''));
+      $('#upload-username').val(message.author||'');
+      $('#upload-version').val(message.version == 0? 'New':'已存在'+(message.version)+'版');
+      $('#upload-mark').val(message.remarks||'');
+    })    
+    
+    $('#upload').on('click',function(){
+      SMAction('pushdata',{action:'upload',data:saveSvg,version:saveversion});
+      return;
     })
-    
-    
-    $('.savebutton').on('click',function(){
-      SMAction('submit',saveSvg);
+    $('#cancel').on('click',function(){
+      SMAction('close');
       return;
     })
 
     function versionRequest(){
       var list = [];
       for(var i = 0;i<saveSvg.length;i++){
-        list.push({name:saveSvg[i].name});
+        list.push(encodeURIComponent(encodeURIComponent(saveSvg[i].name)));
       }
       SMAction('pushdata',{
         action:'version',
-        list:list
+        list:list,
+        projectid:projectID,
+        categoryid:typeID
       })
+    }
+    var versionCheck = function(data){
+      saveversion = 0;
+      for(var i = 0;i<data.length;i++){
+        saveSvg[i].version = data[i].version;
+        if(data[i].version>0){
+          saveversion++;
+        }
+      }
     }
 
     $('#svg-name').on('change',function(){
@@ -299,9 +324,7 @@
       return;
     })
 
-    var versionCheck = function(data){
-      // $('body').empty().append(JSON.stringify(data));
-    }
+    
 
     $('#board-svg').click(function(){
       SMAction('pushdata',{
@@ -314,6 +337,24 @@
         action:'filesvg'
       });
     })
+
+    function uploadReturn(data){
+      if(data.result == 200){
+        SMAction('close');
+      }
+    }
+
+    var init = function(data){
+      svgUpload(data.svg);
+      setAllKey('author',data.nametest);
+      versionRequest();
+      project = data.project;
+      appendType();
+      if(data.svg.length > 0){
+        $('.svg-w:eq(0)').tigger('click');
+      }
+    }
+    // init({svg:[{'name':'123123',content:'123'},{'name':'123123',content:'123'}],nametest:'123','project':[{'projectID':123},{'categoryList':[123,321]}]});
 
     window.addEventListener('hashchange', function(e) {
       return false;

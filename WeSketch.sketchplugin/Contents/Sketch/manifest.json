@@ -45,7 +45,7 @@
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
+      "handler" : "iconQRun"
     },
     {
       "name" : "Font Set",
@@ -90,7 +90,7 @@
       "shortcut": "",
       "istool":"",
       "noshortcut":"true",
-      "handler" : "onRun"
+      "handler" : "uploadIconRun"
     },
     {
       "name" : "Settings",

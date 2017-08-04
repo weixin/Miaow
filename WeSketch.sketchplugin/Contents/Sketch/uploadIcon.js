@@ -1,4 +1,5 @@
 @import "common.js";
+@import "iconQ.js";
 
 var loginKey = "com.sketchplugins.wechat.iconLogin";
 var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
@@ -22,7 +23,7 @@ function choiceSVG(context){
         context.document.saveArtboardOrSlice_toFile(slice, savePath);
         var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
         var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
-        svgList.push({content:encodeURIComponent(string),name:encodeURIComponent(context.selection[i].name().toString())});
+        svgList.push({content:encodeURIComponent(string),name:(encodeURIComponent(context.selection[i].name().toString()))});
         var fm  =[NSFileManager defaultManager];
         fm.removeItemAtPath_error(savePath,nil);
     }
@@ -38,21 +39,18 @@ function queryProject(){
     return r;
 }
 
-function uploadIconFunc(data){
-    return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type + '&author='+data.author ]);
-}
-
 function uploadIconsFunc(data){
     NSApp.displayDialog(JSON.stringify(data));
     return post(['/users/batch_upload','list='+JSON.stringify(data)]);
 }
 
 function version_check(data){
-    var r = post(['/users/version_check','list='+JSON.stringify(data)]);
+    NSApp.displayDialog(JSON.stringify(data));
+    var r = post(['/users/version_check','list='+JSON.stringify(data.list) +'&projectid=' + data.projectid + '&categoryid=' + data.categoryid ]);
     return r;
 }
 
-var onRun = function(context){
+var uploadIconRun = function(context){
     var isLogin;
     if(!NSUserDefaults.standardUserDefaults().objectForKey(loginKey) || NSUserDefaults.standardUserDefaults().objectForKey(loginKey).length() != 32){
         isLogin = false;
@@ -84,22 +82,6 @@ var onRun = function(context){
         floatWindow: true,
         identifier: "uploadIcon",
         callback: function( data ){
-            if(data.type == 'link'){
-                openUrlInBrowser(data.link);
-                return;
-            }else if(data.type == 'loginout'){
-                NSUserDefaults.standardUserDefaults().setObject_forKey('',loginNameKey);
-                NSUserDefaults.standardUserDefaults().setObject_forKey('',loginKey);
-                return;
-            }
-            var result = uploadIconsFunc(data);
-            NSApp.displayDialog(JSON.stringify(result));
-            if(result.status == 200){
-                NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
-                return true;
-            }else{
-                return false;
-            }
         },loginCallback:function( windowObject ){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
             var reuslt = iconLogin(data);
@@ -153,11 +135,37 @@ var onRun = function(context){
                 windowObject.evaluateWebScript("window.location.hash = '';");
 
             }else if(data.action == 'version'){
-                var version = version_check(data.list);
-                NSApp.displayDialog(JSON.stringify(version));
-                windowObject.evaluateWebScript("versionCheck("+JSON.stringify(version)+")");
+                var version = version_check(data);
+                windowObject.evaluateWebScript("versionCheck("+JSON.stringify(version.list)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
 
+            }else if(data.action == 'upload'){
+                function upload(uploaddata){
+                    for(var i = 0;i<uploaddata.length;i++){
+                        uploaddata[i].name = encodeURIComponent(uploaddata[i].name);
+                        uploaddata[i].content = encodeURIComponent(uploaddata[i].content);
+                    }
+                    var result = uploadIconsFunc(uploaddata);
+                    if(result.status == 200){
+                        NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
+                    }
+                    return result;
+                }
+                if(data.version > 0){
+                    var settingsWindow = COSAlertWindow.new();
+                    settingsWindow.addButtonWithTitle('上传');
+                    settingsWindow.addButtonWithTitle('修改');
+                    settingsWindow.setMessageText('发现覆盖');
+                    var runModals = settingsWindow.runModal();
+                    if(runModals == '1000'){
+                        windowObject.evaluateWebScript("uploadReturn("+JSON.stringify(uploadReturn)+")");
+                        windowObject.evaluateWebScript("window.location.hash = '';");
+                    }
+                }else{
+                    var uploadReturn = upload(data.data);
+                    windowObject.evaluateWebScript("uploadReturn("+JSON.stringify(uploadReturn)+")");
+                    windowObject.evaluateWebScript("window.location.hash = '';");
+                }
             }
             
         }

@@ -106,7 +106,7 @@
       width:100%;
       box-sizing: border-box;
       padding:16px 11px;
-      border-top:1px solid rgba(0,0,0,0.3);
+      border-top:1px solid #fff;
     }
 
     .messagebox-content{
@@ -353,10 +353,207 @@
       margin-left: 15px;
       font-size: 12px;
     }
+    .toggle-button{
+      display: block;
+      margin:10px;
+      float:right;
+      color:#1A8CC2;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .dialog{
+      position: absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background-color: rgba(255,255,255,0.7);
+      z-index: 99;
+      display: none;
+      justify-content:center;
+      align-items: center;
+    }
+    .dialog-wrap{
+      background-color: #ECECEC;
+      width:286px;
+      border-radius: 6px;
+    }
+    .dialog-header{
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      width: 286px;
+      height: 22px;
+      background: linear-gradient(0deg,#e7e6e7 0%,#d1d0d1 100%);
+      text-align: center;
+      font-size: 14px;
+      line-height: 22px;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
+      color: #423f42;
+    }
+    .dialog-content{
+      padding: 23px 20px 33px 20px;
+    }
+    .dialog-content-title{
+      text-align: left;
+      font-size: 14px;
+      line-height: 22px;
+      margin-bottom: 5px;
+      color: #000000;
+    }
+    .dialog-content-input input{
+      width:100%;
+    }
+    .savebutton{
+      background:#4fa3f6;
+      color:white;
+      border: 1px solid #1465fb;
+      width:76px;
+      text-align: center;
+      float:right;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 5px;
+      background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
+      line-height: 20px;
+    }
+    .savebutton:active{
+      background:#3485f0;
+    }
+    .cancelbutton{
+      margin-right:10px;
+      width:76px;
+      text-align: center;
+      border: 1px solid #D9D9D9;
+      border-radius: 5px;
+      color: #262626;
+      float:right;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
+      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
+    }
+    .dialog-buttonwrap{
+      margin-top:20px;
+    }
+    .upload-wrap{
+      display: none;
+      padding: 0 0 0 0;
+    }
+    .upload-label-wrap{
+      margin-top: 20px;
+    }
+    .upload-label-wrap label{
+      width: 60px;
+      display: block;
+    }
+    .upload-ui-item{
+      display: block;
+    }
+    .upload-svg-wrap{
+      text-align: center;
+      background: white;
+      width: 250px;
+      padding: 20px;
+      float: left;
+    }
+    .upload-svg-message{
+      padding-left: 25px;
+      flex:1;
+      background: #EFEFEF;
+      border-left:1px solid #D8D7D8;
+    }
+    .upload-svg-wrap svg{
+      max-width: 64px;
+      max-height: 64px;
+    }
+    .upload-svg-wrap>div{
+      margin-bottom: 10px;
+    }
+    .upload-svg-title{
+      margin-bottom: 10px;
+    }
+    .upload-svg-w{
+      border-radius: 5px;
+      float:left;
+      background: #bebebe;
+      width:80px;
+      height:80px;
+      display: flex;
+      justify-content:center;
+      align-items: center;
+      position: relative;
+    }
+    .active.upload-svg-w:before{
+      border-radius: 5px;
+      position: absolute;
+      content: " ";
+      width:100%;
+      height:100%;
+      box-sizing:border-box;
+      border:2px solid #79B7F4;
+      left:0;
+      top:0;
+    }
+    .upload-svg-w+.upload-svg-w{
+      margin-left: 10px;
+    }
+    .upload-svg-w>svg{
+      max-width: 60px;
+      max-height: 60px; 
+    }
+    .upload-input-width{
+      width:140px;
+      resize:none;
+      border:1px solid rgba(0,0,0,0.25);
+    }
+    .upload-savebutton{
+      background:#4fa3f6;
+      color:white;
+      border: 1px solid #1465fb;
+      width:76px;
+      text-align: center;
+      float:right;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 5px;
+      background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
+      line-height: 20px;
+    }
+    .upload-savebutton:active{
+      background:#3485f0;
+    }
+    .upload-buttonwrap{
+      margin-top:10px;
+    }
+    .upload-cancelbutton{
+      margin-right:10px;
+      width:76px;
+      text-align: center;
+      border: 1px solid #D9D9D9;
+      border-radius: 5px;
+      color: #262626;
+      float:right;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
+      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
+    }
+    .upload-svg-button{
+      padding: 10px 20px;
+      border-top:1px solid #D8D7D8;
+    }
+    .upload-button-title{
+      margin: 20px 0 15px 0;
+      font-size: 14px;
+      color: #000000;
+    }
+    .upload-svg-upload{
+      display: flex;
+      height: 537px;
+    }
     </style>
   </head>
   <body>
-
   </body>
   <script type="text/javascript">
   var savedata;
@@ -370,6 +567,8 @@
   var getData;
   var i18;
   var isLogin = false;
+  var saveSvg = [];
+
 
   function appendDom(data){
     $('.bqts').remove();
@@ -381,6 +580,24 @@
     }
     $('.content-wrap').append(dom.join(''));
   }
+
+  function svgUpload(data){
+    saveSvg = data;
+    var svgDom = [];
+    for(var i = 0;i<data.length;i++){
+      if(i % 3 == 0){
+        svgDom.push('<div>');
+      }
+      svgDom.push(
+          '<div data-i="'+i+'" class="svg-w">'+decodeURIComponent(data[i].content)+'</div>'
+        );
+      if(i % 3 == 2){
+        svgDom.push('</div>');
+      }
+    }
+    $('#svg-wrap').append(svgDom.join(''));
+  }
+
   function appendDom2(data){
     $('.bqts').remove();
     $('.content-wrap').empty();
@@ -417,6 +634,21 @@
   }
 
   function domEvent(){
+    $('#toggle-button').click(function(){
+      var action = $('.login-mag').attr('data-action');
+      if(action == undefined || action == 'login'){
+        $('.login-mag').attr('data-action','register');
+        $('#confirm-button').text('注册');
+        $('#toggle-button').text('切换'+'登录');
+        $('#mailwrap').show();
+      }else{
+        $('.login-mag').attr('data-action','login');
+        $('#confirm-button').text('登录');
+        $('#toggle-button').text('切换'+'注册');
+        $('#mailwrap').hide();
+
+      }
+    })
     $('.content-wrap').on('click','.content-body',function(){
       $('.content-body').removeClass('btn-active');
       $(this).addClass('btn-active');
@@ -448,11 +680,6 @@
       $('.login-mag').show();
     })
 
-    $('.register').click(function(){
-      SMAction('submit',{type:'link',link:'http://www.baidu.com'});
-      return;
-    })
-
     $('.search-input').on('input',function(e){
       var inputKey = $(this).val();
       searchK(inputKey);
@@ -478,6 +705,32 @@
       var val = $(this).val();
       $('svg').width(val);
     })
+    $('#confirm-button').click(function(){
+      var action = $('.login-mag').attr('data-action');
+      if(action == undefined || action == 'login'){
+        var username = $('#username').val();
+        var password = $('#password').val();
+        SMAction('login',{
+          username:username,
+          password:password,
+          action:'login'
+        });
+      }else{
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var mail = $('#mail').val();
+        SMAction('login',{
+          username:username,
+          password:password,
+          mail:mail,
+          action:'register'
+        });
+      }
+      $('#username').val('');
+      $('#password').val('');
+      $('#mail').val('');
+    })
+
     $('.loginbutton').on('click',function(){
       var username = $('#username').val();
       var password = $('#password').val();
@@ -488,9 +741,25 @@
     })
 
     $('body').on('change','#selectproject',function(){
+      lsprojectID = $('#selectproject').val();
+      if(lsprojectID == '#_newproject_'){
+        $(this).val(projectID);
+        $('#add-dialog').css('display','flex');
+        $('#add-dialog input').focus();
+        setDialogMessage({action:'addProject',title:'New Project',message:'Name of new project:',key:'projectName'});
+        return;
+      }else if(lsprojectID == '#_inputlink_'){
+        $(this).val(projectID);
+        $('#add-dialog').css('display','flex');
+        $('#add-dialog input').focus();
+        setDialogMessage({action:'addMember',title:'Join Project',message:'Invitation code:',key:'invitedKey'});
+        return;
+      }
       projectID = $('#selectproject').val();
+
       var typeDom = [];
-      typeDom.push('<option value="">'+i18.m14+'</option>')
+      typeDom.push('<optgroup label="Category">');
+      typeDom.push('<option value="">'+i18.m14+'</option>');
       if(projectID != ''){
         for(var i = 0 ;i<project.length;i++){
           if(project[i].projectId == projectID){
@@ -500,9 +769,16 @@
           }
         }
       }
+      typeDom.push('</optgroup>');
+      typeDom.push('<optgroup label="Manager">');
+      typeDom.push('<option value="#_newcategory_">New Category</option>');
+      typeDom.push('</optgroup>');
+
       $('#selecttype2').empty().append(typeDom);
+
       if(projectID != ''){
         $('.messagebox').hide();
+        $('.messagebox2').show();
         SMAction('pushdata',{
           type:'project',
           id:projectID
@@ -515,7 +791,15 @@
       }
     })
     $('body').on('change','#selecttype2',function(){
-      typeID = $('#selecttype2').val();
+
+      var jstypeID = $('#selecttype2').val();
+      if(jstypeID == '#_newcategory_'){
+        $(this).val(typeID);
+        $('#add-dialog').css('display','flex');
+        $('#add-dialog input').focus();
+        setDialogMessage({action:'addCategory',title:'New Category',message:'Name of new category:',key:'categoryName'});
+        return;
+      }
       if(typeID != ''){
         SMAction('pushdata',{
           type:'type',
@@ -536,9 +820,48 @@
         type:'loginout'
       })
     })
+
+    $('#add-dialog .savebutton').click(function(){
+      var action = $('#add-dialog').attr('data-action');
+      var key = $('#add-dialog').attr('data-key');
+      var data = {};
+      data.action = action;
+      if(action == 'addCategory'){
+        data.projectId = projectID;
+      }
+      data[key] = $('#add-dialog .dialog-content-input input').val();
+      SMAction('login',data);
+      $('#add-dialog .dialog-content-input input').val('');
+      $('#add-dialog').hide();
+    })
+    $('#add-dialog .cancelbutton').click(function(){
+      $('#add-dialog .dialog-content-input input').val('');
+      $('#add-dialog').hide();
+    })
+
+    $('#file-button').click(function(){
+      SMAction('pushdata',{action:'filesvg'});
+    })
+    $('#upload-button').click(function(){
+      SMAction('pushdata',{action:'boardsvg'});
+    })
+    $('#upload-cancel').click(function(){
+      $('.upload-wrap').hide();
+      $('.icon-mag').show();
+    })
   }
-  
-  
+
+  function boardsvg(data){
+    $('.upload-wrap').show();
+    $('.icon-mag').hide();
+    svgUpload(data);
+  }
+
+  function filesvg(data){
+    $('.upload-wrap').show();
+    $('.icon-mag').hide();
+    svgUpload(data);
+  }
 
   function searchK(inputKey){
     searchData = [];
@@ -559,13 +882,28 @@
     }
   }
 
+  function setDialogMessage(data){
+    var father = $('#add-dialog');
+    father.find('.dialog-header').text(data.title);
+    father.find('.dialog-content-title').text(data.message);
+    father.attr('data-action',data.action);
+    father.attr('data-key',data.key);
+  }
+
   
   function appendType(){
     var projectDom = [];
+    projectDom.push('<optgroup label="Porject">');
     projectDom.push('<option value="">'+i18.m15+'</option>')
     for(var i = 0 ;i<project.length;i++){
       projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
     }
+    projectDom.push('</optgroup>');
+    projectDom.push('<optgroup label="Manager">');
+    projectDom.push('<option value="#_newproject_">New Porject</option>');
+    projectDom.push('<option value="#_inputlink_">Input Share Link</option>');
+    projectDom.push('</optgroup>');
+
     $('#selectproject').empty().append(projectDom.join(''));
     var typeDom = [];
     projectID = $('#selectproject').val();
@@ -579,9 +917,12 @@
     $('.login-mag').hide();
     $('.icon-mag').show();
     if(data.status == 200){
-      $('.login').hide();
-      $('.person').show();
-      $('.person #username-show').text('（'+data.nametest + '）');
+      if(data.sig){
+        $('.login').hide();
+        $('.person').show();
+        $('.person #username-show').text('（'+data.nametest + '）');
+      }
+      
       project = data.project;
       appendType();
     }else{
@@ -639,15 +980,8 @@
         '</div>',
       '</div>',
       '<div class="messagebox2" style="display:none">',
-        '<div class="messagebox-content">',
-          '<div class="messagebox-content1">',
-          '</div>',
-          '<div class="messagebox-content2">',
-          '</div>',
-        '</div>',
-        '<div class="messagebox-content3">',
-          i18.m10,
-        '</div>',
+        '<div id="upload-button" class="savebutton">Upload</div>',
+        '<div id="file-button" class="cancelbutton" style="margin-left:10px;">File</div>',
       '</div>',
     '</div>',
     '<div class="login-mag">',
@@ -667,10 +1001,77 @@
           '<input id="password" type="password" />',
         '</div>',
       '</div>',
-      '<div class="loginbtnwrap">',
-        '<div class="loginbutton">'+i18.m4+'</div>',
+      '<div class="cell" style="display:none" id="mailwrap">',
+        '<div class="cell-title">',
+          '邮箱',
+        '</div>',
+        '<div class="cell-input">',
+          '<input id="mail" type="text" />',
+        '</div>',
       '</div>',
-    '</div>'];
+        '<span id="toggle-button" class="toggle-button">切换注册</span>',
+      '<div class="loginbtnwrap">',
+        '<div id="confirm-button" class="loginbutton">'+i18.m4+'</div>',
+      '</div>',
+    '</div>',
+    '<div id="add-dialog" class="dialog">',
+      '<div class="dialog-wrap">',
+        '<div class="dialog-header">New Project</div>',
+        '<div class="dialog-content">',
+          '<div class="dialog-content-title">Name of new project:</div>',
+          '<div class="dialog-content-input"><input /></div>',
+          '<div class="dialog-buttonwrap">',
+            '<div class="savebutton">Add</div>',
+            '<div class="cancelbutton">Cancel</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+    '</div>',
+    '<div class="upload-wrap">',
+      '<div class="upload-svg-upload">',
+        '<div class="upload-svg-wrap" id="svg-wrap">',
+        '</div>',
+        '<div class="upload-svg-message">',
+          '<div class="upload-label-wrap">',
+            '<label>Name：</label>',
+            '<div class="upload-ui-item">',
+              '<input id="svg-name" class="upload-input-width" type="text" />',
+            '</div>',
+          '</div>',
+          '<div class="upload-label-wrap">',
+            '<label>Author：</label>',
+            '<div class="upload-ui-item">',
+              '<input readonly="readonly" id="upload-username" class="upload-input-width" type="text" />',
+            '</div>',
+          '</div>',
+          '<div class="upload-label-wrap">',
+            '<label>Version：</label>',
+            '<div class="upload-ui-item">',
+              '<input readonly="readonly" id="upload-version"  class="upload-input-width" type="text" />',
+            '</div>',
+          '</div>',
+          '<div class="upload-label-wrap">',
+            '<label>Remark：</label>',
+            '<div class="upload-ui-item">',
+              '<textarea class="upload-input-width" id="upload-mark" style="height:80px"></textarea>',
+            '</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+      '<div class="upload-svg-button">',
+        '<span>',
+        '<select id="project" ></select>',
+        '</span>',
+        '<span style="padding-left:10px;">',
+        '<select id="type" ></select>',
+        '</span>',
+        '<div style="float:right;">',
+            '<div id="upload-upload" class="upload-savebutton">Upload</div>',
+            '<div id="upload-cancel" class="upload-cancelbutton">Cancel</div>',
+        '</div>',
+      '</div>',
+    '</div>'
+    ];
     $('body').append(dom.join(''));
   }
 

@@ -15,6 +15,23 @@ function iconQ(context){
     jsonData = JSON.parse(jsonData);
     var currentVersion = jsonData.currentIconVersion;
 
+    function choiceSVG(context){
+        var svgList = [];
+        for(var i = 0;i<context.selection.count();i++){
+            var slice = MSExportRequest.exportRequestsFromExportableLayer(context.selection[i]).firstObject();
+            slice.scale = '1';
+            slice.format = 'svg';
+            var save = NSSavePanel.savePanel();
+            var savePath = save.URL().path() + '.svg';
+            context.document.saveArtboardOrSlice_toFile(slice, savePath);
+            var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
+            var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
+            svgList.push({content:encodeURIComponent(string),name:(encodeURIComponent(context.selection[i].name().toString()))});
+            var fm  =[NSFileManager defaultManager];
+            fm.removeItemAtPath_error(savePath,nil);
+        }
+        return svgList;
+    }
 
     function iconLogin(data){
         var r = post(['/users/login','username='+data.username + '&password='+data.password]);
@@ -28,15 +45,6 @@ function iconQ(context){
         return post(['/users/getFiles']);
     }
 
-    function getLogin(){
-        return post(['/users/login']);
-    }
-
-    function queryProject(){
-       var r = post(['/users/queryProject']);
-       return r;
-    }
-
     function queryProjectIcon(projectid){
        var r = post(['/users/queryIconByProId','projectid='+projectid]);
        return r;
@@ -45,6 +53,62 @@ function iconQ(context){
     function queryTypeIcon(categoryid){
        var r = post(['/users/queryIconByCateId','categoryid='+categoryid]);
        return r;
+    }
+
+    function iconLogin(data){
+        var r = post(['/users/login','username='+data.username + '&password='+data.password]);
+        if(r.status == 200){
+            NSUserDefaults.standardUserDefaults().setObject_forKey(data.username,loginNameKey);
+        }
+        return r;
+    }
+
+    function iconRegister(data){
+        var r = post(['/users/register','username='+data.username + '&password='+data.password + '&mail='+data.mail]);
+        if(r.status == 200){
+            NSUserDefaults.standardUserDefaults().setObject_forKey(data.username,loginNameKey);
+        }
+        return r;
+    }
+
+    function addMember(data){
+        var r = post(['/users/addMember','key='+data.invitedKey]);
+        return r;
+    }
+
+    function getLogin(){
+        return post(['/users/login']);
+    }
+
+    function queryProject(){
+        var r = post(['/users/queryProject']);
+        return r;
+    }
+
+    function version_check(data){
+        NSApp.displayDialog(JSON.stringify(data));
+        var r = post(['/users/version_check','projectid='+data.projectid + '&categoryid='+data.categoryid + '&list='+JSON.stringify(data.list)]);
+        return r;
+    }
+
+
+    function uploadIconFunc(data){
+        return post(['/users/single_upload','name='+data.name + '&content='+ data.content + '&projectid=' + data.project + '&categoryid=' + data.type + '&author='+data.author ]);
+    }
+
+    function uploadIconsFunc(data){
+        NSApp.displayDialog(JSON.stringify(data));
+        return post(['/users/batch_upload','list='+JSON.stringify(data)]);
+    }
+
+    function addProject(data){
+        var r = post(['/users/createProject','projectname='+data.projectName]);
+        return r;
+    }
+
+    function addCategory(data){
+        var r = post(['/users/createCategory','projectid='+data.projectId+'&categoryname='+data.categoryName]);
+        return r;
     }
 
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
@@ -93,9 +157,9 @@ function iconQ(context){
 
 
     SMPanel({
-        url: pluginSketch + "/panel/icon.html?12",
-        width: 562,
-        height: 548,
+        url: pluginSketch + "/panel/icon.html",
+        width: 560,
+        height: 580,
         data: initData,
         hiddenClose: false,
         floatWindow: true,
@@ -159,32 +223,130 @@ function iconQ(context){
             }
         },loginCallback:function( windowObject ){
             var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
-            var reuslt = iconLogin(data);
-
-            if(reuslt.status == 200){
-                NSUserDefaults.standardUserDefaults().setObject_forKey(reuslt.sig,loginKey);
-                var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
-                var b = '';
-                b += username;
-                reuslt.nametest = b;
-                project = queryProject().list;
-                reuslt.project = project;
+            NSApp.displayDialog(JSON.stringify(data));
+            var result;
+            if(data.action == 'login'){
+                result = iconLogin(data);
+            }else if(data.action == 'register'){
+                result = iconRegister(data);
+            }else if(data.action == 'addProject'){
+                if(data.projectName == ''){
+                    return NSApp.displayDialog('不能为空');
+                }else{
+                    result = addProject(data);
+                }
+            }else if(data.action == 'addCategory'){
+                if(data.categoryName == ''){
+                    return NSApp.displayDialog('不能为空');
+                }else{
+                    result = addCategory(data);
+                }
+            }else if(data.action == 'addMember'){
+                if(data.invitedKey == ''){
+                    return NSApp.displayDialog('不能为空');
+                }else{
+                    result = addMember(data);
+                }
             }
-            windowObject.evaluateWebScript("sLogin("+JSON.stringify(reuslt)+")");
-        },pushdataCallback:function(data ,windowObject ){
-            var reuslt = {};
-            if(data.type == 'type'){
-                reuslt = queryTypeIcon(data.id);
+            if(result.status == 200){
+                if(result.sig){
+                    NSUserDefaults.standardUserDefaults().setObject_forKey(result.sig,loginKey);
+                    var username = NSUserDefaults.standardUserDefaults().objectForKey(loginNameKey);
+                    var b = '';
+                    b += username;
+                    result.nametest = b;
+                }
+                var project = queryProject().list;
+                result.project = project;
+                NSApp.displayDialog(JSON.stringify(result));
+                windowObject.evaluateWebScript("sLogin("+JSON.stringify(result)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
             }else{
-                reuslt = queryProjectIcon(data.id);
+                windowObject.evaluateWebScript("window.location.hash = '';");
             }
-            windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
-            windowObject.evaluateWebScript("window.location.hash = '';");
+        },pushdataCallback:function(data ,windowObject ){
+            if(data.action == 'boardsvg'){
+                var newContext = uploadContext(context);
+                if(newContext.selection.length == 0){
+                    return NSApp.displayDialog('请选中 Pages 中要上传的元素');
+                }
+                var svg = choiceSVG(newContext);
+                windowObject.evaluateWebScript("boardsvg("+JSON.stringify(svg)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+            }else if(data.action == 'filesvg'){
+                var panel = [NSOpenPanel openPanel];
+                [panel setCanChooseDirectories:false];
+                [panel setCanCreateDirectories:false];
+                [panel setAllowsMultipleSelection:true];
+                panel.setAllowedFileTypes([@"svg"]);
+                panel.setAllowsOtherFileTypes(false);
+                panel.setExtensionHidden(false);
+                var clicked = [panel runModal];
+                if (clicked != NSFileHandlingPanelOKButton) {
+                  return;
+                }
+                var urls = [panel URLs];
+                var svgList = [];
+                for(var i = 0;i<urls.length;i++){
+                    var unformattedURL = [NSString stringWithFormat:@"%@", urls[i]];
+                    var file_path = [unformattedURL stringByRemovingPercentEncoding];
+                    var theResponseData = request(file_path)
+                    var theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
+
+                    svgList.push({
+                        content:encodeURIComponent(theText),
+                        name:file_path.substr(file_path.lastIndexOf('/')+1).replace('.svg','')
+                    })
+                }
+                windowObject.evaluateWebScript("filesvg("+JSON.stringify(svgList)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+            }else if(data.action == 'version'){
+                var version = version_check(data.list);
+                windowObject.evaluateWebScript("versionCheck("+JSON.stringify(version.list)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+
+            }else if(data.action == 'upload'){
+                function upload(uploaddata){
+                    for(var i = 0;i<uploaddata.length;i++){
+                        uploaddata[i].name = encodeURIComponent(uploaddata[i].name);
+                        uploaddata[i].content = encodeURIComponent(uploaddata[i].content);
+                    }
+                    var result = uploadIconsFunc(uploaddata);
+                    if(result.status == 200){
+                        NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
+                    }
+                    return result;
+                }
+                if(data.version > 0){
+                    var settingsWindow = COSAlertWindow.new();
+                    settingsWindow.addButtonWithTitle('上传');
+                    settingsWindow.addButtonWithTitle('修改');
+                    settingsWindow.setMessageText('发现覆盖');
+                    var runModals = settingsWindow.runModal();
+                    if(runModals == '1000'){
+                        windowObject.evaluateWebScript("uploadReturn("+JSON.stringify(uploadReturn)+")");
+                        windowObject.evaluateWebScript("window.location.hash = '';");
+                    }
+                }else{
+                    var uploadReturn = upload(data.data);
+                    windowObject.evaluateWebScript("uploadReturn("+JSON.stringify(uploadReturn)+")");
+                    windowObject.evaluateWebScript("window.location.hash = '';");
+                }
+            }else{
+                var reuslt = {};
+                if(data.type == 'type'){
+                    reuslt = queryTypeIcon(data.id);
+                }else{
+                    reuslt = queryProjectIcon(data.id);
+                }
+                windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+            }
 
         }
     });
 }
 
-var onRun = function(context){
+var iconQRun = function(context){
     iconQ(context);
 }
