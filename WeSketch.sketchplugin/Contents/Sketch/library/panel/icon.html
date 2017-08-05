@@ -26,7 +26,7 @@
       top:0;
       display: flex;
       align-items: center;
-      padding:3px 23px 5px 10px;
+      padding:3px 23px 12px 13px;
       background-color:#F1F1F1;
     }
     .toolbar2{
@@ -41,9 +41,9 @@
       background-color:#F1F1F1;
     }
     .search-inputwrap{
-      flex:1;
-      position: relative;
-      display: inline-block;
+      width:150px;
+      position: absolute;
+      right:0;
       padding:0 10px 0 0;
     }
     .search-icon{
@@ -174,6 +174,7 @@
     }
     .content-body>svg{
       max-width: 44px;
+      max-height: 44px;
     }
     .content-body{
       cursor: pointer;
@@ -450,9 +451,8 @@
       display: block;
     }
     .upload-svg-wrap{
-      text-align: center;
       background: white;
-      width: 250px;
+      width: 300px;
       padding: 20px;
       float: left;
     }
@@ -551,6 +551,10 @@
       display: flex;
       height: 537px;
     }
+    #share-button{
+      margin-left:5px;
+      display:none;
+    }
     </style>
   </head>
   <body>
@@ -562,12 +566,17 @@
   var first = [];
   var project = [];
   var projectID = '';
+  var uploadProjectID = '';
+  var uploadCategoryID = '';
   var typeID = '';
   var baseData;
   var getData;
   var i18;
   var isLogin = false;
   var saveSvg = [];
+  var saveversion;
+  var loginname;
+  var controli;
 
 
   function appendDom(data){
@@ -581,21 +590,136 @@
     $('.content-wrap').append(dom.join(''));
   }
 
+  function appendCategory(){
+    var typeDom = [];
+    typeDom.push('<optgroup label="Category">');
+    typeDom.push('<option value="">'+i18.m14+'</option>');
+    if(projectID != ''){
+      for(var i = 0 ;i<project.length;i++){
+        if(project[i].projectId == projectID){
+          for(var k = 0;k<project[i].categoryList.length;k++){
+            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+          }
+        }
+      }
+    }
+    typeDom.push('</optgroup>');
+    typeDom.push('<optgroup label="Manager">');
+    typeDom.push('<option value="#_newcategory_">New Category</option>');
+    typeDom.push('</optgroup>');
+
+    $('#selecttype2').empty().append(typeDom.join(''));
+  }
+
   function svgUpload(data){
     saveSvg = data;
+    versionRequest();
     var svgDom = [];
     for(var i = 0;i<data.length;i++){
       if(i % 3 == 0){
         svgDom.push('<div>');
       }
       svgDom.push(
-          '<div data-i="'+i+'" class="svg-w">'+decodeURIComponent(data[i].content)+'</div>'
+          '<div data-i="'+i+'" class="upload-svg-w">'+decodeURIComponent(data[i].content)+'</div>'
         );
       if(i % 3 == 2){
         svgDom.push('</div>');
       }
     }
     $('#svg-wrap').append(svgDom.join(''));
+  }
+
+  function setAllKey(k,value){
+    for(var i = 0;i < saveSvg.length;i++){
+      saveSvg[i][k] = value;
+    }
+  }
+
+  function projectChange(){
+    lsprojectID = $('#selectproject').val();
+    if(lsprojectID == '#_newproject_'){
+      $('#selectproject').val(projectID);
+      $('#add-dialog').css('display','flex');
+      $('#add-dialog input').focus();
+      setDialogMessage({action:'addProject',title:'New Project',message:'Name of new project:',key:'projectName'});
+      return;
+    }else if(lsprojectID == '#_inputlink_'){
+      $('#selectproject').val(projectID);
+      $('#add-dialog').css('display','flex');
+      $('#add-dialog input').focus();
+      setDialogMessage({action:'addMember',title:'Join Project',message:'Invitation code:',key:'invitedKey'});
+      return;
+    }
+    projectID = $('#selectproject').val();
+    $('#upload-project').val(projectID);
+
+    appendCategory();
+    
+    typeID = $('#selecttype2').val();
+
+    typeDom = [];
+    if(projectID != ''){
+      for(var i = 0 ;i<project.length;i++){
+        if(project[i].projectId == projectID){
+          for(var k = 0;k<project[i].categoryList.length;k++){
+            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+          }
+          if(project[i].invitedKey){
+            $('#share-button').attr('data-code',project[i].invitedKey).show();
+          }else{
+            $('#share-button').hide();
+          }
+        }
+      }
+    }
+    $('#upload-category').empty().append(typeDom.join(''));
+
+
+    if(projectID != ''){
+      $('.messagebox').hide();
+      $('.messagebox2').show();
+      SMAction('pushdata',{
+        type:'project',
+        id:projectID
+      })
+    }else{
+      $('.messagebox2').hide();
+      $('.messagebox').show();
+      savedata = baseData;
+      appendDom(savedata);
+    }
+  }
+
+  function categoryChange(){
+    var jstypeID = $('#selecttype2').val();
+    if(jstypeID == '#_newcategory_'){
+      $('#selecttype2').val(typeID);
+      $('#add-dialog').css('display','flex');
+      $('#add-dialog input').focus();
+      setDialogMessage({action:'addCategory',title:'New Category',message:'Name of new category:',key:'categoryName'});
+      return;
+    }
+    typeID = $('#selecttype2').val();
+    $('#upload-category').val(typeID);
+    if(typeID != ''){
+      SMAction('pushdata',{
+        type:'type',
+        id:typeID,
+        pid:projectID
+      })
+    }else{
+      SMAction('pushdata',{
+        type:'project',
+        id:projectID
+      })
+    }
+    if(projectID != ''){
+      $('.messagebox').hide();
+      $('.messagebox2').show();
+    }else{
+      $('.messagebox2').hide();
+      $('.messagebox').show();
+    }
   }
 
   function appendDom2(data){
@@ -740,82 +864,25 @@
       });
     })
 
-    $('body').on('change','#selectproject',function(){
-      lsprojectID = $('#selectproject').val();
-      if(lsprojectID == '#_newproject_'){
-        $(this).val(projectID);
-        $('#add-dialog').css('display','flex');
-        $('#add-dialog input').focus();
-        setDialogMessage({action:'addProject',title:'New Project',message:'Name of new project:',key:'projectName'});
-        return;
-      }else if(lsprojectID == '#_inputlink_'){
-        $(this).val(projectID);
-        $('#add-dialog').css('display','flex');
-        $('#add-dialog input').focus();
-        setDialogMessage({action:'addMember',title:'Join Project',message:'Invitation code:',key:'invitedKey'});
-        return;
-      }
-      projectID = $('#selectproject').val();
-
-      var typeDom = [];
-      typeDom.push('<optgroup label="Category">');
-      typeDom.push('<option value="">'+i18.m14+'</option>');
-      if(projectID != ''){
-        for(var i = 0 ;i<project.length;i++){
-          if(project[i].projectId == projectID){
-            for(var k = 0;k<project[i].categoryList.length;k++){
-              typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
-            }
-          }
-        }
-      }
-      typeDom.push('</optgroup>');
-      typeDom.push('<optgroup label="Manager">');
-      typeDom.push('<option value="#_newcategory_">New Category</option>');
-      typeDom.push('</optgroup>');
-
-      $('#selecttype2').empty().append(typeDom);
-
-      if(projectID != ''){
-        $('.messagebox').hide();
-        $('.messagebox2').show();
-        SMAction('pushdata',{
-          type:'project',
-          id:projectID
-        })
-      }else{
-        $('.messagebox2').hide();
-        $('.messagebox').show();
-        savedata = baseData;
-        appendDom(savedata);
-      }
+    $('#selectproject').on('change',function(){
+      projectChange();
     })
-    $('body').on('change','#selecttype2',function(){
+    $('#selecttype2').on('change',function(){
+      categoryChange();
+    })
 
-      var jstypeID = $('#selecttype2').val();
-      if(jstypeID == '#_newcategory_'){
-        $(this).val(typeID);
-        $('#add-dialog').css('display','flex');
-        $('#add-dialog input').focus();
-        setDialogMessage({action:'addCategory',title:'New Category',message:'Name of new category:',key:'categoryName'});
-        return;
-      }
-      if(typeID != ''){
-        SMAction('pushdata',{
-          type:'type',
-          id:typeID
-        })
-      }else{
-        SMAction('pushdata',{
-          type:'project',
-          id:projectID
-        })
-      }
+    $('#share-button').on('click',function(){
+      SMAction('submit',{
+        type:'code',
+        code:$(this).attr('data-code')
+      })
     })
 
     $('#exit').on('click',function(){
       $('.login').show();
       $('.person').hide();
+      project = [];
+      appendType();
       SMAction('submit',{
         type:'loginout'
       })
@@ -846,18 +913,98 @@
       SMAction('pushdata',{action:'boardsvg'});
     })
     $('#upload-cancel').click(function(){
+      saveSvg = [];
+      $('.upload-svg-w').remove();
       $('.upload-wrap').hide();
       $('.icon-mag').show();
     })
+
+    $('body').on('click','.upload-svg-w',function(){
+      $('.upload-svg-w').removeClass('active');
+      $(this).addClass('active');
+      var i = parseInt($(this).attr('data-i'));
+      controli = i;
+      var message = saveSvg[i];
+      $('#svg-name').val(decodeURIComponent(message.name||''));
+      $('#upload-username').val(loginname||'');
+      $('#upload-version').val(message.version == 0? 'New':'已存在'+(message.version)+'版');
+      $('#upload-mark').val(message.remarks||'');
+    })
+
+    $('#upload-project').on('change',function(){
+      projectID = $(this).val();
+      var typeDom = [];
+      for(var i = 0 ;i<project.length;i++){
+        if(project[i].projectId == projectID){
+          for(var k = 0;k<project[i].categoryList.length;k++){
+            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+          }
+        }
+      }
+      $('#upload-category').empty().append(typeDom);
+      versionRequest();
+    });
+
+    $('svg-name').on('change',function(){
+      saveSvg[controli].name = encodeURIComponent($(this).val());
+      versionRequest();
+    })
+
+    $('#upload-upload').on('click',function(){
+      var project = $('#upload-project').val();
+      var category = $('#upload-category').val();
+      setAllKey('projectId',project);
+      setAllKey('categoryId',category);
+      setAllKey('author',loginname);
+
+      SMAction('pushdata',{action:'upload',data:saveSvg,version:saveversion});
+      return;
+    })
+  }
+
+  function versionRequest(){
+    var list = [];
+    for(var i = 0;i<saveSvg.length;i++){
+      list.push(encodeURIComponent(encodeURIComponent(saveSvg[i].name)));
+    }
+    SMAction('pushdata',{
+      action:'version',
+      list:list,
+      projectid:uploadProjectID,
+      categoryid:1
+    })
+  }
+  var versionCheck = function(data){
+    saveversion = 0;
+    for(var i = 0;i<data.length;i++){
+      saveSvg[i].version = data[i].version;
+      if(data[i].version>0){
+        saveversion++;
+      }
+    }
   }
 
   function boardsvg(data){
+    uploadProjectID = $('#upload-project').val();
+    uploadCategoryID = $('#upload-category').val();
+
+    if(!uploadProjectID || !uploadCategoryID){
+      return SMAction('submit',{type:'t'});
+    }
+
     $('.upload-wrap').show();
     $('.icon-mag').hide();
     svgUpload(data);
   }
 
   function filesvg(data){
+    uploadProjectID = $('#upload-project').val();
+    uploadCategoryID = $('#upload-category').val();
+
+    if(uploadProjectID && uploadCategoryID){
+      return SMAction('submit',{type:'t'});
+    }
+
     $('.upload-wrap').show();
     $('.icon-mag').hide();
     svgUpload(data);
@@ -867,12 +1014,18 @@
     searchData = [];
     if(inputKey != ''){
       for(var i = 0;i < savedata.length;i++){
-        if(savedata[i].name.replace('.svg','').indexOf(inputKey) > -1){
-          searchData.push({name:savedata[i].name,content:savedata[i].content,index:i});
+        if(savedata[i].name.toLocaleLowerCase().replace('.svg','').indexOf(inputKey.toLocaleLowerCase()) > -1){
+          var searchResult = {};
+          searchResult = savedata[i];
+          searchResult.index = i;
+          searchData.push(searchResult);
         }
       }
-      appendDom(searchData);
-
+      if(projectID!=''){
+        appendDom2(searchData);
+      }else{
+        appendDom(searchData);
+      }
     }else{
       if(projectID!=''){
         appendDom2(savedata);
@@ -892,6 +1045,7 @@
 
   
   function appendType(){
+    //首页
     var projectDom = [];
     projectDom.push('<optgroup label="Porject">');
     projectDom.push('<option value="">'+i18.m15+'</option>')
@@ -903,13 +1057,20 @@
     projectDom.push('<option value="#_newproject_">New Porject</option>');
     projectDom.push('<option value="#_inputlink_">Input Share Link</option>');
     projectDom.push('</optgroup>');
-
     $('#selectproject').empty().append(projectDom.join(''));
     var typeDom = [];
     projectID = $('#selectproject').val();
     typeDom.push('<option value="">'+i18.m14+'</option>');
     $('#selecttype2').empty().append(typeDom);
     typeID = $('#selecttype2').val();
+
+    //首页
+
+    projectDom = [];
+    for(var i = 0 ;i<project.length;i++){
+      projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
+    }
+    $('#upload-project').empty().append(projectDom.join(''));
   }
   
 
@@ -920,9 +1081,9 @@
       if(data.sig){
         $('.login').hide();
         $('.person').show();
-        $('.person #username-show').text('（'+data.nametest + '）');
+        loginname = data.nametest;
+        $('.person #username-show').text('（'+loginname + '）');
       }
-      
       project = data.project;
       appendType();
     }else{
@@ -941,6 +1102,10 @@
   function initDomTree(){
     var dom = ['<div class="icon-mag">',
       '<div class="toolbar" style="">',
+        '<select class="content-type" name="" id="selectproject">',
+          '<option value="">'+i18.m6+'</option>',
+        '</select>',
+        '<div id="share-button" class="cancelbutton">Share</div>',
         '<div class="login">',
           '<span>'+i18.m4+'</span>',
         '</div>',
@@ -950,9 +1115,6 @@
         '</div>',
       '</div>',
       '<div class="toolbar2">',
-        '<select class="content-type" name="" id="selectproject">',
-          '<option value="">'+i18.m6+'</option>',
-        '</select>',
         '<select style="margin:0 4px;" class="content-type" name="" id="selecttype2">',
           '<option value="">'+i18.m7+'</option>',
         '</select>',
@@ -1041,13 +1203,13 @@
           '<div class="upload-label-wrap">',
             '<label>Author：</label>',
             '<div class="upload-ui-item">',
-              '<input readonly="readonly" id="upload-username" class="upload-input-width" type="text" />',
+              '<input readonly="readonly" disabled="disabled" id="upload-username" class="upload-input-width" type="text" />',
             '</div>',
           '</div>',
           '<div class="upload-label-wrap">',
             '<label>Version：</label>',
             '<div class="upload-ui-item">',
-              '<input readonly="readonly" id="upload-version"  class="upload-input-width" type="text" />',
+              '<input readonly="readonly" disabled="disabled" id="upload-version"  class="upload-input-width" type="text" />',
             '</div>',
           '</div>',
           '<div class="upload-label-wrap">',
@@ -1060,10 +1222,10 @@
       '</div>',
       '<div class="upload-svg-button">',
         '<span>',
-        '<select id="project" ></select>',
+        '<select id="upload-project" ></select>',
         '</span>',
         '<span style="padding-left:10px;">',
-        '<select id="type" ></select>',
+        '<select id="upload-category" ></select>',
         '</span>',
         '<div style="float:right;">',
             '<div id="upload-upload" class="upload-savebutton">Upload</div>',
@@ -1075,24 +1237,50 @@
     $('body').append(dom.join(''));
   }
 
-  window.addEventListener('hashchange', function(e) {
-    return false;
-  }, false);
+  var uploadReturn = function(data){
+    if(data.status == 200){
+      saveSvg = [];
+      $('.upload-svg-w').remove();
+      $('.upload-wrap').hide();
+      $('.icon-mag').show();
+      SMAction('pushdata',{
+        type:'type',
+        id:typeID,
+        pid:projectID
+      })
+    }
+  }
   init = function(data){
     i18 = data.i18;
     initDomTree();
     baseData = data.data;
     savedata = data.data;
+    appendDom(baseData);
+    domEvent();
     isLogin = data.isLogin;
     if(isLogin){
       $('.login').hide();
       $('.person').show();
-      $('.person #username-show').text('（'+data.nametest+'）');
+      loginname = data.nametest;
+      $('.person #username-show').text('（'+loginname+'）');
       project = data.project;
       appendType();
+      if(data.chooseCategory && data.chooseProject){
+        projectID = data.chooseProject;
+        typeID = data.chooseCategory;
+        $('#selectproject').val(projectID);
+        appendCategory();
+        $('#selecttype2').val(typeID);
+        categoryChange();
+      }else if(data.chooseProject){
+        projectID = data.chooseProject;
+        typeID = data.chooseCategory;
+        $('#selectproject').val(projectID);
+        projectChange();
+      }
+      
+      
     }
-    appendDom(baseData);
-    domEvent();
   }
   </script>
 </html>

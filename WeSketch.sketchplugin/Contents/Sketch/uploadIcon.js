@@ -158,6 +158,7 @@ var uploadIconRun = function(context){
                     settingsWindow.setMessageText('发现覆盖');
                     var runModals = settingsWindow.runModal();
                     if(runModals == '1000'){
+                        var uploadReturn = upload(data.data);
                         windowObject.evaluateWebScript("uploadReturn("+JSON.stringify(uploadReturn)+")");
                         windowObject.evaluateWebScript("window.location.hash = '';");
                     }
