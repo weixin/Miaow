@@ -371,7 +371,8 @@ function SMPanel(options){
                         windowObject.evaluateWebScript("inputFile('"+file_path+"')");
                         windowObject.evaluateWebScript("window.location.hash = '';");
                     }else if(request == 'login'){
-                        options.loginCallback(windowObject);
+                        var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+                        options.loginCallback(data,windowObject);
                     }else if(request == 'pushdata'){
                         var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
                         options.pushdataCallback(data,windowObject);
