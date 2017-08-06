@@ -44,10 +44,10 @@
       background-color:#F1F1F1;
     }
     .search-inputwrap{
-      width:150px;
+      width:130px;
       position: absolute;
       right:0;
-      padding:0 10px 0 0;
+      padding:0 23px 0 0;
     }
     .search-icon{
       width:14px;
@@ -255,12 +255,13 @@
       cursor: pointer;
       flex:1;
       text-align: right;
-      font-size: 15px;
+      color: #1A8CC2;
+      font-size: 14px;
     }
     .person{
       display: none;
       flex:1;
-      font-size: 15px;
+      font-size: 14px;
       text-align: right;
     }
     .login>div{
@@ -452,8 +453,11 @@
     .upload-label-wrap label{
       width: 60px;
       display: block;
+      font-size: 13px;
+      margin-bottom: 10px;
     }
     .upload-ui-item{
+      font-size: 13px;
       display: block;
     }
     .upload-svg-wrap{
@@ -489,7 +493,7 @@
       align-items: center;
       position: relative;
     }
-    .active.upload-svg-w:before{
+    .upload-svg-w.active:before{
       border-radius: 5px;
       position: absolute;
       content: " ";
@@ -586,18 +590,51 @@
     .private-message{
       font-size: 12px;
       color: #999999;
-      line-height: 30px;
+      line-height: 20px;
+      text-align: left;
     }
     .private-message-span1{
+      margin-right:10px;
       width: 60px;
       text-align: right;
-      display: inline-block;
+      display: none;
     }
     .private-message-span2{
       color: #333333;
     }
     .private-message-version-link{
       color: #1A8CC2;
+      cursor: pointer;
+    }
+    .private-remark{
+      position: fixed;
+      right:0;
+      width:200px;
+      bottom: 52px;
+      height: 100px;
+      padding: 5px;
+      color: #666666;
+      z-index: 99;
+      background: rgba(90,90,90,0.06);
+      display: none;
+      box-sizing:border-box;
+    }
+    .version-back{
+      cursor: pointer;
+      color: #1A8CC2;
+      margin-left: 15px;
+      font-size: 12px;
+    }
+    .backbutton{
+      border-radius:100px;
+      line-height:48px;
+      font-size:17px;
+      color:#1A8CC2;
+      background:white;
+      border:1px solid #1A8CC2;
+      margin-top:10px;
+      text-align:center;
+      cursor: pointer;
     }
     </style>
   </head>
@@ -607,6 +644,7 @@
   var savedata;
   var choicedata;
   var searchData;
+  var versiondata;
   var first = [];
   var project = [];
   var projectID = '';
@@ -620,7 +658,7 @@
   var saveSvg = [];
   var saveversion;
   var loginname;
-  var controli;
+  var controli = 0;
 
 
   function appendDom(data){
@@ -630,6 +668,17 @@
     dom.push('<div class="bqts">'+i18.m3+'</div>');
     for(var i = 0;i < data.length;i++){
       dom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+    }
+    $('.content-wrap').append(dom.join(''));
+  }
+
+  function appendDom3(data){
+    $('.bqts').remove();
+    $('.content-wrap').empty();
+    var dom = [];
+    dom.push('<div class="version-back">'+'退出'+'</div>');
+    for(var i = 0;i < data.length;i++){
+      dom.push('<div data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
@@ -655,9 +704,18 @@
     $('#selecttype2').empty().append(typeDom.join(''));
   }
 
+  function clickIsvgUploadFile(){
+    $('.upload-svg-w').removeClass('active');
+    $('.upload-svg-w:eq('+controli+')').addClass('active');
+    var message = saveSvg[controli];
+    $('#svg-name').val(decodeURIComponent(message.name||''));
+    $('#upload-username').val(loginname||'');
+    $('#upload-version').val(message.version == 0? 'New':'已存在'+(message.version)+'版');
+    $('#upload-mark').val(message.remark||'');
+  }
+
   function svgUpload(data){
     saveSvg = data;
-    versionRequest();
     var svgDom = [];
     for(var i = 0;i<data.length;i++){
       if(i % 3 == 0){
@@ -671,6 +729,7 @@
       }
     }
     $('#svg-wrap').append(svgDom.join(''));
+
   }
 
   function setAllKey(k,value){
@@ -723,7 +782,7 @@
       $('.messagebox').hide();
       $('.messagebox2').show();
       $('.content-wrap').addClass('content-wrap-private');
-      $('.private-content').show();
+      $('.private-content,.private-remark').show();
       SMAction('pushdata',{
         type:'project',
         id:projectID
@@ -732,7 +791,7 @@
       $('.content-wrap').removeClass('content-wrap-private');
       $('.messagebox2').hide();
       $('.messagebox').show();
-      $('.private-content').hide();
+      $('.private-content,.private-remark').hide();
       savedata = baseData;
       appendDom(savedata);
     }
@@ -764,9 +823,13 @@
     if(projectID != ''){
       $('.messagebox').hide();
       $('.messagebox2').show();
+      $('.content-wrap').addClass('content-wrap-private');
+      $('.private-content,.private-remark').show();
     }else{
+      $('.content-wrap').removeClass('content-wrap-private');
       $('.messagebox2').hide();
       $('.messagebox').show();
+      $('.private-content,.private-remark').hide();
     }
   }
 
@@ -824,6 +887,10 @@
     $('.content-wrap').on('click','.content-body',function(){
       var i = parseInt($(this).attr('data-i'));
       choicedata = savedata[i];
+      var isVersion  = $(this).attr('data-version')?true:false;
+      if(isVersion){
+        choicedata = saveversion[i];
+      }
       var twh = decodeURIComponent(choicedata.content).match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
 
       if(projectID == ''){
@@ -834,7 +901,6 @@
         choicedata.type = 'public';
         SMAction('submit',choicedata);
       }else{
-        $('.messagebox2').show();
         choicedata.type = 'private';
         choicedata.height = parseInt(twh[1]);
         choicedata.width = parseInt(twh[0]);
@@ -843,14 +909,22 @@
     }).on('mouseenter mouseout','.content-body',function(){
       var i = parseInt($(this).attr('data-i'));
       var datamessage = savedata[i];
-      if(datamessage.name){
+      var isVersion  = $(this).attr('data-version')?true:false;
+      if(isVersion){
+        datamessage = saveversion[i];
+        $('.private-version').hide();
+      }
+      if(datamessage.version){
         $('.content-body').removeClass('btn-active');
         $(this).addClass('btn-active');
         $('.private-svg').empty().append(datamessage.content);
-        $('.private-name').empty().append(datamessage.name);
-        $('.private-author span:eq(1)').empty().append(datamessage.author);
-        $('.private-version span:eq(1)').empty().append('1');
+        $('.private-name').text(datamessage.name);
+        $('.private-version').show();
+        $('.private-author span:eq(1)').text(datamessage.author);
+        $('.private-version span:eq(1)').text(datamessage.version);
         $('.private-version span:eq(1)').attr('data-name',datamessage.name);
+        $('.private-message-span1').css('display', 'inline-block');
+        $('.private-remark').text('备注：'+datamessage.remarks);
       }else{
         $('#author').text(i18.m16+'：'+savedata[i].author);
       }
@@ -926,6 +1000,10 @@
       })
     })
 
+    $('#upload-mark').on('change',function(){
+      saveSvg[controli].remarks = encodeURIComponent($(this).val());
+    })
+
     $('#exit').on('click',function(){
       $('.login').show();
       $('.person').hide();
@@ -934,6 +1012,11 @@
       SMAction('submit',{
         type:'loginout'
       })
+    })
+
+    $('#cancel-button').click(function(){
+      $('.-login-magmag').hide();
+      $('.icon-mag').show();
     })
 
     $('#add-dialog .savebutton').click(function(){
@@ -954,39 +1037,54 @@
       $('#add-dialog').hide();
     })
 
+    function getUploadInit(){
+      uploadProjectID = $('#selectproject').val();
+      $('#upload-project').val(uploadProjectID);
+      var typeDom = [];
+      for(var i = 0 ;i<project.length;i++){
+        if(project[i].projectId == uploadProjectID){
+          for(var k = 0;k<project[i].categoryList.length;k++){
+            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
+          }
+        }
+      }
+      $('#upload-category').empty().append(typeDom);
+      uploadCategoryID = $('#selecttype2').val();
+      $('#upload-category').val(uploadCategoryID);
+    }
+
     $('#file-button').click(function(){
-      SMAction('pushdata',{action:'filesvg'});
+      getUploadInit();
+      SMAction('pushdata',{action:'filesvg',categoryid:uploadCategoryID,projectid:uploadProjectID});
     })
     $('#upload-button').click(function(){
-      SMAction('pushdata',{action:'boardsvg'});
+      getUploadInit();
+      SMAction('pushdata',{action:'boardsvg',categoryid:uploadCategoryID,projectid:uploadProjectID});
     })
     $('#upload-cancel').click(function(){
       saveSvg = [];
       $('.upload-svg-w').remove();
       $('.upload-wrap').hide();
       $('.icon-mag').show();
+      controli = 0;
     })
 
     $('body').on('click','.upload-svg-w',function(){
-      $('.upload-svg-w').removeClass('active');
-      $(this).addClass('active');
       var i = parseInt($(this).attr('data-i'));
       controli = i;
-      var message = saveSvg[i];
-      $('#svg-name').val(decodeURIComponent(message.name||''));
-      $('#upload-username').val(loginname||'');
-      $('#upload-version').val(message.version == 0? 'New':'已存在'+(message.version)+'版');
-      $('#upload-mark').val(message.remarks||'');
+      clickIsvgUploadFile();
     }).on('click','.private-message-version-link',function(){
       var name = $(this).attr('data-name');
       SMAction('pushdata',{action:'history',name:name,projectid:projectID,categoryid:typeID});
+    }).on('click','.version-back',function(){
+      appendDom2(savedata);
     })
 
     $('#upload-project').on('change',function(){
-      projectID = $(this).val();
+      uploadProjectID = $(this).val();
       var typeDom = [];
       for(var i = 0 ;i<project.length;i++){
-        if(project[i].projectId == projectID){
+        if(project[i].projectId == uploadProjectID){
           for(var k = 0;k<project[i].categoryList.length;k++){
             typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
           }
@@ -1021,8 +1119,7 @@
     SMAction('pushdata',{
       action:'version',
       list:list,
-      projectid:uploadProjectID,
-      categoryid:1
+      projectid:uploadProjectID
     })
   }
   var versionCheck = function(data){
@@ -1033,32 +1130,21 @@
         saveversion++;
       }
     }
+    clickIsvgUploadFile();
   }
 
   function boardsvg(data){
-    uploadProjectID = $('#upload-project').val();
-    uploadCategoryID = $('#upload-category').val();
-
-    if(!uploadProjectID || !uploadCategoryID){
-      return SMAction('submit',{type:'t'});
-    }
-
     $('.upload-wrap').show();
     $('.icon-mag').hide();
     svgUpload(data);
+    clickIsvgUploadFile();
   }
 
   function filesvg(data){
-    uploadProjectID = $('#upload-project').val();
-    uploadCategoryID = $('#upload-category').val();
-
-    if(uploadProjectID && uploadCategoryID){
-      return SMAction('submit',{type:'t'});
-    }
-
     $('.upload-wrap').show();
     $('.icon-mag').hide();
     svgUpload(data);
+    clickIsvgUploadFile();
   }
 
   function searchK(inputKey){
@@ -1146,6 +1232,11 @@
     savedata = data.list;
     appendDom2(savedata);
   }
+  function pushdata3(data){
+    saveversion = data.list;
+    appendDom3(saveversion);
+  }
+  
   $('body').on('click',function(){
     return false;
   })
@@ -1182,12 +1273,14 @@
         '<div class="private-name"></div>',
         '<div class="private-message">',
           '<div class="private-author">',
-          '<span class="private-message-span1">Author:</span><span class="private-message-span2"></span>',
+          '<span class="private-message-span1">Author</span><span class="private-message-span2"></span>',
           '</div>',
           '<div class="private-version">',
-          '<span class="private-message-span1">Version:</span><span class="private-message-span2 private-message-version-link"></span>',
+          '<span class="private-message-span1">Version</span><span class="private-message-span2 private-message-version-link"></span>',
           '</div>',
         '</div>',
+      '</div>',
+      '<div class="private-remark">',
       '</div>',
       '<div class="messagebox">',
         '<div class="messagebox-content">',
@@ -1209,6 +1302,7 @@
         '<div id="upload-button" class="savebutton">Upload</div>',
         '<div id="file-button" class="cancelbutton" style="margin-left:10px;">File</div>',
       '</div>',
+    '</div>',
     '</div>',
     '<div class="login-mag">',
       '<div class="cell">',
@@ -1238,6 +1332,7 @@
         '<span id="toggle-button" class="toggle-button">切换注册</span>',
       '<div class="loginbtnwrap">',
         '<div id="confirm-button" class="loginbutton">'+i18.m4+'</div>',
+        '<div id="cancel-button" class="backbutton">'+'算了'+'</div>',
       '</div>',
     '</div>',
     '<div id="add-dialog" class="dialog">',

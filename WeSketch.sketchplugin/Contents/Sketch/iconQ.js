@@ -80,8 +80,7 @@ function iconQ(context){
     }
 
     function version_check(data){
-        NSApp.displayDialog(JSON.stringify(data));
-        var r = post(['/users/version_check','projectid='+data.projectid + '&categoryid='+data.categoryid + '&list='+JSON.stringify(data.list)]);
+        var r = post(['/users/version_check','projectid='+data.projectid + '&list='+JSON.stringify(data.list)]);
         return r;
     }
 
@@ -100,7 +99,6 @@ function iconQ(context){
     }
 
     function queryIconByName(data){
-        NSApp.displayDialog(JSON.stringify(data));
         var r = post(['/users/queryIconByName','name='+data.name + '&projectid='+data.projectid+ '&categoryid='+data.categoryid]);
         return r;
     }
@@ -226,8 +224,6 @@ function iconQ(context){
             }else if(data.type == 'code'){
                 paste(data.code);
                 NSApp.displayDialog('邀请码：'+ data.code +'，已加入剪贴板');
-            }else if(data.type == 't'){
-                NSApp.displayDialog('请先选择项目及分类再选中要上传的文件');
             }
         },loginCallback:function(data,windowObject){
             var result;
@@ -289,6 +285,16 @@ function iconQ(context){
                     return NSApp.displayDialog('请选中 Pages 中要上传的元素');
                 }
                 var svg = choiceSVG(newContext);
+                var namelist = [];
+                for(var i = 0;i<svg.length;i++){
+                    namelist.push(svg[i].name);
+                }
+                var version = version_check({projectid:data.projectid,list:namelist}).list;
+
+                for(var i = 0;i<version.length;i++){
+                    svg[i].version = version[i].version;
+                }
+
                 windowObject.evaluateWebScript("boardsvg("+JSON.stringify(svg)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
             }else if(data.action == 'filesvg'){
@@ -304,19 +310,28 @@ function iconQ(context){
                   return;
                 }
                 var urls = [panel URLs];
-                var svgList = [];
+                var svg = [];
                 for(var i = 0;i<urls.length;i++){
                     var unformattedURL = [NSString stringWithFormat:@"%@", urls[i]];
                     var file_path = [unformattedURL stringByRemovingPercentEncoding];
                     var theResponseData = request(file_path)
                     var theText = [[NSString alloc] initWithData:theResponseData encoding:NSUTF8StringEncoding];
 
-                    svgList.push({
+                    svg.push({
                         content:encodeURIComponent(theText),
                         name:file_path.substr(file_path.lastIndexOf('/')+1).replace('.svg','')
                     })
                 }
-                windowObject.evaluateWebScript("filesvg("+JSON.stringify(svgList)+")");
+                var namelist = [];
+                for(var i = 0;i<svg.length;i++){
+                    namelist.push(svg[i].name);
+                }
+                var version = version_check({projectid:data.projectid,list:namelist}).list;
+                for(var i = 0;i<version.length;i++){
+                    svg[i].version = version[i].version;
+                }
+
+                windowObject.evaluateWebScript("filesvg("+JSON.stringify(svg)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
             }else if(data.action == 'version'){
                 var version = version_check(data);
@@ -354,7 +369,7 @@ function iconQ(context){
                 }
             }else if(data.action == 'history'){
                 var result = queryIconByName(data);
-                windowObject.evaluateWebScript("pushdata("+JSON.stringify(result)+")");
+                windowObject.evaluateWebScript("pushdata3("+JSON.stringify(result)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
 
             }else{
@@ -368,7 +383,6 @@ function iconQ(context){
                     NSUserDefaults.standardUserDefaults().setObject_forKey('',categoryChooseKey);
                     NSUserDefaults.standardUserDefaults().setObject_forKey(data.id,projectChooseKey);
                 }
-
                 windowObject.evaluateWebScript("pushdata("+JSON.stringify(result)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
             }
