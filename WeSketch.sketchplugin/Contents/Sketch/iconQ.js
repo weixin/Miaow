@@ -99,6 +99,12 @@ function iconQ(context){
         return r;
     }
 
+    function queryIconByName(data){
+        NSApp.displayDialog(JSON.stringify(data));
+        var r = post(['/users/queryIconByName','name='+data.name + '&projectid='+data.projectid+ '&categoryid='+data.categoryid]);
+        return r;
+    }
+
     function addCategory(data){
         var r = post(['/users/createCategory','projectid='+data.projectId+'&categoryname='+data.categoryName]);
         return r;
@@ -223,8 +229,7 @@ function iconQ(context){
             }else if(data.type == 't'){
                 NSApp.displayDialog('请先选择项目及分类再选中要上传的文件');
             }
-        },loginCallback:function( windowObject ){
-            var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+        },loginCallback:function(data,windowObject){
             var result;
             if(data.action == 'login'){
                 result = iconLogin(data);
@@ -236,6 +241,9 @@ function iconQ(context){
                     return NSApp.displayDialog('不能为空');
                 }else{
                     result = addProject(data);
+                    if(result.status == 200){
+                        NSApp.displayDialog('新增成功');
+                    }
                 }
             }else if(data.action == 'addCategory'){
                 if(data.categoryName == ''){
@@ -243,6 +251,9 @@ function iconQ(context){
                     return NSApp.displayDialog('不能为空');
                 }else{
                     result = addCategory(data);
+                    if(result.status == 200){
+                        NSApp.displayDialog('新增成功');
+                    }
                 }
             }else if(data.action == 'addMember'){
                 if(data.invitedKey == ''){
@@ -250,6 +261,9 @@ function iconQ(context){
                     return NSApp.displayDialog('不能为空');
                 }else{
                     result = addMember(data);
+                    if(result.status == 200){
+                        NSApp.displayDialog('新增成功');
+                    }
                 }
             }
             if(result.status == 200){
@@ -268,7 +282,6 @@ function iconQ(context){
                 windowObject.evaluateWebScript("window.location.hash = '';");
             }
         },pushdataCallback:function(data ,windowObject ){
-            NSApp.displayDialog(JSON.stringify(data));
             if(data.action == 'boardsvg'){
                 var newContext = uploadContext(context);
                 if(newContext.selection.length == 0){
@@ -339,18 +352,24 @@ function iconQ(context){
                     windowObject.evaluateWebScript("uploadReturn("+JSON.stringify(uploadReturn)+")");
                     windowObject.evaluateWebScript("window.location.hash = '';");
                 }
+            }else if(data.action == 'history'){
+                var result = queryIconByName(data);
+                windowObject.evaluateWebScript("pushdata("+JSON.stringify(result)+")");
+                windowObject.evaluateWebScript("window.location.hash = '';");
+
             }else{
-                var reuslt = {};
+                var result = {};
                 if(data.type == 'type'){
-                    reuslt = queryTypeIcon(data.id);
+                    result = queryTypeIcon(data.id);
                     NSUserDefaults.standardUserDefaults().setObject_forKey(data.pid,categoryChooseKey);
                     NSUserDefaults.standardUserDefaults().setObject_forKey(data.id,categoryChooseKey);
                 }else{
-                    reuslt = queryProjectIcon(data.id);
+                    result = queryProjectIcon(data.id);
                     NSUserDefaults.standardUserDefaults().setObject_forKey('',categoryChooseKey);
                     NSUserDefaults.standardUserDefaults().setObject_forKey(data.id,projectChooseKey);
                 }
-                windowObject.evaluateWebScript("pushdata("+JSON.stringify(reuslt)+")");
+
+                windowObject.evaluateWebScript("pushdata("+JSON.stringify(result)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
             }
 

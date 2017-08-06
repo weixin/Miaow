@@ -18,6 +18,9 @@
       margin:0;
       padding:0;
     }
+    .ui-flex{
+      display: flex;
+    }
     .toolbar{
       z-index: 9;
       width:100%;
@@ -101,6 +104,7 @@
       z-index: 9;
       display: flex;
       bottom: 0;
+      left:0;
       background-color: #F6F6F6;
       position: fixed;
       width:100%;
@@ -152,8 +156,6 @@
       padding:6px 0 6px 0;
       overflow: hidden;
       margin-top:5px;
-      overflow: hidden;
-      border-top:1px solid #D8D8D8;
     }
     .content-body{
       width:60px;
@@ -189,24 +191,28 @@
       padding:43px 0 69px 0;
     }
     .content-wrap{
-      padding:90px 20px 107px 20px;
+      padding:90px 20px 85px 20px;
       overflow: auto;
+    }
+    .content-wrap-private{
+      width:300px;
     }
     .btn-active{
       position: relative;
     }
     .btn-active:before{
-      content: " ";
+      border-radius: 5px;
       position: absolute;
-      top:0;
-      left:0;
-      border:3px solid #1AAD19;
+      content: " ";
       width:100%;
       height:100%;
       box-sizing:border-box;
+      border:2px solid #79B7F4;
+      left:0;
+      top:0;
     }
     .content-body:hover:before{
-      content: "Insert";
+      content: "Export";
       color:white;
       text-align: center;
       font-size: 14px;
@@ -555,6 +561,44 @@
       margin-left:5px;
       display:none;
     }
+    .private-content{
+      position: fixed;
+      right:0;
+      height: 100%;
+      width:160px;
+      padding:90px 20px 85px 20px;
+      border-left:1px solid #D8D8D8;
+      text-align: center;
+      display: none;
+    }
+    .private-name{
+      font-size: 20px;
+      color:#999999;
+      margin-bottom: 30px;
+    }
+    .private-svg{
+      margin: 15px 0 10px 0;
+    }
+    .private-svg>svg{
+      max-width: 130px;
+      max-height: 200px;
+    }
+    .private-message{
+      font-size: 12px;
+      color: #999999;
+      line-height: 30px;
+    }
+    .private-message-span1{
+      width: 60px;
+      text-align: right;
+      display: inline-block;
+    }
+    .private-message-span2{
+      color: #333333;
+    }
+    .private-message-version-link{
+      color: #1A8CC2;
+    }
     </style>
   </head>
   <body>
@@ -678,13 +722,17 @@
     if(projectID != ''){
       $('.messagebox').hide();
       $('.messagebox2').show();
+      $('.content-wrap').addClass('content-wrap-private');
+      $('.private-content').show();
       SMAction('pushdata',{
         type:'project',
         id:projectID
       })
     }else{
+      $('.content-wrap').removeClass('content-wrap-private');
       $('.messagebox2').hide();
       $('.messagebox').show();
+      $('.private-content').hide();
       savedata = baseData;
       appendDom(savedata);
     }
@@ -774,8 +822,6 @@
       }
     })
     $('.content-wrap').on('click','.content-body',function(){
-      $('.content-body').removeClass('btn-active');
-      $(this).addClass('btn-active');
       var i = parseInt($(this).attr('data-i'));
       choicedata = savedata[i];
       var twh = decodeURIComponent(choicedata.content).match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
@@ -796,7 +842,18 @@
       }
     }).on('mouseenter mouseout','.content-body',function(){
       var i = parseInt($(this).attr('data-i'));
-      $('#author').text(i18.m16+'：'+savedata[i].author);
+      var datamessage = savedata[i];
+      if(datamessage.name){
+        $('.content-body').removeClass('btn-active');
+        $(this).addClass('btn-active');
+        $('.private-svg').empty().append(datamessage.content);
+        $('.private-name').empty().append(datamessage.name);
+        $('.private-author span:eq(1)').empty().append(datamessage.author);
+        $('.private-version span:eq(1)').empty().append('1');
+        $('.private-version span:eq(1)').attr('data-name',datamessage.name);
+      }else{
+        $('#author').text(i18.m16+'：'+savedata[i].author);
+      }
     })
 
     $('.login').click(function(){
@@ -853,15 +910,6 @@
       $('#username').val('');
       $('#password').val('');
       $('#mail').val('');
-    })
-
-    $('.loginbutton').on('click',function(){
-      var username = $('#username').val();
-      var password = $('#password').val();
-      SMAction('login',{
-        username:username,
-        password:password
-      });
     })
 
     $('#selectproject').on('change',function(){
@@ -929,6 +977,9 @@
       $('#upload-username').val(loginname||'');
       $('#upload-version').val(message.version == 0? 'New':'已存在'+(message.version)+'版');
       $('#upload-mark').val(message.remarks||'');
+    }).on('click','.private-message-version-link',function(){
+      var name = $(this).attr('data-name');
+      SMAction('pushdata',{action:'history',name:name,projectid:projectID,categoryid:typeID});
     })
 
     $('#upload-project').on('change',function(){
@@ -1123,7 +1174,20 @@
           '<input class="search-input" type="text">',
         '</div>',
       '</div>',
+      '<div class="ui-flex">',
       '<div class="content-wrap">',
+      '</div>',
+      '<div class="private-content">',
+        '<div class="private-svg"></div>',
+        '<div class="private-name"></div>',
+        '<div class="private-message">',
+          '<div class="private-author">',
+          '<span class="private-message-span1">Author:</span><span class="private-message-span2"></span>',
+          '</div>',
+          '<div class="private-version">',
+          '<span class="private-message-span1">Version:</span><span class="private-message-span2 private-message-version-link"></span>',
+          '</div>',
+        '</div>',
       '</div>',
       '<div class="messagebox">',
         '<div class="messagebox-content">',
