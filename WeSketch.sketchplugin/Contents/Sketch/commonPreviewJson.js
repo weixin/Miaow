@@ -276,11 +276,11 @@ var commonPreviewJson = function(context,filePath){
 		    	}else{
 		    	    layer.layers()[flagcount].moveToLayer_beforeLayer(group,group);
 		    	}
+    	    	count++;
     		}else{
 	    	    flagcount++;
     		}
     	    
-    	    count++;
     	    if(count+flagcount == layersLength){
     	        break;
     	    }
