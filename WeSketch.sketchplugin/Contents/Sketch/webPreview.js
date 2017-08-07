@@ -43,7 +43,7 @@ function webPreview(context){
                 openUrlInBrowser(data.link);
 	        },
 	        closeCallback: function(){
-	        	NSApp.displayDialog(1);
+	        	// NSApp.displayDialog(1);
 	        }
 	    });
     }

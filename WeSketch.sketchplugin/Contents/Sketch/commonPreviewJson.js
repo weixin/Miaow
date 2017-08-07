@@ -1,3 +1,5 @@
+@import "commonPreview.js";
+
 var checkPreviewJson = function(context){
 	var previewKey = "com.sketchplugins.wechat.preview.";
 	var getCurrentPagesObject = function(context){
@@ -365,6 +367,7 @@ var commonPreviewJson = function(context,filePath){
 	}
 	var scale = 1;
 	var linkJson = {};
+	hidePreview(context);
 
 	var nowPage = context.document.currentPage();
 	var artBoards = nowPage.artboards();
@@ -388,4 +391,6 @@ var commonPreviewJson = function(context,filePath){
 	if (connectionsGroup) {
 		connectionsGroup.setIsVisible(true);
 	}
+	showPreview(context);
+
 }
