@@ -70,6 +70,7 @@ var setIndex = function(context){
 		newPreviewObject['index'][selection.objectID()] = {main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "index", importedSVGLayer, previewKey+context.document.currentPage().objectID());
 		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
+		connectionsGroup.moveToLayer_beforeLayer(context.document.currentPage(),context.document.currentPage())
 	}
 }
 
@@ -163,6 +164,7 @@ var setDialog = function(context){
 		newPreviewObject.dialog[selection.objectID()] = {direction:direction,main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};;
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "dialog", importedSVGLayer, previewKey+context.document.currentPage().objectID());
 		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
+		connectionsGroup.moveToLayer_beforeLayer(context.document.currentPage(),context.document.currentPage());
 	}
 }
 
@@ -248,6 +250,7 @@ var setFixed = function(context){
 		newPreviewObject.fixed[selection.objectID()] = {direction:direction,main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};;
 		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "fixed", importedSVGLayer, previewKey+context.document.currentPage().objectID());
+		connectionsGroup.moveToLayer_beforeLayer(context.document.currentPage(),context.document.currentPage());
 	}
 }
 
@@ -298,6 +301,8 @@ var setBacks = function(context){
 		newPreviewObject.back[selection.objectID()] = {main:decodeURIComponent(encodeURIComponent(selection.objectID())),vs:decodeURIComponent(encodeURIComponent(importedSVGLayer.objectID()))};;
 		NSUserDefaults.standardUserDefaults().setObject_forKey(JSON.stringify(newPreviewObject),previewKey+context.document.currentPage().objectID());
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(importedSVGLayer.objectID(), "back", importedSVGLayer, previewKey+context.document.currentPage().objectID());
+		connectionsGroup.moveToLayer_beforeLayer(context.document.currentPage(),context.document.currentPage());
+	
 	}
 	var fx = 0;
 	var backKey = '#_*back__#';

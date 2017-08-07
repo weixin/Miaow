@@ -392,5 +392,8 @@ var commonPreviewJson = function(context,filePath){
 		connectionsGroup.setIsVisible(true);
 	}
 	showPreview(context);
-
+	var newContext = uploadContext(context);
+	for(var i = 0;i < newContext.selection.length;i++){
+		newContext.selection[i].select_byExpandingSelection(false,false);
+	}
 }
