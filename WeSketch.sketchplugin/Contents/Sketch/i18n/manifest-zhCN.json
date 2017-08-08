@@ -48,11 +48,11 @@
       "handler" : "onRun"
     },
     {
-      "name" : "字符集",
-      "identifier" : "fontSet",
-      "script" : "fontSet.js",
+      "name" : "特殊字符",
+      "identifier" : "fontCharacters",
+      "script" : "fontCharacters.js",
       "shortcut": "",
-      "istool":"",
+      "istool":"true",
       "handler" : "onRun"
     },
     {
@@ -268,15 +268,15 @@
     "syncSetting",
     "-",
     "iconQ",
-    "fontSet",
     "-",
     "link",
     "flag",
     "toolSetting",
     "-",
     "textReplace",
-    "fontReplace",
     "colorReplace",
+    "fontReplace",
+    "fontCharacters",
     "-",
     "codeColor",
     "exportSlice",

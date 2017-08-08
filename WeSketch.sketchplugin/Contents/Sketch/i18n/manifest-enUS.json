@@ -7,7 +7,7 @@
   "icon" : "minicon.png",
   "language_name": "English(US)",
   "language_author": "hzlzh",
-  "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
+  "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands" : [
     {
       "handlers": {
@@ -48,11 +48,11 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Font Set",
-      "identifier" : "fontSet",
-      "script" : "fontSet.js",
+      "name" : "Font Characters",
+      "identifier" : "fontCharacters",
+      "script" : "fontCharacters.js",
       "shortcut": "",
-      "istool":"",
+      "istool":"true",
       "handler" : "onRun"
     },
     {
@@ -275,15 +275,15 @@
     "syncSetting",
     "-",
     "iconQ",
-    "fontSet",
     "-",
     "link",
     "flag",
     "toolSetting",
     "-",
     "textReplace",
-    "fontReplace",
     "colorReplace",
+    "fontReplace",
+    "fontCharacters",
     "-",
     "codeColor",
     "exportSlice",
