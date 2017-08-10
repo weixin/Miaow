@@ -53,8 +53,8 @@ var fontCharacters = function(context){
                         var range = layer.editingDelegate().textView().selectedRange();
                         layer.editingDelegate().textView().replaceCharactersInRange_withString(range, obj.ustr);
                         var range2 = layer.editingDelegate().textView().selectedRange();
-                        range2 = {location:range2-1,length:1};
-                        layer.editingDelegate().textView().setFont_range(fontfamily,range);
+                        range2 = {location:range2.location-1,length:1};
+                        layer.editingDelegate().textView().setFont_range(fontfamily,range2);
                     }else{
                         var fontSize = layer.fontSize();
                         layer.setFont(fontfamily);
