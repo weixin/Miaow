@@ -48,14 +48,6 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Font Characters",
-      "identifier" : "fontCharacters",
-      "script" : "fontCharacters.js",
-      "shortcut": "",
-      "istool":"true",
-      "handler" : "onRun"
-    },
-    {
       "name" : "Advanced Font Replace",
       "identifier" : "fontReplace",
       "script" : "fontReplace.js",
@@ -78,6 +70,22 @@
       "identifier" : "colorReplace",
       "script" : "colorReplace.js",
       "icon": "../Resources/icons/color.png",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Font Characters",
+      "identifier" : "fontCharacters",
+      "script" : "fontCharacters.js",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Order Layers",
+      "identifier" : "orderLayers",
+      "script" : "orderLayers.js",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -284,6 +292,7 @@
     "colorReplace",
     "fontReplace",
     "fontCharacters",
+    "order",
     "-",
     "codeColor",
     "exportSlice",
