@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
@@ -37,6 +37,14 @@
       "shortcut": "command shift 2",
       "handler" : "onRun",
       "istool":"true",
+    },
+    {
+      "name" : "整理图层顺序",
+      "identifier" : "sortingLayers",
+      "script" : "sortingLayers.js",
+      "shortcut": "command shift p",
+      "handler" : "onRun",
+      "istool":"true"
     },
     {
       "name" : "图标库",
@@ -273,6 +281,7 @@
     "flag",
     "toolSetting",
     "-",
+    "sortingLayers",
     "textReplace",
     "colorReplace",
     "fontReplace",

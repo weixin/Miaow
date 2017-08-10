@@ -11,6 +11,7 @@
 @import 'exportSlice.js';
 @import 'codeStyle.js';
 @import 'codeColor.js';
+@import 'sortingLayers.js';
 
 
 function toolbar(context,auto){
@@ -141,6 +142,17 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
+        if(obj.indexOf('sortingLayers') > -1){
+
+            var flagButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "sorting"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            sortingLayers(nowcontext);
+                        });
+            contentView.addSubview(flagButton);
+            xlocation = xlocation+53;
+        }
+
         if(obj.indexOf('iconQ') > -1){
             var iconButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "icon"+prefix,
                         function(sender){
@@ -204,13 +216,13 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('fontCharacters') > -1){
-            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 51, 45), "fontCharacters"+prefix,
+            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 47, 45), "fontCharacters"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
-                            fontReplace(nowcontext);
+                            fontCharacters(nowcontext);
                         });
             contentView.addSubview(fontButton);
-            xlocation = xlocation+59;
+            xlocation = xlocation+55;
         }
 
 

@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
@@ -39,18 +39,18 @@
       "istool":"true"
     },
     {
+      "name" : "Layer Order Organize",
+      "identifier" : "sortingLayers",
+      "script" : "sortingLayers.js",
+      "shortcut": "command shift p",
+      "handler" : "onRun",
+      "istool":"true"
+    },
+    {
       "name" : "Icon Manager",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
       "icon": "../Resources/icons/icon.png",
-      "shortcut": "",
-      "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "Font Characters",
-      "identifier" : "fontCharacters",
-      "script" : "fontCharacters.js",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -78,6 +78,14 @@
       "identifier" : "colorReplace",
       "script" : "colorReplace.js",
       "icon": "../Resources/icons/color.png",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Font Characters",
+      "identifier" : "fontCharacters",
+      "script" : "fontCharacters.js",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -280,6 +288,7 @@
     "flag",
     "toolSetting",
     "-",
+    "sortingLayers",
     "textReplace",
     "colorReplace",
     "fontReplace",
