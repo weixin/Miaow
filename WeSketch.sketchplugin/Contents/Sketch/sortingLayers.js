@@ -26,7 +26,10 @@ function sortingLayers(context){
    if(selection.length == 0){
       return NSApp.displayDialog(i18.m2);
    }
-   var artboard = selection[0].parentArtboard();
+   if(selection[0].className() == "MSArtboardGroup" ||selection[0].className() == "MSSymbolMaster"){
+      return NSApp.displayDialog('请选择元素进行操作');
+   }
+   var artboard = selection[0].parentGroup();
    var length = selection.length;
    var order = {};
 
