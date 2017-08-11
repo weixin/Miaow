@@ -891,7 +891,7 @@
       if(isVersion){
         choicedata = saveversion[i];
       }
-      var twh = decodeURIComponent(choicedata.content).match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
+      var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
 
       if(projectID == ''){
         var width = $('#size').val();

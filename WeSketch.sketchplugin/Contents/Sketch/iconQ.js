@@ -178,8 +178,8 @@ function iconQ(context){
                 var midY = parseInt(Math.round((contentDrawView.frame().size.height/2 - contentDrawView.verticalRuler().baseLine())/contentDrawView.zoomValue()));
                 var x = parseInt(midX - data.width/2);
                 var y = parseInt(midY - data.height/2);
-                var logo = decodeURIComponent(data.content);
-                logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+                var logo = (data.content);
+                logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"','version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"').replace(/<title>.*?<\/title>/,'');
                 logo = NSString.stringWithString(logo);
                 logo = [logo dataUsingEncoding: NSUTF8StringEncoding];
                 var svgImporter = MSSVGImporter.svgImporter();
