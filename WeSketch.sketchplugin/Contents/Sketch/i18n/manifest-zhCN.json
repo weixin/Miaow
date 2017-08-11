@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "identifier": "cn.wechat",
   "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon" : "minicon.png",
@@ -39,6 +39,14 @@
       "istool":"true",
     },
     {
+      "name" : "整理图层顺序",
+      "identifier" : "sortingLayers",
+      "script" : "sortingLayers.js",
+      "shortcut": "command shift p",
+      "handler" : "onRun",
+      "istool":"true"
+    },
+    {
       "name" : "图标库",
       "identifier" : "iconQ",
       "script" : "iconQ.js",
@@ -48,11 +56,11 @@
       "handler" : "onRun"
     },
     {
-      "name" : "字符集",
-      "identifier" : "fontSet",
-      "script" : "fontSet.js",
+      "name" : "特殊字符",
+      "identifier" : "fontCharacters",
+      "script" : "fontCharacters.js",
       "shortcut": "",
-      "istool":"",
+      "istool":"true",
       "handler" : "onRun"
     },
     {
@@ -268,15 +276,16 @@
     "syncSetting",
     "-",
     "iconQ",
-    "fontSet",
     "-",
     "link",
     "flag",
     "toolSetting",
     "-",
+    "sortingLayers",
     "textReplace",
-    "fontReplace",
     "colorReplace",
+    "fontReplace",
+    "fontCharacters",
     "-",
     "codeColor",
     "exportSlice",

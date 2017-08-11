@@ -3,8 +3,8 @@
 var FontSetKey = "com.sketchplugins.wechat.fontsetkey";
 
 
-var onRun = function(context){
-    var i18 = _(context).fontSet;
+var fontCharacters = function(context){
+    var i18 = _(context).fontCharacters;
 
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
     var options = [[[NSFontManager sharedFontManager] availableFontFamilies]][0];
@@ -37,9 +37,6 @@ var onRun = function(context){
                 }
                 var fontfamily = [NSFont fontWithName:data.fontFamily size:14.0];
                 var layer = nowcontext.selection[0];
-                var fontSize = layer.fontSize();
-                layer.setFont(fontfamily);
-                layer.setFontSize(fontSize);
                 function bzone(d){
                     if(d.length != 4){
                         d = '0' + d;
@@ -55,11 +52,17 @@ var onRun = function(context){
                     if(layer.editingDelegate()){
                         var range = layer.editingDelegate().textView().selectedRange();
                         layer.editingDelegate().textView().replaceCharactersInRange_withString(range, obj.ustr);
+                        var range2 = layer.editingDelegate().textView().selectedRange();
+                        range2 = {location:range2.location-1,length:1};
+                        layer.editingDelegate().textView().setFont_range(fontfamily,range2);
                     }else{
+                        var fontSize = layer.fontSize();
+                        layer.setFont(fontfamily);
+                        layer.setFontSize(fontSize);
                         layer.setStringValue(obj.ustr);
                     }
                 }else{
-                    return NSApp.displayDialog(i18.m1);
+                    NSApp.displayDialog(i18.m1);
                 }
                 
                 windowObject.evaluateWebScript("window.location.hash = '';");
@@ -80,4 +83,8 @@ var onRun = function(context){
             }
         }
     });
+}
+
+var onRun = function(context){
+    fontCharacters(context);
 }

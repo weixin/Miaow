@@ -84,7 +84,9 @@
     }
     $('#select').append(select.join('')).select2();
     if(flagInit){
-      SMAction('pushdata',{fontFamily:decodeURIComponent(data.initFamily)});
+      family = $('#select').val();
+
+      SMAction('pushdata',{fontFamily:family});
     }
   }
 

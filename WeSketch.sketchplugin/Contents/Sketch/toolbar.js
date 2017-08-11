@@ -2,6 +2,7 @@
 @import 'flag.js';
 @import 'link.js';
 @import 'fontReplace.js';
+@import 'fontCharacters.js';
 @import 'textReplace.js';
 @import 'colorReplace.js';
 @import 'iconQ.js';
@@ -10,7 +11,11 @@
 @import 'exportSlice.js';
 @import 'codeStyle.js';
 @import 'codeColor.js';
+<<<<<<< HEAD
 @import 'previewToolbar.js';
+=======
+@import 'sortingLayers.js';
+>>>>>>> master
 
 
 function toolbar(context,auto){
@@ -152,37 +157,16 @@ function toolbar(context,auto){
             xlocation = xlocation+53;
         }
 
-        if(obj.indexOf('fontReplace') > -1){
-            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "font"+prefix,
+        if(obj.indexOf('sortingLayers') > -1){
+
+            var flagButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "sorting"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
-                            fontReplace(nowcontext);
+                            sortingLayers(nowcontext);
                         });
-            contentView.addSubview(fontButton);
+            contentView.addSubview(flagButton);
             xlocation = xlocation+53;
         }
-
-        if(obj.indexOf('textReplace') > -1){
-            var textButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "text"+prefix,
-                        function(sender){
-                            var nowcontext = uploadContext(context);
-                            textReplace(nowcontext);
-                        });
-
-            contentView.addSubview(textButton);
-            xlocation = xlocation+53;
-        }
-
-        if(obj.indexOf('colorReplace') > -1){
-            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "color"+prefix,
-                        function(sender){
-                            var nowcontext = uploadContext(context);
-                            colorReplace(nowcontext);
-                        });
-            contentView.addSubview(colorButton);
-            xlocation = xlocation+53;
-        }
-
 
         if(obj.indexOf('iconQ') > -1){
             var iconButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "icon"+prefix,
@@ -213,6 +197,47 @@ function toolbar(context,auto){
                         });
             contentView.addSubview(synccolorButton);
             xlocation = xlocation+53;
+        }
+
+        if(obj.indexOf('textReplace') > -1){
+            var textButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "text"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            textReplace(nowcontext);
+                        });
+
+            contentView.addSubview(textButton);
+            xlocation = xlocation+53;
+        }
+
+        if(obj.indexOf('colorReplace') > -1){
+            var colorButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "color"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            colorReplace(nowcontext);
+                        });
+            contentView.addSubview(colorButton);
+            xlocation = xlocation+53;
+        }
+
+        if(obj.indexOf('fontReplace') > -1){
+            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "font"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            fontReplace(nowcontext);
+                        });
+            contentView.addSubview(fontButton);
+            xlocation = xlocation+53;
+        }
+
+        if(obj.indexOf('fontCharacters') > -1){
+            var fontButton = addButton( NSMakeRect(xlocation+3, 9, 47, 45), "fontCharacters"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            fontCharacters(nowcontext);
+                        });
+            contentView.addSubview(fontButton);
+            xlocation = xlocation+55;
         }
 
 
