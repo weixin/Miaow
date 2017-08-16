@@ -372,10 +372,7 @@ var commonPreviewJson = function(context,filePath){
 	var nowPage = context.document.currentPage();
 	var artBoards = nowPage.artboards();
 
-	var previewKey = "com.sketchplugins.wechat.preview.";
-	var getCurrentPagesObject = function(context){
-		return JSON.parse(NSUserDefaults.standardUserDefaults().objectForKey(previewKey+context.document.currentPage().objectID()) || "{}");
-	}
+
 	var newPreviewObject = getCurrentPagesObject(context);
 
 	for(var i = 0;i<artBoards.length;i++){
