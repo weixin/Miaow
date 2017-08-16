@@ -20,6 +20,22 @@ function iconQ(context){
     function choiceSVG(context){
         var svgList = [];
         for(var i = 0;i<context.selection.count();i++){
+            var rect;
+            if(context.selection[i].className() == 'MSArtboardGroup' || context.selection[i].className() == 'MSLayerGroup'){
+                var sketch = context.api();
+                var myStyle = new sketch.Style()
+                myStyle.fills = ['rgba(255,255,255,0)'];
+                myStyle.borders = ['rgba(255,255,255,0)'];
+                sketch.selectedDocument.selectedPage.newShape({frame: new sketch.Rectangle(context.selection[i].absoluteRect().x(), context.selection[i].absoluteRect().y(), context.selection[i].rect().size.width, context.selection[i].rect().size.height), style:myStyle,name:'__tc__'+context.selection[i].objectID()});
+                var child = context.document.currentPage().children();
+                for(var k = 0 ;k < child.length;k++){
+                    if(child[k].name() == '__tc__' + context.selection[i].objectID()){
+                        child[k].moveToLayer_beforeLayer(context.selection[i],context.selection[i]);
+                        rect = child[k];
+                        break;
+                    }
+                }
+            }
             var slice = MSExportRequest.exportRequestsFromExportableLayer(context.selection[i]).firstObject();
             slice.scale = '1';
             slice.format = 'svg';
@@ -31,6 +47,7 @@ function iconQ(context){
             svgList.push({content:encodeURIComponent(string),name:(encodeURIComponent(context.selection[i].name().toString()))});
             var fm  =[NSFileManager defaultManager];
             fm.removeItemAtPath_error(savePath,nil);
+            rect.removeFromParent();
         }
         return svgList;
     }

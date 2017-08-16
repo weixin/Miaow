@@ -11,11 +11,8 @@
 @import 'exportSlice.js';
 @import 'codeStyle.js';
 @import 'codeColor.js';
-<<<<<<< HEAD
 @import 'previewToolbar.js';
-=======
 @import 'sortingLayers.js';
->>>>>>> master
 
 
 function toolbar(context,auto){

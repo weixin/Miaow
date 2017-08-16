@@ -7,7 +7,7 @@ function webPreview(context){
 	if(!check){
 		return;
 	}
-	var webPreviewUrl = 'https://tool.weixin.qq.com';
+	var webPreviewUrl = 'https://sketch.weapi.io';
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
