@@ -39,6 +39,79 @@
       "istool":"true"
     },
     {
+      "name" : "Set Index",
+      "identifier" : "setIndex",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setIndex"
+    },
+    {
+      "name" : "Set Dialog",
+      "identifier" : "setDialog",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setDialog"
+    },
+    {
+      "name" : "Set Fixed",
+      "identifier" : "setFixed",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setFixed"
+    },
+    {
+      "name" : "Set Back",
+      "identifier" : "setBacks",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setBacks"
+    },
+    {
+      "name" : "Clear",
+      "identifier" : "previewClear",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "clearPreview"
+    },
+    {
+      "name" : "Hide All",
+      "identifier" : "previewHide",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "hidePreview"
+    },
+    {
+      "name" : "Show All",
+      "identifier" : "previewShow",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "showPreview"
+    },
+    {
+      "name" : "local Preview",
+      "identifier" : "localPreview",
+      "script" : "localPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "webPreview",
+      "script" : "webPreview.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "preview Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"",
+      "istool":"true",
+      "handler" : "onRunPreviewToolBar"
+    },
+    {
       "name" : "Layer Order Organize",
       "identifier" : "sortingLayers",
       "script" : "sortingLayers.js",
@@ -164,79 +237,6 @@
       "handler" : "onRun"
     },
     {
-      "name" : "preview Toolbar",
-      "identifier" : "previewToolbar",
-      "script" : "previewToolbar.js",
-      "shortcut": "",
-      "istool":"",
-      "istool":"true",
-      "handler" : "onRunPreviewToolBar"
-    },
-    {
-      "name" : "local Preview",
-      "identifier" : "localPreview",
-      "script" : "localPreview.js",
-      "shortcut": "",
-      "istool":"",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "Web Preview",
-      "identifier" : "webPreview",
-      "script" : "webPreview.js",
-      "shortcut": "",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "Set Dialog",
-      "identifier" : "setDialog",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setDialog"
-    },
-    {
-      "name" : "Set Fixed",
-      "identifier" : "setFixed",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setFixed"
-    },
-    {
-      "name" : "Set Back",
-      "identifier" : "setBacks",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setBacks"
-    },
-    {
-      "name" : "Clear",
-      "identifier" : "previewClear",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "clearPreview"
-    },
-    {
-      "name" : "Hide All",
-      "identifier" : "previewHide",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "hidePreview"
-    },
-    {
-      "name" : "Show All",
-      "identifier" : "previewShow",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "showPreview"
-    },
-    {
-      "name" : "Set First Page",
-      "identifier" : "setFirstPage",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "setIndex"
-    },
-    {
       "name" : "Copy CSS Style",
       "identifier" : "codeStyle",
       "script" : "codeStyle.js",
@@ -352,13 +352,15 @@
     "-",
     "link",
     "flag",
+    "toolSetting",
+    "-",
     {
       "title": "Preview",
       "items": [
-        "setFirstPage",
+        "setIndex",
         "setDialog",
-        "setFixed",
         "setBacks",
+        "setFixed",
         "previewClear",
         "previewHide",
         "previewShow",
@@ -368,7 +370,6 @@
         "previewToolbar"
       ]
     },
-    "toolSetting",
     "-",
     "sortingLayers",
     "textReplace",

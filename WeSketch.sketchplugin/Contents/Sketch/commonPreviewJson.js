@@ -155,7 +155,7 @@ var commonPreviewJson = function(context,filePath){
 			if (destinationArtboard && Message[0] == linkLayer.objectID()) {
 				children.to = encodeURIComponent(destinationArtboard.objectID());
 			}
-			if(exportSVGJson[linkLayer.parentArtboard().objectID()].children[i]){
+			if(exportSVGJson[linkLayer.parentArtboard().objectID()].children[linkLayer.objectID()]){
 				exportSVGJson[linkLayer.parentArtboard().objectID()].children[linkLayer.objectID()].to = children.to;
 			}else{
 				exportSVGJson[linkLayer.parentArtboard().objectID()].children[linkLayer.objectID()] = children;

@@ -171,6 +171,7 @@ for(var i in content){
     	(content[i].type=='dialog'?'class="dialog"':'')+
     	' style="'+(content[i].firstPage==true?'z-index:'+(zindex++)+';display:block;':'display:none;')+'position:absolute;'+ 
         'min-height:100%;'+
+        'height:'+Math.floor(rx * content[i].height)+'px;'+
     	(content[i].background?('background-color:'+content[i].background+';'):'') +
         '" data-id="'+content[i].content.name+'"'+
         ' data-direction="'+ content[i].content.direction +'" >');
@@ -404,6 +405,8 @@ $(document).ready(function () {
         var dom = $(this);
         dom.animate({opacity:0},150);
         moveinFixed();
+        var search = window.location.search.replace('?','').replace('page=','');
+        moveoutFixed($('[data-id="'+ search +'"]'));
         setTimeout(function(){
             dom.css('z-index',0);
         },200)

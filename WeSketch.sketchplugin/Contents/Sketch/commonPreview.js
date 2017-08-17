@@ -37,7 +37,7 @@ var buildPreview = function(context){
 		[svgFrame setY:y];
 	    [svgFrame setWidth:selection.rect().size.width];
 	    [svgFrame setHeight:selection.rect().size.height];
-	    newPreviewObject.fixed[selection.objectID()] = {main:selection.objectID(),direction:direction,vs:importedSVGLayer.objectID()};
+	    newPreviewObject.fixed[selection.objectID()] = {main:selection.objectID(),direction:decodeURIComponent(encodeURIComponent(direction)),vs:importedSVGLayer.objectID()};
 		buildLayers.push(importedSVGLayer);
 	}
 	
@@ -93,7 +93,7 @@ var buildPreview = function(context){
 		[svgFrame setY:y];
 		[svgFrame setWidth:width];
 		[svgFrame setHeight:height];
-	    newPreviewObject.dialog[selection.objectID()] = {main:selection.objectID(),direction:direction,vs:importedSVGLayer.objectID()};
+	    newPreviewObject.dialog[selection.objectID()] = {main:selection.objectID(),direction:decodeURIComponent(encodeURIComponent(direction)),vs:importedSVGLayer.objectID()};
 		buildLayers.push(importedSVGLayer);
 	}
 

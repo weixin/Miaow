@@ -39,6 +39,79 @@
       "istool":"true",
     },
     {
+      "name" : "Set Index",
+      "identifier" : "setIndex",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setIndex"
+    },
+    {
+      "name" : "Set Dialog",
+      "identifier" : "setDialog",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setDialog"
+    },
+    {
+      "name" : "Set Fixed",
+      "identifier" : "setFixed",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setFixed"
+    },
+    {
+      "name" : "Set Back",
+      "identifier" : "setBacks",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setBacks"
+    },
+    {
+      "name" : "Clear",
+      "identifier" : "previewClear",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "clearPreview"
+    },
+    {
+      "name" : "Hide All",
+      "identifier" : "previewHide",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "hidePreview"
+    },
+    {
+      "name" : "Show All",
+      "identifier" : "previewShow",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "showPreview"
+    },
+    {
+      "name" : "local Preview",
+      "identifier" : "localPreview",
+      "script" : "localPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "webPreview",
+      "script" : "webPreview.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "preview Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"",
+      "istool":"true",
+      "handler" : "onRunPreviewToolBar"
+    },
+    {
       "name" : "整理图层顺序",
       "identifier" : "sortingLayers",
       "script" : "sortingLayers.js",
@@ -258,15 +331,15 @@
   "menu": {
     "items": [
     {
-        "title": "管理 UI Kit",
+        "title": "UI Kit",
         "items": [
             "syncuikit",
             "importuikit",
-            "exportuikit",
+            "exportuikit"
         ]
     },
     {
-        "title": "管理色板",
+        "title": "Color Set",
         "items": [
             "synccolor",
             "importcolor",
@@ -280,6 +353,23 @@
     "link",
     "flag",
     "toolSetting",
+    "-",
+    {
+      "title": "Preview",
+      "items": [
+        "setIndex",
+        "setDialog",
+        "setBacks",
+        "setFixed",
+        "previewClear",
+        "previewHide",
+        "previewShow",
+        "localPreview",
+        "webPreview",
+        "-",
+        "previewToolbar"
+      ]
+    },
     "-",
     "sortingLayers",
     "textReplace",
@@ -296,13 +386,13 @@
     "-",
     "setting",
     {
-        "title": "关于",
+        "title": "About",
         "items": [
             "about",
             "issues"
         ]
     },
-    "checkforupdate",
+    "checkforupdate"
     ],
     "title":"WeSketch"
   }
