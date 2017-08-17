@@ -3,10 +3,6 @@
 @import "commonPreviewJson.js"
 
 function webPreview(context){
-	var check = checkPreviewJson(context);
-	if(!check){
-		return;
-	}
 	var webPreviewUrl = 'https://sketch.weapi.io';
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
@@ -15,7 +11,10 @@ function webPreview(context){
 		return save.URL().path()+'/'+(Math.random());
 	}
 	var filePath = chooseFilePath();
-	commonPreviewJson(context,filePath);
+	var flag = commonPreviewJson(context,filePath);
+	if(!flag){
+		return;
+	}
     zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
     var settingsWindow = COSAlertWindow.new();
     settingsWindow.addButtonWithTitle('确定');

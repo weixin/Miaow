@@ -3,10 +3,6 @@
 @import "commonPreviewJson.js"
 
 var localPreview =function(context){
-	var check = checkPreviewJson(context);
-	if(!check){
-		return;
-	}
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);
@@ -22,7 +18,10 @@ var localPreview =function(context){
 	if(!filePath){
     	return;
 	}
-	commonPreviewJson(context,filePath);
+	var flag = commonPreviewJson(context,filePath);
+	if(!flag){
+		return NSApp.displayDialog('error');
+	}
     NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(NSArray.arrayWithObjects(NSURL.fileURLWithPath(filePath)));
 }
 

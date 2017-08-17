@@ -1,23 +1,5 @@
 @import "commonPreview.js";
 
-var checkPreviewJson = function(context){
-	var previewKey = "com.sketchplugins.wechat.preview.";
-	var getCurrentPagesObject = function(context){
-		return JSON.parse(NSUserDefaults.standardUserDefaults().objectForKey(previewKey+context.document.currentPage().objectID()) || "{}");
-	}
-	var flag = false;
-	var newPreviewObject = getCurrentPagesObject(context);
-
-	if(newPreviewObject.index){
-		for(var i in newPreviewObject.index){
-			flag = true;
-		}
-	}
-	if(!flag){
-		return NSApp.displayDialog('请先设置 index 页');
-	}
-	return flag;
-}
 
 var commonPreviewJson = function(context,filePath){
 	var BorderPositions = ["center", "inside", "outside"],
@@ -356,9 +338,21 @@ var commonPreviewJson = function(context,filePath){
 	            .createDirectoryAtPath_withIntermediateDirectories_attributes_error(filePath, true, nil, nil);
 	}
 
+	var newPreviewObject = buildPreview(context);
+
+	var flag = false;
+	if(newPreviewObject.index){
+		for(var i in newPreviewObject.index){
+			flag = true;
+		}
+	}
+	if(!flag){
+		NSApp.displayDialog('请先设置 index 页');
+		return false;
+	}
 
 	if(filePath == false){
-		return;
+		return false;
 	}
 	writeDirectory(filePath);
 	var connectionsGroup = getConnectionsGroupInPage(context.document.currentPage());
@@ -373,7 +367,6 @@ var commonPreviewJson = function(context,filePath){
 	var artBoards = nowPage.artboards();
 
 
-	var newPreviewObject = getCurrentPagesObject(context);
 
 	for(var i = 0;i<artBoards.length;i++){
 		var size = artBoards[i].absoluteRect().size().width;
@@ -393,4 +386,5 @@ var commonPreviewJson = function(context,filePath){
 	for(var i = 0;i < newContext.selection.length;i++){
 		newContext.selection[i].select_byExpandingSelection(false,false);
 	}
+	return true;
 }
