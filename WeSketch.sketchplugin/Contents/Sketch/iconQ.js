@@ -224,7 +224,7 @@ function iconQ(context){
                 if(nowcontext.selection.length>0){
                     [svgFrame setX:nowcontext.selection[0].absoluteRect().x()];
                     [svgFrame setY:nowcontext.selection[0].absoluteRect().y()];
-                    nowcontext.document.showMessage(i18.m1+nowcontext.selection[0].name());
+                    nowcontext.document.showMessage(i18.m1+ ' ' +nowcontext.selection[0].name());
 
                     for(var i = 0;i<nowcontext.selection.length;i++){
                         nowcontext.selection[i].select_byExpandingSelection(false,false);

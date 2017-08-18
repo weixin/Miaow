@@ -3,6 +3,7 @@
 @import "commonPreviewJson.js"
 
 function webPreview(context){
+    var i18 = _(context).webPreview;
 	var webPreviewUrl = 'https://sketch.weapi.io';
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
@@ -17,11 +18,11 @@ function webPreview(context){
 	}
     zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
     var settingsWindow = COSAlertWindow.new();
-    settingsWindow.addButtonWithTitle('确定');
-    settingsWindow.addButtonWithTitle('取消');
+    settingsWindow.addButtonWithTitle(i18.m1);
+    settingsWindow.addButtonWithTitle(i18.m2);
 
-    settingsWindow.setMessageText('确定将页面传到服务器吗？');
-    settingsWindow.setInformativeText('警告，免费服务，作者不承担可能的泄漏风险，你也可以选择导出到本地自行预览');
+    settingsWindow.setMessageText(i18.m3);
+    settingsWindow.setInformativeText(i18.m4);
 
     if(settingsWindow.runModal() == "1000"){
     	var returnData = networkRequest(['-F','image=@'+filePath+'.zip',iconQueryUrl+'/users/uploadHtml']);

@@ -20,7 +20,7 @@ var localPreview =function(context){
 	}
 	var flag = commonPreviewJson(context,filePath);
 	if(!flag){
-		return NSApp.displayDialog('error');
+		return;
 	}
     NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(NSArray.arrayWithObjects(NSURL.fileURLWithPath(filePath)));
 }
