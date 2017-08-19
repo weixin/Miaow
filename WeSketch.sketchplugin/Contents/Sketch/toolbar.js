@@ -65,7 +65,7 @@ function toolbar(context,auto){
         }
     }
 
-    var identifier = "com.sketchplugins.wechat",
+    var identifier = "com.sketchplugins.wechat.toolbar",
         threadDictionary = NSThread.mainThread().threadDictionary(),
         Toolbar = threadDictionary[identifier];
 
@@ -264,13 +264,13 @@ function toolbar(context,auto){
         }
 
         if(obj.indexOf('previewToolbar') > -1){
-            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
+            var previewToolbarButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
                         function(sender){
                             var nowcontext = uploadContext(context);
                             previewToolbar(nowcontext);      
                         });
 
-            contentView.addSubview(linkButton);
+            contentView.addSubview(previewToolbarButton);
             xlocation = xlocation+53;
         }
 

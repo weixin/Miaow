@@ -5,9 +5,9 @@
 
 function previewToolbar(context){
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library");
-    var identifier = "com.sketchplugins.wechat.preview",
+    var identifier = "com.sketchplugins.wechat.previewtoolbar",
         threadDictionary = NSThread.mainThread().threadDictionary(),
-        Toolbar = threadDictionary[identifier];
+        Toolbar2 = threadDictionary[identifier];
     var i18nKey = "com.sketchplugins.wechat.i18n";
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
     var prefix = '-'+lang.toString();
@@ -37,30 +37,30 @@ function previewToolbar(context){
         return button;
     }
 
-    if(!Toolbar){
+    if(!Toolbar2){
         coscript.setShouldKeepAround(true);
-        Toolbar = NSPanel.alloc().init();
-        Toolbar.setStyleMask(NSTitledWindowMask + NSFullSizeContentViewWindowMask);
-        Toolbar.setBackgroundColor(NSColor.colorWithRed_green_blue_alpha(0.92, 0.92, 0.92, 1));
-        Toolbar.setTitleVisibility(NSWindowTitleHidden);
-        Toolbar.setTitlebarAppearsTransparent(true);
+        Toolbar2 = NSPanel.alloc().init();
+        Toolbar2.setStyleMask(NSTitledWindowMask + NSFullSizeContentViewWindowMask);
+        Toolbar2.setBackgroundColor(NSColor.colorWithRed_green_blue_alpha(0.92, 0.92, 0.92, 1));
+        Toolbar2.setTitleVisibility(NSWindowTitleHidden);
+        Toolbar2.setTitlebarAppearsTransparent(true);
 
 
 
         var view = context.document.currentView();
-        var locationx = view.frame().size.width - 70;
-        var locationy = view.frame().size.height + 70;
+        var locationx = view.frame().size.width;
+        var locationy = view.frame().size.height;
 
         var xlocation = 20;
 
         
-        Toolbar.setFrame_display(NSMakeRect(locationx, locationy, 320, 190), false);
-        Toolbar.setMovableByWindowBackground(true);
-        Toolbar.becomeKeyWindow();
-        Toolbar.setLevel(NSFloatingWindowLevel);
+        Toolbar2.setFrame_display(NSMakeRect(locationx, locationy, 320, 190), false);
+        Toolbar2.setMovableByWindowBackground(true);
+        Toolbar2.becomeKeyWindow();
+        Toolbar2.setLevel(NSFloatingWindowLevel);
 
 
-        var contentView = Toolbar.contentView();
+        var contentView = Toolbar2.contentView();
 
 
 
@@ -165,12 +165,12 @@ function previewToolbar(context){
         xlocation = xlocation+60;
 
 
-        threadDictionary[identifier] = Toolbar;
-        Toolbar.makeKeyAndOrderFront(nil);
+        threadDictionary[identifier] = Toolbar2;
+        Toolbar2.makeKeyAndOrderFront(nil);
     }else{
-        coscript.setShouldKeepAround(false);
+        // coscript.setShouldKeepAround(false);
         threadDictionary.removeObjectForKey(identifier);
-        Toolbar.close();
+        Toolbar2.close();
     }
 }
 
