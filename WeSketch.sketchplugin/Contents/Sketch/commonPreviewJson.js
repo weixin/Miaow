@@ -216,8 +216,12 @@ var commonPreviewJson = function(context,filePath){
 	    		backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
 	    		exportSVGJson[layer.objectID()].children[child.objectID()] = backObj;
 	    	}
+	    	if(newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()){
+	    		exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
+	    	}
 	    	if(newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()] && child.isVisible()){
 	    		var name = 'fixed'+(fixedCount++);
+	    		exportSVGJson[layer.objectID()].children[child.objectID()].fixed = true;
 	    		exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
 	    		exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = newPreviewObject.fixed[child.objectID()].direction;
 	    		if(newPreviewObject.fixed[child.objectID()].direction == 'b'){
@@ -232,9 +236,7 @@ var commonPreviewJson = function(context,filePath){
 	    		child.setIsVisible(false);
 	    		saveChild.push(child);
 	    	}
-	    	if(newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()){
-	    		exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
-	    	}
+	    	
 	    }
 	    
 	    var fileName;
@@ -355,10 +357,6 @@ var commonPreviewJson = function(context,filePath){
 		return false;
 	}
 	writeDirectory(filePath);
-	var connectionsGroup = getConnectionsGroupInPage(context.document.currentPage());
-	if (connectionsGroup) {
-		connectionsGroup.setIsVisible(false);
-	}
 	var scale = 1;
 	var linkJson = {};
 	hidePreview(context);
@@ -378,10 +376,7 @@ var commonPreviewJson = function(context,filePath){
 	}
 	relationship(context.document);
 	exportHTML(filePath);
-	if (connectionsGroup) {
-		connectionsGroup.setIsVisible(true);
-	}
-	showPreview(context);
+	hidePreview(context);
 	var newContext = uploadContext(context);
 	for(var i = 0;i < newContext.selection.length;i++){
 		newContext.selection[i].select_byExpandingSelection(false,false);

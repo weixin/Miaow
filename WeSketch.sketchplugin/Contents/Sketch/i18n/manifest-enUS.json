@@ -39,6 +39,72 @@
       "istool":"true"
     },
     {
+      "name" : "Set Index",
+      "identifier" : "setIndex",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setIndex"
+    },
+    {
+      "name" : "Set Dialog",
+      "identifier" : "setDialog",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setDialog"
+    },
+    {
+      "name" : "Set Fixed",
+      "identifier" : "setFixed",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setFixed"
+    },
+    {
+      "name" : "Set Back",
+      "identifier" : "setBacks",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setBacks"
+    },
+    {
+      "name" : "Clear",
+      "identifier" : "previewClear",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "clearPreview"
+    },
+    {
+      "name" : "Show/Hide",
+      "identifier" : "previewHide",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "hidePreview"
+    },
+    {
+      "name" : "local Preview",
+      "identifier" : "localPreview",
+      "script" : "localPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "webPreview",
+      "script" : "webPreview.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "preview Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"",
+      "istool":"true",
+      "handler" : "onRunPreviewToolBar"
+    },
+    {
       "name" : "Layer Order Organize",
       "identifier" : "sortingLayers",
       "script" : "sortingLayers.js",
@@ -53,15 +119,7 @@
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "Font Characters",
-      "identifier" : "fontCharacters",
-      "script" : "fontCharacters.js",
-      "shortcut": "",
-      "istool":"true",
-      "handler" : "onRun"
+      "handler" : "iconQRun"
     },
     {
       "name" : "Advanced Font Replace",
@@ -86,6 +144,14 @@
       "identifier" : "colorReplace",
       "script" : "colorReplace.js",
       "icon": "../Resources/icons/color.png",
+      "shortcut": "",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Font Characters",
+      "identifier" : "fontCharacters",
+      "script" : "fontCharacters.js",
       "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
@@ -161,13 +227,6 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "Web Preview",
-      "identifier" : "h5Preview",
-      "script" : "h5Preview.js",
-      "shortcut": "",
       "handler" : "onRun"
     },
     {
@@ -287,6 +346,22 @@
     "link",
     "flag",
     "toolSetting",
+    "-",
+    {
+      "title": "Preview",
+      "items": [
+        "setIndex",
+        "setDialog",
+        "setBacks",
+        "setFixed",
+        "previewClear",
+        "previewHide",
+        "localPreview",
+        "webPreview",
+        "-",
+        "previewToolbar"
+      ]
+    },
     "-",
     "sortingLayers",
     "textReplace",

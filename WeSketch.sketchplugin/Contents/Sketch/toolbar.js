@@ -97,7 +97,7 @@ function toolbar(context,auto){
 
 
         var contentView = Toolbar.contentView();
-        var closeButton = addButton( NSMakeRect(20, 24, 18, 18), "close",
+        var closeButton = addButton( NSMakeRect(20, 36, 18, 18), "close",
                     function(sender){
                         coscript.setShouldKeepAround(false);
                         threadDictionary.removeObjectForKey(identifier);
@@ -119,6 +119,12 @@ function toolbar(context,auto){
                     });
         contentView.addSubview(closeButton);
 
+        var wikiButton = addButton( NSMakeRect(22, 10, 14, 14), "wiki",
+                    function(sender){
+                        openUrlInBrowser('https://github.com/weixin/wesketch/wiki');
+                    });
+        contentView.addSubview(wikiButton);
+
         var xlocation = 46;
 
         if(obj.indexOf('link') > -1){
@@ -126,17 +132,6 @@ function toolbar(context,auto){
                         function(sender){
                             var nowcontext = uploadContext(context);
                             getLink(nowcontext);      
-                        });
-
-            contentView.addSubview(linkButton);
-            xlocation = xlocation+53;
-        }
-
-        if(obj.indexOf('previewToolbar') > -1){
-            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
-                        function(sender){
-                            var nowcontext = uploadContext(context);
-                            previewToolbar(nowcontext);      
                         });
 
             contentView.addSubview(linkButton);
@@ -265,6 +260,18 @@ function toolbar(context,auto){
                             codeS(nowcontext);
                         });
             contentView.addSubview(codestyleButton);
+            xlocation = xlocation+53;
+        }
+
+        if(obj.indexOf('previewToolbar') > -1){
+            var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "preview"+prefix,
+                        function(sender){
+                            var nowcontext = uploadContext(context);
+                            previewToolbar(nowcontext);      
+                        });
+
+            contentView.addSubview(linkButton);
+            xlocation = xlocation+53;
         }
 
 

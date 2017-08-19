@@ -48,107 +48,121 @@ function previewToolbar(context){
 
 
         var view = context.document.currentView();
-        var locationy = view.frame().size.height - 70;
+        var locationx = view.frame().size.width - 70;
+        var locationy = view.frame().size.height + 70;
 
-        var toolbarwidth = (9 * 53) + 52;
-        var xlocation = 46;
+        var xlocation = 20;
 
         
-        Toolbar.setFrame_display(NSMakeRect(285, locationy, toolbarwidth, 65), false);
+        Toolbar.setFrame_display(NSMakeRect(locationx, locationy, 320, 190), false);
         Toolbar.setMovableByWindowBackground(true);
         Toolbar.becomeKeyWindow();
         Toolbar.setLevel(NSFloatingWindowLevel);
 
 
         var contentView = Toolbar.contentView();
-        var closeButton = addButton( NSMakeRect(20, 24, 18, 18), "close",
-                    function(sender){
-                        coscript.setShouldKeepAround(false);
-                        threadDictionary.removeObjectForKey(identifier);
-                        Toolbar.close();
-                    });
-        contentView.addSubview(closeButton);
 
-        var linkButton = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "index"+prefix,
+
+
+        var linkButton0 = addButton( NSMakeRect(20, 161, 161, 11), "title-1"+prefix,
+                    function(sender){
+                    });
+
+        contentView.addSubview(linkButton0);
+
+        linkButton0 = addButton( NSMakeRect(20, 73, 82, 11), "title-2"+prefix,
+                    function(sender){
+                    });
+
+        contentView.addSubview(linkButton0);
+
+        linkButton0 = addButton( NSMakeRect(97, 0, 320, 2), "line",
+                    function(sender){
+                    });
+
+        contentView.addSubview(linkButton0);
+
+        linkButton0 = addButton( NSMakeRect(294, 163, 14, 14), "wiki",
+                    function(sender){
+                        openUrlInBrowser('https://github.com/weixin/wesketch/wiki');
+                    });
+
+        contentView.addSubview(linkButton0);
+
+
+
+        var linkButton = addButton( NSMakeRect(xlocation, 107, 45, 45), "start"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         setIndex(nowcontext);
                     });
 
         contentView.addSubview(linkButton);
-        xlocation = xlocation+53;
+        xlocation = xlocation+60;
 
-        var linkButton2 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "dialog"+prefix,
+        var linkButton2 = addButton( NSMakeRect(xlocation, 107, 45, 45), "popup"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         setDialog(nowcontext);      
                     });
 
         contentView.addSubview(linkButton2);
-        xlocation = xlocation+53;
+        xlocation = xlocation+60;
 
-        var linkButton3 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "fixed"+prefix,
-                    function(sender){
-                        var nowcontext = uploadContext(context);
-                        setFixed(nowcontext);      
-                    });
-
-        contentView.addSubview(linkButton3);
-        xlocation = xlocation+53;
-
-        var linkButton4 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "back"+prefix,
+        var linkButton3 = addButton( NSMakeRect(xlocation, 107, 45, 45), "linkback"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         setBacks(nowcontext);      
                     });
 
-        contentView.addSubview(linkButton4);
-        xlocation = xlocation+53;
+        contentView.addSubview(linkButton3);
+        xlocation = xlocation+60;
 
-        var linkButton5 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "clear"+prefix,
+        var linkButton4 = addButton( NSMakeRect(xlocation, 107, 45, 45), "fixed"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        setFixed(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton4);
+        xlocation = xlocation+60;
+
+        var linkButton5 = addButton( NSMakeRect(xlocation, 107, 45, 45), "delete"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         clearPreview(nowcontext);      
                     });
 
         contentView.addSubview(linkButton5);
-        xlocation = xlocation+53;
+        
+        xlocation = 20;
 
-        var linkButton6 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "hide"+prefix,
-                    function(sender){
-                        var nowcontext = uploadContext(context);
-                        hidePreview(nowcontext);      
-                    });
-
-        contentView.addSubview(linkButton6);
-        xlocation = xlocation+53;
-
-        var linkButton7 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "show"+prefix,
-                    function(sender){
-                        var nowcontext = uploadContext(context);
-                        showPreview(nowcontext);      
-                    });
-
-        contentView.addSubview(linkButton7);
-        xlocation = xlocation+53;
-
-        var linkButton8 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "local"+prefix,
+        var linkButton8 = addButton( NSMakeRect(xlocation, 19, 45, 45), "local"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         localPreview(nowcontext);      
                     });
 
         contentView.addSubview(linkButton8);
-        xlocation = xlocation+53;
+        xlocation = xlocation+60;
 
-        var linkButton9 = addButton( NSMakeRect(xlocation+3, 9, 45, 45), "qr"+prefix,
+        var linkButton9 = addButton( NSMakeRect(xlocation, 19, 45, 45), "online"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
                         webPreview(nowcontext);      
                     });
 
         contentView.addSubview(linkButton9);
-        xlocation = xlocation+53;
+        xlocation = xlocation+60;
+
+        var linkButton6 = addButton( NSMakeRect(xlocation, 19, 45, 45), "hide"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        hidePreview(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton6);
+        xlocation = xlocation+60;
 
 
         threadDictionary[identifier] = Toolbar;

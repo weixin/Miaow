@@ -2,11 +2,16 @@
 
 var previewKey = "com.sketchplugins.wechat.preview.w";
 var previewWrapKey = "com.sketchplugins.wechat.previewwrap";
+var kPluginDomain = "com.sketchplugins.wechat.link";
 
 
 
 var getConnectionsInPage = function(page) {
 	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isConnectionsContainer == true", previewWrapKey);
+	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
+}
+var getConnectionsLinkInPage = function(page) {
+	var connectionsLayerPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).isConnectionsContainer == true", kPluginDomain);
 	return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
 }
 
@@ -312,14 +317,14 @@ var clearPreview = function(context){
 
 var hidePreview = function(context){
 	var connectionsGroup = getConnectionsInPage(context.document.currentPage());
+	var connectionsGroup2 = getConnectionsLinkInPage(context.document.currentPage());
     if (connectionsGroup) {
-    	connectionsGroup.setIsVisible(false);
-    }
-}
-
-var showPreview = function(context){
-	var connectionsGroup = getConnectionsInPage(context.document.currentPage());
-    if (connectionsGroup) {
-    	connectionsGroup.setIsVisible(true);
+    	if(connectionsGroup.isVisible()){
+    		connectionsGroup.setIsVisible(false);
+    		connectionsGroup2.setIsVisible(false);
+    	}else{
+    		connectionsGroup.setIsVisible(true);
+    		connectionsGroup2.setIsVisible(true);
+    	}
     }
 }

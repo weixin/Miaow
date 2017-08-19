@@ -74,18 +74,11 @@
       "handler" : "clearPreview"
     },
     {
-      "name" : "Hide All",
+      "name" : "Show/Hide",
       "identifier" : "previewHide",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "hidePreview"
-    },
-    {
-      "name" : "Show All",
-      "identifier" : "previewShow",
-      "script" : "commonPreview.js",
-      "shortcut": "",
-      "handler" : "showPreview"
     },
     {
       "name" : "local Preview",
@@ -363,7 +356,6 @@
         "setFixed",
         "previewClear",
         "previewHide",
-        "previewShow",
         "localPreview",
         "webPreview",
         "-",
