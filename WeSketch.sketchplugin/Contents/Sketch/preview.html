@@ -392,7 +392,7 @@ $(document).ready(function () {
         moveoutFixed($('[data-id="'+ to +'"]'));
         return false;
     }).on('click','.link-back',function(){
-        animate($(this).parent(),'back');
+        animate($('[data-id="'+$(this).attr('data-parent')+'"]'),'back');
         history.back();
         moveinFixed();
         return false;

@@ -636,6 +636,13 @@
       text-align:center;
       cursor: pointer;
     }
+    .private-delete{
+      text-align: center;
+    }
+    .private-delete span{
+      cursor: pointer;
+      color: #E64340;
+    }
     </style>
   </head>
   <body>
@@ -991,6 +998,10 @@
       $('.icon-mag').show();
     })
 
+    $('#icon-delete').click(function(){
+      
+    })
+
     $('#add-dialog .savebutton').click(function(){
       var action = $('#add-dialog').attr('data-action');
       var key = $('#add-dialog').attr('data-key');
@@ -1228,6 +1239,7 @@
           '<div class="private-version">',
           '<span class="private-message-span1">Version</span><span class="private-message-span2 private-message-version-link"></span>',
           '</div>',
+          '<div class="private-delete"><span id="icon-delete">删除</span></div>',
         '</div>',
       '</div>',
       '<div class="private-remark">',
@@ -1349,11 +1361,19 @@
       $('.upload-svg-w').remove();
       $('.upload-wrap').hide();
       $('.icon-mag').show();
-      SMAction('pushdata',{
-        type:'type',
-        id:typeID,
-        pid:projectID
-      })
+      if(typeID != ''){
+        SMAction('pushdata',{
+          type:'type',
+          id:typeID,
+          pid:projectID
+        })
+      }else{
+        SMAction('pushdata',{
+          type:'project',
+          id:projectID
+        })
+      }
+      
     }
   }
   init = function(data){
