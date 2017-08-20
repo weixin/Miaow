@@ -39,6 +39,72 @@
       "istool": "true"
     },
     {
+      "name" : "Set Index",
+      "identifier" : "setIndex",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setIndex"
+    },
+    {
+      "name" : "Set Dialog",
+      "identifier" : "setDialog",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setDialog"
+    },
+    {
+      "name" : "Set Fixed",
+      "identifier" : "setFixed",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setFixed"
+    },
+    {
+      "name" : "Set Back",
+      "identifier" : "setBacks",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setBacks"
+    },
+    {
+      "name" : "Clear",
+      "identifier" : "previewClear",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "clearPreview"
+    },
+    {
+      "name" : "显示/隐藏",
+      "identifier" : "previewHide",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "hidePreview"
+    },
+    {
+      "name" : "local Preview",
+      "identifier" : "localPreview",
+      "script" : "localPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "webPreview",
+      "script" : "webPreview.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "preview Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"",
+      "istool":"true",
+      "handler" : "onRunPreviewToolBar"
+    },
+    {
       "name" : "整理圖層順序",
       "identifier" : "sortingLayers",
       "script" : "sortingLayers.js",
@@ -280,6 +346,22 @@
       "link",
       "flag",
       "toolSetting",
+      "-",
+      {
+        "title": "Preview",
+        "items": [
+          "setIndex",
+          "setDialog",
+          "setBacks",
+          "setFixed",
+          "previewClear",
+          "previewHide",
+          "localPreview",
+          "webPreview",
+          "-",
+          "previewToolbar"
+        ]
+      },
       "-",
       "sortingLayers",
       "textReplace",
