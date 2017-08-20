@@ -31,8 +31,14 @@ function iconQ(context){
                 for(var k = 0 ;k < child.length;k++){
                     if(child[k].name() == '__tc__' + context.selection[i].objectID()){
                         child[k].moveToLayer_beforeLayer(context.selection[i],context.selection[i]);
+                        child[k].select_byExpandingSelection(false,false);
                         rect = child[k];
                         break;
+                    }
+                }
+                for(var k = context.selection[i].layers().length-1;k < 0;k--){
+                    if(context.selection[i].layers()[k].name() != '__tc__' + context.selection[i].objectID()){
+                        context.selection[i].layers()[k].moveToLayer_beforeLayer(context.selection[i],context.selection[i]);
                     }
                 }
             }
@@ -44,10 +50,12 @@ function iconQ(context){
             context.document.saveArtboardOrSlice_toFile(slice, savePath);
             var content = NSData.dataWithContentsOfURL(NSURL.URLWithString('file:///'+encodeURIComponent(savePath)));
             var string = [[NSString alloc] initWithData:content encoding:NSUTF8StringEncoding];
-            svgList.push({content:encodeURIComponent(string),name:(encodeURIComponent(context.selection[i].name().toString()))});
+            svgList.push({content:encodeURIComponent(string),name:(encodeURIComponent(context.selection[i].name().toString().replace(/\s+/g,'_')))});
             var fm  =[NSFileManager defaultManager];
             fm.removeItemAtPath_error(savePath,nil);
-            rect.removeFromParent();
+            if(context.selection[i].className() == 'MSArtboardGroup' || context.selection[i].className() == 'MSLayerGroup'){
+                rect.removeFromParent();
+            }
         }
         return svgList;
     }

@@ -685,21 +685,9 @@
 
   function appendCategory(){
     var typeDom = [];
-    typeDom.push('<optgroup label="Category">');
     typeDom.push('<option value="">'+i18.m14+'</option>');
-    if(projectID != ''){
-      for(var i = 0 ;i<project.length;i++){
-        if(project[i].projectId == projectID){
-          for(var k = 0;k<project[i].categoryList.length;k++){
-            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
-          }
-        }
-      }
-    }
-    typeDom.push('</optgroup>');
-    typeDom.push('<optgroup label="Manager">');
-    typeDom.push('<option value="#_newcategory_">New Category</option>');
-    typeDom.push('</optgroup>');
+    typeDom.push('<option value="">'+'自己上传的图标'+'</option>');
+    
 
     $('#selecttype2').empty().append(typeDom.join(''));
   }
@@ -755,27 +743,20 @@
     }
     projectID = $('#selectproject').val();
     $('#upload-project').val(projectID);
+    for(var i = 0 ;i<project.length;i++){
+      if(project[i].projectId == projectID){
+        if(project[i].invitedKey){
+          $('#share-button').attr('data-code',project[i].invitedKey).show();
+        }else{
+          $('#share-button').hide();
+        }
+      }
+    }
 
     appendCategory();
     
     typeID = $('#selecttype2').val();
 
-    typeDom = [];
-    if(projectID != ''){
-      for(var i = 0 ;i<project.length;i++){
-        if(project[i].projectId == projectID){
-          for(var k = 0;k<project[i].categoryList.length;k++){
-            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
-          }
-          if(project[i].invitedKey){
-            $('#share-button').attr('data-code',project[i].invitedKey).show();
-          }else{
-            $('#share-button').hide();
-          }
-        }
-      }
-    }
-    $('#upload-category').empty().append(typeDom.join(''));
 
 
     if(projectID != ''){
@@ -798,16 +779,7 @@
   }
 
   function categoryChange(){
-    var jstypeID = $('#selecttype2').val();
-    if(jstypeID == '#_newcategory_'){
-      $('#selecttype2').val(typeID);
-      $('#add-dialog').css('display','flex');
-      $('#add-dialog input').focus();
-      setDialogMessage({action:'addCategory',title:'New Category',message:'Name of new category:',key:'categoryName'});
-      return;
-    }
-    typeID = $('#selecttype2').val();
-    $('#upload-category').val(typeID);
+    var typeID = $('#selecttype2').val();
     if(typeID != ''){
       SMAction('pushdata',{
         type:'type',
@@ -1015,7 +987,7 @@
     })
 
     $('#cancel-button').click(function(){
-      $('.-login-magmag').hide();
+      $('.login-mag').hide();
       $('.icon-mag').show();
     })
 
@@ -1040,17 +1012,6 @@
     function getUploadInit(){
       uploadProjectID = $('#selectproject').val();
       $('#upload-project').val(uploadProjectID);
-      var typeDom = [];
-      for(var i = 0 ;i<project.length;i++){
-        if(project[i].projectId == uploadProjectID){
-          for(var k = 0;k<project[i].categoryList.length;k++){
-            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
-          }
-        }
-      }
-      $('#upload-category').empty().append(typeDom);
-      uploadCategoryID = $('#selecttype2').val();
-      $('#upload-category').val(uploadCategoryID);
     }
 
     $('#file-button').click(function(){
@@ -1082,15 +1043,6 @@
 
     $('#upload-project').on('change',function(){
       uploadProjectID = $(this).val();
-      var typeDom = [];
-      for(var i = 0 ;i<project.length;i++){
-        if(project[i].projectId == uploadProjectID){
-          for(var k = 0;k<project[i].categoryList.length;k++){
-            typeDom.push('<option value="'+project[i].categoryList[k].categoryId+'">'+project[i].categoryList[k].categoryName+'</option>')
-          }
-        }
-      }
-      $('#upload-category').empty().append(typeDom);
       versionRequest();
     });
 
@@ -1101,9 +1053,7 @@
 
     $('#upload-upload').on('click',function(){
       var project = $('#upload-project').val();
-      var category = $('#upload-category').val();
       setAllKey('projectId',project);
-      setAllKey('categoryId',category);
       setAllKey('author',loginname);
 
       SMAction('pushdata',{action:'upload',data:saveSvg,version:saveversion});
@@ -1382,9 +1332,6 @@
       '<div class="upload-svg-button">',
         '<span>',
         '<select id="upload-project" ></select>',
-        '</span>',
-        '<span style="padding-left:10px;">',
-        '<select id="upload-category" ></select>',
         '</span>',
         '<div style="float:right;">',
             '<div id="upload-upload" class="upload-savebutton">Upload</div>',

@@ -16,6 +16,7 @@ function webPreview(context){
 	if(!flag){
 		return;
 	}
+	NSApp.displayDialog(filePath);
     zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
     var settingsWindow = COSAlertWindow.new();
     settingsWindow.addButtonWithTitle(i18.m1);
@@ -28,6 +29,7 @@ function webPreview(context){
     	var returnData = networkRequest(['-F','image=@'+filePath+'.zip',iconQueryUrl+'/users/uploadHtml']);
     	var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     	jsonData = JSON.parse(jsonData);
+    	
 		var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
 		SMPanel({
 	        url: pluginSketch + "/panel/webPreview.html",
@@ -43,13 +45,14 @@ function webPreview(context){
                 openUrlInBrowser(data.link);
 	        },
 	        closeCallback: function(){
-	        	// NSApp.displayDialog(1);
+	        	post(['/users/deleteHtml','dirname='+jsonData.dir]);
 	        }
 	    });
+    	var fm  =[NSFileManager defaultManager];
+        fm.removeItemAtPath_error(filePath,nil);
+        fm.removeItemAtPath_error(filePath+'.zip',nil);
     }
-	var fm  =[NSFileManager defaultManager];
-    fm.removeItemAtPath_error(filePath,nil);
-    fm.removeItemAtPath_error(filePath+'.zip',nil);
+	
 }
 
 var onRun = function(context){
