@@ -87,24 +87,6 @@
 		"m5":"Delete,Reset Index",
 		"m6":"Artboard refreshed\nPlease select an element"
 	},
-	"iconQ":{
-		"m1":"Icon exported",
-		"m2":"Icon exported (Pages Center)",
-		"m3":"Icons from the Internet, Copyright is owned by it's author",
-		"m4":"Login",
-		"m5":"Exit",
-		"m6":"Public",
-		"m7":"All",
-		"m8":"Color",
-		"m9":"Size",
-		"m10":"More",
-		"m11":"User",
-		"m12":"Password",
-		"m13":"Register",
-		"m14":"All",
-		"m15":"Public",
-		"m16":"Author"
-	},
 	"importColor":{
 		"m1":"Faild, Please checke Color Set",
 		"m2":"Imported successfully, re-open Document Colors to use"
@@ -221,5 +203,49 @@
 	"orderLayers":{
 		"m1":"Sorted successfully",
 		"m2":"Please select the element to organize"
-	}
+	},
+	"webPreview":{
+	    "m1":"确定",
+	    "m2":"取消",
+	    "m3":"确定将页面传到服务器吗？",
+	    "m4":"警告，免费服务，作者不承担可能的泄漏风险，你也可以选择导出到本地自行预览"
+    },
+	"commonPreview":{
+		"m1":"请选中 artboard 进行设置",
+		"m2":"确定",
+		"m3":"取消",
+		"m4":"请选择从何处划入弹窗",
+		"m5":"下边入",
+		"m6":"上边入",
+		"m7":"左边入",
+		"m8":"右边入",
+		"m9":"无动画",
+		"m10":"请选择元素固定方向",
+		"m11":"上固定",
+		"m12":"下固定",
+		"m13":"请选中元素进行设置",
+		"m14":"页面中有 ",
+		"m15":" 个和你设置相同的同名元素，是否都设置为 back？",
+		"m16":"请选中需要清除功能的元素",
+		"m17":"清除成功",
+		"m18":"请先设置 index 页，再进行生成页面"
+	},
+	"iconQ":{
+		"m1":"Icon exported",
+		"m2":"Icon exported (Pages Center)",
+		"m3":"Icons from the Internet, Copyright is owned by it's author",
+		"m4":"Login",
+		"m5":"Exit",
+		"m6":"Public",
+		"m7":"All",
+		"m8":"Color",
+		"m9":"Size",
+		"m10":"More",
+		"m11":"User",
+		"m12":"Password",
+		"m13":"Register",
+		"m14":"All",
+		"m15":"Public",
+		"m16":"Author"
+	},
 }

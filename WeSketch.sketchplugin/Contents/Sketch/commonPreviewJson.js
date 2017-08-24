@@ -1,7 +1,10 @@
+@import "common.js";
 @import "commonPreview.js";
 
 
 var commonPreviewJson = function(context,filePath){
+  	var i18 = _(context).commonPreview;
+
 	var BorderPositions = ["center", "inside", "outside"],
 	    FillTypes = ["color", "gradient"],
 	    GradientTypes = ["linear", "radial", "angular"],
@@ -349,7 +352,7 @@ var commonPreviewJson = function(context,filePath){
 		}
 	}
 	if(!flag){
-		NSApp.displayDialog('请先设置 index 页');
+		NSApp.displayDialog(i18.m18);
 		return false;
 	}
 

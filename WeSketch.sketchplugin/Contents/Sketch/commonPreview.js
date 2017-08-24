@@ -161,12 +161,13 @@ var buildPreview = function(context){
 }
 
 var setIndex = function(context){
+  	var i18 = _(context).commonPreview;
 	if(context.selection.length==0){
-		return NSApp.displayDialog('请选中 artboard 进行设置');
+		return NSApp.displayDialog(i18.m1);
 	}else{
 		var selection = context.selection[0];
 		if(selection.className() != 'MSArtboardGroup'){
-			return NSApp.displayDialog('请选中 artboard 进行设置');
+			return NSApp.displayDialog(i18.m1);
 		}
 		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).indexMain != nil", previewKey);
 		var indexObject = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
@@ -179,26 +180,27 @@ var setIndex = function(context){
 }
 
 var setDialog = function(context){
+  	var i18 = _(context).commonPreview;
 	var fx = 0;
 	function chooseDialog(){
 		var settingsWindow = COSAlertWindow.new();
-		settingsWindow.addButtonWithTitle('确定');
-		settingsWindow.addButtonWithTitle('取消');
+		settingsWindow.addButtonWithTitle(i18.m2);
+		settingsWindow.addButtonWithTitle(i18.m3);
 
-		settingsWindow.setMessageText('请选择从何处划入');
+		settingsWindow.setMessageText(i18.m4);
 	    
-		var ButtonList = ['下边入','上边入','左边入','右边入','无动画'];
+		var ButtonList = [i18.m5,i18.m6,i18.m7,i18.m8,i18.m9];
 
 		fx = createRadioButtons(ButtonList,0);
 		settingsWindow.addAccessoryView(fx);
 		return settingsWindow.runModal();
 	}
 	if(context.selection.length==0){
-		return NSApp.displayDialog('请选中 artboard 进行设置');
+		return NSApp.displayDialog(i18.m1);
 	}else{
 		var selection = context.selection[0];
 		if(selection.className() != 'MSArtboardGroup'){
-			return NSApp.displayDialog('请选中 artboard 进行设置');
+			return NSApp.displayDialog(i18.m1);
 		}
 		if(chooseDialog() != '1000'){
 			return;
@@ -224,26 +226,27 @@ var setDialog = function(context){
 }
 
 var setFixed = function(context){
+  	var i18 = _(context).commonPreview;
 	var fx = 0;
 	function chooseDialog(){
 		var settingsWindow = COSAlertWindow.new();
-		settingsWindow.addButtonWithTitle('确定');
-		settingsWindow.addButtonWithTitle('取消');
+		settingsWindow.addButtonWithTitle(i18.m2);
+		settingsWindow.addButtonWithTitle(i18.m3);
 
-		settingsWindow.setMessageText('请选择固定方向');
+		settingsWindow.setMessageText(i18.m10);
 	    
-		var ButtonList = ['上固定','下固定'];
+		var ButtonList = [i18.m11,i18.m12];
 
 		fx = createRadioButtons(ButtonList,0);
 		settingsWindow.addAccessoryView(fx);
 		return settingsWindow.runModal();
 	}
 	if(context.selection.length==0){
-		return NSApp.displayDialog('请选中元素进行设置');
+		return NSApp.displayDialog(i18.m13);
 	}else{
 		var selection = context.selection[0];
 		if(selection.className() == 'MSArtboardGroup'){
-			return NSApp.displayDialog('请选中元素进行设置');
+			return NSApp.displayDialog(i18.m13);
 		}
 		if(!chooseDialog()){
 			return;
@@ -264,23 +267,24 @@ var setFixed = function(context){
 }
 
 var setBacks = function(context){
+  	var i18 = _(context).commonPreview;
 	var setBack_ = function(context,selection){
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(selection.objectID(), "backMain", selection, previewKey);
 	}
 	var fx = 0;
 	function chooseDialog(n){
 		var settingsWindow = COSAlertWindow.new();
-		settingsWindow.addButtonWithTitle('确定');
-		settingsWindow.addButtonWithTitle('取消');
-		settingsWindow.setMessageText('页面中有 '+n+' 个和你设置相同的同名元素，是否都设置为 back？');
+		settingsWindow.addButtonWithTitle(i18.m2);
+		settingsWindow.addButtonWithTitle(i18.m3);
+		settingsWindow.setMessageText(i18.m14+n+m18.m15);
 		return settingsWindow.runModal();
 	}
 	if(context.selection.length==0){
-		return NSApp.displayDialog('请选中元素进行设置');
+		return NSApp.displayDialog(i18.m10);
 	}else{
 		var selection = context.selection[0];
 		if(selection.className() == 'MSArtboardGroup'){
-			return NSApp.displayDialog('请选中元素进行设置');
+			return NSApp.displayDialog(i18.m10);
 		}
 		var lengthD = 0;
 		for(var i = 0;i < context.document.currentPage().children().length;i++){
@@ -302,9 +306,10 @@ var setBacks = function(context){
 }
 
 var clearPreview = function(context){
+  	var i18 = _(context).commonPreview;
 	var domKey = ['backMain','fixedMain','dialogMain','indexMain'];
 	if(context.selection.length == 0){
-		return NSApp.displayDialog('请选中需要清除功能的元素');
+		return NSApp.displayDialog(i18.m16);
 	}
 	for(var i = 0;i < context.selection.length;i++){
 		for(var k = 0;k< domKey.length;k++){
@@ -312,7 +317,7 @@ var clearPreview = function(context){
 		}
 	}
 	buildPreview(context);
-	context.document.showMessage('清除成功');
+	context.document.showMessage(i18.m17);
 }
 
 var hidePreview = function(context){

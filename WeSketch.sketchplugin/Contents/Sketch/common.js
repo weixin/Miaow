@@ -133,13 +133,24 @@ function encodeData(jsonData){
     return result;
 }
 
+function get(args){
+    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+    var returnData = networkRequest([iconQueryUrl + args[0] + '?sig='+ sig + '&' + args[1]]);
+    var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    jsonData = JSON.parse(jsonData);
+    if(jsonData.status == 200){
+        return jsonData;
+    }else{
+        NSApp.displayDialog(jsonData.msg);
+        return jsonData;
+    }
+}
+
 function post(args){
     var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
-    // NSApp.displayDialog('sig='+ sig + '&' + args[1] + 'address:'+iconQueryUrl + args[0]]);
     var returnData = networkRequest(['-d','sig='+ sig + '&' + args[1],iconQueryUrl + args[0]]);
     var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     jsonData = JSON.parse(jsonData);
-    // NSApp.displayDialog(JSON.stringify(jsonData));
     if(jsonData.status == 200){
         return jsonData;
     }else{

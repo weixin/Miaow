@@ -66,7 +66,7 @@ function sortingLayers(context){
          }else{
             order[i][k].selection.moveToLayer_beforeLayer(artboard,order[i][k-1].selection);
          }
-         order[i][k].selection.setName(order[i][0].name);
+         order[i][k].selection.setName(order[i][0].name + (k+1));
          if(k == order[i].length - 1){
             layer.removeFromParent();
          }

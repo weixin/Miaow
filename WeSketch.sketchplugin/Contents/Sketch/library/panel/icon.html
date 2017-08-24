@@ -102,7 +102,6 @@
     }
     .messagebox,.messagebox2{
       z-index: 9;
-      display: flex;
       bottom: 0;
       left:0;
       background-color: #F6F6F6;
@@ -211,8 +210,36 @@
       left:0;
       top:0;
     }
-    .content-body:hover:before{
+    .btn-active2{
+      position: relative;
+    }
+    .btn-active2:before{
+      border-radius: 5px;
+      position: absolute;
+      content: " ";
+      width:100%;
+      height:100%;
+      box-sizing:border-box;
+      border:2px solid red;
+      left:0;
+      top:0;
+    }
+    .content-body_hover:before{
       content: "Export";
+      color:white;
+      text-align: center;
+      font-size: 14px;
+      line-height: 60px;
+      position: absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background-color: rgba(0,0,0,0.3);
+      box-sizing:border-box;
+    }
+    .content-body_hover2:before{
+      content: "Choice";
       color:white;
       text-align: center;
       font-size: 14px;
@@ -440,6 +467,19 @@
       line-height: 20px;
       background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
     }
+    .sharebutton{
+      margin-right:10px;
+      width:76px;
+      text-align: center;
+      border: 1px solid #D9D9D9;
+      border-radius: 5px;
+      color: #262626;
+      float:right;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
+      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
+    }
     .dialog-buttonwrap{
       margin-top:20px;
     }
@@ -581,6 +621,7 @@
       margin-bottom: 30px;
     }
     .private-svg{
+      background-image: url(./img/color.jpeg);
       margin: 15px 0 10px 0;
     }
     .private-svg>svg{
@@ -637,6 +678,7 @@
       cursor: pointer;
     }
     .private-delete{
+      display: none;
       text-align: center;
     }
     .private-delete span{
@@ -666,6 +708,8 @@
   var saveversion;
   var loginname;
   var controli = 0;
+  var shareFlag = 0;
+  var shareArray = [];
 
 
   function appendDom(data){
@@ -685,7 +729,7 @@
     var dom = [];
     dom.push('<div class="version-back">'+'退出'+'</div>');
     for(var i = 0;i < data.length;i++){
-      dom.push('<div data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+      dom.push('<div data-id="'+data[i].id+'" data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
@@ -829,16 +873,16 @@
       if(firstname.length>1){
         firstname = firstname[0];
         if(typeobj[firstname] != undefined){
-          dom[typeobj[firstname]].push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+          dom[typeobj[firstname]].push('<div data-id="'+data[i].id+'" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
         }else{
           typecount++;
           typeobj[firstname] = typecount;
           dom[typecount] = [];
           dom[typecount].push('<div class="content-title">'+firstname+'</div><div style="overflow:hidden">');
-          dom[typecount].push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+          dom[typecount].push('<div data-id="'+data[i].id+'" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
         }
       }else{
-        leavedom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+        leavedom.push('<div data-id="'+data[i].id+'" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
       }
     }
     for(var i = 0;i<dom.length;i++){
@@ -864,27 +908,48 @@
       }
     })
     $('.content-wrap').on('click','.content-body',function(){
-      var i = parseInt($(this).attr('data-i'));
-      choicedata = savedata[i];
-      var isVersion  = $(this).attr('data-version')?true:false;
-      if(isVersion){
-        choicedata = saveversion[i];
-      }
-      var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
-
-      if(projectID == ''){
-        var width = $('#size').val();
-        choicedata.width = parseInt(width);
-        choicedata.height = parseInt(width * twh[1] / twh[0]);
-        choicedata.color = $('#color').val();
-        choicedata.type = 'public';
-        SMAction('submit',choicedata);
+      if(shareFlag){
+        var $this = $(this);
+        var id = $this.attr('data-id');
+        var slicei = -1;
+        for(var i = 0;i<shareArray.length;i++){
+          if(id == shareArray[i]){
+            slicei = i;
+          }else{
+            $('[data-id="'+ shareArray[i] + '"]').addClass('btn-active2');
+          }
+        }
+        if(slicei != '-1'){
+          $('[data-id="'+ shareArray[slicei] + '"]').removeClass('btn-active2')
+          shareArray.splice(slicei,1);
+        }else{
+          shareArray.push(id);
+          $this.addClass('btn-active2');
+        }
       }else{
-        choicedata.type = 'private';
-        choicedata.height = parseInt(twh[1]);
-        choicedata.width = parseInt(twh[0]);
-        SMAction('submit',choicedata);
+        var i = parseInt($(this).attr('data-i'));
+        choicedata = savedata[i];
+        var isVersion  = $(this).attr('data-version')?true:false;
+        if(isVersion){
+          choicedata = saveversion[i];
+        }
+        var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
+
+        if(projectID == ''){
+          var width = $('#size').val();
+          choicedata.width = parseInt(width);
+          choicedata.height = parseInt(width * twh[1] / twh[0]);
+          choicedata.color = $('#color').val();
+          choicedata.type = 'public';
+          SMAction('submit',choicedata);
+        }else{
+          choicedata.type = 'private';
+          choicedata.height = parseInt(twh[1]);
+          choicedata.width = parseInt(twh[0]);
+          SMAction('submit',choicedata);
+        }
       }
+      
     }).on('mouseenter mouseout','.content-body',function(){
       var i = parseInt($(this).attr('data-i'));
       var datamessage = savedata[i];
@@ -894,11 +959,17 @@
         $('.private-version').hide();
       }
       if(datamessage.version){
-        $('.content-body').removeClass('btn-active');
-        $(this).addClass('btn-active');
+        if(shareFlag){
+          // $('.content-body').removeClass('content-body_hover2');
+          // $(this).addClass('content-body_hover2');
+        }else{
+          $('.content-body').removeClass('btn-active').removeClass('content-body_hover');
+          $(this).addClass('btn-active').addClass('content-body_hover');
+        }
         $('.private-svg').empty().append(datamessage.content);
         $('.private-name').text(datamessage.name);
         $('.private-version').show();
+        $('.private-delete').show().find('#icon-delete').attr('data-id',datamessage.id);
         $('.private-author span:eq(1)').text(datamessage.author);
         $('.private-version span:eq(1)').text(datamessage.version);
         $('.private-version span:eq(1)').attr('data-name',datamessage.name);
@@ -998,10 +1069,6 @@
       $('.icon-mag').show();
     })
 
-    $('#icon-delete').click(function(){
-      
-    })
-
     $('#add-dialog .savebutton').click(function(){
       var action = $('#add-dialog').attr('data-action');
       var key = $('#add-dialog').attr('data-key');
@@ -1050,6 +1117,33 @@
       SMAction('pushdata',{action:'history',name:name,projectid:projectID,categoryid:typeID});
     }).on('click','.version-back',function(){
       appendDom2(savedata);
+    }).on('click','#icon-delete',function(){
+      var deleteid = $(this).attr('data-id');
+      SMAction('pushdata',{
+        action:"delete",
+        deleteid:deleteid,
+        projectid:projectID
+      })
+    }).on('click','#share-icon',function(){
+      $('#confirm-share-icon').show();
+      $('#cancel-share-icon').show();
+      $('#share-icon').hide();
+      shareFlag = 1;
+      shareArray = [];
+      $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+    }).on('click','#confirm-share-icon',function(){
+      $('#share-icon').show();
+      $('#confirm-share-icon').hide();
+      $('#cancel-share-icon').hide();
+      shareFlag = 0;
+      SMAction('submit',{type:'share',projectId:projectID,ids:shareArray});
+      $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+    }).on('click','#cancel-share-icon',function(){
+      $('#share-icon').show();
+      $('#confirm-share-icon').hide();
+      $('#cancel-share-icon').hide();
+      shareFlag = 0;
+      $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
     })
 
     $('#upload-project').on('change',function(){
@@ -1261,8 +1355,12 @@
         '</div>',
       '</div>',
       '<div class="messagebox2" style="display:none">',
-        '<div id="upload-button" class="savebutton">Upload</div>',
-        '<div id="file-button" class="cancelbutton" style="margin-left:10px;">File</div>',
+        '<div id="upload-button" style="float:left;margin-right:10px" class="savebutton">Upload</div>',
+        '<div id="file-button" style="float:left;" class="cancelbutton" >File</div>',
+        '<div id="share-icon" class="cancelbutton" style="float:right;" >Share</div>',
+        
+        '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;margin-left:10px;" >Cancel</div>',
+        '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;" >Confirm</div>',
       '</div>',
     '</div>',
     '</div>',

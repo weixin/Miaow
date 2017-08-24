@@ -119,18 +119,24 @@ function iconQ(context){
     }
 
     function addProject(data){
-        var r = post(['/users/createProject','projectname='+data.projectName]);
-        return r;
+        return post(['/users/createProject','projectname='+data.projectName]);
     }
 
     function queryIconByName(data){
-        var r = post(['/users/queryIconByName','name='+data.name + '&projectid='+data.projectid+ '&categoryid='+data.categoryid]);
-        return r;
+        return post(['/users/queryIconByName','name='+data.name + '&projectid='+data.projectid]);
+        
     }
 
     function addCategory(data){
-        var r = post(['/users/createCategory','projectid='+data.projectId+'&categoryname='+data.categoryName]);
-        return r;
+        return post(['/users/createCategory','projectid='+data.projectId+'&categoryname='+data.categoryName]);
+    }
+
+    function deleteIcon(data){
+        return post(['/users/deleteIcon','list='+JSON.stringify([data])]);
+    }
+
+    function downloadZip(data){
+        return get(['/users/createZip','projectid=' + data.projectId + '&id='+encodeURIComponent(JSON.stringify(data.ids)]));
     }
 
     var svgtitle = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
@@ -248,7 +254,12 @@ function iconQ(context){
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',projectChooseKey);
             }else if(data.type == 'code'){
                 paste(data.code);
-                NSApp.displayDialog('邀请码：'+ data.code +'，已加入剪贴板');
+                NSApp.displayDialog('邀请码：\n'+ data.code +'\n已加入剪贴板');
+            }else if(data.type == 'share'){
+                var d = downloadZip(data);
+                var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName;
+                paste(address);
+                NSApp.displayDialog('分发地址：\n' + address + '\n已经加入剪贴板');
             }
         },loginCallback:function(data,windowObject){
             var result;
@@ -397,7 +408,21 @@ function iconQ(context){
                 windowObject.evaluateWebScript("pushdata3("+JSON.stringify(result)+")");
                 windowObject.evaluateWebScript("window.location.hash = '';");
 
-            }else{
+            }else if(data.action == 'delete'){
+                var settingsWindow = COSAlertWindow.new();
+                settingsWindow.addButtonWithTitle('确定');
+                settingsWindow.addButtonWithTitle('取消');
+                settingsWindow.setMessageText('确定要删除此图标吗？');
+
+                var response = settingsWindow.runModal();
+                if (response == "1000") {
+                    deleteIcon(data.deleteid);
+                    var result = queryProjectIcon(data.projectid);
+                    windowObject.evaluateWebScript("pushdata("+JSON.stringify(result)+")");
+                    windowObject.evaluateWebScript("window.location.hash = '';");
+                }
+            }
+            else{
                 var result = {};
                 if(data.type == 'type'){
                     result = queryTypeIcon(data.id);
