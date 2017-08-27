@@ -152,7 +152,9 @@
 		"m12":"conflict, please check",
 		"m13":"Exported successfully",
 		"m14":"No update",
-		"m15":"update conflict"
+		"m15":"update conflict",
+		"m16":"Sync this version to all the local usage?",
+		"m17":"Sync Successfully!\nAll the local usage had been replaced by this version, please check it now."
 	},
 	"textReplace":{
 		"m1":"Replace Text",
