@@ -276,7 +276,7 @@ var setBacks = function(context){
 		var settingsWindow = COSAlertWindow.new();
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
-		settingsWindow.setMessageText(i18.m14+n+m18.m15);
+		settingsWindow.setMessageText(i18.m14+n+i18.m15);
 		return settingsWindow.runModal();
 	}
 	if(context.selection.length==0){

@@ -727,7 +727,7 @@
     $('.bqts').remove();
     $('.content-wrap').empty();
     var dom = [];
-    dom.push('<div class="version-back">'+'退出'+'</div>');
+    dom.push('<div class="version-back">'+i18.m31+'</div>');
     for(var i = 0;i < data.length;i++){
       dom.push('<div data-id="'+data[i].id+'" data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
@@ -737,7 +737,7 @@
   function appendCategory(){
     var typeDom = [];
     typeDom.push('<option value="">'+i18.m14+'</option>');
-    typeDom.push('<option value="">'+'自己上传的图标'+'</option>');
+    typeDom.push('<option value="">'+i18.m32+'</option>');
     
 
     $('#selecttype2').empty().append(typeDom.join(''));
@@ -749,7 +749,7 @@
     var message = saveSvg[controli];
     $('#svg-name').val(decodeURIComponent(message.name||''));
     $('#upload-username').val(loginname||'');
-    $('#upload-version').val(message.version == 0? 'New':'已存在'+(message.version)+'版');
+    $('#upload-version').val(message.version == 0? 'New':i18.m33+(message.version)+i18.m34);
     $('#upload-mark').val(message.remark||'');
   }
 
@@ -783,13 +783,13 @@
       $('#selectproject').val(projectID);
       $('#add-dialog').css('display','flex');
       $('#add-dialog input').focus();
-      setDialogMessage({action:'addProject',title:'New Project',message:'Name of new project:',key:'projectName'});
+      setDialogMessage({action:'addProject',title:i18.m35,message:i18.m36,key:'projectName'});
       return;
     }else if(lsprojectID == '#_inputlink_'){
       $('#selectproject').val(projectID);
       $('#add-dialog').css('display','flex');
       $('#add-dialog input').focus();
-      setDialogMessage({action:'addMember',title:'Join Project',message:'Invitation code:',key:'invitedKey'});
+      setDialogMessage({action:'addMember',title:i18.m37,message:i18.m38,key:'invitedKey'});
       return;
     }
     projectID = $('#selectproject').val();
@@ -860,14 +860,14 @@
     $('.bqts').remove();
     $('.content-wrap').empty();
     if(!data){
-      $('.content-wrap').append('<div class="content-title">暂无图标</div>');
+      $('.content-wrap').append('<div class="content-title">'+i18.m39+'</div>');
       return;
     }
     var typecount = -1;
     var dom = [];
     var typeobj = {};
     var leavedom = [];
-    leavedom.push('<div class="content-title">未分类</div><div style="overflow:hidden">');
+    leavedom.push('<div class="content-title">'+i18.m40+'</div><div style="overflow:hidden">');
     for(var i = 0;i < data.length;i++){
       var firstname = data[i].name.split('_');
       if(firstname.length>1){
@@ -896,13 +896,13 @@
       var action = $('.login-mag').attr('data-action');
       if(action == undefined || action == 'login'){
         $('.login-mag').attr('data-action','register');
-        $('#confirm-button').text('注册');
-        $('#toggle-button').text('切换'+'登录');
+        $('#confirm-button').text(i18.m41);
+        $('#toggle-button').text(i18.m42+i18.m43);
         $('#mailwrap').show();
       }else{
         $('.login-mag').attr('data-action','login');
-        $('#confirm-button').text('登录');
-        $('#toggle-button').text('切换'+'注册');
+        $('#confirm-button').text(i18.m43);
+        $('#toggle-button').text(i18.m42+i18.m41);
         $('#mailwrap').hide();
 
       }
@@ -974,7 +974,7 @@
         $('.private-version span:eq(1)').text(datamessage.version);
         $('.private-version span:eq(1)').attr('data-name',datamessage.name);
         $('.private-message-span1').css('display', 'inline-block');
-        $('.private-remark').text('备注：'+datamessage.remarks);
+        $('.private-remark').text(i18.m44+(datamessage.remarks==null?'':datamessage.remarks));
       }else{
         $('#author').text(i18.m16+'：'+savedata[i].author);
       }
@@ -1246,8 +1246,8 @@
     }
     projectDom.push('</optgroup>');
     projectDom.push('<optgroup label="Manager">');
-    projectDom.push('<option value="#_newproject_">New Porject</option>');
-    projectDom.push('<option value="#_inputlink_">Input Share Link</option>');
+    projectDom.push('<option value="#_newproject_">'+i18.m46+'</option>');
+    projectDom.push('<option value="#_inputlink_">'+i18.m47+'</option>');
     projectDom.push('</optgroup>');
     $('#selectproject').empty().append(projectDom.join(''));
     var typeDom = [];
@@ -1333,7 +1333,7 @@
           '<div class="private-version">',
           '<span class="private-message-span1">Version</span><span class="private-message-span2 private-message-version-link"></span>',
           '</div>',
-          '<div class="private-delete"><span id="icon-delete">删除</span></div>',
+          '<div class="private-delete"><span id="icon-delete">'+i18.m48+'</span></div>',
         '</div>',
       '</div>',
       '<div class="private-remark">',
@@ -1355,12 +1355,12 @@
         '</div>',
       '</div>',
       '<div class="messagebox2" style="display:none">',
-        '<div id="upload-button" style="float:left;margin-right:10px" class="savebutton">Upload</div>',
-        '<div id="file-button" style="float:left;" class="cancelbutton" >File</div>',
-        '<div id="share-icon" class="cancelbutton" style="float:right;" >Share</div>',
+        '<div id="upload-button" style="float:left;margin-right:10px" class="savebutton">'+i18.m49+'</div>',
+        '<div id="file-button" style="float:left;" class="cancelbutton" >'+i18.m50+'</div>',
+        '<div id="share-icon" class="cancelbutton" style="float:right;" >'+i18.m51+'</div>',
         
-        '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;margin-left:10px;" >Cancel</div>',
-        '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;" >Confirm</div>',
+        '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;margin-left:10px;" >'+i18.m52+'</div>',
+        '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;" >'+i18.m53+'</div>',
       '</div>',
     '</div>',
     '</div>',
@@ -1383,27 +1383,27 @@
       '</div>',
       '<div class="cell" style="display:none" id="mailwrap">',
         '<div class="cell-title">',
-          '邮箱',
+          i18.m54,
         '</div>',
         '<div class="cell-input">',
           '<input id="mail" type="text" />',
         '</div>',
       '</div>',
-        '<span id="toggle-button" class="toggle-button">切换注册</span>',
+        '<span id="toggle-button" class="toggle-button">'+ i18.m42+ i18.m41 +'</span>',
       '<div class="loginbtnwrap">',
         '<div id="confirm-button" class="loginbutton">'+i18.m4+'</div>',
-        '<div id="cancel-button" class="backbutton">'+'算了'+'</div>',
+        '<div id="cancel-button" class="backbutton">'+i18.m55+'</div>',
       '</div>',
     '</div>',
     '<div id="add-dialog" class="dialog">',
       '<div class="dialog-wrap">',
-        '<div class="dialog-header">New Project</div>',
+        '<div class="dialog-header"></div>',
         '<div class="dialog-content">',
-          '<div class="dialog-content-title">Name of new project:</div>',
+          '<div class="dialog-content-title"></div>',
           '<div class="dialog-content-input"><input /></div>',
           '<div class="dialog-buttonwrap">',
-            '<div class="savebutton">Add</div>',
-            '<div class="cancelbutton">Cancel</div>',
+            '<div class="savebutton">'+i18.m56+'</div>',
+            '<div class="cancelbutton">'+i18.m29+'</div>',
           '</div>',
         '</div>',
       '</div>',
@@ -1414,25 +1414,25 @@
         '</div>',
         '<div class="upload-svg-message">',
           '<div class="upload-label-wrap">',
-            '<label>Name：</label>',
+            '<label>'+i18.m57+'</label>',
             '<div class="upload-ui-item">',
               '<input id="svg-name" class="upload-input-width" type="text" />',
             '</div>',
           '</div>',
           '<div class="upload-label-wrap">',
-            '<label>Author：</label>',
+            '<label>'+i18.m58+'</label>',
             '<div class="upload-ui-item">',
               '<input readonly="readonly" disabled="disabled" id="upload-username" class="upload-input-width" type="text" />',
             '</div>',
           '</div>',
           '<div class="upload-label-wrap">',
-            '<label>Version：</label>',
+            '<label>'+i18.m59+'</label>',
             '<div class="upload-ui-item">',
               '<input readonly="readonly" disabled="disabled" id="upload-version"  class="upload-input-width" type="text" />',
             '</div>',
           '</div>',
           '<div class="upload-label-wrap">',
-            '<label>Remark：</label>',
+            '<label>'+i18.m60+'</label>',
             '<div class="upload-ui-item">',
               '<textarea class="upload-input-width" id="upload-mark" style="height:80px"></textarea>',
             '</div>',
@@ -1444,8 +1444,8 @@
         '<select id="upload-project" ></select>',
         '</span>',
         '<div style="float:right;">',
-            '<div id="upload-upload" class="upload-savebutton">Upload</div>',
-            '<div id="upload-cancel" class="upload-cancelbutton">Cancel</div>',
+            '<div id="upload-upload" class="upload-savebutton">'+i18.m51+'</div>',
+            '<div id="upload-cancel" class="upload-cancelbutton">'+i18.m52+'</div>',
         '</div>',
       '</div>',
     '</div>'

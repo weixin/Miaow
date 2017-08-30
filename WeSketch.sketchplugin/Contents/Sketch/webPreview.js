@@ -16,7 +16,6 @@ function webPreview(context){
 	if(!flag){
 		return;
 	}
-	NSApp.displayDialog(filePath);
     zip(['-q','-r','-m','-o','-j',filePath+'.zip',filePath]);
     var settingsWindow = COSAlertWindow.new();
     settingsWindow.addButtonWithTitle(i18.m1);

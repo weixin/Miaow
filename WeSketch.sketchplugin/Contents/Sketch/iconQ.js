@@ -254,12 +254,12 @@ function iconQ(context){
                 NSUserDefaults.standardUserDefaults().setObject_forKey('',projectChooseKey);
             }else if(data.type == 'code'){
                 paste(data.code);
-                NSApp.displayDialog('邀请码：\n'+ data.code +'\n已加入剪贴板');
+                NSApp.displayDialog(i18.m17+ data.code +i18.m18);
             }else if(data.type == 'share'){
                 var d = downloadZip(data);
                 var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName;
                 paste(address);
-                NSApp.displayDialog('分发地址：\n' + address + '\n已经加入剪贴板');
+                NSApp.displayDialog(i18.m19 + address + i18.m18);
             }
         },loginCallback:function(data,windowObject){
             var result;
@@ -270,31 +270,31 @@ function iconQ(context){
             }else if(data.action == 'addProject'){
                 if(data.projectName == ''){
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog('不能为空');
+                    return NSApp.displayDialog(i18.m20);
                 }else{
                     result = addProject(data);
                     if(result.status == 200){
-                        NSApp.displayDialog('新增成功');
+                        NSApp.displayDialog(i18.m21);
                     }
                 }
             }else if(data.action == 'addCategory'){
                 if(data.categoryName == ''){
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog('不能为空');
+                    return NSApp.displayDialog(i18.m20);
                 }else{
                     result = addCategory(data);
                     if(result.status == 200){
-                        NSApp.displayDialog('新增成功');
+                        NSApp.displayDialog(i18.m21);
                     }
                 }
             }else if(data.action == 'addMember'){
                 if(data.invitedKey == ''){
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog('不能为空');
+                    return NSApp.displayDialog(i18.m20);
                 }else{
                     result = addMember(data);
                     if(result.status == 200){
-                        NSApp.displayDialog('新增成功');
+                        NSApp.displayDialog(i18.m21);
                     }
                 }
             }
@@ -318,7 +318,7 @@ function iconQ(context){
                 var newContext = uploadContext(context);
                 if(newContext.selection.length == 0){
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog('请选中 Pages 中要上传的元素');
+                    return NSApp.displayDialog(i18.m22);
                 }
                 var svg = choiceSVG(newContext);
                 var namelist = [];
@@ -382,16 +382,16 @@ function iconQ(context){
                     }
                     var result = uploadIconsFunc(uploaddata);
                     if(result.status == 200){
-                        NSApp.displayDialog('上传成功，预览地址已经放入剪贴板');
+                        NSApp.displayDialog(i18.m23);
                     }
                     return result;
                 }
                 if(data.version > 0){
                     var settingsWindow = COSAlertWindow.new();
-                    settingsWindow.addButtonWithTitle('上传');
-                    settingsWindow.addButtonWithTitle('修改');
-                    settingsWindow.setMessageText('警告');
-                    settingsWindow.addTextLabelWithValue('有'+data.version+'个上传发现历史版本，你确定覆盖老版本吗？');
+                    settingsWindow.addButtonWithTitle(i18.m24);
+                    settingsWindow.addButtonWithTitle(i18.m25);
+                    settingsWindow.setMessageText(i18.m26);
+                    settingsWindow.addTextLabelWithValue(data.version+i18.m27);
                     var runModals = settingsWindow.runModal();
                     if(runModals == '1000'){
                         var uploadReturn = upload(data.data);
@@ -410,9 +410,9 @@ function iconQ(context){
 
             }else if(data.action == 'delete'){
                 var settingsWindow = COSAlertWindow.new();
-                settingsWindow.addButtonWithTitle('确定');
-                settingsWindow.addButtonWithTitle('取消');
-                settingsWindow.setMessageText('确定要删除此图标吗？');
+                settingsWindow.addButtonWithTitle(i18.m28);
+                settingsWindow.addButtonWithTitle(i18.m29);
+                settingsWindow.setMessageText(i18.m30);
 
                 var response = settingsWindow.runModal();
                 if (response == "1000") {
