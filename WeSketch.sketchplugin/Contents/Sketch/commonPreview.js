@@ -16,7 +16,7 @@ var getConnectionsLinkInPage = function(page) {
 }
 
 var buildPreview = function(context){
-	var newPreviewObject = {index:{},dialog:{},fixed:{},back:{}};
+	var newPreviewObject = {index:{},dialog:{},fixed:{},back:{},noBuild:{}};
 	var buildLayers = [];
 	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).fixedMain != nil", previewKey);
 	var fixedObject = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
@@ -67,6 +67,29 @@ var buildPreview = function(context){
 	    [svgFrame setWidth:selection.rect().size.width];
 	    [svgFrame setHeight:selection.rect().size.height];
 	    newPreviewObject.back[selection.objectID()] = {main:selection.objectID(),vs:importedSVGLayer.objectID()};
+		buildLayers.push(importedSVGLayer);
+	}
+
+	linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).noBuildMain != nil", previewKey);
+	var noBuildObject = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
+	for(var i =0;i<noBuildObject.length;i++){
+		var selection = noBuildObject[i];
+		var x = selection.absoluteRect().x();
+		var y = selection.absoluteRect().y();
+		var svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="68" height="72" viewBox="0 0 68 72"><defs><rect id="rectangle-2-a" width="68" height="72" x="204" y="243"/><mask id="rectangle-2-b" width="68" height="72" x="0" y="0" fill="#fff"><use xlink:href="#rectangle-2-a"/></mask></defs><use fill="none" fill-rule="evenodd" stroke="#F00" stroke-dasharray="5" stroke-width="2" mask="url(#rectangle-2-b)" transform="translate(-204 -243)" xlink:href="#rectangle-2-a"/></svg>';
+		svg = NSString.stringWithString(svg);
+		svg = [svg dataUsingEncoding: NSUTF8StringEncoding];
+		var svgImporter = MSSVGImporter.svgImporter();
+		svgImporter.prepareToImportFromData(svg);
+		var importedSVGLayer = svgImporter.importAsLayer();
+		var svgFrame = importedSVGLayer.frame();
+		var backKey = '#_*noBuild__#';
+		importedSVGLayer.name = backKey + selection.objectID();
+		[svgFrame setX:x];
+		[svgFrame setY:y];
+	    [svgFrame setWidth:selection.rect().size.width];
+	    [svgFrame setHeight:selection.rect().size.height];
+	    newPreviewObject.noBuild[selection.objectID()] = {main:selection.objectID(),vs:importedSVGLayer.objectID()};
 		buildLayers.push(importedSVGLayer);
 	}
 	
@@ -228,7 +251,7 @@ var setDialog = function(context){
 var setFixed = function(context){
   	var i18 = _(context).commonPreview;
 	var fx = 0;
-	function chooseDialog(){
+	function chooseDialog2(){
 		var settingsWindow = COSAlertWindow.new();
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
@@ -241,6 +264,18 @@ var setFixed = function(context){
 		settingsWindow.addAccessoryView(fx);
 		return settingsWindow.runModal();
 	}
+	function chooseDialog(n){
+		var settingsWindow = COSAlertWindow.new();
+		settingsWindow.addButtonWithTitle(i18.m2);
+		settingsWindow.addButtonWithTitle(i18.m3);
+		settingsWindow.setMessageText(i18.m14+n+i18.m15);
+		return settingsWindow.runModal();
+	}
+
+	var setFixed_ = function(context,selection){
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(selection.objectID(), "fixedMain", selection, previewKey);
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(direction, "direction", selection, previewKey);
+	}
 	if(context.selection.length==0){
 		return NSApp.displayDialog(i18.m13);
 	}else{
@@ -248,7 +283,7 @@ var setFixed = function(context){
 		if(selection.className() == 'MSArtboardGroup'){
 			return NSApp.displayDialog(i18.m13);
 		}
-		if(!chooseDialog()){
+		if(!chooseDialog2()){
 			return;
 		}
 
@@ -260,8 +295,24 @@ var setFixed = function(context){
 		}else if(index == 1){
 			direction = 'b';
 		}
-		context.command.setValue_forKey_onLayer_forPluginIdentifier(selection.objectID(), "fixedMain", selection, previewKey);
-		context.command.setValue_forKey_onLayer_forPluginIdentifier(direction, "direction", selection, previewKey);
+
+		var lengthD = 0;
+		for(var i = 0;i < context.document.currentPage().children().length;i++){
+			if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
+				lengthD ++;
+			}
+		}
+
+		if(lengthD != 1 && chooseDialog(lengthD) != '1000'){
+			setFixed_(context,selection);
+		}else{
+			for(var i = 0;i < context.document.currentPage().children().length;i++){
+				if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
+					setFixed_(context,context.document.currentPage().children()[i]);
+				}
+			}
+		}
+		
 		buildPreview(context);
 	}
 }
@@ -305,9 +356,48 @@ var setBacks = function(context){
 	buildPreview(context);
 }
 
+var setNoBuild = function(context){
+	var i18 = _(context).commonPreview;
+	var setNoBuild_ = function(context,selection){
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(selection.objectID(), "noBuildMain", selection, previewKey);
+	}
+	var fx = 0;
+	function chooseDialog(n){
+		var settingsWindow = COSAlertWindow.new();
+		settingsWindow.addButtonWithTitle(i18.m2);
+		settingsWindow.addButtonWithTitle(i18.m3);
+		settingsWindow.setMessageText(i18.m14+n+i18.m15);
+		return settingsWindow.runModal();
+	}
+	if(context.selection.length==0){
+		return NSApp.displayDialog(i18.m10);
+	}else{
+		var selection = context.selection[0];
+		if(selection.className() == 'MSArtboardGroup'){
+			return NSApp.displayDialog(i18.m10);
+		}
+		var lengthD = 0;
+		for(var i = 0;i < context.document.currentPage().children().length;i++){
+			if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
+				lengthD ++;
+			}
+		}
+		if(lengthD != 1 && chooseDialog(lengthD) != '1000'){
+			setNoBuild_(context,selection);
+		}else{
+			for(var i = 0;i < context.document.currentPage().children().length;i++){
+				if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
+					setNoBuild_(context,context.document.currentPage().children()[i]);
+				}
+			}
+		}
+	}
+	buildPreview(context);
+}
+
 var clearPreview = function(context){
   	var i18 = _(context).commonPreview;
-	var domKey = ['backMain','fixedMain','dialogMain','indexMain'];
+	var domKey = ['backMain','fixedMain','dialogMain','indexMain','noBuildMain'];
 	if(context.selection.length == 0){
 		return NSApp.displayDialog(i18.m16);
 	}
@@ -326,10 +416,14 @@ var hidePreview = function(context){
     if (connectionsGroup) {
     	if(connectionsGroup.isVisible()){
     		connectionsGroup.setIsVisible(false);
-    		connectionsGroup2.setIsVisible(false);
+    		if(connectionsGroup2){
+    			connectionsGroup2.setIsVisible(false);
+    		}
     	}else{
     		connectionsGroup.setIsVisible(true);
-    		connectionsGroup2.setIsVisible(true);
+    		if(connectionsGroup2){
+    			connectionsGroup2.setIsVisible(true);
+    		}
     	}
     }
 }

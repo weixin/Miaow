@@ -67,6 +67,13 @@
       "handler" : "setBacks"
     },
     {
+      "name" : "set No Build",
+      "identifier" : "setNoBuild",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setNoBuild"
+    },
+    {
       "name" : "Clear",
       "identifier" : "previewClear",
       "script" : "commonPreview.js",
@@ -354,6 +361,7 @@
         "setDialog",
         "setBacks",
         "setFixed",
+        "setNoBuild",
         "previewClear",
         "previewHide",
         "localPreview",

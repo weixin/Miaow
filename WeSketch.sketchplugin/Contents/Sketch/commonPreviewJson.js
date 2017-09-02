@@ -168,10 +168,42 @@ var commonPreviewJson = function(context,filePath){
 	}
 
 	function exportHTML(filePath){
+		var fx = 0;
+		var fxstyle = '';
+		var fxlocal = 0;
+		function chooseDialog(){
+			var settingsWindow = COSAlertWindow.new();
+			settingsWindow.addButtonWithTitle(i18.m2);
+			settingsWindow.addButtonWithTitle(i18.m3);
+
+			settingsWindow.setMessageText(i18.m19);
+		    
+			var ButtonList = [i18.m20,i18.m21,i18.m22];
+
+			fx = createRadioButtons(ButtonList,0);
+			settingsWindow.addAccessoryView(fx);
+			return settingsWindow.runModal();
+		}
+		if(chooseDialog() != '1000'){
+			fxstyle = 'default';
+		}else{
+			fx = fx.selectedCell();
+			var index = [fx tag];
+			if(index == 0){
+				fxstyle = 'default';
+				fxlocal = '-20px';
+			}else if(index == 1){
+				fxstyle = 'black';
+				fxlocal = '-20px';
+			}else if(index == 2){
+				fxstyle = 'black-translucent';
+			}
+		}
+		
     	var htmlPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("preview.html").path();
         var previewData = NSData.dataWithContentsOfFile(htmlPath);
         previewData = [[NSString alloc] initWithData:previewData encoding:NSUTF8StringEncoding];
-		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson));
+		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson)).replace('{{barstyle}}',fxstyle).replace('{{local}}',fxlocal);
         writeFile({content:previewData,path:filePath,fileName:'index.html'})
 	}
 
@@ -367,19 +399,28 @@ var commonPreviewJson = function(context,filePath){
 	var nowPage = context.document.currentPage();
 	var artBoards = nowPage.artboards();
 
-
+	var previewKey = "com.sketchplugins.wechat.preview.w";
+	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).noBuildMain != nil", previewKey);
+	var noBuildObject = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
+	
+	for(var i =0;i<noBuildObject.length;i++){
+		noBuildObject[i].setIsVisible(false);
+	}
 
 	for(var i = 0;i<artBoards.length;i++){
 		var size = artBoards[i].absoluteRect().size().width;
 		if(size == 320 || size == 414 || size == 375){
 			scale = 2;
 		}
-		getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
+		// getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
 		exportPNG(artBoards[i],context,filePath,scale,newPreviewObject);
 	}
 	relationship(context.document);
 	exportHTML(filePath);
 	hidePreview(context);
+	for(var i =0;i<noBuildObject.length;i++){
+		noBuildObject[i].setIsVisible(true);
+	}
 	var newContext = uploadContext(context);
 	for(var i = 0;i < newContext.selection.length;i++){
 		newContext.selection[i].select_byExpandingSelection(false,false);
