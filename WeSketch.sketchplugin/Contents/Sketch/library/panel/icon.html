@@ -750,7 +750,15 @@
   var controli = 0;
   var shareFlag = 0;
   var shareArray = [];
+  var shareArrayDom = [];
 
+  function showFlag(){
+    if(shareFlag){
+      for(var i = 0;i < shareArray.length;i++){
+        $('[data-id="'+ shareArray[i] + '"]').addClass('btn-active2');
+      }
+    }
+  }
 
   function appendDom(data){
     $('.bqts').remove();
@@ -772,18 +780,16 @@
       dom.push('<div data-id="'+data[i].id+'" data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
+    showFlag();
   }
 
   function appendDom4(){
     var dom = [];
-    for(var i = 0;i<shareArray.length;i++){
-      for(var k = 0;k<savedata.length;k++){
-        if(savedata[k].id == shareArray[i]){
-          dom.push('<div class="content-body">'+(savedata[k].content)+'<div class="content-name">'+savedata[k].name.replace('.svg','')+'</div></div>');
-        }
-      }
+    for(var i = 0;i<shareArrayDom.length;i++){
+      dom.push('<div class="content-body">'+(shareArrayDom[i].content)+'<div class="content-name">'+shareArrayDom[i].name.replace('.svg','')+'</div></div>');
     }
     $('.share-dialog-main').empty().append(dom.join(''));
+    showFlag();
   }
 
   function appendCategory(){
@@ -939,6 +945,7 @@
       dom[i] = dom[i].join('') + '</div>';
     }
     $('.content-wrap').append(dom.join('') + leavedom.join('')+'</div>');
+    showFlag();
   }
 
   function domEvent(){
@@ -969,11 +976,19 @@
             $('[data-id="'+ shareArray[i] + '"]').addClass('btn-active2');
           }
         }
+        var i = parseInt($(this).attr('data-i'));
+        choicedata = savedata[i];
+        var isVersion  = $(this).attr('data-version')?true:false;
+        if(isVersion){
+          choicedata = saveversion[i];
+        }
         if(slicei != '-1'){
           $('[data-id="'+ shareArray[slicei] + '"]').removeClass('btn-active2')
           shareArray.splice(slicei,1);
+          shareArrayDom.splice(slicei,1);
         }else{
           shareArray.push(id);
+          shareArrayDom.push(choicedata);
           $this.addClass('btn-active2');
         }
       }else{
@@ -1178,6 +1193,7 @@
       $('#share-icon').hide();
       shareFlag = 1;
       shareArray = [];
+      shareArrayDom = [];
       $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
     }).on('click','#confirm-share-icon',function(){
       $('.share-dialog').show();
