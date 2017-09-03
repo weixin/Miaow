@@ -297,19 +297,19 @@ var setFixed = function(context){
 		}
 
 		var lengthD = 0;
+		var saveDom = [];
 		for(var i = 0;i < context.document.currentPage().children().length;i++){
 			if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
 				lengthD ++;
+				saveDom.push(context.document.currentPage().children()[i]);
 			}
 		}
 
 		if(lengthD != 1 && chooseDialog(lengthD) != '1000'){
 			setFixed_(context,selection);
 		}else{
-			for(var i = 0;i < context.document.currentPage().children().length;i++){
-				if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
-					setFixed_(context,context.document.currentPage().children()[i]);
-				}
+			for(var i = 0;i < saveDom.length;i++){
+				setFixed_(context,saveDom[i]);
 			}
 		}
 		
@@ -338,18 +338,18 @@ var setBacks = function(context){
 			return NSApp.displayDialog(i18.m10);
 		}
 		var lengthD = 0;
+		var saveDom = [];
 		for(var i = 0;i < context.document.currentPage().children().length;i++){
 			if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
 				lengthD ++;
+				saveDom.push(context.document.currentPage().children()[i]);
 			}
 		}
 		if(lengthD != 1 && chooseDialog(lengthD) != '1000'){
 			setBack_(context,selection);
 		}else{
-			for(var i = 0;i < context.document.currentPage().children().length;i++){
-				if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
-					setBack_(context,context.document.currentPage().children()[i]);
-				}
+			for(var i = 0;i < saveDom.length;i++){
+				setBack_(context,saveDom[i]);
 			}
 		}
 	}
@@ -377,18 +377,18 @@ var setNoBuild = function(context){
 			return NSApp.displayDialog(i18.m10);
 		}
 		var lengthD = 0;
+		var saveDom = [];
 		for(var i = 0;i < context.document.currentPage().children().length;i++){
 			if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
 				lengthD ++;
+				saveDom.push(context.document.currentPage().children()[i]);
 			}
 		}
 		if(lengthD != 1 && chooseDialog(lengthD) != '1000'){
 			setNoBuild_(context,selection);
 		}else{
-			for(var i = 0;i < context.document.currentPage().children().length;i++){
-				if(encodeURIComponent(context.document.currentPage().children()[i].name()) == encodeURIComponent(selection.name())){
-					setNoBuild_(context,context.document.currentPage().children()[i]);
-				}
+			for(var i = 0;i < saveDom.length;i++){
+				setNoBuild_(context,saveDom[i]);
 			}
 		}
 	}
