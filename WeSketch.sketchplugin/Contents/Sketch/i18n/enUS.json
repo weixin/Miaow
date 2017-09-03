@@ -297,6 +297,9 @@
 		"m57":"Name",
 		"m58":"Author",
 		"m59":"version",
-		"m60":"Note"
+		"m60":"Note",
+		"m61":"生成链接",
+		"m62":"Porject",
+		"m63":"Manager"
 	}
 }

@@ -795,7 +795,7 @@
   function appendCategory(){
     var typeDom = [];
     typeDom.push('<option value="">'+i18.m14+'</option>');
-    typeDom.push('<option value="">'+i18.m32+'</option>');
+    // typeDom.push('<option value="">'+i18.m32+'</option>');
     
 
     $('#selecttype2').empty().append(typeDom.join(''));
@@ -1312,13 +1312,13 @@
   
   function appendType(){
     var projectDom = [];
-    projectDom.push('<optgroup label="Porject">');
+    projectDom.push('<optgroup label="'+i18.m62+'">');
     projectDom.push('<option value="">'+i18.m15+'</option>')
     for(var i = 0 ;i<project.length;i++){
       projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
     }
     projectDom.push('</optgroup>');
-    projectDom.push('<optgroup label="Manager">');
+    projectDom.push('<optgroup label="'+i18.m63+'">');
     projectDom.push('<option value="#_newproject_">'+i18.m46+'</option>');
     projectDom.push('<option value="#_inputlink_">'+i18.m47+'</option>');
     projectDom.push('</optgroup>');
@@ -1524,9 +1524,9 @@
     '</div>',
     '<div class="share-dialog"><div class="share-dialog-w">',
     '<div class="share-dialog-main"></div>',
-    '<div class="share-dialog-message"><label>'+'留言'+'</label><textarea id="share-dialog-message"></textarea>',
+    '<div class="share-dialog-message"><label>'+i18.m60+'</label><textarea id="share-dialog-message"></textarea>',
     '<div>',
-    '<div id="build-share" class="upload-savebutton">'+'生成链接'+'</div>',
+    '<div id="build-share" class="upload-savebutton">'+i18.m61+'</div>',
     '<div id="close-share" class="upload-cancelbutton">'+i18.m52+'</div>',
     '</div></div>',
     '</div></div>'
