@@ -5,6 +5,7 @@
 function webPreview(context){
     var i18 = _(context).webPreview;
 	var webPreviewUrl = 'https://sketch.weapi.io';
+	context.document.showMessage(i18.m5);
 	function chooseFilePath(){
 		var save = NSSavePanel.savePanel();
 		save.setAllowsOtherFileTypes(true);

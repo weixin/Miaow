@@ -430,6 +430,7 @@
     }
     .dialog-content-title{
       text-align: left;
+      width: 160px;
       font-size: 14px;
       line-height: 22px;
       margin-bottom: 5px;
@@ -609,7 +610,6 @@
       position: fixed;
       right:0;
       height: 100%;
-      width:160px;
       padding:90px 20px 85px 20px;
       border-left:1px solid #D8D8D8;
       text-align: center;
@@ -619,6 +619,8 @@
       font-size: 20px;
       color:#999999;
       margin-bottom: 30px;
+      width: 160px;
+      word-break:break-all;
     }
     .private-svg{
       background-image: url(./img/color.jpeg);
@@ -685,6 +687,44 @@
       cursor: pointer;
       color: #E64340;
     }
+    .share-dialog{
+      background: rgba(0,0,0,0.5);
+      position: fixed;
+      left:0;
+      top:0;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+      display: none;
+    }
+    .share-dialog-w{
+      width: 420px;
+      height: 435px;
+      background: white;
+      margin: 50px auto;
+    }
+    .share-dialog-main{
+      background: white;
+      overflow: auto;
+      height: 300px;
+    }
+    .share-dialog-message{
+      background: #f1f1f1;
+      height: 95px;
+      padding: 20px;
+    }
+    .share-dialog-message label{
+      width: 60px;
+      margin-right: 20px;
+      vertical-align: top;
+      font-size: 12px;
+    }
+    .share-dialog-message textarea{
+      width: 300px;
+      font-size: 12px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
     </style>
   </head>
   <body>
@@ -732,6 +772,18 @@
       dom.push('<div data-id="'+data[i].id+'" data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
     }
     $('.content-wrap').append(dom.join(''));
+  }
+
+  function appendDom4(){
+    var dom = [];
+    for(var i = 0;i<shareArray.length;i++){
+      for(var k = 0;k<savedata.length;k++){
+        if(savedata[k].id == shareArray[i]){
+          dom.push('<div class="content-body">'+(savedata[k].content)+'<div class="content-name">'+savedata[k].name.replace('.svg','')+'</div></div>');
+        }
+      }
+    }
+    $('.share-dialog-main').empty().append(dom.join(''));
   }
 
   function appendCategory(){
@@ -807,8 +859,6 @@
     appendCategory();
     
     typeID = $('#selecttype2').val();
-
-
 
     if(projectID != ''){
       $('.messagebox').hide();
@@ -960,8 +1010,6 @@
       }
       if(datamessage.version){
         if(shareFlag){
-          // $('.content-body').removeClass('content-body_hover2');
-          // $(this).addClass('content-body_hover2');
         }else{
           $('.content-body').removeClass('btn-active').removeClass('content-body_hover');
           $(this).addClass('btn-active').addClass('content-body_hover');
@@ -1132,18 +1180,28 @@
       shareArray = [];
       $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
     }).on('click','#confirm-share-icon',function(){
+      $('.share-dialog').show();
+
       $('#share-icon').show();
       $('#confirm-share-icon').hide();
       $('#cancel-share-icon').hide();
       shareFlag = 0;
-      SMAction('submit',{type:'share',projectId:projectID,ids:shareArray});
       $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+      appendDom4();
+      // SMAction('submit',{type:'share',projectId:projectID,ids:shareArray});
     }).on('click','#cancel-share-icon',function(){
+      $('#share-dialog-message').val('');
       $('#share-icon').show();
       $('#confirm-share-icon').hide();
       $('#cancel-share-icon').hide();
       shareFlag = 0;
       $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+    }).on('click','#close-share',function(){
+      $('.share-dialog').hide();
+    }).on('click','#build-share',function(){
+      $('.share-dialog').hide();
+      var message = $('#share-dialog-message').val();
+      SMAction('submit',{type:'share',projectId:projectID,ids:shareArray,message:message});
     })
 
     $('#upload-project').on('change',function(){
@@ -1237,7 +1295,6 @@
 
   
   function appendType(){
-    //首页
     var projectDom = [];
     projectDom.push('<optgroup label="Porject">');
     projectDom.push('<option value="">'+i18.m15+'</option>')
@@ -1448,7 +1505,15 @@
             '<div id="upload-cancel" class="upload-cancelbutton">'+i18.m52+'</div>',
         '</div>',
       '</div>',
-    '</div>'
+    '</div>',
+    '<div class="share-dialog"><div class="share-dialog-w">',
+    '<div class="share-dialog-main"></div>',
+    '<div class="share-dialog-message"><label>'+'留言'+'</label><textarea id="share-dialog-message"></textarea>',
+    '<div>',
+    '<div id="build-share" class="upload-savebutton">'+'生成链接'+'</div>',
+    '<div id="close-share" class="upload-cancelbutton">'+i18.m52+'</div>',
+    '</div></div>',
+    '</div></div>'
     ];
     $('body').append(dom.join(''));
   }
@@ -1502,8 +1567,6 @@
         $('#selectproject').val(projectID);
         projectChange();
       }
-      
-      
     }
   }
   </script>

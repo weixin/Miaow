@@ -36,9 +36,12 @@ function iconQ(context){
                         break;
                     }
                 }
-                for(var k = context.selection[i].layers().length-1;k < 0;k--){
-                    if(context.selection[i].layers()[k].name() != '__tc__' + context.selection[i].objectID()){
-                        context.selection[i].layers()[k].moveToLayer_beforeLayer(context.selection[i],context.selection[i]);
+                var flagk = 0;
+                for(var k = 0;k < context.selection[i].layers().length;k++){
+                    if(context.selection[i].layers()[flagk].name() != '__tc__' + context.selection[i].objectID()){
+                        context.selection[i].layers()[flagk].moveToLayer_beforeLayer(context.selection[i],context.selection[i]);
+                    }else{
+                        flagk ++;
                     }
                 }
             }
@@ -231,6 +234,8 @@ function iconQ(context){
                             fill.color = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
                         }
                     }
+                }else{
+
                 }
                 [svgFrame setX:x];
                 [svgFrame setY:y];
@@ -257,7 +262,7 @@ function iconQ(context){
                 NSApp.displayDialog(i18.m17+ data.code +i18.m18);
             }else if(data.type == 'share'){
                 var d = downloadZip(data);
-                var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName;
+                var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName + '&' + 'remark=' + encodeURIComponent(data.message);
                 paste(address);
                 NSApp.displayDialog(i18.m19 + address + i18.m18);
             }
