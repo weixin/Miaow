@@ -127,13 +127,13 @@ function previewToolbar(context){
         contentView.addSubview(linkButton4);
         xlocation = xlocation+60;
 
-        var linkButton5 = addButton( NSMakeRect(xlocation, 107, 45, 45), "delete"+prefix,
+        var linkButton10 = addButton( NSMakeRect(xlocation, 107, 56, 45), "transparent"+prefix,
                     function(sender){
                         var nowcontext = uploadContext(context);
-                        clearPreview(nowcontext);      
+                        setNoBuild(nowcontext);      
                     });
 
-        contentView.addSubview(linkButton5);
+        contentView.addSubview(linkButton10);
         
         xlocation = 20;
 
@@ -163,6 +163,14 @@ function previewToolbar(context){
 
         contentView.addSubview(linkButton6);
         xlocation = xlocation+60;
+
+        var linkButton5 = addButton( NSMakeRect(xlocation, 19, 45, 45), "delete"+prefix,
+                    function(sender){
+                        var nowcontext = uploadContext(context);
+                        clearPreview(nowcontext);      
+                    });
+
+        contentView.addSubview(linkButton5);
 
 
         threadDictionary[identifier] = Toolbar2;

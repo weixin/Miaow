@@ -67,7 +67,7 @@
       "handler" : "setBacks"
     },
     {
-      "name" : "set No Build",
+      "name" : "set Transparent",
       "identifier" : "setNoBuild",
       "script" : "commonPreview.js",
       "shortcut": "",
