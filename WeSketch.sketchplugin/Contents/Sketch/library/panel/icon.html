@@ -849,13 +849,18 @@
       $('#add-dialog input').focus();
       setDialogMessage({action:'addMember',title:i18.m37,message:i18.m38,key:'invitedKey'});
       return;
+    }else if(lsprojectID == '#_typedelete_'){
+      $('#selectproject').val(projectID);
+      SMAction('login',{action:'deleteProject',projectid:projectID});
     }
     projectID = $('#selectproject').val();
     $('#upload-project').val(projectID);
     for(var i = 0 ;i<project.length;i++){
       if(project[i].projectId == projectID){
-        if(project[i].invitedKey){
+        if(project[i].isOwner){
           $('#share-button').attr('data-code',project[i].invitedKey).show();
+          $('#selectproject').find('option[value="#_typedelete_"]').remove();
+          $('#selectproject optgroup:eq(1)').append('<option value="#_typedelete_">'+i18.m66 + project[i].projectName +'</option>');
         }else{
           $('#share-button').hide();
         }
@@ -1196,15 +1201,24 @@
       shareArrayDom = [];
       $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
     }).on('click','#confirm-share-icon',function(){
-      $('.share-dialog').show();
 
+      if(shareArray == 0){
+        SMAction('submit',{
+          type:"displayDialog",
+          data: i18.m65
+        })
+        return;
+      }
       $('#share-icon').show();
       $('#confirm-share-icon').hide();
       $('#cancel-share-icon').hide();
       shareFlag = 0;
       $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+
+      $('.share-dialog').show();
       appendDom4();
-      // SMAction('submit',{type:'share',projectId:projectID,ids:shareArray});
+
+
     }).on('click','#cancel-share-icon',function(){
       $('#share-dialog-message').val('');
       $('#share-icon').show();
@@ -1432,8 +1446,9 @@
         '<div id="file-button" style="float:left;" class="cancelbutton" >'+i18.m50+'</div>',
         '<div id="share-icon" class="cancelbutton" style="float:right;" >'+i18.m51+'</div>',
         
-        '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;margin-left:10px;" >'+i18.m52+'</div>',
-        '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;" >'+i18.m53+'</div>',
+        '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;margin-left:10px;" >'+i18.m53+'</div>',
+
+        '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;" >'+i18.m52+'</div>',
       '</div>',
     '</div>',
     '</div>',

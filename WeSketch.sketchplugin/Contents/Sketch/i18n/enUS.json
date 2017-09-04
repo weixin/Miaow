@@ -301,6 +301,11 @@
 		"m61":"Generate link",
 		"m62":"Porject Name",
 		"m63":"Manager Project",
-		"m64":"Invite Code"
+		"m64":"Invite Code",
+		"m65":"请点选需要分享的图标",
+		"m66":"删除项目 ",
+		"m67":"确定删除此项目吗？",
+		"m68":"删除成功",
+		"m69":"删除项目之后无法恢复，成员也无法再看见，谨慎操作"
 	}
 }

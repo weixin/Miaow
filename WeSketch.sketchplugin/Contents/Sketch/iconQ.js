@@ -125,6 +125,10 @@ function iconQ(context){
         return post(['/users/createProject','projectname='+data.projectName]);
     }
 
+    function deleteProject(data){
+        return post(['/users/deleteProject','projectid='+data.projectid]);
+    }
+
     function queryIconByName(data){
         return post(['/users/queryIconByName','name='+data.name + '&projectid='+data.projectid]);
         
@@ -262,9 +266,12 @@ function iconQ(context){
                 NSApp.displayDialog(i18.m17+ data.code +i18.m18);
             }else if(data.type == 'share'){
                 var d = downloadZip(data);
-                var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName + '&' + 'remark=' + encodeURIComponent(data.message);
+                var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName + '&' + 'remark=' + (data.message);
                 paste(address);
                 NSApp.displayDialog(i18.m19 + address + i18.m18);
+            }else if(data.type == 'displayDialog'){
+                NSApp.displayDialog(i18.m64);
+
             }
         },loginCallback:function(data,windowObject){
             var result;
@@ -301,6 +308,22 @@ function iconQ(context){
                     if(result.status == 200){
                         NSApp.displayDialog(i18.m21);
                     }
+                }
+            }else if(data.action == 'deleteProject'){
+                var settingsWindow = COSAlertWindow.new();
+                settingsWindow.addButtonWithTitle(i18.m28);
+                settingsWindow.addButtonWithTitle(i18.m29);
+
+                settingsWindow.setMessageText(i18.m67);
+                settingsWindow.setInformativeText(i18.m69);
+
+                if(settingsWindow.runModal() == "1000"){
+                    var result = deleteProject(data);
+                    if(result.status == 200){
+                        NSApp.displayDialog(i18.m68);
+                    }
+                }else{
+                    return;
                 }
             }
             if(result.status == 200){
