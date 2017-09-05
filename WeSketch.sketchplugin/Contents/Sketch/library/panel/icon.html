@@ -212,7 +212,7 @@
       width:100%;
       height:100%;
       box-sizing:border-box;
-      border:2px solid #79B7F4;
+      border:4px solid #6D9EE1;
       left:0;
       top:0;
     }
@@ -226,7 +226,7 @@
       width:100%;
       height:100%;
       box-sizing:border-box;
-      border:2px solid #79B7F4;
+      border:4px solid #6D9EE1;
       left:0;
       top:0;
     }
@@ -366,12 +366,15 @@
       margin-left: 15px;
       font-size: 12px;
     }
+    .bqts2{
+      font-size: 12px;
+    }
     .toggle-button{
       display: block;
-      margin:10px;
-      float:right;
+      margin:10px 40px;
+      float:left;
       color:#1A8CC2;
-      font-size: 12px;
+      font-size: 14px;
       cursor: pointer;
     }
     .dialog{
@@ -570,6 +573,7 @@
     .upload-svg-button{
       padding: 10px 20px;
       border-top:1px solid #D8D7D8;
+      font-size: 12px;
     }
     .upload-button-title{
       margin: 20px 0 15px 0;
@@ -702,6 +706,9 @@
       font-size: 12px;
       height: 60px;
       margin-bottom: 10px;
+    }
+    #upload-project{
+      margin-left:5px;
     }
     </style>
   </head>
@@ -1187,9 +1194,9 @@
       shareFlag = 1;
       shareArray = [];
       shareArrayDom = [];
+      $('.content-wrap').prepend('<div class="bqts2">'+ i18.m70 +'</div>');
       $('.content-body').removeClass('btn-active2').removeClass('btn-active');
     }).on('click','#confirm-share-icon',function(){
-
       if(shareArray == 0){
         SMAction('submit',{
           type:"displayDialog",
@@ -1202,10 +1209,9 @@
       $('#cancel-share-icon').hide();
       shareFlag = 0;
       $('.content-body').removeClass('btn-active2').removeClass('btn-active');
-
       $('.share-dialog').show();
       appendDom4();
-
+      $('.content-wrap').find('.bqts2').remove();
 
     }).on('click','#cancel-share-icon',function(){
       $('#share-dialog-message').val('');
@@ -1214,6 +1220,8 @@
       $('#cancel-share-icon').hide();
       shareFlag = 0;
       $('.content-body').removeClass('btn-active2').removeClass('btn-active');
+      $('.content-wrap').find('.bqts2').remove();
+
     }).on('click','#close-share',function(){
       $('.share-dialog').hide();
     }).on('click','#build-share',function(){
@@ -1227,7 +1235,7 @@
       versionRequest();
     });
 
-    $('svg-name').on('change',function(){
+    $('#svg-name').on('change',function(){
       saveSvg[controli].name = encodeURIComponent($(this).val());
       versionRequest();
     })
@@ -1516,7 +1524,7 @@
         '</div>',
       '</div>',
       '<div class="upload-svg-button">',
-        '<span>',
+        '<span>' + i18.m62,
         '<select id="upload-project" ></select>',
         '</span>',
         '<div style="float:right;">',
