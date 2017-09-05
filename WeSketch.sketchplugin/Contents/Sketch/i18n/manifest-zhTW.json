@@ -3,85 +3,92 @@
   "author": "Tencent WeChat",
   "version": "1.2.0",
   "identifier": "cn.wechat",
-  "description": "A set of plugins for Sketch include drawing links & marks,UI Kit & Color sync,font & text replacing",
+  "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon": "minicon.png",
   "language_name": "Traditional Chinese(zhTW)",
   "language_author": "Tencent WeChat Team",
   "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
-  "commands": [
+  "commands" : [
     {
       "handlers": {
-        "actions": {
-          "OpenDocument": "onOpenDocument"
-        }
-      },
-      "noshortcut": "true",
+              "actions": {
+                  "OpenDocument" : "onOpenDocument"
+              }
+          },
+      "noshortcut":"true",
       "script": "onAction.js"
     },
     {
-      "name": "互動連線",
-      "identifier": "link",
-      "script": "link.js",
+      "name" : "交互連線",
+      "identifier" : "link",
+      "script" : "link.js",
       "icon": "../Resources/icons/link.png",
       "shortcut": "command shift 1",
-      "istool": "true",
-      "handlers": {
-        "run": "onRun"
+      "istool":"true",
+      "handlers" : {
+        "run" : "onRun"
       }
     },
     {
-      "name": "注釋標記",
-      "identifier": "flag",
-      "script": "flag.js",
+      "name" : "註釋標記",
+      "identifier" : "flag",
+      "script" : "flag.js",
       "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
-      "handler": "onRun",
-      "istool": "true"
+      "handler" : "onRun",
+      "istool":"true",
     },
     {
-      "name" : "Set Index",
+      "name" : "設為起始頁",
       "identifier" : "setIndex",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setIndex"
     },
     {
-      "name" : "Set Dialog",
+      "name" : "設為彈出層",
       "identifier" : "setDialog",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setDialog"
     },
     {
-      "name" : "Set Fixed",
+      "name" : "設為浮動元素",
       "identifier" : "setFixed",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setFixed"
     },
     {
-      "name" : "Set Back",
+      "name" : "設為返回功能",
       "identifier" : "setBacks",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setBacks"
     },
     {
-      "name" : "Clear",
+      "name" : "設為透明元素",
+      "identifier" : "setNoBuild",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setNoBuild"
+    },
+    {
+      "name" : "清楚設置",
       "identifier" : "previewClear",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "clearPreview"
     },
     {
-      "name" : "显示/隐藏",
+      "name" : "顯示/隱藏",
       "identifier" : "previewHide",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "hidePreview"
     },
     {
-      "name" : "local Preview",
+      "name" : "生成本地預覽",
       "identifier" : "localPreview",
       "script" : "localPreview.js",
       "shortcut": "",
@@ -89,14 +96,14 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Web Preview",
+      "name" : "生成在線預覽",
       "identifier" : "webPreview",
       "script" : "webPreview.js",
       "shortcut": "",
       "handler" : "onRun"
     },
     {
-      "name" : "preview Toolbar",
+      "name" : "預覽工具箱",
       "identifier" : "previewToolbar",
       "script" : "previewToolbar.js",
       "shortcut": "",
@@ -113,13 +120,13 @@
       "istool":"true"
     },
     {
-      "name": "圖標庫",
-      "identifier": "iconQ",
-      "script": "iconQ.js",
+      "name" : "圖標庫",
+      "identifier" : "iconQ",
+      "script" : "iconQ.js",
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
       "name" : "特殊字符",
@@ -130,262 +137,263 @@
       "handler" : "onRun"
     },
     {
-      "name": "字體批量替換",
-      "identifier": "fontReplace",
-      "script": "fontReplace.js",
+      "name" : "字體批量替換",
+      "identifier" : "fontReplace",
+      "script" : "fontReplace.js",
       "icon": "../Resources/icons/font.png",
       "shortcut": "",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "文字批量替換",
-      "identifier": "textReplace",
-      "script": "textReplace.js",
+      "name" : "文本批量替換",
+      "identifier" : "textReplace",
+      "script" : "textReplace.js",
       "icon": "../Resources/icons/text.png",
       "shortcut": "command shift f",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "顏色批量替換",
-      "identifier": "colorReplace",
-      "script": "colorReplace.js",
+      "name" : "顏色批量替換",
+      "identifier" : "colorReplace",
+      "script" : "colorReplace.js",
       "icon": "../Resources/icons/color.png",
       "shortcut": "",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "上傳圖標",
-      "identifier": "uploadIcon",
-      "script": "uploadIcon.js",
+      "name" : "上傳圖標",
+      "identifier" : "uploadIcon",
+      "script" : "uploadIcon.js",
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
-      "istool": "",
-      "noshortcut": "true",
-      "handler": "onRun"
+      "istool":"",
+      "noshortcut":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "同步UI Kit",
-      "identifier": "syncuikit",
-      "script": "syncUIkit.js",
+      "name" : "同步 UI Kit",
+      "identifier" : "syncuikit",
+      "script" : "syncUIkit.js",
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "導入UI Kit",
-      "identifier": "importuikit",
-      "script": "importUIkit.js",
+      "name" : "導入 UI Kit",
+      "identifier" : "importuikit",
+      "script" : "importUIkit.js",
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
-      "istool": "",
-      "handler": "onRun"
+      "istool":"",
+      "handler" : "onRun"
     },
     {
-      "name": "匯出UI Kit",
-      "identifier": "exportuikit",
-      "script": "exportUIkit.js",
+      "name" : "導出 UI Kit",
+      "identifier" : "exportuikit",
+      "script" : "exportUIkit.js",
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
-      "istool": "",
-      "handler": "onRun"
+      "istool":"",
+      "handler" : "onRun"
     },
     {
-      "name": "同步色板",
-      "identifier": "synccolor",
-      "script": "syncColor.js",
+      "name" : "同步色板",
+      "identifier" : "synccolor",
+      "script" : "syncColor.js",
       "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "匯出色板",
-      "identifier": "exportcolor",
-      "script": "exportColor.js",
+      "name" : "導出色板",
+      "identifier" : "exportcolor",
+      "script" : "exportColor.js",
       "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
-      "istool": "",
-      "handler": "onRun"
+      "istool":"",
+      "handler" : "onRun"
     },
     {
-      "name": "導入色板",
-      "identifier": "importcolor",
-      "script": "importColor.js",
+      "name" : "導入色板",
+      "identifier" : "importcolor",
+      "script" : "importColor.js",
       "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
-      "istool": "",
-      "handler": "onRun"
+      "istool":"",
+      "handler" : "onRun"
     },
     {
-      "name": "快捷取色",
-      "identifier": "codeColor",
-      "script": "codeColor.js",
+      "name" : "快捷取色",
+      "identifier" : "codeColor",
+      "script" : "codeColor.js",
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "生成程式碼",
-      "identifier": "codeStyle",
-      "script": "codeStyle.js",
+      "name" : "生成代碼",
+      "identifier" : "codeStyle",
+      "script" : "codeStyle.js",
       "icon": "../Resources/icons/codeStyle.png",
       "shortcut": "command shift d",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "自定義寬高匯出",
-      "identifier": "exportSlice",
-      "script": "exportSlice.js",
+      "name" : "自定義寬高導出",
+      "identifier" : "exportSlice",
+      "script" : "exportSlice.js",
       "icon": "../Resources/icons/cut.png",
       "shortcut": "command shift u",
-      "istool": "true",
-      "handler": "onRun"
+      "istool":"true",
+      "handler" : "onRun"
     },
     {
-      "name": "└—設定",
-      "identifier": "codeSetting",
-      "script": "codeSetting.js",
+      "name" : " └─ 設置",
+      "identifier" : "codeSetting",
+      "script" : "codeSetting.js",
       "shortcut": "",
-      "handler": "onRun",
-      "istool": "",
-      "noshortcut": "true"
+      "handler" : "onRun",
+      "istool":"",
+      "noshortcut":"true"
     },
     {
-      "name": "└—設定",
-      "identifier": "syncSetting",
-      "script": "syncSetting.js",
+      "name" : " └─ 設置",
+      "identifier" : "syncSetting",
+      "script" : "syncSetting.js",
       "shortcut": "",
-      "handler": "onRun",
-      "istool": "",
-      "noshortcut": "true"
+      "handler" : "onRun",
+      "istool":"",
+      "noshortcut":"true"
     },
     {
-      "name": "工具列",
-      "identifier": "toolbar",
-      "script": "toolbar.js",
+      "name" : "工具欄",
+      "identifier" : "toolbar",
+      "script" : "toolbar.js",
       "shortcut": "",
-      "istool": "",
-      "handlers": {
-        "run": "onRunToolBar"
+      "istool":"",
+      "handlers" : {
+        "run" : "onRunToolBar"
       }
     },
     {
-      "name": "設定",
-      "identifier": "setting",
-      "script": "setting.js",
+      "name" : "設置",
+      "identifier" : "setting",
+      "script" : "setting.js",
       "shortcut": "",
-      "handler": "onRun",
-      "istool": "",
-      "noshortcut": "true"
+      "handler" : "onRun",
+      "istool":"",
+      "noshortcut":"true"
     },
     {
-      "name": "└—設定",
-      "identifier": "toolSetting",
-      "script": "toolSetting.js",
+      "name" : " └─ 設置",
+      "identifier" : "toolSetting",
+      "script" : "toolSetting.js",
       "shortcut": "",
-      "handler": "onRun",
-      "istool": "",
-      "noshortcut": "true"
+      "handler" : "onRun",
+      "istool":"",
+      "noshortcut":"true"
     },
     {
-      "name": "檢查更新",
-      "identifier": "checkforupdate",
-      "script": "checkForUpdate.js",
+      "name" : "檢查更新",
+      "identifier" : "checkforupdate",
+      "script" : "checkForUpdate.js",
       "shortcut": "",
-      "istool": "",
-      "handler": "onRun",
-      "noshortcut": "true"
+      "istool":"",
+      "handler" : "onRun",
+      "noshortcut":"true"
     },
     {
-      "name": "官網",
-      "identifier": "about",
-      "script": "about.js",
+      "name" : "官網",
+      "identifier" : "about",
+      "script" : "about.js",
       "shortcut": "",
-      "handler": "onRun",
-      "istool": "",
-      "noshortcut": "true"
+      "handler" : "onRun",
+      "istool":"",
+      "noshortcut":"true"
     },
     {
-      "name": "迴響",
-      "identifier": "issues",
-      "script": "issues.js",
+      "name" : "反饋",
+      "identifier" : "issues",
+      "script" : "issues.js",
       "shortcut": "",
-      "istool": "",
-      "handler": "onRun",
-      "noshortcut": "true"
+      "istool":"",
+      "handler" : "onRun",
+      "noshortcut":"true"
     }
   ],
   "menu": {
     "items": [
-      {
-        "title": "管理UI Kit",
+    {
+        "title": "UI Kit",
         "items": [
-          "syncuikit",
-          "importuikit",
-          "exportuikit"
+            "syncuikit",
+            "importuikit",
+            "exportuikit"
         ]
-      },
-      {
-        "title": "管理色板",
+    },
+    {
+        "title": "Color Set",
         "items": [
-          "synccolor",
-          "importcolor",
-          "exportcolor"
+            "synccolor",
+            "importcolor",
+            "exportcolor"
         ]
-      },
-      "syncSetting",
-      "-",
-      "iconQ",
-      "-",
-      "link",
-      "flag",
-      "toolSetting",
-      "-",
-      {
-        "title": "Preview",
-        "items": [
-          "setIndex",
-          "setDialog",
-          "setBacks",
-          "setFixed",
-          "previewClear",
-          "previewHide",
-          "localPreview",
-          "webPreview",
-          "-",
-          "previewToolbar"
-        ]
-      },
-      "-",
-      "sortingLayers",
-      "textReplace",
-      "colorReplace",
-      "fontReplace",
-      "fontCharacters",
-      "-",
-      "codeColor",
-      "exportSlice",
-      "codeStyle",
-      "codeSetting",
-      "-",
-      "toolbar",
-      "-",
-      "setting",
-      {
+    },
+    "syncSetting",
+    "-",
+    "iconQ",
+    "-",
+    "link",
+    "flag",
+    "toolSetting",
+    "-",
+    {
+      "title": "生成真機預覽",
+      "items": [
+        "setIndex",
+        "setDialog",
+        "setBacks",
+        "setFixed",
+        "setNoBuild",
+        "previewClear",
+        "previewHide",
+        "localPreview",
+        "webPreview",
+        "-",
+        "previewToolbar"
+      ]
+    },
+    "-",
+    "sortingLayers",
+    "textReplace",
+    "colorReplace",
+    "fontReplace",
+    "fontCharacters",
+    "-",
+    "codeColor",
+    "exportSlice",
+    "codeStyle",
+    "codeSetting",
+    "-",
+    "toolbar",
+    "-",
+    "setting",
+    {
         "title": "關於",
         "items": [
-          "about",
-          "issues"
+            "about",
+            "issues"
         ]
-      },
-      "checkforupdate"
+    },
+    "checkforupdate"
     ],
-    "title": "WeSketch"
+    "title":"WeSketch"
   }
 }

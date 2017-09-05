@@ -3,10 +3,10 @@
   "author": "Tencent WeChat",
   "version": "1.2.0",
   "identifier": "cn.wechat",
-  "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
-  "icon" : "minicon.png",
+  "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
+  "icon": "minicon.png",
   "language_name": "Simplified Chinese(zhCN)",
-  "language_author": "doubleluo",
+  "language_author": "Tencent WeChat Team",
   "appcast": "http://wximg.qq.com/tmt/sketch/appcast.xml",
   "commands" : [
     {
@@ -39,35 +39,42 @@
       "istool":"true",
     },
     {
-      "name" : "Set Index",
+      "name" : "设为起始页",
       "identifier" : "setIndex",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setIndex"
     },
     {
-      "name" : "Set Dialog",
+      "name" : "设为弹出层",
       "identifier" : "setDialog",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setDialog"
     },
     {
-      "name" : "Set Fixed",
+      "name" : "设为浮动元素",
       "identifier" : "setFixed",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setFixed"
     },
     {
-      "name" : "Set Back",
+      "name" : "设为返回功能",
       "identifier" : "setBacks",
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setBacks"
     },
     {
-      "name" : "Clear",
+      "name" : "设为透明元素",
+      "identifier" : "setNoBuild",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setNoBuild"
+    },
+    {
+      "name" : "清楚设置",
       "identifier" : "previewClear",
       "script" : "commonPreview.js",
       "shortcut": "",
@@ -81,7 +88,7 @@
       "handler" : "hidePreview"
     },
     {
-      "name" : "local Preview",
+      "name" : "生成本地预览",
       "identifier" : "localPreview",
       "script" : "localPreview.js",
       "shortcut": "",
@@ -89,14 +96,14 @@
       "handler" : "onRun"
     },
     {
-      "name" : "Web Preview",
+      "name" : "生成在线预览",
       "identifier" : "webPreview",
       "script" : "webPreview.js",
       "shortcut": "",
       "handler" : "onRun"
     },
     {
-      "name" : "preview Toolbar",
+      "name" : "预览工具箱",
       "identifier" : "previewToolbar",
       "script" : "previewToolbar.js",
       "shortcut": "",
@@ -348,12 +355,13 @@
     "toolSetting",
     "-",
     {
-      "title": "Preview",
+      "title": "生成真机预览",
       "items": [
         "setIndex",
         "setDialog",
         "setBacks",
         "setFixed",
+        "setNoBuild",
         "previewClear",
         "previewHide",
         "localPreview",
@@ -378,7 +386,7 @@
     "-",
     "setting",
     {
-        "title": "About",
+        "title": "关于",
         "items": [
             "about",
             "issues"

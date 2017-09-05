@@ -3,8 +3,8 @@
   "author": "Tencent WeChat",
   "version": "1.2.0",
   "identifier": "cn.wechat",
-  "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
-  "icon" : "minicon.png",
+  "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
+  "icon": "minicon.png",
   "language_name": "English(US)",
   "language_author": "hzlzh",
   "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
@@ -65,6 +65,13 @@
       "script" : "commonPreview.js",
       "shortcut": "",
       "handler" : "setBacks"
+    },
+    {
+      "name" : "Set Transparent",
+      "identifier" : "setNoBuild",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setNoBuild"
     },
     {
       "name" : "Clear",
@@ -348,12 +355,13 @@
     "toolSetting",
     "-",
     {
-      "title": "Preview",
+      "title": "Generate Preview",
       "items": [
         "setIndex",
         "setDialog",
         "setBacks",
         "setFixed",
+        "setNoBuild",
         "previewClear",
         "previewHide",
         "localPreview",
