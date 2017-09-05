@@ -266,7 +266,7 @@ function iconQ(context){
                 NSApp.displayDialog(i18.m17+ data.code +i18.m18);
             }else if(data.type == 'share'){
                 var d = downloadZip(data);
-                var address = 'http://123.207.94.56:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName + '&' + 'remark=' + (data.message);
+                var address = 'https://sketch.weapi.io/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName + '&' + 'remark=' + (data.message);
                 paste(address);
                 NSApp.displayDialog(i18.m19 + address + i18.m18);
             }else if(data.type == 'displayDialog'){
