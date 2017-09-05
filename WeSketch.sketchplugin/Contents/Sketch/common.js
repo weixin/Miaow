@@ -133,6 +133,19 @@ function encodeData(jsonData){
     return result;
 }
 
+function get(args){
+    var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
+    var returnData = networkRequest([iconQueryUrl + args[0] + '?sig='+ sig + '&' + args[1]]);
+    var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    jsonData = JSON.parse(jsonData);
+    if(jsonData.status == 200){
+        return jsonData;
+    }else{
+        NSApp.displayDialog(jsonData.msg);
+        return jsonData;
+    }
+}
+
 function post(args){
     var sig = NSUserDefaults.standardUserDefaults().objectForKey(loginKey);
     var returnData = networkRequest(['-d','sig='+ sig + '&' + args[1],iconQueryUrl + args[0]]);
@@ -299,9 +312,9 @@ function SMPanel(options){
     Panel.setFrame_display(frame, false);
     Panel.setBackgroundColor(contentBgColor);
 
-    var contentView = Panel.contentView(),
-        webView = WebView.alloc().initWithFrame(NSMakeRect(0, 0, options.width, options.height)),
-        windowObject = webView.windowScriptObject(),
+    var contentView = Panel.contentView();
+    var webView = WebView.alloc().initWithFrame(NSMakeRect(options.showX?options.showX:0, options.showY?options.showY:0, options.width, options.height));
+    var windowObject = webView.windowScriptObject(),
         delegate = new MochaJSDelegate({
             "webView:didFinishLoadForFrame:": (function(webView, webFrame){
                     var SMAction = [
@@ -371,7 +384,8 @@ function SMPanel(options){
                         windowObject.evaluateWebScript("inputFile('"+file_path+"')");
                         windowObject.evaluateWebScript("window.location.hash = '';");
                     }else if(request == 'login'){
-                        options.loginCallback(windowObject);
+                        var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
+                        options.loginCallback(data,windowObject);
                     }else if(request == 'pushdata'){
                         var data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
                         options.pushdataCallback(data,windowObject);
@@ -395,10 +409,9 @@ function SMPanel(options){
     closeButton.setCOSJSTargetFunction(function(sender) {
         var request = NSURL.URLWithString(webView.mainFrameURL()).fragment();
 
-        // if(options.floatWindow && request == "submit"){
-        //     data = JSON.parse(decodeURI(windowObject.valueForKey("SMData")));
-        //     options.callback(data);
-        // }
+        if(options.closeCallback){
+            options.closeCallback();
+        }
 
         if(options.identifier){
             threadDictionary.removeObjectForKey(options.identifier);
@@ -428,7 +441,9 @@ function SMPanel(options){
     if(options.floatWindow){
         Panel.becomeKeyWindow();
         Panel.setLevel(NSFloatingWindowLevel);
-        Panel.center();
+        if(!options.showX || !options.showY){
+            Panel.center();
+        }
         Panel.makeKeyAndOrderFront(nil);
         if(options.identifier){
             threadDictionary[options.identifier] = Panel;

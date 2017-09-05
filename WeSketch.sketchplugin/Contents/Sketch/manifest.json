@@ -1,10 +1,10 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "identifier": "cn.wechat",
-  "description" : "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
-  "icon" : "minicon.png",
+  "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
+  "icon": "minicon.png",
   "language_name": "English(US)",
   "language_author": "hzlzh",
   "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
@@ -39,6 +39,79 @@
       "istool":"true"
     },
     {
+      "name" : "Set Index",
+      "identifier" : "setIndex",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setIndex"
+    },
+    {
+      "name" : "Set Dialog",
+      "identifier" : "setDialog",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setDialog"
+    },
+    {
+      "name" : "Set Fixed",
+      "identifier" : "setFixed",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setFixed"
+    },
+    {
+      "name" : "Set Back",
+      "identifier" : "setBacks",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setBacks"
+    },
+    {
+      "name" : "Set Transparent",
+      "identifier" : "setNoBuild",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "setNoBuild"
+    },
+    {
+      "name" : "Clear",
+      "identifier" : "previewClear",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "clearPreview"
+    },
+    {
+      "name" : "Show/Hide",
+      "identifier" : "previewHide",
+      "script" : "commonPreview.js",
+      "shortcut": "",
+      "handler" : "hidePreview"
+    },
+    {
+      "name" : "local Preview",
+      "identifier" : "localPreview",
+      "script" : "localPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "Web Preview",
+      "identifier" : "webPreview",
+      "script" : "webPreview.js",
+      "shortcut": "",
+      "handler" : "onRun"
+    },
+    {
+      "name" : "preview Toolbar",
+      "identifier" : "previewToolbar",
+      "script" : "previewToolbar.js",
+      "shortcut": "",
+      "istool":"",
+      "istool":"",
+      "handler" : "onRunPreviewToolBar"
+    },
+    {
       "name" : "Layer Order Organize",
       "identifier" : "sortingLayers",
       "script" : "sortingLayers.js",
@@ -53,7 +126,7 @@
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
+      "handler" : "iconQRun"
     },
     {
       "name" : "Advanced Font Replace",
@@ -161,13 +234,6 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
-      "handler" : "onRun"
-    },
-    {
-      "name" : "Web Preview",
-      "identifier" : "h5Preview",
-      "script" : "h5Preview.js",
-      "shortcut": "",
       "handler" : "onRun"
     },
     {
@@ -287,6 +353,23 @@
     "link",
     "flag",
     "toolSetting",
+    "-",
+    {
+      "title": "Generate Preview",
+      "items": [
+        "setIndex",
+        "setDialog",
+        "setBacks",
+        "setFixed",
+        "setNoBuild",
+        "previewClear",
+        "previewHide",
+        "localPreview",
+        "webPreview",
+        "-",
+        "previewToolbar"
+      ]
+    },
     "-",
     "sortingLayers",
     "textReplace",
