@@ -703,20 +703,6 @@
       height: 60px;
       margin-bottom: 10px;
     }
-    .content-body_hover:before{
-      content: "Export";
-      color:white;
-      text-align: center;
-      font-size: 14px;
-      line-height: 60px;
-      position: absolute;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background-color: rgba(0,0,0,0.3);
-      box-sizing:border-box;
-    }
     </style>
   </head>
   <body>
@@ -969,10 +955,20 @@
         choicedata = saveversion[i];
       }
       var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
-      choicedata.type = 'private';
-      choicedata.height = parseInt(twh[1]);
-      choicedata.width = parseInt(twh[0]);
-      SMAction('submit',choicedata);
+      if(projectID == ''){
+        var width = $('#size').val();
+        choicedata.width = parseInt(width);
+        choicedata.height = parseInt(width * twh[1] / twh[0]);
+        choicedata.color = $('#color').val();
+        choicedata.type = 'public';
+        SMAction('submit',choicedata);
+      }else{
+        choicedata.type = 'private';
+        choicedata.height = parseInt(twh[1]);
+        choicedata.width = parseInt(twh[0]);
+        SMAction('submit',choicedata);
+      }
+      
     }).on('click','.content-body',function(){
       if(shareFlag){
         var $this = $(this);
@@ -1002,19 +998,8 @@
         }
       }else{
         if(projectID == ''){
-          var i = parseInt($(this).attr('data-i'));
-          choicedata = savedata[i];
-          var isVersion  = $(this).attr('data-version')?true:false;
-          if(isVersion){
-            choicedata = saveversion[i];
-          }
-          var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
-          var width = $('#size').val();
-          choicedata.width = parseInt(width);
-          choicedata.height = parseInt(width * twh[1] / twh[0]);
-          choicedata.color = $('#color').val();
-          choicedata.type = 'public';
-          SMAction('submit',choicedata);
+          $('.content-body').removeClass('btn-active');
+          $(this).addClass('btn-active');
         }else{
           var i = parseInt($(this).attr('data-i'));
           var datamessage = savedata[i];
@@ -1038,7 +1023,8 @@
             $('.private-message-span1').css('display', 'inline-block');
             $('.private-remark').text(i18.m44+(datamessage.remarks==null?'':datamessage.remarks));
           }else{
-            $('#author').text(i18.m16+'：'+savedata[i].author);
+            $('.content-body').removeClass('btn-active');
+            $(this).addClass('btn-active');
           }
         }
       }
@@ -1047,8 +1033,6 @@
       var datamessage = savedata[i];
       if(!datamessage.version){
         $('#author').text(i18.m16+'：'+savedata[i].author);
-        $('.content-body').removeClass('btn-active').removeClass('content-body_hover');
-        $(this).addClass('btn-active').addClass('content-body_hover');
       }
     })
 
@@ -1203,7 +1187,7 @@
       shareFlag = 1;
       shareArray = [];
       shareArrayDom = [];
-      $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+      $('.content-body').removeClass('btn-active2').removeClass('btn-active');
     }).on('click','#confirm-share-icon',function(){
 
       if(shareArray == 0){
@@ -1217,7 +1201,7 @@
       $('#confirm-share-icon').hide();
       $('#cancel-share-icon').hide();
       shareFlag = 0;
-      $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+      $('.content-body').removeClass('btn-active2').removeClass('btn-active');
 
       $('.share-dialog').show();
       appendDom4();
@@ -1229,7 +1213,7 @@
       $('#confirm-share-icon').hide();
       $('#cancel-share-icon').hide();
       shareFlag = 0;
-      $('.content-body').removeClass('btn-active2').removeClass('btn-active').removeClass('content-body_hover');
+      $('.content-body').removeClass('btn-active2').removeClass('btn-active');
     }).on('click','#close-share',function(){
       $('.share-dialog').hide();
     }).on('click','#build-share',function(){

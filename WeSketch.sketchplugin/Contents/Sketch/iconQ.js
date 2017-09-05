@@ -270,8 +270,7 @@ function iconQ(context){
                 paste(address);
                 NSApp.displayDialog(i18.m19 + address + i18.m18);
             }else if(data.type == 'displayDialog'){
-                NSApp.displayDialog(i18.m64);
-
+                NSApp.displayDialog(data.data);
             }
         },loginCallback:function(data,windowObject){
             var result;
