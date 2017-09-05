@@ -240,7 +240,7 @@
 	"iconQ":{
 		"m1":"Icon exported",
 		"m2":"Icon exported (Pages Center)",
-		"m3":"Icons from the Internet, Copyright is owned by it's author",
+		"m3":"Note: Double click icon to import",
 		"m4":"Login",
 		"m5":"Exit",
 		"m6":"Public",
@@ -302,10 +302,11 @@
 		"m62":"Porject Name",
 		"m63":"Manager Project",
 		"m64":"Invite Code",
-		"m65":"请点选需要分享的图标",
-		"m66":"删除项目 ",
-		"m67":"确定删除此项目吗？",
-		"m68":"删除成功",
-		"m69":"删除项目之后无法恢复，成员也无法再看见，谨慎操作"
+		"m65":"Click choose icons to share",
+		"m66":"Delete Project ",
+		"m67":"Do you sure to delete Project?",
+		"m68":"Delete Successfully!",
+		"m69":"Waring! Deleted files can not be restored.",
+		"m70":"Note: Click to choose icon for package"
 	}
 }
