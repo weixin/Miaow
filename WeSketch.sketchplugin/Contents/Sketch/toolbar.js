@@ -275,8 +275,9 @@ function toolbar(context,auto){
 
         threadDictionary[identifier] = Toolbar;
         Toolbar.makeKeyAndOrderFront(nil);
-    }else{
-        
+    }else if(Toolbar && !auto){
+        threadDictionary.removeObjectForKey(identifier);
+        Toolbar.close();
     }
 }
 

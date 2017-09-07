@@ -96,12 +96,6 @@
         '<select id="i18n"></select>',
         '</div>',
         '<div class="title">',
-          i18.m3,
-        '</div>',
-        '<div>',
-          '<input type="checkbox" id="updateauto"/><label for="updateauto">'+i18.m4+'</label>',
-        '</div>',
-        '<div class="title">',
           i18.m5,
         '</div>',
         '<div>',
@@ -157,12 +151,11 @@
 
     function domEvent(){
       $('.savebutton').on('click',function(){
-        var updateauto = $('#updateauto').is(':checked')?'true':'false';
         var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
         var language = $("#i18n").val();
         var obj = {};
         obj.keydata = keydata;
-        obj.updateAuto = updateauto;
+        obj.updateAuto = false;
         obj.toolbarAuto = toolbarauto;
         obj.language = language;
         SMAction('submit',obj);

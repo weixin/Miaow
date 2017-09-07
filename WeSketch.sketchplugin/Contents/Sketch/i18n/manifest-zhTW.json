@@ -276,7 +276,7 @@
       "name" : "工具欄",
       "identifier" : "toolbar",
       "script" : "toolbar.js",
-      "shortcut": "",
+      "shortcut": "command shift k",
       "istool":"",
       "handlers" : {
         "run" : "onRunToolBar"
@@ -391,8 +391,7 @@
             "about",
             "issues"
         ]
-    },
-    "checkforupdate"
+    }
     ],
     "title":"WeSketch"
   }
