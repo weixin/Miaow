@@ -1,3 +1,5 @@
+@import "common.js"
+
 function fontReplace(context){
     var i18 = _(context).fontReplace;
 
@@ -24,7 +26,9 @@ function fontReplace(context){
 
     function userInterfaceLoop() {
         var modal = createUserInterface();
-        uiResponse = processButtonClick(modal, modal.runModal());
+        if(modal){
+            uiResponse = processButtonClick(modal, modal.runModal());
+        }
 
     }
 
@@ -32,6 +36,7 @@ function fontReplace(context){
     function createUserInterface() {
         if (includedFontName.length == 0) {
             doc.showMessage(i18.m1);
+            return false;
         } else {
             userInterface = COSAlertWindow.new();
             userInterface.setMessageText(i18.m2);

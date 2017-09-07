@@ -1,7 +1,7 @@
 {
   "name": "WeSketch",
   "author": "Tencent WeChat",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "identifier": "cn.wechat",
   "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon": "minicon.png",
@@ -331,7 +331,7 @@
   "menu": {
     "items": [
     {
-        "title": "UI Kit",
+        "title": "UI Kit 同步",
         "items": [
             "syncuikit",
             "importuikit",
@@ -339,7 +339,7 @@
         ]
     },
     {
-        "title": "Color Set",
+        "title": "顏色同步",
         "items": [
             "synccolor",
             "importcolor",

@@ -225,11 +225,12 @@ function iconQ(context){
                 var importedSVGLayer = svgImporter.importAsLayer();
                 var svgFrame = importedSVGLayer.frame();
                 importedSVGLayer.name = data.name;
-                var oldWidth = svgFrame.width();
-                var oldHeight = svgFrame.height();
-                [svgFrame setWidth:data.width];
-                svgFrame.setHeight(data.width*oldHeight/oldWidth);
+                
                 if(data.type == 'public'){
+                    var oldWidth = svgFrame.width();
+                    var oldHeight = svgFrame.height();
+                    [svgFrame setWidth:data.width];
+                    svgFrame.setHeight(data.width*oldHeight/oldWidth);
                     var children = importedSVGLayer.children();
                     var colorToReplace = hexToRgb(data.color);
                     for(var j = 0;j<children.length;j++){

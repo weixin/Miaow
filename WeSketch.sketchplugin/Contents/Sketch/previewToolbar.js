@@ -4,6 +4,7 @@
 @import 'webPreview.js';
 
 function previewToolbar(context){
+    var i18 = _(context).toolbar;
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library");
     var identifier = "com.sketchplugins.wechat.previewtoolbar",
         threadDictionary = NSThread.mainThread().threadDictionary(),

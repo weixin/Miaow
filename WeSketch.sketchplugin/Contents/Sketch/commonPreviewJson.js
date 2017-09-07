@@ -191,10 +191,10 @@ var commonPreviewJson = function(context,filePath){
 			var index = [fx tag];
 			if(index == 0){
 				fxstyle = 'default';
-				fxlocal = '-20px';
+				fxlocal = '-20';
 			}else if(index == 1){
 				fxstyle = 'black';
-				fxlocal = '-20px';
+				fxlocal = '-20';
 			}else if(index == 2){
 				fxstyle = 'black-translucent';
 			}
@@ -203,7 +203,7 @@ var commonPreviewJson = function(context,filePath){
     	var htmlPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("preview.html").path();
         var previewData = NSData.dataWithContentsOfFile(htmlPath);
         previewData = [[NSString alloc] initWithData:previewData encoding:NSUTF8StringEncoding];
-		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson)).replace('{{barstyle}}',fxstyle).replace('{{local}}',fxlocal);
+		previewData = previewData.replace('{{json}}',JSON.stringify(exportSVGJson)).replace('{{barstyle}}',fxstyle).replace(/{{local}}/ig,fxlocal);
         writeFile({content:previewData,path:filePath,fileName:'index.html'})
 	}
 

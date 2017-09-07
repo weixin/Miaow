@@ -16,12 +16,10 @@
 
 
 function toolbar(context,auto){
+    var i18 = _(context).toolbar;
     var i18nKey = "com.sketchplugins.wechat.i18n";
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
     var prefix = '-'+lang.toString();
-
-    var i18 = _(context).toolbar;
-
 
     var toolbarAutoShow = "com.sketchplugins.wechat.toolbarautoshow";
     var toolbarAuto = NSUserDefaults.standardUserDefaults().objectForKey(toolbarAutoShow) || '';
