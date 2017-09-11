@@ -2,7 +2,7 @@
 //author sonburn
 //https://github.com/sonburn/symbol-organizer
 
-var Organizer = function(context) {
+var Organizer = function (context) {
 	// Document variables
 	var doc = context.document;
 	var command = context.command;
@@ -18,7 +18,7 @@ var Organizer = function(context) {
 	// If there are symbols...
 	else {
 		// Reset page origin
-		var pageOrigin = CGPointMake(0,0);
+		var pageOrigin = CGPointMake(0, 0);
 		page.setRulerBase(pageOrigin);
 
 		// Get layout settings
@@ -30,7 +30,7 @@ var Organizer = function(context) {
 			if (layoutSettings.removeSymbols == 1) {
 				var removedCount = 0;
 
-				for (var i=0; i < symbols.count(); i++) {
+				for (var i = 0; i < symbols.count(); i++) {
 					var symbol = symbols.objectAtIndex(i);
 
 					if (!symbol.hasInstances()) {
@@ -47,8 +47,10 @@ var Organizer = function(context) {
 			var layoutSymbols = page.artboards();
 
 			// Sort new symbols object by name
-			var sortByName = [NSSortDescriptor sortDescriptorWithKey:"name" ascending:1];
-			layoutSymbols = [layoutSymbols sortedArrayUsingDescriptors:[sortByName]];
+			var sortByName = [NSSortDescriptor sortDescriptorWithKey: "name"
+				ascending: 1
+			];
+			layoutSymbols = [layoutSymbols sortedArrayUsingDescriptors: [sortByName]];
 
 			// Duplicate the sorted symbol object, reverse the order if the user has selected to do so
 			var layoutLayers = (layoutSettings.sortOrder == 0) ? [[layoutSymbols reverseObjectEnumerator] allObjects] : layoutSymbols;
@@ -68,10 +70,10 @@ var Organizer = function(context) {
 				var symbolName = symbol.name();
 
 				// Determine a break point in the symbol name
-				var breakPoint = getCharPosition(symbolName,"/",layoutSettings.groupDepth+1);
+				var breakPoint = getCharPosition(symbolName, "/", layoutSettings.groupDepth + 1);
 
 				// Set a prefix for current group
-				var thisGroupPrefix = (breakPoint > 0) ? symbolName.slice(0,breakPoint) : symbolName.slice(0,symbolName.indexOf("/"));
+				var thisGroupPrefix = (breakPoint > 0) ? symbolName.slice(0, breakPoint) : symbolName.slice(0, symbolName.indexOf("/"));
 
 				// If this group prefix is not the same as last group
 				if (lastGroupPrefix != thisGroupPrefix) {
@@ -195,11 +197,11 @@ var Organizer = function(context) {
 
 	function getLayoutSettings() {
 		// Setting variables
-		var groupOptions = ['Label/','Label/Label/','Label/Label/Label/','Label/Label/Label/Label/'];
+		var groupOptions = ['Label/', 'Label/Label/', 'Label/Label/Label/', 'Label/Label/Label/Label/'];
 		var groupDepth = 1;
-		var sortOrderOptions = ['A-Z','Z-A'];
+		var sortOrderOptions = ['A-Z', 'Z-A'];
 		var sortOrder = 1;
-		var sortDirectionOptions = ['Horizontal','Vertical'];
+		var sortDirectionOptions = ['Horizontal', 'Vertical'];
 		var sortDirection = 0;
 		var xPad = '300';
 		var yPad = '300';
@@ -208,22 +210,23 @@ var Organizer = function(context) {
 
 
 		return {
-			groupDepth : groupDepth,
-			sortOrder : sortOrder,
-			sortDirection : sortDirection,
-			maxPer : maxPer,
-			xPad : xPad,
-			yPad : yPad,
-			removeSymbols : removeSymbols
+			groupDepth: groupDepth,
+			sortOrder: sortOrder,
+			sortDirection: sortDirection,
+			maxPer: maxPer,
+			xPad: xPad,
+			yPad: yPad,
+			removeSymbols: removeSymbols
 		}
 	}
-	function displayDialog(title,body) {
+
+	function displayDialog(title, body) {
 		var app = NSApplication.sharedApplication();
-		app.displayDialog_withTitle(body,title);
+		app.displayDialog_withTitle(body, title);
 	}
 
-	function getCharPosition(string,match,count) {
-		var position = string.split(match,count).join(match).length;
+	function getCharPosition(string, match, count) {
+		var position = string.split(match, count).join(match).length;
 
 		if (string.length() != position) {
 			return position;
@@ -233,13 +236,15 @@ var Organizer = function(context) {
 	function sortLayerList(layoutSymbols) {
 		var parent = page;
 		var indices = [];
-		var loop = [symbols objectEnumerator], symbol;
+		var loop = [symbols objectEnumerator],
+			symbol;
 
 		while (symbol = [loop nextObject]) {
 			indices.push(parent.indexOfLayer(symbol));
 		}
 
-		var removeLoop = [symbols objectEnumerator], symbolToRemove;
+		var removeLoop = [symbols objectEnumerator],
+			symbolToRemove;
 
 		while (symbolToRemove = [removeLoop nextObject]) {
 			[symbolToRemove removeFromParent];
@@ -248,8 +253,8 @@ var Organizer = function(context) {
 		for (var i = 0; i < indices.length; i++) {
 			var index = indices[i];
 			var sortedSymbol = layoutSymbols[i];
-			var layerArray = [NSArray arrayWithObject:sortedSymbol];
-			[parent insertLayers:layerArray atIndex:index];
+			var layerArray = [NSArray arrayWithObject: sortedSymbol];
+			[parent insertLayers: layerArray atIndex: index];
 		}
 
 		symbols = page.artboards();

@@ -1,254 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <link href="css/normalize.css" rel="stylesheet">
-    <style type="text/css">
-      body{
-        background-color: #f6f6f6;
-        font-size: 12px;
-      }
-      .toolbar{
-        background-color: #f1f1f1;
-        height:40px;
-        padding:0 20px;
-        position: fixed;
-        top:0;
-        width:100%;
-        box-sizing:border-box;
-      }
-      .ui-flex{
-        display: flex;
-      }
-      .ui-item{
-        flex:1;
-      }
-      .uikit-input,.color-input{
-        width:225px;
-      }
-      .list{
-        font-size:12px;
-        padding: 40px 0;
-      }
-      .list-item{
-        background-color: white;
-        padding:10px 20px;
-      }
-      .list-item + .list-item{
-        margin-top: 10px;
-      }
-      .add-button{
-        cursor: pointer;
-        font-size: 12px;
-        float:right;
-        padding: 0 15px;
-        background-color: red;
-        color:white;
-        border-radius: 5px;
-      }
-      .list-name{
-        width:60px;
-        padding-right:20px;
-      }
-      .list-name input{
-        width:100%;
-      }
-      .ui-icon{
-        padding: 0 0 0 10px;
-        display: flex;
-        justify-content:center;
-        align-items: center;
-      }
-      .icon-delete{
-        width:16px;
-        height:16px;
-        background-size: 100% 100%;
-        background: url(./img/delete.png);
-        cursor: pointer;
-      }
-      .label{
-        display: inline-block;
-        width:60px;
-      }
-      .colorwrap{
-        margin-top:5px;
-      }
 
-      .savebutton{
-        background:#3485f0;
-        color:white;
-        border: 1px solid #237fff;
-        border-radius: 4px;
-        padding:0 15px;
-        margin-right:20px;
-        float:right;
-        cursor: pointer;
-      }
-      .savebutton:active{
-        background: linear-gradient(0deg,#4c98fe 0%,#0466e3 100%);
-      }
-      .buttonwrap{
-        bottom:0;
-        padding: 10px 0;
-        width:100%;
-        box-sizing:border-box;
-        background: #f1f1f1;
-        position: fixed;
-      }
-      .choice-file{
-        display: inline-block;
-        width:20px;
-        height:20px;
-        margin-left:2px;
-        vertical-align: middle;
-        background-image: url(./img/folder.svg);
-      }
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <link href="css/normalize.css" rel="stylesheet">
+  <style type="text/css">
+    body {
+      background-color: #f6f6f6;
+      font-size: 12px;
+    }
 
-    </style>
-  </head>
-  <body >
+    .toolbar {
+      background-color: #f1f1f1;
+      height: 40px;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
- 
-    
+    .ui-flex {
+      display: flex;
+    }
+
+    .ui-item {
+      flex: 1;
+    }
+
+    .uikit-input,
+    .color-input {
+      width: 225px;
+    }
+
+    .list {
+      font-size: 12px;
+      padding: 40px 0;
+    }
+
+    .list-item {
+      background-color: white;
+      padding: 10px 20px;
+    }
+
+    .list-item+.list-item {
+      margin-top: 10px;
+    }
+
+    .add-button {
+      cursor: pointer;
+      font-size: 12px;
+      float: right;
+      padding: 0 15px;
+      background-color: red;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .list-name {
+      width: 60px;
+      padding-right: 20px;
+    }
+
+    .list-name input {
+      width: 100%;
+    }
+
+    .ui-icon {
+      padding: 0 0 0 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .icon-delete {
+      width: 16px;
+      height: 16px;
+      background-size: 100% 100%;
+      background: url(./img/delete.png);
+      cursor: pointer;
+    }
+
+    .label {
+      display: inline-block;
+      width: 60px;
+    }
+
+    .colorwrap {
+      margin-top: 5px;
+    }
+
+    .savebutton {
+      background: #3485f0;
+      color: white;
+      border: 1px solid #237fff;
+      border-radius: 4px;
+      padding: 0 15px;
+      margin-right: 20px;
+      float: right;
+      cursor: pointer;
+    }
+
+    .savebutton:active {
+      background: linear-gradient(0deg, #4c98fe 0%, #0466e3 100%);
+    }
+
+    .buttonwrap {
+      bottom: 0;
+      padding: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: #f1f1f1;
+      position: fixed;
+    }
+
+    .choice-file {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-left: 2px;
+      vertical-align: middle;
+      background-image: url(./img/folder.svg);
+    }
+  </style>
+</head>
+
+<body>
+
+
+
   <script type="text/javascript">
     var choiceFileDom;
     var i18;
 
-    function initDom(){
+    function initDom() {
       var dom = ['<div>',
         '<div class="toolbar">',
-          '<div style="overflow:hidden">',
-            '<div class="add-button" id="addlist">',
-              i18.m2,
-            '</div>',
-          '</div>',
-          '<div class="ui-flex">',
-            '<div class="list-name">'+i18.m3+'</div>',
-            '<div class="ui-item">'+i18.m4+'</div>',
-          '</div>',
+        '<div style="overflow:hidden">',
+        '<div class="add-button" id="addlist">',
+        i18.m2,
+        '</div>',
+        '</div>',
+        '<div class="ui-flex">',
+        '<div class="list-name">' + i18.m3 + '</div>',
+        '<div class="ui-item">' + i18.m4 + '</div>',
+        '</div>',
         '</div>',
         '<div class="list">',
         '</div>',
         '<div class="buttonwrap">',
-          '<div class="savebutton">'+i18.m5+'</div>',
+        '<div class="savebutton">' + i18.m5 + '</div>',
         '</div>',
-      '</div>'];
+        '</div>'
+      ];
       $('body').append(dom.join(''));
     }
-    
-    function listDom(data){
-      if(data){
+
+    function listDom(data) {
+      if (data) {
         var dom = '<div class="list-item ui-flex">' +
-        '<div class="list-name">' + 
-          '<input class="name-input" type="text" value="'+data.title+'"/>' +
-        '</div>'+
-        '<div class="ui-item">'+
-          '<div>'+
-            '<label class="label">UIKIT：</label>'+
-            '<input class="uikit-input" type="text" value="'+(data.uikit !='undefined'?data.uikit:'')+'"/>'+
-            '<div class="choice-file"></div>'+
-          '</div>'+
-          '<div class="colorwrap">'+
-            '<label class="label">COLOR：</label>'+
-            '<input class="color-input" type="text" value="'+(data.color !='undefined'?data.color:'')+'"/>'+
-            '<div class="choice-file"></div>'+
-          '</div>'+
-        '</div>'+
-        '<div class="ui-icon">'+
-          '<div class="icon-delete">'+
-          '</div>'+
-        '</div>' + 
-      '</div>';
-      $('.list').append(dom);
-      }else{
+          '<div class="list-name">' +
+          '<input class="name-input" type="text" value="' + data.title + '"/>' +
+          '</div>' +
+          '<div class="ui-item">' +
+          '<div>' +
+          '<label class="label">UIKIT：</label>' +
+          '<input class="uikit-input" type="text" value="' + (data.uikit != 'undefined' ? data.uikit : '') + '"/>' +
+          '<div class="choice-file"></div>' +
+          '</div>' +
+          '<div class="colorwrap">' +
+          '<label class="label">COLOR：</label>' +
+          '<input class="color-input" type="text" value="' + (data.color != 'undefined' ? data.color : '') + '"/>' +
+          '<div class="choice-file"></div>' +
+          '</div>' +
+          '</div>' +
+          '<div class="ui-icon">' +
+          '<div class="icon-delete">' +
+          '</div>' +
+          '</div>' +
+          '</div>';
+        $('.list').append(dom);
+      } else {
         var dom = '<div class="list-item ui-flex">' +
-        '<div class="list-name">' + 
+          '<div class="list-name">' +
           '<input class="name-input" type="text" value=""/>' +
-        '</div>'+
-        '<div class="ui-item">'+
-          '<div>'+
-            '<label class="label">UIKIT：</label>'+
-            '<input class="uikit-input" type="text"/>'+
-            '<div class="choice-file"></div>'+
-          '</div>'+
-          '<div class="colorwrap">'+
-            '<label class="label">COLOR：</label>'+
-            '<input class="color-input" type="text"/>'+
-            '<div class="choice-file"></div>'+
-          '</div>'+
-        '</div>'+
-        '<div class="ui-icon">'+
-          '<div class="icon-delete">'+
-          '</div>'+
-        '</div>' + 
-      '</div>'
-      $('.list').append(dom);
+          '</div>' +
+          '<div class="ui-item">' +
+          '<div>' +
+          '<label class="label">UIKIT：</label>' +
+          '<input class="uikit-input" type="text"/>' +
+          '<div class="choice-file"></div>' +
+          '</div>' +
+          '<div class="colorwrap">' +
+          '<label class="label">COLOR：</label>' +
+          '<input class="color-input" type="text"/>' +
+          '<div class="choice-file"></div>' +
+          '</div>' +
+          '</div>' +
+          '<div class="ui-icon">' +
+          '<div class="icon-delete">' +
+          '</div>' +
+          '</div>' +
+          '</div>'
+        $('.list').append(dom);
       }
     }
 
-    function eventDom(){
-      $('#addlist').click(function(){
+    function eventDom() {
+      $('#addlist').click(function () {
         listDom();
       })
-      $('body').on('click','.icon-delete',function(){
+      $('body').on('click', '.icon-delete', function () {
         $(this).parent().parent().remove();
-        if($('.list-item').length == 0){
+        if ($('.list-item').length == 0) {
           listDom();
         }
       })
 
 
-      $('body').on('click','.choice-file',function(){
+      $('body').on('click', '.choice-file', function () {
         choiceFileDom = $(this).prev('input');
-        SMAction('file');    
+        SMAction('file');
         return;
       })
 
-      $('.savebutton').click(function(){
+      $('.savebutton').click(function () {
         var savedom = $('.list-item');
         var saveData = [];
-        $('.list-item').each(function(i,dom){
+        $('.list-item').each(function (i, dom) {
           var title = $(dom).find('.name-input').val();
           var color = $(dom).find('.color-input').val();
           var uikit = $(dom).find('.uikit-input').val();
           saveData.push({
-            title:title,
-            color:color,
-            uikit:uikit
+            title: title,
+            color: color,
+            uikit: uikit
           })
-          
+
         })
-        SMAction('submit',{type:'save',data:saveData})
+        SMAction('submit', {
+          type: 'save',
+          data: saveData
+        })
         SMAction('close');
       })
     }
 
-    
 
-    var inputFile = function(data){
+
+    var inputFile = function (data) {
       choiceFileDom.val(data);
     }
 
-    var init = function(data){
+    var init = function (data) {
       i18 = data.i18;
       initDom();
       eventDom();
       var list = data.list;
-      for(var i = 0;i<list.length;i++){
+      for (var i = 0; i < list.length; i++) {
         listDom({
-          title:decodeURIComponent(list[i].title),
-          uikit:decodeURIComponent(list[i].uikit),
-          color:decodeURIComponent(list[i].color)
+          title: decodeURIComponent(list[i].title),
+          uikit: decodeURIComponent(list[i].uikit),
+          color: decodeURIComponent(list[i].color)
         });
       }
     }
-    window.onhashchange = function(){
+    window.onhashchange = function () {
       return false;
     }
   </script>
-  </body>
+</body>
+
 </html>

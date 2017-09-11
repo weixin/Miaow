@@ -1,6 +1,5 @@
 @import "common.js"
 
-var onRun = function(context) {
-    openUrlInBrowser("https://weixin.github.io/WeSketch");
+var onRun = function (context) {
+    openUrlInBrowser("https://github.com/weixin/WeSketch");
 };
-
