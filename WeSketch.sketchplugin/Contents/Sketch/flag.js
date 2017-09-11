@@ -231,7 +231,8 @@ function getFlag(context, refrush) {
 									isDeleteNum = getRightFlagNum(nowDom);
 								}
 							} else {
-								return false;
+								lastState = 'e';
+								isDrawNow = true;
 							}
 						}
 

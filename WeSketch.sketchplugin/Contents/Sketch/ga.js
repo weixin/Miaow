@@ -15,6 +15,8 @@ class Analytics {
             cid: this.getUUID(),
             t: 'event',
             an: 'WeSketch',
+            aid: context.plugin.identifier(),
+            av: context.plugin.version(),
             sr: `${width}x${height}`
         }
     }
