@@ -210,7 +210,7 @@
 	    "m1":"OK",
 	    "m2":"Cannel",
 	    "m3":"Upload this preview to cloud server?",
-	    "m4":"Note: Preview will be deleted after 1 hour!",
+	    "m4":"Note: Preview will be deleted after half hour!",
 		"m5":"Creating preview..."
     },
 	"commonPreview":{

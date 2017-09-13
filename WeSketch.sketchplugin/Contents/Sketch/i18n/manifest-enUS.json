@@ -107,8 +107,7 @@
       "identifier" : "previewToolbar",
       "script" : "previewToolbar.js",
       "shortcut": "",
-      "istool":"",
-      "istool":"",
+      "istool":"true",
       "handler" : "onRunPreviewToolBar"
     },
     {

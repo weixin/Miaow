@@ -173,7 +173,7 @@ var commonPreviewJson = function (context, filePath) {
 	function exportHTML(filePath) {
 		var fx = 0;
 		var fxstyle = '';
-		var fxlocal = 0;
+		var fxlocal = '-0';
 
 		function chooseDialog() {
 			var settingsWindow = COSAlertWindow.new();

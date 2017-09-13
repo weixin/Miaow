@@ -57,7 +57,7 @@ function previewToolbar(context) {
         var xlocation = 20;
 
 
-        Toolbar2.setFrame_display(NSMakeRect(locationx, locationy, 320, 190), false);
+        Toolbar2.setFrame_display(NSMakeRect(locationx, locationy, 320, 210), false);
         Toolbar2.setMovableByWindowBackground(true);
         Toolbar2.becomeKeyWindow();
         Toolbar2.setLevel(NSFloatingWindowLevel);
@@ -82,9 +82,17 @@ function previewToolbar(context) {
 
         contentView.addSubview(linkButton0);
 
-        linkButton0 = addButton(NSMakeRect(294, 163, 14, 14), "wiki",
+        linkButton0 = addButton(NSMakeRect(50, 182, 14, 14), "wiki",
             function (sender) {
                 openUrlInBrowser('https://github.com/weixin/wesketch/wiki');
+            });
+
+        contentView.addSubview(linkButton0);
+
+        linkButton0 = addButton(NSMakeRect(20, 180, 18, 18), "close",
+            function (sender) {
+                threadDictionary.removeObjectForKey(identifier);
+                Toolbar2.close();
             });
 
         contentView.addSubview(linkButton0);

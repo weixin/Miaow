@@ -2211,12 +2211,7 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            margin-top: {
-                {
-                    local
-                }
-            }
-            px;
+            margin-top: {{local}}px;
         }
 
         #wrapper {
@@ -2401,7 +2396,7 @@
                 if (ua.match(/MicroMessenger/i) == "micromessenger") {
                     $('.wechat').show();
                 } else {
-                    if (navigator.standalone) {
+                    if (navigator.standalone || ua.indexOf('iphone') != -1 ) {
                         $('.icon').hide();
                         $('.loadding').show();
                         var loader = new PxLoader();
@@ -2415,7 +2410,6 @@
                                 }
                             }
                         }
-
                         loader.addCompletionListener(function () {
                             $('.loadding').remove();
                             $('#wrapper').show();
@@ -2475,8 +2469,7 @@
 
                 //子图片
                 dom.push('<div style="background-image:url(./' + content[i].content.name + '.png);background-size:' +
-                    +Math.floor(rx * content[i].content.width) + 'px ' +
-                    +Math.floor(rx * content[i].content.height) + 'px;' +
+                    +Math.floor(rx * content[i].content.width) + 'px auto;' +
                     'position:absolute;background-repeat: no-repeat;' +
                     'left:' + Math.floor(rx * content[i].content.x) + 'px;' +
                     'top:' + (Math.floor(rx * content[i].content.y)) + 'px;' +
@@ -2505,24 +2498,15 @@
                         k].x) + 'px;');
                     if (content[i].children[k].image) {
                         dom.push('background-image:url(' + content[i].children[k].image + '.png);');
-                        dom.push('background-size:' + Math.floor(rx * content[i].children[k].width) + 'px ' + Math.floor(
-                            rx * content[i].children[k].height) + 'px;');
+                        dom.push('background-size:' + Math.floor(rx * content[i].children[k].width) + 'px auto;');
                         dom.push('position:fixed;');
                     } else {
                         dom.push('position:absolute;');
                     }
                     if (content[i].children[k].fixedDirection == 'b') {
-                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].y)) {
-                            {
-                                local
-                            }
-                        }) + 'px;');
+                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].y)){{local}}) + 'px;');
                     } else {
-                        dom.push('top:' + ((Math.floor(rx * content[i].children[k].y)) {
-                            {
-                                local
-                            }
-                        }) + 'px;');
+                        dom.push('top:' + ((Math.floor(rx * content[i].children[k].y)){{local}}) + 'px;');
                     }
                     dom.push('z-index:1"></div>');
                 }
