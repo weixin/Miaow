@@ -2428,23 +2428,22 @@
             var zindex = 920;
             var firstPage;
 
-            function moveoutFixed(parent) {
-                parent.find('div').each(function () {
+           function moveoutFixed(parent) {
+                parent.find('div[data-parent]').each(function () {
                     if ($(this).css('position') == 'fixed') {
-                        $('body').append($(this).css('z-index', '999'));
+                        $('body').append($(this).css('z-index', '40'));
+                    }else{
+                        $('body').append($(this).css('z-index', '41'));
                     }
                 })
             }
 
             function moveinFixed() {
                 $('body').find('div[data-parent]').each(function () {
-                    if ($(this).css('position') == 'fixed') {
                         $(this).css('z-index', '-1').appendTo($('[data-id="' + $(this).attr('data-parent') +
                             '"]'));
-                    }
                 })
             }
-
 
             var dom = [];
             for (var i in content) {
