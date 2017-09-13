@@ -1,6 +1,6 @@
 @import "common.js"
 
-function fontReplace(context){
+function fontReplace(context) {
     var i18 = _(context).fontReplace;
 
     var doc = context.document;
@@ -11,7 +11,7 @@ function fontReplace(context){
     var selectingFontName = [];
     var userInterface;
     var SELECT, READY_TO_SEARCH, CANCELLED, NOT_READY;
-    var fontCheck={};
+    var fontCheck = {};
     var accessoryList = null;
     var scaleOptionsMatrix = null;
     var options = [[[NSFontManager sharedFontManager] availableFontFamilies]][0];
@@ -26,7 +26,7 @@ function fontReplace(context){
 
     function userInterfaceLoop() {
         var modal = createUserInterface();
-        if(modal){
+        if (modal) {
             uiResponse = processButtonClick(modal, modal.runModal());
         }
 
@@ -40,41 +40,41 @@ function fontReplace(context){
         } else {
             userInterface = COSAlertWindow.new();
             userInterface.setMessageText(i18.m2);
-            userInterface.addTextLabelWithValue(i18.m3+"：");
+            userInterface.addTextLabelWithValue(i18.m3 + "：");
 
             var k = 0;
             for (var i = 0; i < includedFontName.length; i++) {
-                var checkbox = NSButton.alloc().initWithFrame(NSMakeRect( 0, i * 24, 300, 18 ));
+                var checkbox = NSButton.alloc().initWithFrame(NSMakeRect(0, i * 24, 300, 18));
                 checkbox.setButtonType(NSSwitchButton);
                 checkbox.setTitle(includedFontName[i]);
                 checkbox.setState(false);
-                userInterface.addAccessoryView( checkbox );
+                userInterface.addAccessoryView(checkbox);
                 k = i;
             }
-            var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
+            var separator = NSBox.alloc().initWithFrame(NSMakeRect(0, 0, 300, 10));
             separator.setBoxType(2);
             userInterface.addAccessoryView(separator);
 
-            userInterface.addTextLabelWithValue(i18.m4+"：");
+            userInterface.addTextLabelWithValue(i18.m4 + "：");
 
-            var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, k*24 + 40, 300.0, 30))
+            var accessoryView = NSView.alloc().initWithFrame(NSMakeRect(0.0, k * 24 + 40, 300.0, 30))
 
-            accessoryList = NSComboBox.alloc().initWithFrame(NSMakeRect(0,0,200,25));
+            accessoryList = NSComboBox.alloc().initWithFrame(NSMakeRect(0, 0, 200, 25));
             accessoryList.addItemsWithObjectValues(options);
             accessoryView.addSubview(accessoryList);
 
-            var button = [[NSButton alloc] initWithFrame:NSMakeRect(220,-3,80,30)];
-            [button setButtonType:2];
+            var button = [[NSButton alloc] initWithFrame: NSMakeRect(220, -3, 80, 30)];
+            [button setButtonType: 2];
             button.bezelStyle = 1;
             button.title = i18.m5;
-            [button setCOSJSTargetFunction:function(sender) {
-                 if(searchButtonType == 1){
+            [button setCOSJSTargetFunction: function (sender) {
+                if (searchButtonType == 1) {
                     button.title = i18.m6;
                     var value = accessoryList.objectValue().toLocaleLowerCase();
                     searchButtonType = 2;
                     searchList = [];
-                    for(var i = 0;i<options.length;i++){
-                        if(options[i].toLocaleLowerCase().indexOf(value) > -1){
+                    for (var i = 0; i < options.length; i++) {
+                        if (options[i].toLocaleLowerCase().indexOf(value) > -1) {
                             searchList.push(options[i]);
                         }
                     }
@@ -82,23 +82,23 @@ function fontReplace(context){
                     accessoryList.addItemsWithObjectValues(searchList);
                     accessoryList.selectItemAtIndex(0);
 
-                 }else{
+                } else {
                     searchButtonType = 1;
                     button.title = i18.m7;
                     accessoryList.removeAllItems();
                     accessoryList.addItemsWithObjectValues(options);
 
-                 }
+                }
             }];
             accessoryView.addSubview(button);
             userInterface.addAccessoryView(accessoryView);
 
 
-            var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
+            var separator = NSBox.alloc().initWithFrame(NSMakeRect(0, 0, 300, 10));
             separator.setBoxType(2);
             userInterface.addAccessoryView(separator);
 
-            userInterface.addTextLabelWithValue(i18.m8+"：");
+            userInterface.addTextLabelWithValue(i18.m8 + "：");
             var scaleOptions = [1, 2];
             var numOptions = scaleOptions.length;
             var exportScale = 1;
@@ -107,17 +107,17 @@ function fontReplace(context){
 
             scaleOptionsMatrix = NSMatrix.alloc().initWithFrame_mode_prototype_numberOfRows_numberOfColumns(NSMakeRect(0, 0, 300, 22), NSRadioModeMatrix, buttonCell, 1, numOptions);
             scaleOptionsMatrix.setAutorecalculatesCellSize(true);
-            scaleOptionsMatrix.setIntercellSpacing(NSMakeSize(10,0));
+            scaleOptionsMatrix.setIntercellSpacing(NSMakeSize(10, 0));
             var cells = scaleOptionsMatrix.cells();
             cells.objectAtIndex(0).setTitle(i18.m9);
             cells.objectAtIndex(1).setTitle(i18.m10);
             var scaleOption;
 
-            var exportOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0,0,300,30));
+            var exportOptionsView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, 30));
             exportOptionsView.addSubview(scaleOptionsMatrix);
             userInterface.addAccessoryView(exportOptionsView);
 
-            var separator = NSBox.alloc().initWithFrame(NSMakeRect(0,0,300,10));
+            var separator = NSBox.alloc().initWithFrame(NSMakeRect(0, 0, 300, 10));
             separator.setBoxType(2);
             userInterface.addAccessoryView(separator);
 
@@ -136,37 +136,37 @@ function fontReplace(context){
         if (buttonClick == '1000') {
 
             for (var i = 0; i < includedFontName.length; i++) {
-                if ([[[modal viewAtIndex: i+1] selectedCell] state] == true) {
-                    replaceCount ++;
-                    selectingFontName.push([[[modal viewAtIndex: i+1] selectedCell] title]);
+                if ([[[modal viewAtIndex: i + 1] selectedCell] state] == true) {
+                    replaceCount++;
+                    selectingFontName.push([[[modal viewAtIndex: i + 1] selectedCell] title]);
                 }
             }
 
             featureSelectSpecificFontTextLayer();
 
-            context.document.showMessage(i18.m13+"，"+fontRpleaceCount+i18.m14); 
+            context.document.showMessage(i18.m13 + "，" + fontRpleaceCount + i18.m14);
 
         }
     }
 
 
-    function featureSearchFontName () {
+    function featureSearchFontName() {
         switchOfSearch = 1;
         searchInLayer(doc);
         includedFontName.sort();
     }
 
 
-    function featureSelectSpecificFontTextLayer () {
-        if(scaleOptionsMatrix.selectedCell().title() == i18.m9){
+    function featureSelectSpecificFontTextLayer() {
+        if (scaleOptionsMatrix.selectedCell().title() == i18.m9) {
             doctype = 0;
-        }else{
+        } else {
             doctype = 1;
         }
         switchOfSearch = 2;
-        if(doctype == 0){
+        if (doctype == 0) {
             searchInLayer(doc);
-        }else{
+        } else {
             searchInLayer(page);
         }
     }
@@ -176,42 +176,42 @@ function fontReplace(context){
         switch ([layer class]) {
 
             case MSTextLayer:
-            if (switchOfSearch == 1) {
-                showFontName(layer);
-            } else if (switchOfSearch == 2) {
-                selectTextLayer(layer);
-            }
-            break;
+                if (switchOfSearch == 1) {
+                    showFontName(layer);
+                } else if (switchOfSearch == 2) {
+                    selectTextLayer(layer);
+                }
+                break;
 
             case MSDocument:
-            var documentPages = [layer pages];
-            for (var i = 0; i < [documentPages count]; i++) {
-                var documentPage = [documentPages objectAtIndex:i];
-                searchInLayer(documentPage);
-            }
-            break;
+                var documentPages = [layer pages];
+                for (var i = 0; i < [documentPages count]; i++) {
+                    var documentPage = [documentPages objectAtIndex: i];
+                    searchInLayer(documentPage);
+                }
+                break;
 
             case MSPage:
             case MSLayerGroup:
             case MSSymbolMaster:
             case MSArtboardGroup:
-            var sublayers = [layer layers];
-            for (var i = 0; i < [sublayers count]; i++) {
-                var sublayer = [sublayers objectAtIndex: i];
-                searchInLayer(sublayer);
-            }
-            break;
+                var sublayers = [layer layers];
+                for (var i = 0; i < [sublayers count]; i++) {
+                    var sublayer = [sublayers objectAtIndex: i];
+                    searchInLayer(sublayer);
+                }
+                break;
         }
     }
 
 
     function showFontName(layer) {
-        var tempFontName = layer.attributedString().fontNames().toString().replace('{(','').replace(')}','').replace(/\n/g,'').replace(/\u0022/g,'').split(',');
-        for(var z=0;z<tempFontName.length;z++){
-            var fontName = tempFontName[z];                 
-            if (!fontCheck[fontName]){
-                 fontCheck[fontName] = true;
-                 includedFontName.push(fontName);
+        var tempFontName = layer.attributedString().fontNames().toString().replace('{(', '').replace(')}', '').replace(/\n/g, '').replace(/\u0022/g, '').split(',');
+        for (var z = 0; z < tempFontName.length; z++) {
+            var fontName = tempFontName[z];
+            if (!fontCheck[fontName]) {
+                fontCheck[fontName] = true;
+                includedFontName.push(fontName);
             }
         }
     }
@@ -219,23 +219,24 @@ function fontReplace(context){
 
     function selectTextLayer(layer) {
         for (var i = 0; i < selectingFontName.length; i++) {
-            if (layer.attributedString().fontNames().toString().indexOf(selectingFontName[i].replace(/\s+/g,"")) != -1) {
-                replaceFont(layer,accessoryList.objectValue());
+            if (layer.attributedString().fontNames().toString().indexOf(selectingFontName[i].replace(/\s+/g, "")) != -1) {
+                replaceFont(layer, accessoryList.objectValue());
             }
         }
     }
 
-    function replaceFont(textLayer,text){
-        fontRpleaceCount ++;
-        var fontfamily = [NSFont fontWithName:text size:0];
+    function replaceFont(textLayer, text) {
+        fontRpleaceCount++;
+        var fontfamily = [NSFont fontWithName: text size: 0];
         var fontSize = textLayer.fontSize();
         textLayer.setFont(fontfamily);
         textLayer.setFontSize(fontSize);
         textLayer.adjustFrameToFit();
     }
+    var ga = new Analytics(context);
+    if (ga) ga.sendEvent('fontReplace', 'open');
 }
 
 var onRun = function (context) {
     fontReplace(context);
 }
-

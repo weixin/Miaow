@@ -1,20 +1,21 @@
 @import "common.js"
-function checkForUpdate(context,auto){
+
+function checkForUpdate(context, auto) {
 	var i18 = _(context).checkForUpdate;
-	if(!auto){
+	if (!auto) {
 		context.document.showMessage(i18.m1 + '...');
 	}
-	var returnData = networkRequest([getConfig('config',context).VERSION])
-	var jsonData = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+	var returnData = networkRequest([getConfig('config', context).VERSION])
+	var jsonData = [[NSString alloc] initWithData: returnData encoding: NSUTF8StringEncoding];
 	jsonData = JSON.parse(jsonData);
 	var currentVersion = jsonData.currentVersion,
-	message = jsonData.message,
-	installedVersion = context.plugin.version();
+		message = jsonData.message,
+		installedVersion = context.plugin.version();
 	var updateAvailable = true;
-	if(currentVersion == installedVersion){
+	if (currentVersion == installedVersion) {
 		updateAvailable = false;
 	}
-	if(auto && updateAvailable == false){
+	if (auto && updateAvailable == false) {
 		return false;
 	}
 	var updateAlert = COSAlertWindow.new();
@@ -22,7 +23,7 @@ function checkForUpdate(context,auto){
 	updateAlert.setMessageText(updateAvailable ? i18.m2 : i18.m3);
 	if (updateAvailable) {
 		updateAlert.setInformativeText(i18.m4 + currentVersion + i18.m5 + installedVersion + "，" + i18.m6 + "？");
-		if(message){
+		if (message) {
 			updateAlert.setInformativeText(message);
 		}
 		updateAlert.addButtonWithTitle(i18.m7);
@@ -38,6 +39,6 @@ function checkForUpdate(context,auto){
 	}
 }
 
-var onRun = function(context) {
+var onRun = function (context) {
 	checkForUpdate(context);
 }

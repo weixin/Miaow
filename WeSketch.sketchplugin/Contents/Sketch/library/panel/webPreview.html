@@ -1,61 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/qrcode.js"></script>
-    <link href="css/normalize.css" rel="stylesheet">
-    <style type="text/css">
-    body,html{
-      height:100%;
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/qrcode.js"></script>
+  <link href="css/normalize.css" rel="stylesheet">
+  <style type="text/css">
+    body,
+    html {
+      height: 100%;
       background-color: #ececec;
       overflow: hidden;
       font-size: 12px;
     }
-    .center{
+
+    .center {
       overflow: hidden;
       text-align: center;
       margin: 0 auto;
       width: 260px;
     }
-    .qr{
+
+    .qr {
       overflow: hidden;
       margin: 10px auto;
       width: 240px;
       height: 260px;
     }
-    .text{
+
+    .text {
       margin: 0 auto;
       width: 240px;
       font-size: 12px;
       text-align: left;
       color: #1A8CC2;
     }
-    #text{
+
+    #text {
       cursor: pointer;
     }
-    </style>
-  </head>
-  <body >
-    <div class="center">
-      <div class="qr" id="qr">
-        
-      </div>
-      <div class="text" id="text">
-        
-      </div>
-      <div class="text" >
-        关闭页面之后，网页会自动删除
-      </div>
+  </style>
+</head>
+
+<body>
+  <div class="center">
+    <div class="qr" id="qr">
+
     </div>
+    <div class="text" id="text">
+
+    </div>
+    <div class="text">
+      关闭页面之后，网页会自动删除
+    </div>
+  </div>
   <script type="text/javascript">
-    $('#text').click(function(){
-      SMAction('submit',{link:$(this).text()});
+    $('#text').click(function () {
+      SMAction('submit', {
+        link: $(this).text()
+      });
     })
-    init = function(data){
+    init = function (data) {
       $('#text').text(data.link);
       var qrnode = new AraleQRCode({
         render: 'table',
@@ -67,5 +76,6 @@
       document.getElementById('qr').appendChild(qrnode);
     }
   </script>
-  </body>
+</body>
+
 </html>

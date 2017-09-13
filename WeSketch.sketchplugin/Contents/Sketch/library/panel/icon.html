@@ -1,415 +1,476 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
 
-    <link href="css/normalize.css" rel="stylesheet">
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/common.js"></script>
-    <style>
-    html,body{
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+
+  <link href="css/normalize.css" rel="stylesheet">
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/common.js"></script>
+  <style>
+    html,
+    body {
       height: 100%;
-      background:white;
+      background: white;
       -webkit-touch-callout: none;
-      -webkit-user-select: none; 
-      -khtml-user-select: none; 
+      -webkit-user-select: none;
+      -khtml-user-select: none;
       -moz-user-select: none;
-      -ms-user-select: none; 
-      user-select: none; 
+      -ms-user-select: none;
+      user-select: none;
     }
-    *{
-      margin:0;
-      padding:0;
+
+    * {
+      margin: 0;
+      padding: 0;
     }
-    .ui-flex{
+
+    .ui-flex {
       display: flex;
     }
-    .toolbar{
+
+    .toolbar {
       z-index: 9;
-      width:100%;
-      box-sizing:border-box;
+      width: 100%;
+      box-sizing: border-box;
       position: fixed;
-      top:0;
+      top: 0;
       display: flex;
       align-items: center;
-      padding:3px 23px 12px 13px;
-      background-color:#F1F1F1;
+      padding: 3px 23px 12px 13px;
+      background-color: #F1F1F1;
     }
-    .toolbar2{
+
+    .toolbar2 {
       z-index: 9;
-      width:100%;
-      box-sizing:border-box;
+      width: 100%;
+      box-sizing: border-box;
       position: fixed;
-      top:28px;
+      top: 28px;
       display: flex;
       align-items: center;
-      padding:3px 10px 12px 10px;
-      background-color:#F1F1F1;
+      padding: 3px 10px 12px 10px;
+      background-color: #F1F1F1;
     }
-    .search-inputwrap{
-      width:130px;
+
+    .search-inputwrap {
+      width: 130px;
       position: absolute;
-      right:0;
-      padding:0 23px 0 0;
+      right: 0;
+      padding: 0 23px 0 0;
     }
-    .search-icon{
-      width:14px;
-      height:14px;
+
+    .search-icon {
+      width: 14px;
+      height: 14px;
       position: absolute;
-      top:5px;
-      left:3px;
+      top: 5px;
+      left: 3px;
       background-image: url(./img/search.png);
       background-size: 14px 14px;
     }
-    .search-input{
-      width:100%;
+
+    .search-input {
+      width: 100%;
       padding-left: 18px;
-      outline:0;
-      box-sizing:border-box;
-    }
-    .content-type{
-      width:100px;
-    }
-    .listchoose-icon{
-      display: block;
-      margin:0 5px;
-      text-overflow:ellipsis;
-      display:-webkit-box;
-      -webkit-line-clamp:1;
-      align-items: center;
-      -webkit-box-orient:vertical;
-    }
-    .gz-icon{
-      background-image:url(./img/t1.png);
-      width:12px;
-      height:12px;
-      background-size: 100% 100%;
-    }
-    .gz-icon_active{
-      background-image:url(./img/t1-active.png);
-      width:12px;
-      background-size: 100% 100%;
-      height:12px;
-    }
-    .list-icon{
-      background-image:url(./img/t2.png);
-      width:16px;
-      background-size: 100% 100%;
-      height:13px;
-    }
-    .list-icon_active{
-      background-image:url(./img/t2-active.png);
-      width:26px;
-      background-size: 100% 100%;
-      height:13px;
-    }
-    .messagebox,.messagebox2{
-      z-index: 9;
-      bottom: 0;
-      left:0;
-      background-color: #F6F6F6;
-      position: fixed;
-      width:100%;
+      outline: 0;
       box-sizing: border-box;
-      padding:16px 11px;
-      border-top:1px solid #fff;
     }
 
-    .messagebox-content{
-      flex: 1;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      display:flex;
-      -webkit-line-clamp:1;
-          align-items: center;
-      -webkit-box-orient:vertical;
+    .content-type {
+      width: 100px;
     }
-    .export{
-      padding:4px 9px;
-      color:#FFFFFF;
+
+    .listchoose-icon {
+      display: block;
+      margin: 0 5px;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      align-items: center;
+      -webkit-box-orient: vertical;
+    }
+
+    .gz-icon {
+      background-image: url(./img/t1.png);
+      width: 12px;
+      height: 12px;
+      background-size: 100% 100%;
+    }
+
+    .gz-icon_active {
+      background-image: url(./img/t1-active.png);
+      width: 12px;
+      background-size: 100% 100%;
+      height: 12px;
+    }
+
+    .list-icon {
+      background-image: url(./img/t2.png);
+      width: 16px;
+      background-size: 100% 100%;
+      height: 13px;
+    }
+
+    .list-icon_active {
+      background-image: url(./img/t2-active.png);
+      width: 26px;
+      background-size: 100% 100%;
+      height: 13px;
+    }
+
+    .messagebox,
+    .messagebox2 {
+      z-index: 9;
+      bottom: 0;
+      left: 0;
+      background-color: #F6F6F6;
+      position: fixed;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px 11px;
+      border-top: 1px solid #fff;
+    }
+
+    .messagebox-content {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      -webkit-line-clamp: 1;
+      align-items: center;
+      -webkit-box-orient: vertical;
+    }
+
+    .export {
+      padding: 4px 9px;
+      color: #FFFFFF;
       background: #1AAD19;
       border-radius: 5px;
       font-size: 13px;
-      width:50px;
+      width: 50px;
       cursor: pointer;
     }
-    .messagebox-content1{
+
+    .messagebox-content1 {
       font-size: 16px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      display:-webkit-box;
-      -webkit-line-clamp:1;
-      -webkit-box-orient:vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
     }
-    .messagebox-content2{
+
+    .messagebox-content2 {
       font-size: 12px;
-      color:rgba(0,0,0,0.6);
+      color: rgba(0, 0, 0, 0.6);
       margin: 0 10px;
     }
-    .messagebox-content3{
-      padding-left:5px;
+
+    .messagebox-content3 {
+      padding-left: 5px;
     }
-    .content-list{
-      padding:0 10px;
-      margin-top:10px;
+
+    .content-list {
+      padding: 0 10px;
+      margin-top: 10px;
     }
-    .content-title{
+
+    .content-title {
       font-size: 12px;
-      padding:6px 0 6px 0;
+      padding: 6px 0 6px 0;
       overflow: hidden;
-      margin-top:5px;
+      margin-top: 5px;
     }
-    .content-body{
-      width:60px;
-      height:60px;
+
+    .content-body {
+      width: 60px;
+      height: 60px;
       float: left;
-      display:flex;
-      justify-content:center;
+      display: flex;
+      justify-content: center;
       align-items: center;
-      background-color:#bebebe;
+      background-color: #bebebe;
       position: relative;
     }
-    .content-body_active:before{
-      content:" ";
+
+    .content-body_active:before {
+      content: " ";
       position: absolute;
-      width:100%;
-      height:100%;
-      border:1px solid red;
+      width: 100%;
+      height: 100%;
+      border: 1px solid red;
     }
-    .content-body>svg{
+
+    .content-body>svg {
       max-width: 44px;
       max-height: 44px;
     }
-    .content-body{
+
+    .content-body {
       cursor: pointer;
-      margin:20px 20px 55px 20px;
+      margin: 20px 20px 55px 20px;
       position: relative;
     }
-    .content-view{
+
+    .content-view {
       display: flex;
-      padding:0 0 3px 0;
+      padding: 0 0 3px 0;
     }
-    .content{
-      padding:43px 0 69px 0;
+
+    .content {
+      padding: 43px 0 69px 0;
     }
-    .content-wrap{
-      padding:90px 20px 85px 20px;
+
+    .content-wrap {
+      padding: 90px 20px 85px 20px;
       overflow: auto;
     }
-    .content-wrap-private{
-      width:300px;
+
+    .content-wrap-private {
+      width: 300px;
     }
-    .btn-active{
+
+    .btn-active {
       position: relative;
     }
-    .btn-active:before{
+
+    .btn-active:before {
       border-radius: 5px;
       position: absolute;
       content: " ";
-      width:100%;
-      height:100%;
-      box-sizing:border-box;
-      border:4px solid #6D9EE1;
-      left:0;
-      top:0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border: 4px solid #6D9EE1;
+      left: 0;
+      top: 0;
     }
-    .btn-active2{
+
+    .btn-active2 {
       position: relative;
     }
-    .btn-active2:before{
+
+    .btn-active2:before {
       border-radius: 5px;
       position: absolute;
       content: " ";
-      width:100%;
-      height:100%;
-      box-sizing:border-box;
-      border:4px solid #6D9EE1;
-      left:0;
-      top:0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border: 4px solid #6D9EE1;
+      left: 0;
+      top: 0;
     }
-    .content-name{
+
+    .content-name {
       text-align: center;
-      color:black;
+      color: black;
       font-size: 12px;
       position: absolute;
-      top:70px;
-      left:0;
-      word-break:break-all;
-      width:62px;
-      text-overflow:ellipsis;
-      display:-webkit-box;
-      -webkit-line-clamp:3;
-      -webkit-box-orient:vertical;
+      top: 70px;
+      left: 0;
+      word-break: break-all;
+      width: 62px;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .tools-input{
-      width:70px;
+
+    .tools-input {
+      width: 70px;
       outline: 0;
-      color:#000;
+      color: #000;
       font-size: 12px;
     }
-    .color-box{
-      width:17px;
-      height:17px;
-      background-color:#000;
+
+    .color-box {
+      width: 17px;
+      height: 17px;
+      background-color: #000;
     }
-    .login{
+
+    .login {
       cursor: pointer;
-      flex:1;
+      flex: 1;
       text-align: right;
       color: #1A8CC2;
       font-size: 14px;
     }
-    .person{
+
+    .person {
       display: none;
-      flex:1;
+      flex: 1;
       font-size: 14px;
       text-align: right;
     }
-    .login>div{
+
+    .login>div {
       display: inline-block;
       margin-left: 5px;
       background-image: url(./img/login.svg);
-      width:20px;
-      height:20px;
+      width: 20px;
+      height: 20px;
       background-size: 20px;
       cursor: pointer;
     }
-    .person>div{
+
+    .person>div {
       display: inline-block;
       margin-left: 5px;
       background-image: url(./img/person.svg);
-      width:20px;
-      height:20px;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       background-size: 20px;
     }
-    .login-mag{
+
+    .login-mag {
       display: none;
     }
-    .cell{
-      align-items:center;
-      position:relative;
-      display:flex;
-      padding:10px 30px;
-      width:100%;
-      box-sizing:border-box;
-      font-size:17px;
-      text-align:left;
-      text-decoration:none;
-      color:#555555;
-      background-color:white;
-      font-size: 17px;
-      border:0;
-    }
-    .cell + .cell:before{
-      position:absolute;
-      content:'';
-      left:15px;
-      top:0;
-      right:0;
-      border-top:1px solid #EEEEEE;
-    }
-    .cell-title{
-      width:50px;
-      margin-left:10px;
-      color:#555555;
-    }
-    .cell-input{
-      flex:1;
-    }
-    .cell-input input{
-      color:#555555;
-      border:0;
-      width:100%;
-    }
-    .login-mag{
-      height:100%;
-      box-sizing:border-box;
-      background-color: #ececec;
-      padding-top:50px;
-    }
-    .loginbtnwrap{
-      padding:40px 30px 0 30px;
 
+    .cell {
+      align-items: center;
+      position: relative;
+      display: flex;
+      padding: 10px 30px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 17px;
+      text-align: left;
+      text-decoration: none;
+      color: #555555;
+      background-color: white;
+      font-size: 17px;
+      border: 0;
     }
-    .loginbutton{
-      border-radius:100px;
-      line-height:48px;
-      font-size:17px;
-      color:#ffffff;
-      background:#1A8CC2;
-      text-align:center;
+
+    .cell+.cell:before {
+      position: absolute;
+      content: '';
+      left: 15px;
+      top: 0;
+      right: 0;
+      border-top: 1px solid #EEEEEE;
+    }
+
+    .cell-title {
+      width: 50px;
+      margin-left: 10px;
+      color: #555555;
+    }
+
+    .cell-input {
+      flex: 1;
+    }
+
+    .cell-input input {
+      color: #555555;
+      border: 0;
+      width: 100%;
+    }
+
+    .login-mag {
+      height: 100%;
+      box-sizing: border-box;
+      background-color: #ececec;
+      padding-top: 50px;
+    }
+
+    .loginbtnwrap {
+      padding: 40px 30px 0 30px;
+    }
+
+    .loginbutton {
+      border-radius: 100px;
+      line-height: 48px;
+      font-size: 17px;
+      color: #ffffff;
+      background: #1A8CC2;
+      text-align: center;
       cursor: pointer;
     }
-    .register{
+
+    .register {
       display: block;
-      margin:10px;
-      float:right;
-      color:#1A8CC2;
+      margin: 10px;
+      float: right;
+      color: #1A8CC2;
       font-size: 12px;
       cursor: pointer;
     }
-    .author{
-      flex:1;
+
+    .author {
+      flex: 1;
       text-align: right;
       font-size: 13px;
-      color:#555555;
+      color: #555555;
     }
-    #exit{
+
+    #exit {
       cursor: pointer;
     }
-    .bqts{
+
+    .bqts {
       margin-left: 15px;
       font-size: 12px;
     }
-    .bqts2{
+
+    .bqts2 {
       font-size: 12px;
     }
-    .toggle-button{
+
+    .toggle-button {
       display: block;
-      margin:10px 40px;
-      float:left;
-      color:#1A8CC2;
+      margin: 10px 40px;
+      float: left;
+      color: #1A8CC2;
       font-size: 14px;
       cursor: pointer;
     }
-    .dialog{
+
+    .dialog {
       position: absolute;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background-color: rgba(255,255,255,0.7);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
       z-index: 99;
       display: none;
-      justify-content:center;
+      justify-content: center;
       align-items: center;
     }
-    .dialog-wrap{
+
+    .dialog-wrap {
       background-color: #ECECEC;
-      width:286px;
+      width: 286px;
       border-radius: 6px;
     }
-    .dialog-header{
+
+    .dialog-header {
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
       width: 286px;
       height: 22px;
-      background: linear-gradient(0deg,#e7e6e7 0%,#d1d0d1 100%);
+      background: linear-gradient(0deg, #e7e6e7 0%, #d1d0d1 100%);
       text-align: center;
       font-size: 14px;
       line-height: 22px;
-      border-bottom: 1px solid rgba(0,0,0,0.2);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       color: #423f42;
     }
-    .dialog-content{
+
+    .dialog-content {
       padding: 23px 20px 33px 20px;
     }
-    .dialog-content-title{
+
+    .dialog-content-title {
       text-align: left;
       width: 160px;
       font-size: 14px;
@@ -417,72 +478,83 @@
       margin-bottom: 5px;
       color: #000000;
     }
-    .dialog-content-input input{
-      width:100%;
+
+    .dialog-content-input input {
+      width: 100%;
     }
-    .savebutton{
-      background:#4fa3f6;
-      color:white;
+
+    .savebutton {
+      background: #4fa3f6;
+      color: white;
       border: 1px solid #1465fb;
-      width:76px;
+      width: 76px;
       text-align: center;
-      float:right;
+      float: right;
       cursor: pointer;
       font-size: 12px;
       border-radius: 5px;
-      background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
+      background: linear-gradient(0deg, #6ab3fa 0%, #087fff 100%);
       line-height: 20px;
     }
-    .savebutton:active{
-      background:#3485f0;
+
+    .savebutton:active {
+      background: #3485f0;
     }
-    .cancelbutton{
-      margin-right:10px;
-      width:76px;
-      text-align: center;
-      border: 1px solid #D9D9D9;
-      border-radius: 5px;
-      color: #262626;
-      float:right;
-      cursor: pointer;
-      font-size: 12px;
-      line-height: 20px;
-      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
-    }
-    .sharebutton{
-      margin-right:10px;
-      width:76px;
+
+    .cancelbutton {
+      margin-right: 10px;
+      width: 76px;
       text-align: center;
       border: 1px solid #D9D9D9;
       border-radius: 5px;
       color: #262626;
-      float:right;
+      float: right;
       cursor: pointer;
       font-size: 12px;
       line-height: 20px;
-      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
+      background: linear-gradient(0deg, #fefefe 0%, #f1f1f1 100%);
     }
-    .dialog-buttonwrap{
-      margin-top:20px;
+
+    .sharebutton {
+      margin-right: 10px;
+      width: 76px;
+      text-align: center;
+      border: 1px solid #D9D9D9;
+      border-radius: 5px;
+      color: #262626;
+      float: right;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
+      background: linear-gradient(0deg, #fefefe 0%, #f1f1f1 100%);
     }
-    .upload-wrap{
+
+    .dialog-buttonwrap {
+      margin-top: 20px;
+    }
+
+    .upload-wrap {
       display: none;
       padding: 0 0 0 0;
     }
-    .upload-label-wrap{
+
+    .upload-label-wrap {
       margin-top: 20px;
     }
-    .upload-label-wrap label{
+
+    .upload-label-wrap label {
       width: 60px;
       display: block;
       font-size: 13px;
       margin-bottom: 10px;
     }
-    .upload-ui-item{
+
+    .upload-ui-item {
       font-size: 13px;
       display: block;
     }
-    .upload-svg-wrap{
+
+    .upload-svg-wrap {
       overflow: auto;
       height: 490px;
       background: white;
@@ -490,233 +562,270 @@
       padding: 20px;
       float: left;
     }
-    .upload-svg-message{
+
+    .upload-svg-message {
       padding-left: 25px;
-      flex:1;
+      flex: 1;
       background: #EFEFEF;
-      border-left:1px solid #D8D7D8;
+      border-left: 1px solid #D8D7D8;
     }
-    .upload-svg-wrap svg{
+
+    .upload-svg-wrap svg {
       max-width: 64px;
       max-height: 64px;
     }
-    .upload-svg-wrap>div{
-    }
-    .upload-svg-title{
+
+    .upload-svg-wrap>div {}
+
+    .upload-svg-title {
       margin-bottom: 10px;
     }
-    .upload-svg-w{
+
+    .upload-svg-w {
       margin-bottom: 10px;
       border-radius: 5px;
-      float:left;
+      float: left;
       background: #bebebe;
-      width:80px;
-      height:80px;
+      width: 80px;
+      height: 80px;
       display: flex;
-      justify-content:center;
+      justify-content: center;
       align-items: center;
       position: relative;
     }
-    .upload-svg-w.active:before{
+
+    .upload-svg-w.active:before {
       border-radius: 5px;
       position: absolute;
       content: " ";
-      width:100%;
-      height:100%;
-      box-sizing:border-box;
-      border:2px solid #79B7F4;
-      left:0;
-      top:0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border: 2px solid #79B7F4;
+      left: 0;
+      top: 0;
     }
-    .upload-svg-w+.upload-svg-w{
+
+    .upload-svg-w+.upload-svg-w {
       margin-left: 10px;
     }
-    .upload-svg-w>svg{
+
+    .upload-svg-w>svg {
       max-width: 60px;
-      max-height: 60px; 
+      max-height: 60px;
     }
-    .upload-input-width{
-      width:140px;
-      resize:none;
-      border:1px solid rgba(0,0,0,0.25);
+
+    .upload-input-width {
+      width: 140px;
+      resize: none;
+      border: 1px solid rgba(0, 0, 0, 0.25);
     }
-    .upload-savebutton{
-      background:#4fa3f6;
-      color:white;
+
+    .upload-savebutton {
+      background: #4fa3f6;
+      color: white;
       border: 1px solid #1465fb;
-      width:76px;
+      width: 76px;
       text-align: center;
-      float:right;
+      float: right;
       cursor: pointer;
       font-size: 12px;
       border-radius: 5px;
-      background: linear-gradient(0deg,#6ab3fa 0%,#087fff 100%);
+      background: linear-gradient(0deg, #6ab3fa 0%, #087fff 100%);
       line-height: 20px;
     }
-    .upload-savebutton:active{
-      background:#3485f0;
+
+    .upload-savebutton:active {
+      background: #3485f0;
     }
-    .upload-buttonwrap{
-      margin-top:10px;
+
+    .upload-buttonwrap {
+      margin-top: 10px;
     }
-    .upload-cancelbutton{
-      margin-right:10px;
-      width:76px;
+
+    .upload-cancelbutton {
+      margin-right: 10px;
+      width: 76px;
       text-align: center;
       border: 1px solid #D9D9D9;
       border-radius: 5px;
       color: #262626;
-      float:right;
+      float: right;
       cursor: pointer;
       font-size: 12px;
       line-height: 20px;
-      background: linear-gradient(0deg,#fefefe 0%,#f1f1f1 100%);
+      background: linear-gradient(0deg, #fefefe 0%, #f1f1f1 100%);
     }
-    .upload-svg-button{
+
+    .upload-svg-button {
       padding: 10px 20px;
-      border-top:1px solid #D8D7D8;
+      border-top: 1px solid #D8D7D8;
       font-size: 12px;
     }
-    .upload-button-title{
+
+    .upload-button-title {
       margin: 20px 0 15px 0;
       font-size: 14px;
       color: #000000;
     }
-    .upload-svg-upload{
+
+    .upload-svg-upload {
       display: flex;
       height: 537px;
     }
-    #share-button{
-      margin-left:5px;
-      display:none;
+
+    #share-button {
+      margin-left: 5px;
+      display: none;
     }
-    .private-content{
+
+    .private-content {
       position: fixed;
-      right:0;
+      right: 0;
       height: 100%;
-      padding:90px 20px 85px 20px;
-      border-left:1px solid #D8D8D8;
+      padding: 90px 20px 85px 20px;
+      border-left: 1px solid #D8D8D8;
       text-align: center;
       display: none;
     }
-    .private-name{
+
+    .private-name {
       font-size: 20px;
-      color:#999999;
+      color: #999999;
       margin-bottom: 30px;
       width: 160px;
-      word-break:break-all;
+      word-break: break-all;
     }
-    .private-svg{
+
+    .private-svg {
       background-image: url(./img/color.jpeg);
       margin: 15px 0 10px 0;
     }
-    .private-svg>svg{
+
+    .private-svg>svg {
       max-width: 130px;
       max-height: 200px;
     }
-    .private-message{
+
+    .private-message {
       font-size: 12px;
       color: #999999;
       line-height: 20px;
       text-align: left;
     }
-    .private-message-span1{
-      margin-right:10px;
+
+    .private-message-span1 {
+      margin-right: 10px;
       width: 60px;
       text-align: right;
       display: none;
     }
-    .private-message-span2{
+
+    .private-message-span2 {
       color: #333333;
     }
-    .private-message-version-link{
+
+    .private-message-version-link {
       color: #1A8CC2;
       cursor: pointer;
     }
-    .private-remark{
+
+    .private-remark {
       position: fixed;
-      right:0;
-      width:200px;
+      right: 0;
+      width: 200px;
       bottom: 52px;
       height: 100px;
       padding: 5px;
       color: #666666;
       z-index: 99;
-      background: rgba(90,90,90,0.06);
+      background: rgba(90, 90, 90, 0.06);
       display: none;
-      box-sizing:border-box;
+      box-sizing: border-box;
     }
-    .version-back{
+
+    .version-back {
       cursor: pointer;
       color: #1A8CC2;
       margin-left: 15px;
       font-size: 12px;
     }
-    .backbutton{
-      border-radius:100px;
-      line-height:48px;
-      font-size:17px;
-      color:#1A8CC2;
-      background:white;
-      border:1px solid #1A8CC2;
-      margin-top:10px;
-      text-align:center;
+
+    .backbutton {
+      border-radius: 100px;
+      line-height: 48px;
+      font-size: 17px;
+      color: #1A8CC2;
+      background: white;
+      border: 1px solid #1A8CC2;
+      margin-top: 10px;
+      text-align: center;
       cursor: pointer;
     }
-    .private-delete{
+
+    .private-delete {
       display: none;
       text-align: center;
     }
-    .private-delete span{
+
+    .private-delete span {
       cursor: pointer;
       color: #E64340;
     }
-    .share-dialog{
-      background: rgba(0,0,0,0.5);
+
+    .share-dialog {
+      background: rgba(0, 0, 0, 0.5);
       position: fixed;
-      left:0;
-      top:0;
+      left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
       z-index: 999;
       display: none;
     }
-    .share-dialog-w{
+
+    .share-dialog-w {
       width: 420px;
       height: 435px;
       background: white;
       margin: 50px auto;
     }
-    .share-dialog-main{
+
+    .share-dialog-main {
       background: white;
       overflow: auto;
       height: 300px;
     }
-    .share-dialog-message{
+
+    .share-dialog-message {
       background: #f1f1f1;
       height: 95px;
       padding: 20px;
     }
-    .share-dialog-message label{
+
+    .share-dialog-message label {
       width: 60px;
       margin-right: 20px;
       vertical-align: top;
       font-size: 12px;
     }
-    .share-dialog-message textarea{
+
+    .share-dialog-message textarea {
       width: 300px;
       font-size: 12px;
       height: 60px;
       margin-bottom: 10px;
     }
-    #upload-project{
-      margin-left:5px;
+
+    #upload-project {
+      margin-left: 5px;
     }
-    </style>
-  </head>
-  <body>
-  </body>
-  <script type="text/javascript">
+  </style>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
   var savedata;
   var choicedata;
   var searchData;
@@ -739,76 +848,80 @@
   var shareArray = [];
   var shareArrayDom = [];
 
-  function showFlag(){
-    if(shareFlag){
-      for(var i = 0;i < shareArray.length;i++){
-        $('[data-id="'+ shareArray[i] + '"]').addClass('btn-active2');
+  function showFlag() {
+    if (shareFlag) {
+      for (var i = 0; i < shareArray.length; i++) {
+        $('[data-id="' + shareArray[i] + '"]').addClass('btn-active2');
       }
     }
   }
 
-  function appendDom(data){
+  function appendDom(data) {
     $('.bqts').remove();
     $('.content-wrap').empty();
     var dom = [];
-    dom.push('<div class="bqts">'+i18.m3+'</div>');
-    for(var i = 0;i < data.length;i++){
-      dom.push('<div data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+    dom.push('<div class="bqts">' + i18.m3 + '</div>');
+    for (var i = 0; i < data.length; i++) {
+      dom.push('<div data-i="' + (data[i].index || i) + '" class="content-body">' + (data[i].content) +
+        '<div class="content-name">' + data[i].name.replace('.svg', '') + '</div>' + '</div>');
     }
     $('.content-wrap').append(dom.join(''));
   }
 
-  function appendDom3(data){
+  function appendDom3(data) {
     $('.bqts').remove();
     $('.content-wrap').empty();
     var dom = [];
-    dom.push('<div class="version-back">'+i18.m31+'</div>');
-    for(var i = 0;i < data.length;i++){
-      dom.push('<div data-id="'+data[i].id+'" data-version="true" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+    dom.push('<div class="version-back">' + i18.m31 + '</div>');
+    for (var i = 0; i < data.length; i++) {
+      dom.push('<div data-id="' + data[i].id + '" data-version="true" data-i="' + (data[i].index || i) +
+        '" class="content-body">' + (data[i].content) + '<div class="content-name">' + data[i].name.replace('.svg',
+          '') + '</div>' + '</div>');
     }
     $('.content-wrap').append(dom.join(''));
     showFlag();
   }
 
-  function appendDom4(){
+  function appendDom4() {
     var dom = [];
-    for(var i = 0;i<shareArrayDom.length;i++){
-      dom.push('<div class="content-body">'+(shareArrayDom[i].content)+'<div class="content-name">'+shareArrayDom[i].name.replace('.svg','')+'</div></div>');
+    for (var i = 0; i < shareArrayDom.length; i++) {
+      dom.push('<div class="content-body">' + (shareArrayDom[i].content) + '<div class="content-name">' + shareArrayDom[
+        i].name.replace('.svg', '') + '</div></div>');
     }
     $('.share-dialog-main').empty().append(dom.join(''));
     showFlag();
   }
 
-  function appendCategory(){
+  function appendCategory() {
     var typeDom = [];
-    typeDom.push('<option value="">'+i18.m14+'</option>');
+    typeDom.push('<option value="">' + i18.m14 + '</option>');
     // typeDom.push('<option value="">'+i18.m32+'</option>');
-    
+
 
     $('#selecttype2').empty().append(typeDom.join(''));
   }
 
-  function clickIsvgUploadFile(){
+  function clickIsvgUploadFile() {
     $('.upload-svg-w').removeClass('active');
-    $('.upload-svg-w:eq('+controli+')').addClass('active');
+    $('.upload-svg-w:eq(' + controli + ')').addClass('active');
     var message = saveSvg[controli];
-    $('#svg-name').val(decodeURIComponent(message.name||''));
-    $('#upload-username').val(loginname||'');
-    $('#upload-version').val(message.version == 0? 'New':i18.m33+(message.version)+i18.m34);
-    $('#upload-mark').val(message.remark||'');
+    $('#svg-name').val(decodeURIComponent(message.name || ''));
+    $('#upload-username').val(loginname || '');
+    $('#upload-version').val(message.version == 0 ? 'New' : i18.m33 + (message.version) + i18.m34);
+    $('#upload-mark').val(message.remark || '');
   }
 
-  function svgUpload(data){
+  function svgUpload(data) {
     saveSvg = data;
     var svgDom = [];
-    for(var i = 0;i<data.length;i++){
-      if(i % 3 == 0){
+    for (var i = 0; i < data.length; i++) {
+      if (i % 3 == 0) {
         svgDom.push('<div>');
       }
       svgDom.push(
-          '<div data-i="'+i+'" class="upload-svg-w">'+decodeURIComponent(data[i].content)+'</div>'
-        );
-      if(i % 3 == 2){
+        '<div data-i="' + i + '" class="upload-svg-w">' + decodeURIComponent(data[i].content) + '</div>'
+      );
+      if (i % 3 == 2) {
         svgDom.push('</div>');
       }
     }
@@ -816,58 +929,72 @@
 
   }
 
-  function setAllKey(k,value){
-    for(var i = 0;i < saveSvg.length;i++){
+  function setAllKey(k, value) {
+    for (var i = 0; i < saveSvg.length; i++) {
       saveSvg[i][k] = value;
     }
   }
 
-  function projectChange(){
+  function projectChange() {
     lsprojectID = $('#selectproject').val();
-    if(lsprojectID == '#_newproject_'){
+    if (lsprojectID == '#_newproject_') {
       $('#selectproject').val(projectID);
-      $('#add-dialog').css('display','flex');
+      $('#add-dialog').css('display', 'flex');
       $('#add-dialog input').focus();
-      setDialogMessage({action:'addProject',title:i18.m35,message:i18.m36,key:'projectName'});
+      setDialogMessage({
+        action: 'addProject',
+        title: i18.m35,
+        message: i18.m36,
+        key: 'projectName'
+      });
       return;
-    }else if(lsprojectID == '#_inputlink_'){
+    } else if (lsprojectID == '#_inputlink_') {
       $('#selectproject').val(projectID);
-      $('#add-dialog').css('display','flex');
+      $('#add-dialog').css('display', 'flex');
       $('#add-dialog input').focus();
-      setDialogMessage({action:'addMember',title:i18.m37,message:i18.m38,key:'invitedKey'});
+      setDialogMessage({
+        action: 'addMember',
+        title: i18.m37,
+        message: i18.m38,
+        key: 'invitedKey'
+      });
       return;
-    }else if(lsprojectID == '#_typedelete_'){
+    } else if (lsprojectID == '#_typedelete_') {
       $('#selectproject').val(projectID);
-      SMAction('login',{action:'deleteProject',projectid:projectID});
+      SMAction('login', {
+        action: 'deleteProject',
+        projectid: projectID
+      });
     }
     projectID = $('#selectproject').val();
     $('#upload-project').val(projectID);
-    for(var i = 0 ;i<project.length;i++){
-      if(project[i].projectId == projectID){
-        if(project[i].isOwner){
-          $('#share-button').attr('data-code',project[i].invitedKey).show();
+    for (var i = 0; i < project.length; i++) {
+      if (project[i].projectId == projectID) {
+        if (project[i].isOwner) {
+          $('#share-button').attr('data-code', project[i].invitedKey).show();
           $('#selectproject').find('option[value="#_typedelete_"]').remove();
-          $('#selectproject optgroup:eq(1)').append('<option value="#_typedelete_">'+i18.m66 + project[i].projectName +'</option>');
-        }else{
+          $('#selectproject optgroup:eq(1)').append('<option value="#_typedelete_">' + i18.m66 + project[i].projectName +
+            '</option>');
+        } else {
           $('#share-button').hide();
         }
       }
     }
 
     appendCategory();
-    
+
     typeID = $('#selecttype2').val();
 
-    if(projectID != ''){
+    if (projectID != '') {
       $('.messagebox').hide();
       $('.messagebox2').show();
       $('.content-wrap').addClass('content-wrap-private');
       $('.private-content,.private-remark').show();
-      SMAction('pushdata',{
-        type:'project',
-        id:projectID
+      SMAction('pushdata', {
+        type: 'project',
+        id: projectID
       })
-    }else{
+    } else {
       $('.content-wrap').removeClass('content-wrap-private');
       $('.messagebox2').hide();
       $('.messagebox').show();
@@ -877,26 +1004,26 @@
     }
   }
 
-  function categoryChange(){
+  function categoryChange() {
     var typeID = $('#selecttype2').val();
-    if(typeID != ''){
-      SMAction('pushdata',{
-        type:'type',
-        id:typeID,
-        pid:projectID
+    if (typeID != '') {
+      SMAction('pushdata', {
+        type: 'type',
+        id: typeID,
+        pid: projectID
       })
-    }else{
-      SMAction('pushdata',{
-        type:'project',
-        id:projectID
+    } else {
+      SMAction('pushdata', {
+        type: 'project',
+        id: projectID
       })
     }
-    if(projectID != ''){
+    if (projectID != '') {
       $('.messagebox').hide();
       $('.messagebox2').show();
       $('.content-wrap').addClass('content-wrap-private');
       $('.private-content,.private-remark').show();
-    }else{
+    } else {
       $('.content-wrap').removeClass('content-wrap-private');
       $('.messagebox2').hide();
       $('.messagebox').show();
@@ -904,196 +1031,202 @@
     }
   }
 
-  function appendDom2(data){
+  function appendDom2(data) {
     $('.bqts').remove();
     $('.content-wrap').empty();
-    if(!data){
-      $('.content-wrap').append('<div class="content-title">'+i18.m39+'</div>');
+    if (!data) {
+      $('.content-wrap').append('<div class="content-title">' + i18.m39 + '</div>');
       return;
     }
     var typecount = -1;
     var dom = [];
     var typeobj = {};
     var leavedom = [];
-    leavedom.push('<div class="content-title">'+i18.m40+'</div><div style="overflow:hidden">');
-    for(var i = 0;i < data.length;i++){
+    leavedom.push('<div class="content-title">' + i18.m40 + '</div><div style="overflow:hidden">');
+    for (var i = 0; i < data.length; i++) {
       var firstname = data[i].name.split('_');
-      if(firstname.length>1){
+      if (firstname.length > 1) {
         firstname = firstname[0];
-        if(typeobj[firstname] != undefined){
-          dom[typeobj[firstname]].push('<div data-id="'+data[i].id+'" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
-        }else{
+        if (typeobj[firstname] != undefined) {
+          dom[typeobj[firstname]].push('<div data-id="' + data[i].id + '" data-i="' + (data[i].index || i) +
+            '" class="content-body">' + (data[i].content) + '<div class="content-name">' + data[i].name.replace(
+              '.svg', '') + '</div>' + '</div>');
+        } else {
           typecount++;
           typeobj[firstname] = typecount;
           dom[typecount] = [];
-          dom[typecount].push('<div class="content-title">'+firstname+'</div><div style="overflow:hidden">');
-          dom[typecount].push('<div data-id="'+data[i].id+'" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+          dom[typecount].push('<div class="content-title">' + firstname + '</div><div style="overflow:hidden">');
+          dom[typecount].push('<div data-id="' + data[i].id + '" data-i="' + (data[i].index || i) +
+            '" class="content-body">' + (data[i].content) + '<div class="content-name">' + data[i].name.replace(
+              '.svg', '') + '</div>' + '</div>');
         }
-      }else{
-        leavedom.push('<div data-id="'+data[i].id+'" data-i="'+(data[i].index||i)+'" class="content-body">'+(data[i].content)+'<div class="content-name">'+data[i].name.replace('.svg','')+'</div>'+'</div>');
+      } else {
+        leavedom.push('<div data-id="' + data[i].id + '" data-i="' + (data[i].index || i) + '" class="content-body">' +
+          (data[i].content) + '<div class="content-name">' + data[i].name.replace('.svg', '') + '</div>' + '</div>');
       }
     }
-    for(var i = 0;i<dom.length;i++){
+    for (var i = 0; i < dom.length; i++) {
       dom[i] = dom[i].join('') + '</div>';
     }
-    $('.content-wrap').append(dom.join('') + leavedom.join('')+'</div>');
+    $('.content-wrap').append(dom.join('') + leavedom.join('') + '</div>');
     showFlag();
   }
 
-  function domEvent(){
-    $('#toggle-button').click(function(){
+  function domEvent() {
+    $('#toggle-button').click(function () {
       var action = $('.login-mag').attr('data-action');
-      if(action == undefined || action == 'login'){
-        $('.login-mag').attr('data-action','register');
+      if (action == undefined || action == 'login') {
+        $('.login-mag').attr('data-action', 'register');
         $('#confirm-button').text(i18.m41);
-        $('#toggle-button').text(i18.m42+i18.m43);
+        $('#toggle-button').text(i18.m42 + i18.m43);
         $('#mailwrap').show();
-      }else{
-        $('.login-mag').attr('data-action','login');
+      } else {
+        $('.login-mag').attr('data-action', 'login');
         $('#confirm-button').text(i18.m43);
-        $('#toggle-button').text(i18.m42+i18.m41);
+        $('#toggle-button').text(i18.m42 + i18.m41);
         $('#mailwrap').hide();
 
       }
     })
-    $('.content-wrap').on('dblclick','.content-body',function(){
+    $('.content-wrap').on('dblclick', '.content-body', function () {
       var i = parseInt($(this).attr('data-i'));
       choicedata = savedata[i];
-      var isVersion  = $(this).attr('data-version')?true:false;
-      if(isVersion){
+      var isVersion = $(this).attr('data-version') ? true : false;
+      if (isVersion) {
         choicedata = saveversion[i];
       }
-      var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ','').replace('"','').split(' ');
-      if(projectID == ''){
+      var twh = choicedata.content.match(/viewBox=\".*?\"/ig)[0].replace('viewBox="0 0 ', '').replace('"', '').split(
+        ' ');
+      if (projectID == '') {
         var width = $('#size').val();
         choicedata.width = parseInt(width);
         choicedata.height = parseInt(width * twh[1] / twh[0]);
         choicedata.color = $('#color').val();
         choicedata.type = 'public';
-        SMAction('submit',choicedata);
-      }else{
+        SMAction('submit', choicedata);
+      } else {
         choicedata.type = 'private';
         choicedata.height = parseInt(twh[1]);
         choicedata.width = parseInt(twh[0]);
-        SMAction('submit',choicedata);
+        SMAction('submit', choicedata);
       }
-      
-    }).on('click','.content-body',function(){
-      if(shareFlag){
+
+    }).on('click', '.content-body', function () {
+      if (shareFlag) {
         var $this = $(this);
         var id = $this.attr('data-id');
         var slicei = -1;
-        for(var i = 0;i<shareArray.length;i++){
-          if(id == shareArray[i]){
+        for (var i = 0; i < shareArray.length; i++) {
+          if (id == shareArray[i]) {
             slicei = i;
-          }else{
-            $('[data-id="'+ shareArray[i] + '"]').addClass('btn-active2');
+          } else {
+            $('[data-id="' + shareArray[i] + '"]').addClass('btn-active2');
           }
         }
         var i = parseInt($(this).attr('data-i'));
         choicedata = savedata[i];
-        var isVersion  = $(this).attr('data-version')?true:false;
-        if(isVersion){
+        var isVersion = $(this).attr('data-version') ? true : false;
+        if (isVersion) {
           choicedata = saveversion[i];
         }
-        if(slicei != '-1'){
-          $('[data-id="'+ shareArray[slicei] + '"]').removeClass('btn-active2')
-          shareArray.splice(slicei,1);
-          shareArrayDom.splice(slicei,1);
-        }else{
+        if (slicei != '-1') {
+          $('[data-id="' + shareArray[slicei] + '"]').removeClass('btn-active2')
+          shareArray.splice(slicei, 1);
+          shareArrayDom.splice(slicei, 1);
+        } else {
           shareArray.push(id);
           shareArrayDom.push(choicedata);
           $this.addClass('btn-active2');
         }
-      }else{
-        if(projectID == ''){
+      } else {
+        if (projectID == '') {
           $('.content-body').removeClass('btn-active');
           $(this).addClass('btn-active');
-        }else{
+        } else {
           var i = parseInt($(this).attr('data-i'));
           var datamessage = savedata[i];
-          var isVersion  = $(this).attr('data-version')?true:false;
-          if(isVersion){
+          var isVersion = $(this).attr('data-version') ? true : false;
+          if (isVersion) {
             datamessage = saveversion[i];
             $('.private-version').hide();
           }
-          if(datamessage.version){
-            if(!shareFlag){
+          if (datamessage.version) {
+            if (!shareFlag) {
               $('.content-body').removeClass('btn-active');
               $(this).addClass('btn-active');
             }
             $('.private-svg').empty().append(datamessage.content);
             $('.private-name').text(datamessage.name);
             $('.private-version').show();
-            $('.private-delete').show().find('#icon-delete').attr('data-id',datamessage.id);
+            $('.private-delete').show().find('#icon-delete').attr('data-id', datamessage.id);
             $('.private-author span:eq(1)').text(datamessage.author);
             $('.private-version span:eq(1)').text(datamessage.version);
-            $('.private-version span:eq(1)').attr('data-name',datamessage.name);
+            $('.private-version span:eq(1)').attr('data-name', datamessage.name);
             $('.private-message-span1').css('display', 'inline-block');
-            $('.private-remark').text(i18.m44+(datamessage.remarks==null?'':datamessage.remarks));
-          }else{
+            $('.private-remark').text(i18.m44 + (datamessage.remarks == null ? '' : datamessage.remarks));
+          } else {
             $('.content-body').removeClass('btn-active');
             $(this).addClass('btn-active');
           }
         }
       }
-    }).on('mouseenter mouseout','.content-body',function(){
+    }).on('mouseenter mouseout', '.content-body', function () {
       var i = parseInt($(this).attr('data-i'));
       var datamessage = savedata[i];
-      if(!datamessage.version){
-        $('#author').text(i18.m16+'：'+savedata[i].author);
+      if (!datamessage.version) {
+        $('#author').text(i18.m16 + '：' + savedata[i].author);
       }
     })
 
-    $('.login').click(function(){
+    $('.login').click(function () {
       $('.icon-mag').hide();
       $('.login-mag').show();
     })
 
-    $('.search-input').on('input',function(e){
+    $('.search-input').on('input', function (e) {
       var inputKey = $(this).val();
       searchK(inputKey);
     })
-    $('#color').on('input',function(){
+    $('#color').on('input', function () {
       var val = $(this).val();
-      if(val.length == 6 || val.length == 3){
-        $('.color-box').css('background','#'+val);
-        $('path').attr('fill','#' + val);
-        $('svg').css('color','#' + val);
+      if (val.length == 6 || val.length == 3) {
+        $('.color-box').css('background', '#' + val);
+        $('path').attr('fill', '#' + val);
+        $('svg').css('color', '#' + val);
       }
-    }).on('blur',function(){
+    }).on('blur', function () {
       var val = $(this).val();
-      if(val.length == 3){
-        $('#color').val(val[0]+val[0]+val[1]+val[1]+val[2]+val[2]);
-      }else if(val.length == 6){
-        
-      }else{
+      if (val.length == 3) {
+        $('#color').val(val[0] + val[0] + val[1] + val[1] + val[2] + val[2]);
+      } else if (val.length == 6) {
+
+      } else {
         $('#color').val('000000');
       }
     })
-    $('#size').on('input',function(){
+    $('#size').on('input', function () {
       var val = $(this).val();
       $('svg').width(val);
     })
-    $('#confirm-button').click(function(){
+    $('#confirm-button').click(function () {
       var action = $('.login-mag').attr('data-action');
-      if(action == undefined || action == 'login'){
+      if (action == undefined || action == 'login') {
         var username = $('#username').val();
         var password = $('#password').val();
-        SMAction('login',{
-          username:username,
-          password:password,
-          action:'login'
+        SMAction('login', {
+          username: username,
+          password: password,
+          action: 'login'
         });
-      }else{
+      } else {
         var username = $('#username').val();
         var password = $('#password').val();
         var mail = $('#mail').val();
-        SMAction('login',{
-          username:username,
-          password:password,
-          mail:mail,
-          action:'register'
+        SMAction('login', {
+          username: username,
+          password: password,
+          mail: mail,
+          action: 'register'
         });
       }
       $('#username').val('');
@@ -1101,71 +1234,79 @@
       $('#mail').val('');
     })
 
-    $('#selectproject').on('change',function(){
+    $('#selectproject').on('change', function () {
       projectChange();
     })
-    $('#selecttype2').on('change',function(){
+    $('#selecttype2').on('change', function () {
       categoryChange();
     })
 
-    $('#share-button').on('click',function(){
-      SMAction('submit',{
-        type:'code',
-        code:$(this).attr('data-code')
+    $('#share-button').on('click', function () {
+      SMAction('submit', {
+        type: 'code',
+        code: $(this).attr('data-code')
       })
     })
 
-    $('#upload-mark').on('change',function(){
+    $('#upload-mark').on('change', function () {
       saveSvg[controli].remarks = encodeURIComponent($(this).val());
     })
 
-    $('#exit').on('click',function(){
+    $('#exit').on('click', function () {
       $('.login').show();
       $('.person').hide();
       project = [];
       appendType();
-      SMAction('submit',{
-        type:'loginout'
+      SMAction('submit', {
+        type: 'loginout'
       })
     })
 
-    $('#cancel-button').click(function(){
+    $('#cancel-button').click(function () {
       $('.login-mag').hide();
       $('.icon-mag').show();
     })
 
-    $('#add-dialog .savebutton').click(function(){
+    $('#add-dialog .savebutton').click(function () {
       var action = $('#add-dialog').attr('data-action');
       var key = $('#add-dialog').attr('data-key');
       var data = {};
       data.action = action;
-      if(action == 'addCategory'){
+      if (action == 'addCategory') {
         data.projectId = projectID;
       }
       data[key] = $('#add-dialog .dialog-content-input input').val();
-      SMAction('login',data);
+      SMAction('login', data);
       $('#add-dialog .dialog-content-input input').val('');
       $('#add-dialog').hide();
     })
-    $('#add-dialog .cancelbutton').click(function(){
+    $('#add-dialog .cancelbutton').click(function () {
       $('#add-dialog .dialog-content-input input').val('');
       $('#add-dialog').hide();
     })
 
-    function getUploadInit(){
+    function getUploadInit() {
       uploadProjectID = $('#selectproject').val();
       $('#upload-project').val(uploadProjectID);
     }
 
-    $('#file-button').click(function(){
+    $('#file-button').click(function () {
       getUploadInit();
-      SMAction('pushdata',{action:'filesvg',categoryid:uploadCategoryID,projectid:uploadProjectID});
+      SMAction('pushdata', {
+        action: 'filesvg',
+        categoryid: uploadCategoryID,
+        projectid: uploadProjectID
+      });
     })
-    $('#upload-button').click(function(){
+    $('#upload-button').click(function () {
       getUploadInit();
-      SMAction('pushdata',{action:'boardsvg',categoryid:uploadCategoryID,projectid:uploadProjectID});
+      SMAction('pushdata', {
+        action: 'boardsvg',
+        categoryid: uploadCategoryID,
+        projectid: uploadProjectID
+      });
     })
-    $('#upload-cancel').click(function(){
+    $('#upload-cancel').click(function () {
       saveSvg = [];
       $('.upload-svg-w').remove();
       $('.upload-wrap').hide();
@@ -1173,35 +1314,40 @@
       controli = 0;
     })
 
-    $('body').on('click','.upload-svg-w',function(){
+    $('body').on('click', '.upload-svg-w', function () {
       var i = parseInt($(this).attr('data-i'));
       controli = i;
       clickIsvgUploadFile();
-    }).on('click','.private-message-version-link',function(){
+    }).on('click', '.private-message-version-link', function () {
       var name = $(this).attr('data-name');
-      SMAction('pushdata',{action:'history',name:name,projectid:projectID,categoryid:typeID});
-    }).on('click','.version-back',function(){
+      SMAction('pushdata', {
+        action: 'history',
+        name: name,
+        projectid: projectID,
+        categoryid: typeID
+      });
+    }).on('click', '.version-back', function () {
       appendDom2(savedata);
-    }).on('click','#icon-delete',function(){
+    }).on('click', '#icon-delete', function () {
       var deleteid = $(this).attr('data-id');
-      SMAction('pushdata',{
-        action:"delete",
-        deleteid:deleteid,
-        projectid:projectID
+      SMAction('pushdata', {
+        action: "delete",
+        deleteid: deleteid,
+        projectid: projectID
       })
-    }).on('click','#share-icon',function(){
+    }).on('click', '#share-icon', function () {
       $('#confirm-share-icon').show();
       $('#cancel-share-icon').show();
       $('#share-icon').hide();
       shareFlag = 1;
       shareArray = [];
       shareArrayDom = [];
-      $('.content-wrap').prepend('<div class="bqts2">'+ i18.m70 +'</div>');
+      $('.content-wrap').prepend('<div class="bqts2">' + i18.m70 + '</div>');
       $('.content-body').removeClass('btn-active2').removeClass('btn-active');
-    }).on('click','#confirm-share-icon',function(){
-      if(shareArray == 0){
-        SMAction('submit',{
-          type:"displayDialog",
+    }).on('click', '#confirm-share-icon', function () {
+      if (shareArray == 0) {
+        SMAction('submit', {
+          type: "displayDialog",
           data: i18.m65
         })
         return;
@@ -1215,7 +1361,7 @@
       appendDom4();
       $('.content-wrap').find('.bqts2').remove();
 
-    }).on('click','#cancel-share-icon',function(){
+    }).on('click', '#cancel-share-icon', function () {
       $('#share-dialog-message').val('');
       $('#share-icon').show();
       $('#confirm-share-icon').hide();
@@ -1224,351 +1370,364 @@
       $('.content-body').removeClass('btn-active2').removeClass('btn-active');
       $('.content-wrap').find('.bqts2').remove();
 
-    }).on('click','#close-share',function(){
+    }).on('click', '#close-share', function () {
       $('.share-dialog').hide();
-    }).on('click','#build-share',function(){
+    }).on('click', '#build-share', function () {
       $('.share-dialog').hide();
       var message = $('#share-dialog-message').val();
-      SMAction('submit',{type:'share',projectId:projectID,ids:shareArray,message:message});
+      SMAction('submit', {
+        type: 'share',
+        projectId: projectID,
+        ids: shareArray,
+        message: message
+      });
     })
 
-    $('#upload-project').on('change',function(){
+    $('#upload-project').on('change', function () {
       uploadProjectID = $(this).val();
       versionRequest();
     });
 
-    $('#svg-name').on('change',function(){
+    $('#svg-name').on('change', function () {
       saveSvg[controli].name = encodeURIComponent($(this).val());
       versionRequest();
     })
 
-    $('#upload-upload').on('click',function(){
+    $('#upload-upload').on('click', function () {
       var project = $('#upload-project').val();
-      setAllKey('projectId',project);
-      setAllKey('author',loginname);
+      setAllKey('projectId', project);
+      setAllKey('author', loginname);
 
-      SMAction('pushdata',{action:'upload',data:saveSvg,version:saveversion});
+      SMAction('pushdata', {
+        action: 'upload',
+        data: saveSvg,
+        version: saveversion
+      });
       return;
     })
   }
 
-  function versionRequest(){
+  function versionRequest() {
     var list = [];
-    for(var i = 0;i<saveSvg.length;i++){
+    for (var i = 0; i < saveSvg.length; i++) {
       list.push(encodeURIComponent(encodeURIComponent(saveSvg[i].name)));
     }
-    SMAction('pushdata',{
-      action:'version',
-      list:list,
-      projectid:uploadProjectID
+    SMAction('pushdata', {
+      action: 'version',
+      list: list,
+      projectid: uploadProjectID
     })
   }
-  var versionCheck = function(data){
+  var versionCheck = function (data) {
     saveversion = 0;
-    for(var i = 0;i<data.length;i++){
+    for (var i = 0; i < data.length; i++) {
       saveSvg[i].version = data[i].version;
-      if(data[i].version>0){
+      if (data[i].version > 0) {
         saveversion++;
       }
     }
     clickIsvgUploadFile();
   }
 
-  function boardsvg(data){
+  function boardsvg(data) {
     $('.upload-wrap').show();
     $('.icon-mag').hide();
     svgUpload(data);
     clickIsvgUploadFile();
   }
 
-  function filesvg(data){
+  function filesvg(data) {
     $('.upload-wrap').show();
     $('.icon-mag').hide();
     svgUpload(data);
     clickIsvgUploadFile();
   }
 
-  function searchK(inputKey){
+  function searchK(inputKey) {
     searchData = [];
-    if(inputKey != ''){
-      for(var i = 0;i < savedata.length;i++){
-        if(savedata[i].name.toLocaleLowerCase().replace('.svg','').indexOf(inputKey.toLocaleLowerCase()) > -1){
+    if (inputKey != '') {
+      for (var i = 0; i < savedata.length; i++) {
+        if (savedata[i].name.toLocaleLowerCase().replace('.svg', '').indexOf(inputKey.toLocaleLowerCase()) > -1) {
           var searchResult = {};
           searchResult = savedata[i];
           searchResult.index = i;
           searchData.push(searchResult);
         }
       }
-      if(projectID!=''){
+      if (projectID != '') {
         appendDom2(searchData);
-      }else{
+      } else {
         appendDom(searchData);
       }
-    }else{
-      if(projectID!=''){
+    } else {
+      if (projectID != '') {
         appendDom2(savedata);
-      }else{
+      } else {
         appendDom(savedata);
       }
     }
   }
 
-  function setDialogMessage(data){
+  function setDialogMessage(data) {
     var father = $('#add-dialog');
     father.find('.dialog-header').text(data.title);
     father.find('.dialog-content-title').text(data.message);
-    father.attr('data-action',data.action);
-    father.attr('data-key',data.key);
+    father.attr('data-action', data.action);
+    father.attr('data-key', data.key);
   }
 
-  
-  function appendType(){
+
+  function appendType() {
     var projectDom = [];
-    projectDom.push('<optgroup label="'+i18.m62+'">');
-    projectDom.push('<option value="">'+i18.m15+'</option>')
-    for(var i = 0 ;i<project.length;i++){
-      projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
+    projectDom.push('<optgroup label="' + i18.m62 + '">');
+    projectDom.push('<option value="">' + i18.m15 + '</option>')
+    for (var i = 0; i < project.length; i++) {
+      projectDom.push('<option value="' + project[i].projectId + '">' + project[i].projectName + '</option>')
     }
     projectDom.push('</optgroup>');
-    projectDom.push('<optgroup label="'+i18.m63+'">');
-    projectDom.push('<option value="#_newproject_">'+i18.m46+'</option>');
-    projectDom.push('<option value="#_inputlink_">'+i18.m47+'</option>');
+    projectDom.push('<optgroup label="' + i18.m63 + '">');
+    projectDom.push('<option value="#_newproject_">' + i18.m46 + '</option>');
+    projectDom.push('<option value="#_inputlink_">' + i18.m47 + '</option>');
     projectDom.push('</optgroup>');
     $('#selectproject').empty().append(projectDom.join(''));
     var typeDom = [];
     projectID = $('#selectproject').val();
-    typeDom.push('<option value="">'+i18.m14+'</option>');
+    typeDom.push('<option value="">' + i18.m14 + '</option>');
     $('#selecttype2').empty().append(typeDom);
     typeID = $('#selecttype2').val();
 
     //首页
 
     projectDom = [];
-    for(var i = 0 ;i<project.length;i++){
-      projectDom.push('<option value="'+project[i].projectId+'">'+project[i].projectName+'</option>')
+    for (var i = 0; i < project.length; i++) {
+      projectDom.push('<option value="' + project[i].projectId + '">' + project[i].projectName + '</option>')
     }
     $('#upload-project').empty().append(projectDom.join(''));
   }
-  
 
-  function sLogin(data){
+
+  function sLogin(data) {
     $('.login-mag').hide();
     $('.icon-mag').show();
-    if(data.status == 200){
-      if(data.sig){
+    if (data.status == 200) {
+      if (data.sig) {
         $('.login').hide();
         $('.person').show();
         loginname = data.nametest;
-        $('.person #username-show').text('（'+loginname + '）');
+        $('.person #username-show').text('（' + loginname + '）');
       }
       project = data.project;
       appendType();
-    }else{
+    } else {
       $('#password').val('');
     }
   }
-  function pushdata(data){
+
+  function pushdata(data) {
     getData = data.list;
     savedata = data.list;
     appendDom2(savedata);
   }
-  function pushdata3(data){
+
+  function pushdata3(data) {
     saveversion = data.list;
     appendDom3(saveversion);
   }
-  
-  $('body').on('click',function(){
+
+  $('body').on('click', function () {
     return false;
   })
 
-  function initDomTree(){
+  function initDomTree() {
     var dom = ['<div class="icon-mag">',
       '<div class="toolbar" style="">',
-        '<select class="content-type" name="" id="selectproject">',
-          '<option value="">'+i18.m6+'</option>',
-        '</select>',
-        '<div id="share-button" class="cancelbutton">'+i18.m64+'</div>',
-        '<div class="login">',
-          '<span>'+i18.m4+'</span>',
-        '</div>',
-        '<div class="person">',
-          '<span id="username-show"></span>',
-          '<span id="exit">'+i18.m5+'</span>',
-        '</div>',
+      '<select class="content-type" name="" id="selectproject">',
+      '<option value="">' + i18.m6 + '</option>',
+      '</select>',
+      '<div id="share-button" class="cancelbutton">' + i18.m64 + '</div>',
+      '<div class="login">',
+      '<span>' + i18.m4 + '</span>',
+      '</div>',
+      '<div class="person">',
+      '<span id="username-show"></span>',
+      '<span id="exit">' + i18.m5 + '</span>',
+      '</div>',
       '</div>',
       '<div class="toolbar2">',
-        '<select style="margin:0 4px;" class="content-type" name="" id="selecttype2">',
-          '<option value="">'+i18.m7+'</option>',
-        '</select>',
-        '<div class="search-inputwrap">',
-          '<div class="search-icon"></div>',
-          '<input class="search-input" type="text">',
-        '</div>',
+      '<select style="margin:0 4px;" class="content-type" name="" id="selecttype2">',
+      '<option value="">' + i18.m7 + '</option>',
+      '</select>',
+      '<div class="search-inputwrap">',
+      '<div class="search-icon"></div>',
+      '<input class="search-input" type="text">',
+      '</div>',
       '</div>',
       '<div class="ui-flex">',
       '<div class="content-wrap">',
       '</div>',
       '<div class="private-content">',
-        '<div class="private-svg"></div>',
-        '<div class="private-name"></div>',
-        '<div class="private-message">',
-          '<div class="private-author">',
-          '<span class="private-message-span1">Author</span><span class="private-message-span2"></span>',
-          '</div>',
-          '<div class="private-version">',
-          '<span class="private-message-span1">Version</span><span class="private-message-span2 private-message-version-link"></span>',
-          '</div>',
-          '<div class="private-delete"><span id="icon-delete">'+i18.m48+'</span></div>',
-        '</div>',
+      '<div class="private-svg"></div>',
+      '<div class="private-name"></div>',
+      '<div class="private-message">',
+      '<div class="private-author">',
+      '<span class="private-message-span1">Author</span><span class="private-message-span2"></span>',
+      '</div>',
+      '<div class="private-version">',
+      '<span class="private-message-span1">Version</span><span class="private-message-span2 private-message-version-link"></span>',
+      '</div>',
+      '<div class="private-delete"><span id="icon-delete">' + i18.m48 + '</span></div>',
+      '</div>',
       '</div>',
       '<div class="private-remark">',
       '</div>',
       '<div class="messagebox">',
-        '<div class="messagebox-content">',
-          '<div class="messagebox-content2">'+i18.m8+' #</div>',
-          '<div class="">',
-            '<input id="color" class="tools-input" type="text" value="000000" />',
-          '</div> ',
-          '<div class="color-box"></div>',
-          '<div class="messagebox-content2">'+i18.m9+'</div>',
-          '<div class="">',
-            '<input id="size" class="tools-input" type="text" value="64" />',
-          '</div>',
-          '<div class="author" >',
-            '<span id="author"></span>',
-          '</div>',
-        '</div>',
+      '<div class="messagebox-content">',
+      '<div class="messagebox-content2">' + i18.m8 + ' #</div>',
+      '<div class="">',
+      '<input id="color" class="tools-input" type="text" value="000000" />',
+      '</div> ',
+      '<div class="color-box"></div>',
+      '<div class="messagebox-content2">' + i18.m9 + '</div>',
+      '<div class="">',
+      '<input id="size" class="tools-input" type="text" value="64" />',
+      '</div>',
+      '<div class="author" >',
+      '<span id="author"></span>',
+      '</div>',
+      '</div>',
       '</div>',
       '<div class="messagebox2" style="display:none">',
-        '<div id="upload-button" style="float:left;margin-right:10px" class="savebutton">'+i18.m49+'</div>',
-        '<div id="file-button" style="float:left;" class="cancelbutton" >'+i18.m50+'</div>',
-        '<div id="share-icon" class="cancelbutton" style="float:right;" >'+i18.m51+'</div>',
-        
-        '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;margin-left:10px;" >'+i18.m53+'</div>',
+      '<div id="upload-button" style="float:left;margin-right:10px" class="savebutton">' + i18.m49 + '</div>',
+      '<div id="file-button" style="float:left;" class="cancelbutton" >' + i18.m50 + '</div>',
+      '<div id="share-icon" class="cancelbutton" style="float:right;" >' + i18.m51 + '</div>',
 
-        '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;" >'+i18.m52+'</div>',
+      '<div id="confirm-share-icon" class="savebutton" style="float:right;display:none;margin-left:10px;" >' + i18.m53 +
       '</div>',
-    '</div>',
-    '</div>',
-    '<div class="login-mag">',
+
+      '<div id="cancel-share-icon" class="cancelbutton" style="float:right;display:none;" >' + i18.m52 + '</div>',
+      '</div>',
+      '</div>',
+      '</div>',
+      '<div class="login-mag">',
       '<div class="cell">',
-        '<div class="cell-title">',
-          i18.m11,
-        '</div>',
-        '<div class="cell-input">',
-          '<input id="username" type="text" />',
-        '</div>',
+      '<div class="cell-title">',
+      i18.m11,
+      '</div>',
+      '<div class="cell-input">',
+      '<input id="username" type="text" />',
+      '</div>',
       '</div>',
       '<div class="cell">',
-        '<div class="cell-title">',
-          i18.m12,
-        '</div>',
-        '<div class="cell-input">',
-          '<input id="password" type="password" />',
-        '</div>',
+      '<div class="cell-title">',
+      i18.m12,
+      '</div>',
+      '<div class="cell-input">',
+      '<input id="password" type="password" />',
+      '</div>',
       '</div>',
       '<div class="cell" style="display:none" id="mailwrap">',
-        '<div class="cell-title">',
-          i18.m54,
-        '</div>',
-        '<div class="cell-input">',
-          '<input id="mail" type="text" />',
-        '</div>',
+      '<div class="cell-title">',
+      i18.m54,
       '</div>',
-        '<span id="toggle-button" class="toggle-button">'+ i18.m42+ i18.m41 +'</span>',
+      '<div class="cell-input">',
+      '<input id="mail" type="text" />',
+      '</div>',
+      '</div>',
+      '<span id="toggle-button" class="toggle-button">' + i18.m42 + i18.m41 + '</span>',
       '<div class="loginbtnwrap">',
-        '<div id="confirm-button" class="loginbutton">'+i18.m4+'</div>',
-        '<div id="cancel-button" class="backbutton">'+i18.m55+'</div>',
+      '<div id="confirm-button" class="loginbutton">' + i18.m4 + '</div>',
+      '<div id="cancel-button" class="backbutton">' + i18.m55 + '</div>',
       '</div>',
-    '</div>',
-    '<div id="add-dialog" class="dialog">',
+      '</div>',
+      '<div id="add-dialog" class="dialog">',
       '<div class="dialog-wrap">',
-        '<div class="dialog-header"></div>',
-        '<div class="dialog-content">',
-          '<div class="dialog-content-title"></div>',
-          '<div class="dialog-content-input"><input /></div>',
-          '<div class="dialog-buttonwrap">',
-            '<div class="savebutton">'+i18.m56+'</div>',
-            '<div class="cancelbutton">'+i18.m29+'</div>',
-          '</div>',
-        '</div>',
+      '<div class="dialog-header"></div>',
+      '<div class="dialog-content">',
+      '<div class="dialog-content-title"></div>',
+      '<div class="dialog-content-input"><input /></div>',
+      '<div class="dialog-buttonwrap">',
+      '<div class="savebutton">' + i18.m56 + '</div>',
+      '<div class="cancelbutton">' + i18.m29 + '</div>',
       '</div>',
-    '</div>',
-    '<div class="upload-wrap">',
+      '</div>',
+      '</div>',
+      '</div>',
+      '<div class="upload-wrap">',
       '<div class="upload-svg-upload">',
-        '<div class="upload-svg-wrap" id="svg-wrap">',
-        '</div>',
-        '<div class="upload-svg-message">',
-          '<div class="upload-label-wrap">',
-            '<label>'+i18.m57+'</label>',
-            '<div class="upload-ui-item">',
-              '<input id="svg-name" class="upload-input-width" type="text" />',
-            '</div>',
-          '</div>',
-          '<div class="upload-label-wrap">',
-            '<label>'+i18.m58+'</label>',
-            '<div class="upload-ui-item">',
-              '<input readonly="readonly" disabled="disabled" id="upload-username" class="upload-input-width" type="text" />',
-            '</div>',
-          '</div>',
-          '<div class="upload-label-wrap">',
-            '<label>'+i18.m59+'</label>',
-            '<div class="upload-ui-item">',
-              '<input readonly="readonly" disabled="disabled" id="upload-version"  class="upload-input-width" type="text" />',
-            '</div>',
-          '</div>',
-          '<div class="upload-label-wrap">',
-            '<label>'+i18.m60+'</label>',
-            '<div class="upload-ui-item">',
-              '<textarea class="upload-input-width" id="upload-mark" style="height:80px"></textarea>',
-            '</div>',
-          '</div>',
-        '</div>',
+      '<div class="upload-svg-wrap" id="svg-wrap">',
+      '</div>',
+      '<div class="upload-svg-message">',
+      '<div class="upload-label-wrap">',
+      '<label>' + i18.m57 + '</label>',
+      '<div class="upload-ui-item">',
+      '<input id="svg-name" class="upload-input-width" type="text" />',
+      '</div>',
+      '</div>',
+      '<div class="upload-label-wrap">',
+      '<label>' + i18.m58 + '</label>',
+      '<div class="upload-ui-item">',
+      '<input readonly="readonly" disabled="disabled" id="upload-username" class="upload-input-width" type="text" />',
+      '</div>',
+      '</div>',
+      '<div class="upload-label-wrap">',
+      '<label>' + i18.m59 + '</label>',
+      '<div class="upload-ui-item">',
+      '<input readonly="readonly" disabled="disabled" id="upload-version"  class="upload-input-width" type="text" />',
+      '</div>',
+      '</div>',
+      '<div class="upload-label-wrap">',
+      '<label>' + i18.m60 + '</label>',
+      '<div class="upload-ui-item">',
+      '<textarea class="upload-input-width" id="upload-mark" style="height:80px"></textarea>',
+      '</div>',
+      '</div>',
+      '</div>',
       '</div>',
       '<div class="upload-svg-button">',
-        '<span>' + i18.m62,
-        '<select id="upload-project" ></select>',
-        '</span>',
-        '<div style="float:right;">',
-            '<div id="upload-upload" class="upload-savebutton">'+i18.m24+'</div>',
-            '<div id="upload-cancel" class="upload-cancelbutton">'+i18.m52+'</div>',
-        '</div>',
+      '<span>' + i18.m62,
+      '<select id="upload-project" ></select>',
+      '</span>',
+      '<div style="float:right;">',
+      '<div id="upload-upload" class="upload-savebutton">' + i18.m24 + '</div>',
+      '<div id="upload-cancel" class="upload-cancelbutton">' + i18.m52 + '</div>',
       '</div>',
-    '</div>',
-    '<div class="share-dialog"><div class="share-dialog-w">',
-    '<div class="share-dialog-main"></div>',
-    '<div class="share-dialog-message"><label>'+i18.m60+'</label><textarea id="share-dialog-message"></textarea>',
-    '<div>',
-    '<div id="build-share" class="upload-savebutton">'+i18.m61+'</div>',
-    '<div id="close-share" class="upload-cancelbutton">'+i18.m52+'</div>',
-    '</div></div>',
-    '</div></div>'
+      '</div>',
+      '</div>',
+      '<div class="share-dialog"><div class="share-dialog-w">',
+      '<div class="share-dialog-main"></div>',
+      '<div class="share-dialog-message"><label>' + i18.m60 +
+      '</label><textarea id="share-dialog-message"></textarea>',
+      '<div>',
+      '<div id="build-share" class="upload-savebutton">' + i18.m61 + '</div>',
+      '<div id="close-share" class="upload-cancelbutton">' + i18.m52 + '</div>',
+      '</div></div>',
+      '</div></div>'
     ];
     $('body').append(dom.join(''));
   }
 
-  var uploadReturn = function(data){
-    if(data.status == 200){
+  var uploadReturn = function (data) {
+    if (data.status == 200) {
       saveSvg = [];
       $('.upload-svg-w').remove();
       $('.upload-wrap').hide();
       $('.icon-mag').show();
-      if(typeID != ''){
-        SMAction('pushdata',{
-          type:'type',
-          id:typeID,
-          pid:projectID
+      if (typeID != '') {
+        SMAction('pushdata', {
+          type: 'type',
+          id: typeID,
+          pid: projectID
         })
-      }else{
-        SMAction('pushdata',{
-          type:'project',
-          id:projectID
+      } else {
+        SMAction('pushdata', {
+          type: 'project',
+          id: projectID
         })
       }
-      
+
     }
   }
-  init = function(data){
+  init = function (data) {
     i18 = data.i18;
     initDomTree();
     baseData = data.data;
@@ -1576,21 +1735,21 @@
     appendDom(baseData);
     domEvent();
     isLogin = data.isLogin;
-    if(isLogin){
+    if (isLogin) {
       $('.login').hide();
       $('.person').show();
       loginname = data.nametest;
-      $('.person #username-show').text('（'+loginname+'）');
+      $('.person #username-show').text('（' + loginname + '）');
       project = data.project;
       appendType();
-      if(data.chooseCategory && data.chooseProject){
+      if (data.chooseCategory && data.chooseProject) {
         projectID = data.chooseProject;
         typeID = data.chooseCategory;
         $('#selectproject').val(projectID);
         appendCategory();
         $('#selecttype2').val(typeID);
         categoryChange();
-      }else if(data.chooseProject){
+      } else if (data.chooseProject) {
         projectID = data.chooseProject;
         typeID = data.chooseCategory;
         $('#selectproject').val(projectID);
@@ -1598,5 +1757,6 @@
       }
     }
   }
-  </script>
+</script>
+
 </html>

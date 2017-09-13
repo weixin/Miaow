@@ -1,123 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <link href="css/normalize.css" rel="stylesheet">
-    <style type="text/css">
-    body,html{
-      height:100%;
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <link href="css/normalize.css" rel="stylesheet">
+  <style type="text/css">
+    body,
+    html {
+      height: 100%;
       background-color: #ececec;
       font-size: 12px;
     }
-    .body{
-      padding:10px 15px 20px 15px ;
 
+    .body {
+      padding: 10px 15px 20px 15px;
     }
-    .title{
+
+    .title {
       font-size: 14px;
       margin: 10px 0;
     }
-    .keytitle{
-      width:95px;
+
+    .keytitle {
+      width: 95px;
     }
-    .keywrap{
+
+    .keywrap {
       display: flex;
     }
-    .keywrap + .keywrap{
-      margin-top:10px;
+
+    .keywrap+.keywrap {
+      margin-top: 10px;
     }
-    .inputwrap{
-      flex:1;
+
+    .inputwrap {
+      flex: 1;
     }
-    .inputwrap input{
-      height:14px;
-      width:100%;
+
+    .inputwrap input {
+      height: 14px;
+      width: 100%;
     }
-    .cancelbutton{
-      border:1px solid #cacaca;
-      color:#000;
-      float:right;
-      padding:0 15px;
-      border-radius:5px;
-      margin-right:15px;
+
+    .cancelbutton {
+      border: 1px solid #cacaca;
+      color: #000;
+      float: right;
+      padding: 0 15px;
+      border-radius: 5px;
+      margin-right: 15px;
       cursor: pointer;
       background-color: #fff;
     }
-    .savebutton{
-      color:white;
-      background:#3485f0;
+
+    .savebutton {
+      color: white;
+      background: #3485f0;
       border: 1px solid #237fff;
       border-radius: 4px;
-      padding:0 15px;
-      margin-right:35px;
-      float:right;
+      padding: 0 15px;
+      margin-right: 35px;
+      float: right;
       cursor: pointer;
     }
-    .key-setting{
-      padding-bottom:30px;
-    }
-    .savebutton:active{
-      background: linear-gradient(0deg,#4c98fe 0%,#0466e3 100%);
-    }
-    .buttonwrap{
-      left:0;
-      bottom:0;
-      padding: 10px 0;
-      width:100%;
-      border-top:1px solid #bebebe;
-      background: #f1f1f1;
-      position: fixed;
-      box-sizing:border-box;
-    }
-    .title2{
-      font-size: 12px;
-      margin:10px 0;
+
+    .key-setting {
+      padding-bottom: 30px;
     }
 
-    </style>
-  </head>
-  <body >
-    
-    
+    .savebutton:active {
+      background: linear-gradient(0deg, #4c98fe 0%, #0466e3 100%);
+    }
+
+    .buttonwrap {
+      left: 0;
+      bottom: 0;
+      padding: 10px 0;
+      width: 100%;
+      border-top: 1px solid #bebebe;
+      background: #f1f1f1;
+      position: fixed;
+      box-sizing: border-box;
+    }
+
+    .title2 {
+      font-size: 12px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+
   <script type="text/javascript">
     var keydata = [];
     var i18;
 
-    function initDom(){
+    function initDom() {
       var dom = ['<div class="body">',
         '<div class="title">',
-         i18.m10,
+        i18.m10,
         '</div>',
         '<div>',
         '<select id="i18n"></select>',
         '</div>',
         '<div class="title">',
-          i18.m5,
+        i18.m5,
         '</div>',
         '<div>',
-          '<input type="checkbox" id="toolbarauto"/><label for="toolbarauto">'+i18.m6+'</label>',
+        '<input type="checkbox" id="toolbarauto"/><label for="toolbarauto">' + i18.m6 + '</label>',
         '</div>',
         '<div class="title">',
-          i18.m7,
+        i18.m7,
         '</div>',
-        '<div class="title2">'+i18.m8+'</div>',
+        '<div class="title2">' + i18.m8 + '</div>',
         '<div class="key-setting">',
         '</div>',
         '<div class="buttonwrap">',
-          '<div class="savebutton">'+i18.m9+'</div>',
+        '<div class="savebutton">' + i18.m9 + '</div>',
         '</div>',
-      '</div>'];
+        '</div>'
+      ];
       $('body').append(dom.join(''));
     }
 
-    function keypre(){
-      $('input.keyinput').on('keydown',function(e){
+    function keypre() {
+      $('input.keyinput').on('keydown', function (e) {
         var index = parseInt($(this).attr('data-index'));
-        if(e.keyCode == 69 || e.keyCode == 8){
+        if (e.keyCode == 69 || e.keyCode == 8) {
           $(this).val('');
           keydata[index].shortcut = '';
           return;
@@ -126,19 +141,19 @@
         var shiftKey = e.shiftKey;
         var metaKey = e.metaKey;
         var text = [];
-        if(metaKey){
+        if (metaKey) {
           text.push('command');
         }
-        if(ctrlKey){
+        if (ctrlKey) {
           text.push('control');
         }
-        if(shiftKey){
+        if (shiftKey) {
           text.push('shift');
         }
-        
-        if(text.length > 0){
+
+        if (text.length > 0) {
           var shortkey = String.fromCharCode(e.keyCode);
-          if(e.keyCode == 91){
+          if (e.keyCode == 91) {
             shortkey = '';
           }
           var val = text.join(' ') + ' ' + shortkey;
@@ -149,23 +164,23 @@
       })
     }
 
-    function domEvent(){
-      $('.savebutton').on('click',function(){
-        var toolbarauto = $('#toolbarauto').is(':checked')?'true':'false';
+    function domEvent() {
+      $('.savebutton').on('click', function () {
+        var toolbarauto = $('#toolbarauto').is(':checked') ? 'true' : 'false';
         var language = $("#i18n").val();
         var obj = {};
         obj.keydata = keydata;
         obj.updateAuto = false;
         obj.toolbarAuto = toolbarauto;
         obj.language = language;
-        SMAction('submit',obj);
+        SMAction('submit', obj);
         SMAction('close');
       })
     }
 
 
-    
-    var init = function(data){
+
+    var init = function (data) {
       i18 = data.i18;
       initDom();
       domEvent();
@@ -174,43 +189,49 @@
       var command = data.commands;
 
       var i18Dom = [];
-      for(var i = 0;i<i18List.length;i++){
-        i18Dom.push('<option '+(i18List[i].key==language?'selected="selected"':'')+' value="'+i18List[i].key+'">'+i18List[i].name+'</option>')
+      for (var i = 0; i < i18List.length; i++) {
+        i18Dom.push('<option ' + (i18List[i].key == language ? 'selected="selected"' : '') + ' value="' + i18List[i].key +
+          '">' + i18List[i].name + '</option>')
       }
       $('#i18n').append(i18Dom.join(''));
 
       keydata = command;
 
       var keybody = [];
-      for(var i = 0;i<command.length;i++){
+      for (var i = 0; i < command.length; i++) {
         keybody.push('<div class="keywrap">')
-        keybody.push('<div data-identifier='+decodeURIComponent(command[i].identifier)+' class="keytitle">' +decodeURIComponent(command[i].name) + ':</div>');
-        keybody.push('<div class="inputwrap"><input class="keyinput" data-index="'+i+'" value="' +decodeURIComponent(command[i].shortcut) + '" /></div>');
-        if(command[i].istool == 'true' || command[i].istool == 'false'){
-          keybody.push('<div style="width:80px;text-align:center;"><input data-index="'+i+'" class="toolbar" style="margin-top:5px" type="checkbox" '+(command[i].istool == 'true'?'checked="checked"':'')+' /></div>')
-        }else{
+        keybody.push('<div data-identifier=' + decodeURIComponent(command[i].identifier) + ' class="keytitle">' +
+          decodeURIComponent(command[i].name) + ':</div>');
+        keybody.push('<div class="inputwrap"><input class="keyinput" data-index="' + i + '" value="' +
+          decodeURIComponent(command[i].shortcut) + '" /></div>');
+        if (command[i].istool == 'true' || command[i].istool == 'false') {
+          keybody.push('<div style="width:80px;text-align:center;"><input data-index="' + i +
+            '" class="toolbar" style="margin-top:5px" type="checkbox" ' + (command[i].istool == 'true' ?
+              'checked="checked"' : '') + ' /></div>')
+        } else {
           keybody.push('<div style="width:80px;text-align:center;"></div>');
         }
         keybody.push('</div>')
       }
-      if(data.toolbarAuto != 'false'){
-        $('#toolbarauto').attr('checked','checked');
+      if (data.toolbarAuto != 'false') {
+        $('#toolbarauto').attr('checked', 'checked');
       }
-      if(data.updateAuto != 'false'){
-        $('#updateauto').attr('checked','checked');
+      if (data.updateAuto != 'false') {
+        $('#updateauto').attr('checked', 'checked');
       }
       $('.key-setting').append(keybody.join(''));
       keypre();
-      $('input.toolbar').change(function(e){
+      $('input.toolbar').change(function (e) {
         var index = parseInt($(this).attr('data-index'));
-        if($(this).is(':checked')){
+        if ($(this).is(':checked')) {
           keydata[index].istool = 'true';
-        }else{
+        } else {
           keydata[index].istool = 'false';
         }
       })
     }
     init();
   </script>
-  </body>
+</body>
+
 </html>
