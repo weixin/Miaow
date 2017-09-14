@@ -248,6 +248,7 @@ var commonPreviewJson = function (context, filePath) {
 		}
 		exportSVGJson[layer.objectID()].children = {};
 		var saveChild = [];
+		var saveChild2 = [];
 		for (var i = 0; i < layer.children().length; i++) {
 			var child = layer.children()[i];
 			if (((newPreviewObject.back && newPreviewObject.back[child.objectID()]) || (newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()])) && child.isVisible()) {
@@ -258,28 +259,27 @@ var commonPreviewJson = function (context, filePath) {
 				backObj.width = encodeURIComponent(layer.children()[i].absoluteRect().size().width);
 				backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
 				exportSVGJson[layer.objectID()].children[child.objectID()] = backObj;
-			}
-			if (newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()) {
-				exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
-			}
-			if (newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()] && child.isVisible()) {
-				var name = 'fixed' + (fixedCount++);
-				exportSVGJson[layer.objectID()].children[child.objectID()].fixed = true;
-				exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
-				exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = newPreviewObject.fixed[child.objectID()].direction;
-				if (newPreviewObject.fixed[child.objectID()].direction == 'b') {
-					exportSVGJson[layer.objectID()].children[child.objectID()].y = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
+				if (newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()) {
+					exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
 				}
+				if (newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()] && child.isVisible()) {
+					var name = 'fixed' + (fixedCount++);
+					exportSVGJson[layer.objectID()].children[child.objectID()].fixed = true;
+					exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
+					exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = newPreviewObject.fixed[child.objectID()].direction;
+					if (newPreviewObject.fixed[child.objectID()].direction == 'b') {
+						exportSVGJson[layer.objectID()].children[child.objectID()].y = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
+					}
 
-				var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
-				fixedpng.scale = scale;
-				fixedpng.format = 'png';
-				var savePath = file + '/' + name + '.png';
-				context.document.saveArtboardOrSlice_toFile(fixedpng, savePath);
-				child.setIsVisible(false);
-				saveChild.push(child);
+					var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
+					fixedpng.scale = scale;
+					fixedpng.format = 'png';
+					var savePath = file + '/' + name + '.png';
+					context.document.saveArtboardOrSlice_toFile(fixedpng, savePath);
+					child.setIsVisible(false);
+					saveChild.push(child);
+				}
 			}
-
 		}
 
 		var fileName;
@@ -292,18 +292,11 @@ var commonPreviewJson = function (context, filePath) {
 		var layersLength = layer.layers().length;
 		for (var i = 0; i < layersLength; i++) {
 			if (layer.layers()[flagcount].objectID() != group.objectID() && layer.layers()[flagcount].isVisible()) {
-				if (layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height) {
-					var backgroundColor = exportColor(layer.layers()[flagcount]);
-					if (backgroundColor) {
-						exportSVGJson[layer.objectID()].background = backgroundColor;
-						flagcount++;
-					} else {
-						layer.layers()[flagcount].moveToLayer_beforeLayer(group, group);
-					}
-				} else {
-					layer.layers()[flagcount].moveToLayer_beforeLayer(group, group);
-				}
-				count++;
+				var p = layer.layers()[flagcount].duplicate();
+				saveChild2.push(layer.layers()[flagcount]);
+				layer.layers()[flagcount].setIsVisible(false);
+				p.moveToLayer_beforeLayer(group, group);
+				flagcount++;
 			} else {
 				flagcount++;
 			}
@@ -341,24 +334,20 @@ var commonPreviewJson = function (context, filePath) {
 		var savePath = file + '/' + name + '.png';
 		context.document.saveArtboardOrSlice_toFile(slice, savePath);
 
-		count = 0;
-		layersLength = group.layers().length;
-		for (var i = 0; i < layersLength; i++) {
-			group.layers()[0].moveToLayer_beforeLayer(layer, layer);
-			count++;
-			if (count == layersLength) {
-				break;
-			}
+		for (var i = 0; i < saveChild.length; i++) {
+			saveChild[i].setIsVisible(true);
 		}
+		for (var i = 0; i < saveChild2.length; i++) {
+			saveChild2[i].setIsVisible(true);
+		}
+
 		group.removeFromParent();
 		if (!exportSVGJson[layer.objectID()].background) {
 			var background = layer.hasBackgroundColor() ? colorToJSON(layer.backgroundColor()) : '';
 			exportSVGJson[layer.objectID()].background = background;
 		}
 
-		for (var i = 0; i < saveChild.length; i++) {
-			saveChild[i].setIsVisible(true);
-		}
+		
 	}
 
 	function writeFile(options) {

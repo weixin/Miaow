@@ -2396,28 +2396,24 @@
                 if (ua.match(/MicroMessenger/i) == "micromessenger") {
                     $('.wechat').show();
                 } else {
-                    if (navigator.standalone || ua.indexOf('iphone') == -1 ) {
-                        $('.icon').hide();
-                        $('.loadding').show();
-                        var loader = new PxLoader();
-                        for (var i in content) {
-                            if (content[i].content.name) {
-                                loader.addImage('./' + content[i].content.name + '.png');
-                            }
-                            for (var k in content[i].children) {
-                                if (content[i].children[k].image) {
-                                    loader.addImage('./' + content[i].children[k].image + '.png');
-                                }
+                    $('.icon').hide();
+                    $('.loadding').show();
+                    var loader = new PxLoader();
+                    for (var i in content) {
+                        if (content[i].content.name) {
+                            loader.addImage('./' + content[i].content.name + '.png');
+                        }
+                        for (var k in content[i].children) {
+                            if (content[i].children[k].image) {
+                                loader.addImage('./' + content[i].children[k].image + '.png');
                             }
                         }
-                        loader.addCompletionListener(function () {
-                            $('.loadding').remove();
-                            $('#wrapper').show();
-                        });
-                        loader.start();
-                    } else {
-                        $('.icon').show();
                     }
+                    loader.addCompletionListener(function () {
+                        $('.loadding').remove();
+                        $('#wrapper').show();
+                    });
+                    loader.start();
                 }
             })
 
@@ -2425,15 +2421,15 @@
 
             var size = 414;
             var zoom = window.innerWidth / size;
-            var zindex = 920;
+            var zindex = 1;
             var firstPage;
 
            function moveoutFixed(parent) {
                 parent.find('div[data-parent]').each(function () {
                     if ($(this).css('position') == 'fixed') {
-                        $('body').append($(this).css('z-index', '40'));
+                        $('#content').append($(this).css('z-index', '200'));
                     }else{
-                        $('body').append($(this).css('z-index', '41'));
+                        $('#content').append($(this).css('z-index', '201'));
                     }
                 })
             }
@@ -2503,9 +2499,9 @@
                         dom.push('position:absolute;');
                     }
                     if (content[i].children[k].fixedDirection == 'b') {
-                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].y)){{local}}) + 'px;');
+                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].y))) + 'px;');
                     } else {
-                        dom.push('top:' + ((Math.floor(rx * content[i].children[k].y)){{local}}) + 'px;');
+                        dom.push('top:' + ((Math.floor(rx * content[i].children[k].y))) + 'px;');
                     }
                     dom.push('z-index:1"></div>');
                 }
@@ -2673,10 +2669,10 @@
                     });
                     setTimeout(function () {
                         $('#content>div').each(function () {
-                            if ($(this).attr('data-id') != to) {
-                                $(this).hide();
-                            } else {
+                            if ($(this).attr('data-id') == to || $(this).attr('data-parent') ) {
                                 $(this).show();
+                            } else {
+                                $(this).hide();
                             }
                         })
                     }, 150)
@@ -2722,10 +2718,10 @@
                     }
                     setTimeout(function () {
                         $('#content>div').each(function () {
-                            if ($(this).attr('data-id') != search) {
-                                $(this).hide();
-                            } else {
+                            if ($(this).attr('data-id') == search || $(this).attr('data-parent') ) {
                                 $(this).show();
+                            } else {
+                                $(this).hide();
                             }
                         })
                     }, 150)
