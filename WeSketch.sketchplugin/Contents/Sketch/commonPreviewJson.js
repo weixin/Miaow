@@ -139,7 +139,19 @@ var commonPreviewJson = function (context, filePath) {
 		return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
 	}
 
-	function relationship(doc) {
+	function getParentGroupIsFixed(selection,newPreviewObject){
+		var parent = selection.parentGroup();
+		if(parent.className() == 'MSArtboardGroup'){
+			return '';
+		}
+		if(newPreviewObject.fixed[parent.objectID()]){
+			return encodeURIComponent(parent.objectID());
+		}else{
+			getParentGroupIsFixed(parent,newPreviewObject);
+		}
+	}
+
+	function relationship(doc,newPreviewObject) {
 		var kPluginDomain = "com.sketchplugins.wechat.link";
 		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
 			linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
@@ -154,6 +166,7 @@ var commonPreviewJson = function (context, filePath) {
 			children.y = parseInt(encodeURIComponent(linkLayer.absoluteRect().y())) - parseInt(encodeURIComponent(parentArtboard.absoluteRect().y()));
 			children.width = encodeURIComponent(linkLayer.absoluteRect().size().width);
 			children.height = encodeURIComponent(linkLayer.absoluteRect().size().height);
+			children.baba = getParentGroupIsFixed(linkLayer,newPreviewObject);
 			destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
 			var Message = destinationArtboardID.split('____');
 			destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
@@ -173,7 +186,7 @@ var commonPreviewJson = function (context, filePath) {
 	function exportHTML(filePath) {
 		var fx = 0;
 		var fxstyle = '';
-		var fxlocal = '-0';
+		var fxlocal = '0';
 
 		function chooseDialog() {
 			var settingsWindow = COSAlertWindow.new();
@@ -195,10 +208,10 @@ var commonPreviewJson = function (context, filePath) {
 			var index = [fx tag];
 			if (index == 0) {
 				fxstyle = 'default';
-				fxlocal = '-20';
+				fxlocal = '20';
 			} else if (index == 1) {
 				fxstyle = 'black';
-				fxlocal = '-20';
+				fxlocal = '20';
 			} else if (index == 2) {
 				fxstyle = 'black-translucent';
 			}
@@ -258,6 +271,7 @@ var commonPreviewJson = function (context, filePath) {
 				backObj.y = parseInt(encodeURIComponent(layer.children()[i].absoluteRect().y())) - parseInt(encodeURIComponent(parentArtboard.absoluteRect().y()));
 				backObj.width = encodeURIComponent(layer.children()[i].absoluteRect().size().width);
 				backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
+				backObj.baba = getParentGroupIsFixed(layer.children()[i],newPreviewObject);
 				exportSVGJson[layer.objectID()].children[child.objectID()] = backObj;
 				if (newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()) {
 					exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
@@ -268,7 +282,7 @@ var commonPreviewJson = function (context, filePath) {
 					exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
 					exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = newPreviewObject.fixed[child.objectID()].direction;
 					if (newPreviewObject.fixed[child.objectID()].direction == 'b') {
-						exportSVGJson[layer.objectID()].children[child.objectID()].y = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
+						exportSVGJson[layer.objectID()].children[child.objectID()].yy = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
 					}
 
 					var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
@@ -412,7 +426,7 @@ var commonPreviewJson = function (context, filePath) {
 		// getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
 		exportPNG(artBoards[i], context, filePath, scale, newPreviewObject);
 	}
-	relationship(context.document);
+	relationship(context.document,newPreviewObject);
 	exportHTML(filePath);
 	hidePreview(context);
 	for (var i = 0; i < noBuildObject.length; i++) {

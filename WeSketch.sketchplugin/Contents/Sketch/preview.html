@@ -2177,12 +2177,13 @@
             /*border-radius: 1px;*/
             /*border: 1px solid #f3e31a;*/
             /*background-color: rgba(255,250,172,0.35);*/
-            min-width: 25px;
+            min-width: 40px;
+            min-height: 40px;
         }
 
         .link-back {
-            min-width: 30px;
-            min-height: 20px;
+            min-width: 40px;
+            min-height: 40px;
             /* opacity: 0;
         border-radius: 5px;
         border: 1px solid #ff7c82;
@@ -2203,15 +2204,13 @@
         #content {
             position: relative;
             overflow-x: hidden;
-            overflow: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         #content>div {
             height: 100%;
             width: 100%;
             overflow: hidden;
-            margin-top: {{local}}px;
+            margin-top: -{{local}}px;
         }
 
         #wrapper {
@@ -2350,8 +2349,10 @@
         }
 
         .wrapper {
-            display: none;
-        }
+            height: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            display: none;        }
 
         .wechat {
             display: none;
@@ -2380,7 +2381,7 @@
                 </div>
             </div>
         </div>
-        <div id="wrapper" class="">
+        <div id="wrapper" class="wrapper">
             <div id="content">
             </div>
         </div>
@@ -2389,7 +2390,6 @@
         <script>
             var content = '{{json}}';
             content = JSON.parse(content);
-
 
             $(function () {
                 var ua = navigator.userAgent.toLowerCase();
@@ -2425,17 +2425,15 @@
             var firstPage;
 
            function moveoutFixed(parent) {
-                parent.find('div[data-parent]').each(function () {
+                parent.children('div[data-parent]').each(function () {
                     if ($(this).css('position') == 'fixed') {
-                        $('#content').append($(this).css('z-index', '200'));
-                    }else{
-                        $('#content').append($(this).css('z-index', '201'));
+                        $('#wrapper').append($(this).css('z-index', '200'));
                     }
                 })
             }
 
             function moveinFixed() {
-                $('body').find('div[data-parent]').each(function () {
+                $('#wrapper').children('div[data-parent]').each(function () {
                         $(this).css('z-index', '-1').appendTo($('[data-id="' + $(this).attr('data-parent') +
                             '"]'));
                 })
@@ -2457,12 +2455,6 @@
                     (content[i].background ? ('background-color:' + content[i].background + ';') : '') +
                     '" data-id="' + content[i].content.name + '"' +
                     ' data-direction="' + content[i].content.direction + '" >');
-
-                // if(content[i].type!='dialog'){
-                //     dom.push('<div style="background-image:url(./'+ content[i].content.name.replace('page','header') +'.png)" class="statusbar"></div>');
-                // }
-
-                //子图片
                 dom.push('<div style="background-image:url(./' + content[i].content.name + '.png);background-size:' +
                     +Math.floor(rx * content[i].content.width) + 'px auto;' +
                     'position:absolute;background-repeat: no-repeat;' +
@@ -2475,6 +2467,12 @@
                 for (var k in content[i].children) {
                     dom.push('<div  data-direction="' + content[i].children[k].direction + '" data-parent="' + content[
                         i].content.name + '"');
+                    if(content[i].children[k].baba){
+                        dom.push(' data-baba="' + content[i].children[content[i].children[k].baba].image + '"');
+                    }
+                    if (content[i].children[k].image) {
+                        dom.push(' data-fixed="' + content[i].children[k].image + '"');
+                    }
                     if (content[i].children[k].back) {
                         dom.push('class="link-back" ');
                     }
@@ -2498,16 +2496,29 @@
                     } else {
                         dom.push('position:absolute;');
                     }
-                    if (content[i].children[k].fixedDirection == 'b') {
-                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].y))) + 'px;');
-                    } else {
-                        dom.push('top:' + ((Math.floor(rx * content[i].children[k].y))) + 'px;');
+                    dom.push('top:' + ((Math.floor(rx * content[i].children[k].y))-{{local}}) + 'px;');
+                    if (content[i].children[k].yy) {
+                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].yy))-{{local}}) + 'px;');
                     }
                     dom.push('z-index:1"></div>');
                 }
                 dom.push('</div>');
             }
             $('#content').append(dom.join(''));
+
+            $('div[data-baba]').each(function(){
+                var $this = $(this);
+                var top = $this.css('top').replace('px','');
+                var left = $this.css('left').replace('px','');
+                var parent = $('div[data-fixed="'+ $this.attr('data-baba') +'"]');
+                var parenttop = parent.css('top').replace('px','');
+                var parentleft = parent.css('left').replace('px','');
+                $this.css('top',top-parenttop);
+                $this.css('left',left-parentleft);
+                $this.appendTo(parent);
+            })
+
+
             moveinFixed();
             var search1 = window.location.search.replace('?', '').replace('page=', '');
             moveoutFixed($('[data-id="' + search1 + '"]'));
@@ -2517,9 +2528,7 @@
             FastClick.attach(document.body);
             nonbounce("content");
             $('#content').css({
-                'height': window.innerHeight,
-                "overflow": "scroll",
-                "-webkit-overflow-scrolling": "touch"
+                'height': window.innerHeight
             });
         </script>
         <script>
