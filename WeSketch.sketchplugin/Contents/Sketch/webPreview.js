@@ -35,7 +35,7 @@ function webPreview(context) {
 		SMPanel({
 			url: pluginSketch + "/panel/webPreview.html",
 			width: 280,
-			height: 320,
+			height: 300,
 			data: {
 				link: webPreviewUrl + '/' + jsonData.dir + '/index.html'
 			},
