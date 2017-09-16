@@ -139,7 +139,19 @@ var commonPreviewJson = function (context, filePath) {
 		return page.children().filteredArrayUsingPredicate(connectionsLayerPredicate).firstObject();
 	}
 
-	function relationship(doc) {
+	function getParentGroupIsFixed(selection,newPreviewObject){
+		var parent = selection.parentGroup();
+		if(parent.className() == 'MSArtboardGroup'){
+			return '';
+		}
+		if(newPreviewObject.fixed[parent.objectID()]){
+			return encodeURIComponent(parent.objectID());
+		}else{
+			getParentGroupIsFixed(parent,newPreviewObject);
+		}
+	}
+
+	function relationship(doc,newPreviewObject) {
 		var kPluginDomain = "com.sketchplugins.wechat.link";
 		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
 			linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
@@ -154,6 +166,7 @@ var commonPreviewJson = function (context, filePath) {
 			children.y = parseInt(encodeURIComponent(linkLayer.absoluteRect().y())) - parseInt(encodeURIComponent(parentArtboard.absoluteRect().y()));
 			children.width = encodeURIComponent(linkLayer.absoluteRect().size().width);
 			children.height = encodeURIComponent(linkLayer.absoluteRect().size().height);
+			children.baba = getParentGroupIsFixed(linkLayer,newPreviewObject);
 			destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
 			var Message = destinationArtboardID.split('____');
 			destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
@@ -173,7 +186,7 @@ var commonPreviewJson = function (context, filePath) {
 	function exportHTML(filePath) {
 		var fx = 0;
 		var fxstyle = '';
-		var fxlocal = 0;
+		var fxlocal = '0';
 
 		function chooseDialog() {
 			var settingsWindow = COSAlertWindow.new();
@@ -195,10 +208,10 @@ var commonPreviewJson = function (context, filePath) {
 			var index = [fx tag];
 			if (index == 0) {
 				fxstyle = 'default';
-				fxlocal = '-20';
+				fxlocal = '20';
 			} else if (index == 1) {
 				fxstyle = 'black';
-				fxlocal = '-20';
+				fxlocal = '20';
 			} else if (index == 2) {
 				fxstyle = 'black-translucent';
 			}
@@ -248,6 +261,7 @@ var commonPreviewJson = function (context, filePath) {
 		}
 		exportSVGJson[layer.objectID()].children = {};
 		var saveChild = [];
+		var saveChild2 = [];
 		for (var i = 0; i < layer.children().length; i++) {
 			var child = layer.children()[i];
 			if (((newPreviewObject.back && newPreviewObject.back[child.objectID()]) || (newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()])) && child.isVisible()) {
@@ -257,29 +271,29 @@ var commonPreviewJson = function (context, filePath) {
 				backObj.y = parseInt(encodeURIComponent(layer.children()[i].absoluteRect().y())) - parseInt(encodeURIComponent(parentArtboard.absoluteRect().y()));
 				backObj.width = encodeURIComponent(layer.children()[i].absoluteRect().size().width);
 				backObj.height = encodeURIComponent(layer.children()[i].absoluteRect().size().height);
+				backObj.baba = getParentGroupIsFixed(layer.children()[i],newPreviewObject);
 				exportSVGJson[layer.objectID()].children[child.objectID()] = backObj;
-			}
-			if (newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()) {
-				exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
-			}
-			if (newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()] && child.isVisible()) {
-				var name = 'fixed' + (fixedCount++);
-				exportSVGJson[layer.objectID()].children[child.objectID()].fixed = true;
-				exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
-				exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = newPreviewObject.fixed[child.objectID()].direction;
-				if (newPreviewObject.fixed[child.objectID()].direction == 'b') {
-					exportSVGJson[layer.objectID()].children[child.objectID()].y = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
+				if (newPreviewObject.back && newPreviewObject.back[child.objectID()] && child.isVisible()) {
+					exportSVGJson[layer.objectID()].children[child.objectID()].back = true;
 				}
+				if (newPreviewObject.fixed && newPreviewObject.fixed[child.objectID()] && child.isVisible()) {
+					var name = 'fixed' + (fixedCount++);
+					exportSVGJson[layer.objectID()].children[child.objectID()].fixed = true;
+					exportSVGJson[layer.objectID()].children[child.objectID()].image = name;
+					exportSVGJson[layer.objectID()].children[child.objectID()].fixedDirection = newPreviewObject.fixed[child.objectID()].direction;
+					if (newPreviewObject.fixed[child.objectID()].direction == 'b') {
+						exportSVGJson[layer.objectID()].children[child.objectID()].yy = exportSVGJson[layer.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].height - exportSVGJson[layer.objectID()].children[child.objectID()].y;
+					}
 
-				var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
-				fixedpng.scale = scale;
-				fixedpng.format = 'png';
-				var savePath = file + '/' + name + '.png';
-				context.document.saveArtboardOrSlice_toFile(fixedpng, savePath);
-				child.setIsVisible(false);
-				saveChild.push(child);
+					var fixedpng = MSExportRequest.exportRequestsFromExportableLayer(child).firstObject();
+					fixedpng.scale = scale;
+					fixedpng.format = 'png';
+					var savePath = file + '/' + name + '.png';
+					context.document.saveArtboardOrSlice_toFile(fixedpng, savePath);
+					child.setIsVisible(false);
+					saveChild.push(child);
+				}
 			}
-
 		}
 
 		var fileName;
@@ -292,18 +306,11 @@ var commonPreviewJson = function (context, filePath) {
 		var layersLength = layer.layers().length;
 		for (var i = 0; i < layersLength; i++) {
 			if (layer.layers()[flagcount].objectID() != group.objectID() && layer.layers()[flagcount].isVisible()) {
-				if (layer.layers()[flagcount].rect().size.width == layer.rect().size.width && layer.layers()[flagcount].rect().size.height == layer.rect().size.height) {
-					var backgroundColor = exportColor(layer.layers()[flagcount]);
-					if (backgroundColor) {
-						exportSVGJson[layer.objectID()].background = backgroundColor;
-						flagcount++;
-					} else {
-						layer.layers()[flagcount].moveToLayer_beforeLayer(group, group);
-					}
-				} else {
-					layer.layers()[flagcount].moveToLayer_beforeLayer(group, group);
-				}
-				count++;
+				var p = layer.layers()[flagcount].duplicate();
+				saveChild2.push(layer.layers()[flagcount]);
+				layer.layers()[flagcount].setIsVisible(false);
+				p.moveToLayer_beforeLayer(group, group);
+				flagcount++;
 			} else {
 				flagcount++;
 			}
@@ -341,24 +348,20 @@ var commonPreviewJson = function (context, filePath) {
 		var savePath = file + '/' + name + '.png';
 		context.document.saveArtboardOrSlice_toFile(slice, savePath);
 
-		count = 0;
-		layersLength = group.layers().length;
-		for (var i = 0; i < layersLength; i++) {
-			group.layers()[0].moveToLayer_beforeLayer(layer, layer);
-			count++;
-			if (count == layersLength) {
-				break;
-			}
+		for (var i = 0; i < saveChild.length; i++) {
+			saveChild[i].setIsVisible(true);
 		}
+		for (var i = 0; i < saveChild2.length; i++) {
+			saveChild2[i].setIsVisible(true);
+		}
+
 		group.removeFromParent();
 		if (!exportSVGJson[layer.objectID()].background) {
 			var background = layer.hasBackgroundColor() ? colorToJSON(layer.backgroundColor()) : '';
 			exportSVGJson[layer.objectID()].background = background;
 		}
 
-		for (var i = 0; i < saveChild.length; i++) {
-			saveChild[i].setIsVisible(true);
-		}
+		
 	}
 
 	function writeFile(options) {
@@ -423,7 +426,7 @@ var commonPreviewJson = function (context, filePath) {
 		// getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
 		exportPNG(artBoards[i], context, filePath, scale, newPreviewObject);
 	}
-	relationship(context.document);
+	relationship(context.document,newPreviewObject);
 	exportHTML(filePath);
 	hidePreview(context);
 	for (var i = 0; i < noBuildObject.length; i++) {
