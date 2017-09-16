@@ -216,11 +216,17 @@ var commonPreviewJson = function (context, filePath) {
 				fxstyle = 'black-translucent';
 			}
 		}
+    	var i18nKey = "com.sketchplugins.wechat.i18n";
+		var loadingTips = '正在加载所有素材文件<br>请稍后...';
+		var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
+		if (encodeURIComponent(lang).indexOf('enUS') > -1) {
+			loadingTips = 'Loading all the images<br>Please wait...';
+		}
 
 		var htmlPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("preview.html").path();
 		var previewData = NSData.dataWithContentsOfFile(htmlPath);
 		previewData = [[NSString alloc] initWithData: previewData encoding: NSUTF8StringEncoding];
-		previewData = previewData.replace('{{json}}', JSON.stringify(exportSVGJson)).replace('{{barstyle}}', fxstyle).replace(/{{local}}/ig, fxlocal);
+		previewData = previewData.replace('{{json}}', JSON.stringify(exportSVGJson)).replace('{{barstyle}}', fxstyle).replace(/{{local}}/ig, fxlocal).replace('{{loading}}',loadingTips);
 		writeFile({
 			content: previewData,
 			path: filePath,
