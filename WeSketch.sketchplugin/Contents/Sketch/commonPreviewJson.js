@@ -433,8 +433,14 @@ var commonPreviewJson = function (context, filePath, show) {
 		var size = artBoards[i].absoluteRect().size().width;
 		if (size == 320 || size == 414 || size == 375) {
 			scale = 2;
+			exportSVGJson.width = parseInt(encodeURIComponent(size));
+		}else if(size == 750){
+			exportSVGJson.width = 375;
+		}else if(size == 640){
+			exportSVGJson.width = 320;
+		}else{
+			exportSVGJson.width = 414;
 		}
-		// getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
 		exportPNG(artBoards[i], context, filePath, scale, newPreviewObject);
 	}
 	relationship(context.document,newPreviewObject);
