@@ -2,7 +2,7 @@
 @import "commonPreview.js";
 
 
-var commonPreviewJson = function (context, filePath) {
+var commonPreviewJson = function (context, filePath, show) {
 	var i18 = _(context).commonPreview;
 
 	var BorderPositions = ["center", "inside", "outside"],
@@ -201,8 +201,11 @@ var commonPreviewJson = function (context, filePath) {
 			settingsWindow.addAccessoryView(fx);
 			return settingsWindow.runModal();
 		}
-		if (chooseDialog() != '1000') {
+		if (show || chooseDialog() != '1000') {
 			fxstyle = 'default';
+			if(show){
+				fxlocal = '20';
+			}
 		} else {
 			fx = fx.selectedCell();
 			var index = [fx tag];
