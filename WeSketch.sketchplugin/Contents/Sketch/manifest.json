@@ -88,6 +88,14 @@
       "handler" : "hidePreview"
     },
     {
+      "name" : "Show Preview",
+      "identifier" : "showPreview",
+      "script" : "showPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
       "name" : "Local Preview",
       "identifier" : "localPreview",
       "script" : "localPreview.js",
@@ -363,6 +371,7 @@
         "setNoBuild",
         "previewClear",
         "previewHide",
+        "showPreview",
         "localPreview",
         "webPreview",
         "-",

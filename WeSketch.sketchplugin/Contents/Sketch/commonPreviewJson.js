@@ -2,7 +2,7 @@
 @import "commonPreview.js";
 
 
-var commonPreviewJson = function (context, filePath) {
+var commonPreviewJson = function (context, filePath, show) {
 	var i18 = _(context).commonPreview;
 
 	var BorderPositions = ["center", "inside", "outside"],
@@ -201,8 +201,11 @@ var commonPreviewJson = function (context, filePath) {
 			settingsWindow.addAccessoryView(fx);
 			return settingsWindow.runModal();
 		}
-		if (chooseDialog() != '1000') {
+		if (show || chooseDialog() != '1000') {
 			fxstyle = 'default';
+			if(show){
+				fxlocal = '20';
+			}
 		} else {
 			fx = fx.selectedCell();
 			var index = [fx tag];
@@ -430,8 +433,14 @@ var commonPreviewJson = function (context, filePath) {
 		var size = artBoards[i].absoluteRect().size().width;
 		if (size == 320 || size == 414 || size == 375) {
 			scale = 2;
+			exportSVGJson.width = parseInt(encodeURIComponent(size));
+		}else if(size == 750){
+			exportSVGJson.width = 375;
+		}else if(size == 640){
+			exportSVGJson.width = 320;
+		}else{
+			exportSVGJson.width = 414;
 		}
-		// getSliceHeader(artBoards[i],context,'header'+pageCount,filePath,scale);
 		exportPNG(artBoards[i], context, filePath, scale, newPreviewObject);
 	}
 	relationship(context.document,newPreviewObject);

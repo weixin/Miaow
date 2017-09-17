@@ -88,6 +88,14 @@
       "handler" : "hidePreview"
     },
     {
+      "name" : "直接预览",
+      "identifier" : "showPreview",
+      "script" : "showPreview.js",
+      "shortcut": "",
+      "istool":"",
+      "handler" : "onRun"
+    },
+    {
       "name" : "生成本地预览",
       "identifier" : "localPreview",
       "script" : "localPreview.js",
