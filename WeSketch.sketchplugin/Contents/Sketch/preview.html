@@ -2444,32 +2444,37 @@
                 if (ua.match(/MicroMessenger/i) == "micromessenger") {
                     $('.wechat').show();
                 } else {
-                    if (navigator.standalone || ua.indexOf('iphone') == -1 ) {
-                        $('.icon').hide();
-                        $('.loadding').show();
-                        var loader = new PxLoader();
-                        for (var i in content) {
-                            if(i == 'width'){
-                                continue;
-                            }
-                            if (content[i].content.name) {
-                                loader.addImage('./' + content[i].content.name + '.png');
-                            }
-                            for (var k in content[i].children) {
-                                if (content[i].children[k].image) {
-                                    loader.addImage('./' + content[i].children[k].image + '.png');
-                                }
+                    if (!navigator.standalone) {
+                        $('.icon').show();
+                        setTimeout(function(){
+                            $('.icon').hide();
+                        },8000)
+                    }
+                    $('.loadding').show();
+                    var loader = new PxLoader();
+                    for (var i in content) {
+                        if(i == 'width'){
+                            continue;
+                        }
+                        if (content[i].content.name) {
+                            loader.addImage('./' + content[i].content.name + '.png');
+                        }
+                        for (var k in content[i].children) {
+                            if (content[i].children[k].image) {
+                                loader.addImage('./' + content[i].children[k].image + '.png');
                             }
                         }
-                        loader.addCompletionListener(function () {
-                            $('.loadding').remove();
-                            $('#wrapper').show();
-                        });
-                        loader.start();
-                    }else{
-                        $('.icon').show();
                     }
+                    loader.addCompletionListener(function () {
+                        $('.loadding').remove();
+                        $('#wrapper').show();
+                    });
+                    loader.start();
                 }
+            })
+
+            $('.icon').click(function(){
+                $('.icon').hide();
             })
 
 
@@ -2554,9 +2559,10 @@
                     } else {
                         dom.push('position:absolute;');
                     }
-                    dom.push('top:' + ((Math.floor(rx * content[i].children[k].y))-{{local}}) + 'px;');
                     if (content[i].children[k].yy) {
-                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].yy))-{{local}}) + 'px;');
+                        dom.push('bottom:' + ((Math.floor(rx * content[i].children[k].yy))+{{local}}) + 'px;');
+                    }else{
+                        dom.push('top:' + ((Math.floor(rx * content[i].children[k].y))-{{local}}) + 'px;');
                     }
                     dom.push('z-index:1"></div>');
                 }
