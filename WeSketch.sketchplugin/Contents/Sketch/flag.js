@@ -79,6 +79,12 @@ function getFlag(context, refrush) {
 	}
 
 	var drawLeftArrow = function (doc, dom, isNew) {
+		var parentArtboard = dom.parentArtboard();
+		if(parentArtboard != undefined && parentArtboard.rect().size.width < 500){
+		    scale = 1;
+		}else{
+		    scale = 2;
+		}
 		var count;
 		if (isNew) {
 			count = getLeftFlagNum();
@@ -88,8 +94,6 @@ function getFlag(context, refrush) {
 				count = count - 1;
 			}
 		}
-
-
 		var linexl = dom.absoluteRect().x() + dom.rect().size.width;
 		var liney = dom.absoluteRect().y() + dom.rect().size.height / 2 - (24 * scale / 2);
 
@@ -130,6 +134,12 @@ function getFlag(context, refrush) {
 		return connectionsGroup;
 	}
 	var drawRightArrow = function (doc, dom) {
+		var parentArtboard = dom.parentArtboard();
+		if(parentArtboard != undefined && parentArtboard.rect().size.width < 500){
+		    scale = 1;
+		}else{
+		    scale = 2;
+		}
 		var count = getRightFlagNum(dom);
 		if (isDeleteNum != 0 && count > isDeleteNum) {
 			count = count - 1;
