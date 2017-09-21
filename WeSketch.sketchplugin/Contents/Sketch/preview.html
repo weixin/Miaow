@@ -2444,7 +2444,7 @@
                 if (ua.match(/MicroMessenger/i) == "micromessenger") {
                     $('.wechat').show();
                 } else {
-                    if (!navigator.standalone) {
+                    if (!navigator.standalone && ua.indexOf('iphone')>-1) {
                         $('.icon').show();
                         setTimeout(function(){
                             $('.icon').hide();

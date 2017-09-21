@@ -2,6 +2,7 @@
 @import 'commonPreview.js';
 @import 'localPreview.js';
 @import 'webPreview.js';
+@import 'showPreview.js';
 
 function previewToolbar(context) {
     var i18 = _(context).toolbar;
@@ -144,6 +145,15 @@ function previewToolbar(context) {
         contentView.addSubview(linkButton10);
 
         xlocation = 20;
+
+        var linkButton11 = addButton(NSMakeRect(xlocation, 19, 45, 45), "preview" + prefix,
+            function (sender) {
+                var nowcontext = uploadContext(context);
+                showPreview(nowcontext);
+            });
+
+        contentView.addSubview(linkButton11);
+        xlocation = xlocation + 60;
 
         var linkButton8 = addButton(NSMakeRect(xlocation, 19, 45, 45), "local" + prefix,
             function (sender) {
