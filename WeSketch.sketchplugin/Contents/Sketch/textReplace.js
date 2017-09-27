@@ -31,7 +31,7 @@ function textReplace(context) {
     };
 
     function createUserInterface() {
-        if (selection && selection.count() == 1 && selection[0].class() == MSTextLayer) {
+        if (selection.length>0 && selection.count() == 1 && selection[0].class() == MSTextLayer) {
             if (selection[0].editingDelegate()) {
                 var range = selection[0].editingDelegate().textView().selectedRange();
                 var value = selection[0].stringValue();
@@ -103,7 +103,7 @@ function textReplace(context) {
         switch ([layer class]) {
             case MSTextLayer:
                 if ([layer stringValue].trim().match(textToFind)) {
-                    if (selection[0].editingDelegate() && layer.objectID() == selection[0].objectID()) {
+                    if (selection.length>0 && selection[0].editingDelegate() && layer.objectID() == selection[0].objectID()) {
                         var value = layer.stringValue();
                         var result = value.replace(textToFind, textToReplace);
                         var valueLength = value.length();
