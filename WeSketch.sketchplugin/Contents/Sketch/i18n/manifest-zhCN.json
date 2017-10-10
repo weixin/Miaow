@@ -262,6 +262,22 @@
       "handler" : "onRun"
     },
     {
+      "name" : "获取代码片段",
+      "identifier" : "getSymbolCode",
+      "script" : "symbolCode.js",
+      "shortcut": "command shift y",
+      "istool":"",
+      "handler" : "getSymbolCode"
+    },
+    {
+      "name" : "设置代码片段",
+      "identifier" : "setSymbolCode",
+      "script" : "symbolCode.js",
+      "shortcut": "command shift u",
+      "istool":"",
+      "handler" : "setSymbolCode"
+    },
+    {
       "name" : " └─ 设置",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
@@ -387,6 +403,8 @@
     "codeColor",
     "exportSlice",
     "codeStyle",
+    "setSymbolCode",
+    "getSymbolCode",
     "codeSetting",
     "-",
     "toolbar",

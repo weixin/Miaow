@@ -262,6 +262,22 @@
       "handler" : "onRun"
     },
     {
+      "name" : "Get Symbol Code",
+      "identifier" : "getSymbolCode",
+      "script" : "symbolCode.js",
+      "shortcut": "command shift y",
+      "istool":"",
+      "handler" : "getSymbolCode"
+    },
+    {
+      "name" : "Set Symbol Code",
+      "identifier" : "setSymbolCode",
+      "script" : "symbolCode.js",
+      "shortcut": "command shift u",
+      "istool":"",
+      "handler" : "setSymbolCode"
+    },
+    {
       "name" : " └─ Settings",
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
@@ -388,6 +404,8 @@
     "codeColor",
     "exportSlice",
     "codeStyle",
+    "setSymbolCode",
+    "getSymbolCode",
     "codeSetting",
     "-",
     "toolbar",
