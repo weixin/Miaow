@@ -8,7 +8,8 @@
 		"m6":", download new version automaticly？",
 		"m7":"Upgrade",
 		"m8":"Not Now",
-		"m9":"OK"
+		"m9":"OK",
+		"m10":"Warning"		
 	},
 	"codeColor":{
 		"m1":"Color Copied",

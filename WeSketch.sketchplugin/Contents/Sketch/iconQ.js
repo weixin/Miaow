@@ -2,7 +2,8 @@
 
 function iconQ(context) {
     var i18 = _(context).iconQ;
-
+    var ga = new Analytics(context);
+    
     var usualKey = "com.sketchplugins.wechat.iconusual";
     var loginKey = "com.sketchplugins.wechat.iconLogin";
     var loginNameKey = "com.sketchplugins.wechat.iconLoginName";
@@ -268,6 +269,13 @@ function iconQ(context) {
                     nowcontext.document.showMessage(i18.m2);
                 }
                 importedSVGLayer.select_byExpandingSelection(true, true);
+                if (ga) {                    
+                    if (data.type == 'public') {
+                        ga.sendEvent('icon', 'public');
+                    }else{
+                        ga.sendEvent('icon', 'private');                        
+                    }
+                }
             } else if (data.type == 'loginout') {
                 NSUserDefaults.standardUserDefaults().setObject_forKey('', loginNameKey);
                 NSUserDefaults.standardUserDefaults().setObject_forKey('', loginKey);
@@ -275,14 +283,14 @@ function iconQ(context) {
                 NSUserDefaults.standardUserDefaults().setObject_forKey('', projectChooseKey);
             } else if (data.type == 'code') {
                 paste(data.code);
-                NSApp.displayDialog(i18.m17 + data.code + i18.m18);
+                errorDialog(context,i18.m17 + data.code + i18.m18);
             } else if (data.type == 'share') {
                 var d = downloadZip(data);
                 var address = 'http://sketch.weapi.io:3000/users/downloadZip?' + 'svgname=' + d.data.svgZipName + '&' + 'pngname=' + d.data.pngZipName + '&' + 'remark=' + (data.message);
                 paste(address);
-                NSApp.displayDialog(i18.m19 + address + i18.m18);
+                errorDialog(context,i18.m19 + address + i18.m18);
             } else if (data.type == 'displayDialog') {
-                NSApp.displayDialog(data.data);
+                errorDialog(context,data.data);
             }
         },
         loginCallback: function (data, windowObject) {
@@ -294,35 +302,35 @@ function iconQ(context) {
             } else if (data.action == 'addProject') {
                 if (data.projectName == '') {
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog(i18.m20);
+                    return errorDialog(context,i18.m20);
                 } else {
                     result = addProject(data);
                     if (result.status == 200) {
-                        NSApp.displayDialog(i18.m21);
+                        errorDialog(context,i18.m21);
                     }
                 }
             } else if (data.action == 'addCategory') {
                 if (data.categoryName == '') {
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog(i18.m20);
+                    return errorDialog(context,i18.m20);
                 } else {
                     result = addCategory(data);
                     if (result.status == 200) {
-                        NSApp.displayDialog(i18.m21);
+                        errorDialog(context,i18.m21);
                     }
                 }
             } else if (data.action == 'addMember') {
                 if (data.invitedKey == '') {
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog(i18.m20);
+                    return errorDialog(context,i18.m20);
                 } else {
                     result = addMember(data);
                     if (result.status == 200) {
-                        NSApp.displayDialog(i18.m21);
+                        errorDialog(context,i18.m21);
                     }
                 }
             } else if (data.action == 'deleteProject') {
-                var settingsWindow = COSAlertWindow.new();
+                var settingsWindow = dialog(context);
                 settingsWindow.addButtonWithTitle(i18.m28);
                 settingsWindow.addButtonWithTitle(i18.m29);
 
@@ -332,7 +340,7 @@ function iconQ(context) {
                 if (settingsWindow.runModal() == "1000") {
                     var result = deleteProject(data);
                     if (result.status == 200) {
-                        NSApp.displayDialog(i18.m68);
+                        errorDialog(context,i18.m68);
                     }
                 } else {
                     return;
@@ -359,7 +367,7 @@ function iconQ(context) {
                 var newContext = uploadContext(context);
                 if (newContext.selection.length == 0) {
                     windowObject.evaluateWebScript("window.location.hash = '';");
-                    return NSApp.displayDialog(i18.m22);
+                    return errorDialog(context,i18.m22);
                 }
                 var svg = choiceSVG(newContext);
                 var namelist = [];
@@ -429,12 +437,12 @@ function iconQ(context) {
                     }
                     var result = uploadIconsFunc(uploaddata);
                     if (result.status == 200) {
-                        NSApp.displayDialog(i18.m23);
+                        errorDialog(context,i18.m23);
                     }
                     return result;
                 }
                 if (data.version > 0) {
-                    var settingsWindow = COSAlertWindow.new();
+                    var settingsWindow = dialog(context);
                     settingsWindow.addButtonWithTitle(i18.m24);
                     settingsWindow.addButtonWithTitle(i18.m25);
                     settingsWindow.setMessageText(i18.m26);
@@ -456,7 +464,7 @@ function iconQ(context) {
                 windowObject.evaluateWebScript("window.location.hash = '';");
 
             } else if (data.action == 'delete') {
-                var settingsWindow = COSAlertWindow.new();
+                var settingsWindow = dialog(context);
                 settingsWindow.addButtonWithTitle(i18.m28);
                 settingsWindow.addButtonWithTitle(i18.m29);
                 settingsWindow.setMessageText(i18.m30);
@@ -485,7 +493,6 @@ function iconQ(context) {
 
         }
     });
-    var ga = new Analytics(context);
     if (ga) ga.sendEvent('icon', 'open');
 }
 

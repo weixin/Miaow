@@ -59,7 +59,7 @@ var onRun = function (context) {
 		manifestEn = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
 
 	var i18t = _(context).toolSetting;
-	var settingsWindow = COSAlertWindow.new();
+	var settingsWindow = dialog(context);
 	settingsWindow.addButtonWithTitle(i18t.m1);
 	settingsWindow.addButtonWithTitle(i18t.m2);
 

@@ -40,7 +40,7 @@ function textReplace(context) {
                 textToFind = selection[0].stringValue().trim();
             }
         }
-        userInterface = COSAlertWindow.new();
+        userInterface = dialog(context);
 
         userInterface.setMessageText(i18.m1);
         userInterface.setInformativeText(i18.m2);
@@ -168,7 +168,7 @@ function textReplace(context) {
     if (replaceCount) {
         context.document.showMessage(i18.m13 + replaceCount + i18.m14 + '\r\n"' + textToFind2 + i18.m15 + textToReplace + '"');
     } else {
-        NSApp.displayDialog(i18.m16 + '"' + textToFind + '"');
+        errorDialog(context,i18.m16 + '"' + textToFind + '"');
     }
     var ga = new Analytics(context);
     if (ga) ga.sendEvent('textReplace', 'confirm');

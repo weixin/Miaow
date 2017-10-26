@@ -21,7 +21,7 @@ function showPreview(context) {
 	var width = 414;
 	var height = 716;
 	function chooseDialog() {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle('确定');
 		settingsWindow.addButtonWithTitle('取消');
 

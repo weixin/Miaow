@@ -19,7 +19,7 @@ function webPreview(context) {
 		return;
 	}
 	zip(['-q', '-r', '-m', '-o', '-j', filePath + '.zip', filePath]);
-	var settingsWindow = COSAlertWindow.new();
+	var settingsWindow = dialog(context);
 	settingsWindow.addButtonWithTitle(i18.m1);
 	settingsWindow.addButtonWithTitle(i18.m2);
 

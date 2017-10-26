@@ -14,7 +14,7 @@ var SyncColor2 = function (context, UIKITURL) {
 
 	var dataPre = [theText substringToIndex: 1];
 	if (dataPre == "<") {
-		NSApp.displayDialog(i18c.m1);
+		errorDialog(context,i18c.m1);
 		return;
 	} else {
 		colorContents = theText
@@ -47,7 +47,7 @@ function syncColor(context) {
 	var scaleOptionsMatrix;
 
 	function chooseKit(context) {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18c.m2);
 		settingsWindow.addButtonWithTitle(i18c.m3);
 
@@ -72,8 +72,8 @@ function syncColor(context) {
 
 	var app = NSApp.delegate();
 	var doc = context.document;
-	var dialog = chooseKit(context);
-	if (dialog != '1000') {
+	var dialogKit = chooseKit(context);
+	if (dialogKit != '1000') {
 		return;
 	}
 

@@ -2553,7 +2553,7 @@
                         rx * content[i].children[k].height) + 'px;left:' + Math.floor(rx * content[i].children[
                         k].x) + 'px;');
                     if (content[i].children[k].image) {
-                        dom.push('background-image:url(' + content[i].children[k].image + '.png);');
+                        dom.push('background-image:url(' + content[i].children[k].image + '.png);background-repeat:no-repeat;');
                         dom.push('background-size:' + Math.floor(rx * content[i].children[k].width) + 'px auto;');
                         dom.push('position:fixed;');
                     } else {

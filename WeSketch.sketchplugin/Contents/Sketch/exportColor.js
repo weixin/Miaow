@@ -43,6 +43,6 @@ var onRun = function (context) {
 		}
 
 	} else {
-		NSApp.displayDialog(i18.m2);
+		errorDialog(context,i18.m2);
 	}
 }

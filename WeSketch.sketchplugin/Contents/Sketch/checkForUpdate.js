@@ -18,7 +18,7 @@ function checkForUpdate(context, auto) {
 	if (auto && updateAvailable == false) {
 		return false;
 	}
-	var updateAlert = COSAlertWindow.new();
+	var updateAlert = dialog(context);
 
 	updateAlert.setMessageText(updateAvailable ? i18.m2 : i18.m3);
 	if (updateAvailable) {
