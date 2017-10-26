@@ -1,5 +1,5 @@
 {
-  "name": "WeSketch",
+  "name": "Miaow",
   "author": "Tencent WeChat",
   "version": "1.4.0",
   "identifier": "cn.wechat",
@@ -393,6 +393,6 @@
         ]
     }
     ],
-    "title":"WeSketch"
+    "title":"Miaow"
   }
 }
