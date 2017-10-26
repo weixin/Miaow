@@ -209,11 +209,11 @@ var buildPreview = function (context) {
 var setIndex = function (context) {
 	var i18 = _(context).commonPreview;
 	if (context.selection.length == 0) {
-		return NSApp.displayDialog(i18.m1);
+		return errorDialog(context,i18.m1);
 	} else {
 		var selection = context.selection[0];
 		if (selection.className() != 'MSArtboardGroup') {
-			return NSApp.displayDialog(i18.m1);
+			return errorDialog(context,i18.m1);
 		}
 		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).indexMain != nil", previewKey);
 		var indexObject = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate);
@@ -230,7 +230,7 @@ var setDialog = function (context) {
 	var fx = 0;
 
 	function chooseDialog() {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
 
@@ -243,11 +243,11 @@ var setDialog = function (context) {
 		return settingsWindow.runModal();
 	}
 	if (context.selection.length == 0) {
-		return NSApp.displayDialog(i18.m1);
+		return errorDialog(context,i18.m1);
 	} else {
 		var selection = context.selection[0];
 		if (selection.className() != 'MSArtboardGroup') {
-			return NSApp.displayDialog(i18.m1);
+			return errorDialog(context,i18.m1);
 		}
 		if (chooseDialog() != '1000') {
 			return;
@@ -277,7 +277,7 @@ var setFixed = function (context) {
 	var fx = 0;
 
 	function chooseDialog2() {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
 
@@ -291,7 +291,7 @@ var setFixed = function (context) {
 	}
 
 	function chooseDialog(n) {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
 		settingsWindow.setMessageText(i18.m14 + n + i18.m15);
@@ -303,11 +303,11 @@ var setFixed = function (context) {
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(direction, "direction", selection, previewKey);
 	}
 	if (context.selection.length == 0) {
-		return NSApp.displayDialog(i18.m13);
+		return errorDialog(context,i18.m13);
 	} else {
 		var selection = context.selection[0];
 		if (selection.className() == 'MSArtboardGroup') {
-			return NSApp.displayDialog(i18.m13);
+			return errorDialog(context,i18.m13);
 		}
 		if (!chooseDialog2()) {
 			return;
@@ -351,18 +351,18 @@ var setBacks = function (context) {
 	var fx = 0;
 
 	function chooseDialog(n) {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
 		settingsWindow.setMessageText(i18.m14 + n + i18.m15);
 		return settingsWindow.runModal();
 	}
 	if (context.selection.length == 0) {
-		return NSApp.displayDialog(i18.m10);
+		return errorDialog(context,i18.m10);
 	} else {
 		var selection = context.selection[0];
 		if (selection.className() == 'MSArtboardGroup') {
-			return NSApp.displayDialog(i18.m10);
+			return errorDialog(context,i18.m10);
 		}
 		var lengthD = 0;
 		var saveDom = [];
@@ -391,18 +391,18 @@ var setNoBuild = function (context) {
 	var fx = 0;
 
 	function chooseDialog(n) {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m2);
 		settingsWindow.addButtonWithTitle(i18.m3);
 		settingsWindow.setMessageText(i18.m14 + n + i18.m15);
 		return settingsWindow.runModal();
 	}
 	if (context.selection.length == 0) {
-		return NSApp.displayDialog(i18.m10);
+		return errorDialog(context,i18.m10);
 	} else {
 		var selection = context.selection[0];
 		if (selection.className() == 'MSArtboardGroup') {
-			return NSApp.displayDialog(i18.m10);
+			return errorDialog(context,i18.m10);
 		}
 		var lengthD = 0;
 		var saveDom = [];
@@ -427,7 +427,7 @@ var clearPreview = function (context) {
 	var i18 = _(context).commonPreview;
 	var domKey = ['backMain', 'fixedMain', 'dialogMain', 'indexMain', 'noBuildMain'];
 	if (context.selection.length == 0) {
-		return NSApp.displayDialog(i18.m16);
+		return errorDialog(context,i18.m16);
 	}
 	for (var i = 0; i < context.selection.length; i++) {
 		for (var k = 0; k < domKey.length; k++) {

@@ -24,7 +24,7 @@ var onRun = function (context) {
       }
 
       if (layer.class() == 'MSTextLayer') {
-        if (encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue().trim()) != encodeURIComponent(b.layers()[i].stringValue().trim())) {
+        if (encodeURIComponent(layer.textColor().toString()) != encodeURIComponent(b.layers()[i].textColor().toString()) || encodeURIComponent(layer.font()) != encodeURIComponent(b.layers()[i].font()) || encodeURIComponent(layer.stringValue()) != encodeURIComponent(b.layers()[i].stringValue())) {
           return false;
         }
       }
@@ -105,7 +105,7 @@ var onRun = function (context) {
       var nowK = k;
       for (var k = 0; k < pages.count(); k++) {
         //如果有同一个page名
-        if (encodeURIComponent(pages[k].name().trim()) == encodeURIComponent(sourcePageName.trim())) {
+        if (encodeURIComponent(pages[k].name()) == encodeURIComponent(sourcePageName)) {
           deleteFlag.push(pages[k]);
           flagForOldPage = true;
 
@@ -118,7 +118,7 @@ var onRun = function (context) {
             var s = sourceSymbol[f];
             var flagForNewSymbol = false;
             for (var g = 0; g < localSymobl.count(); g++) {
-              if (encodeURIComponent(s.name().trim()) == encodeURIComponent(localSymobl[g].name().trim())) {
+              if (encodeURIComponent(s.name()) == encodeURIComponent(localSymobl[g].name())) {
 
 
                 flagForNewSymbol = true;

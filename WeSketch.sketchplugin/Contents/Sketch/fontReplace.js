@@ -38,7 +38,7 @@ function fontReplace(context) {
             doc.showMessage(i18.m1);
             return false;
         } else {
-            userInterface = COSAlertWindow.new();
+            userInterface = dialog(context);
             userInterface.setMessageText(i18.m2);
             userInterface.addTextLabelWithValue(i18.m3 + "：");
 

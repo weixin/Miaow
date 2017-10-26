@@ -14,7 +14,7 @@ function exportSlice(context) {
 
 	var selection = context.selection;
 	if (selection.count() == 0) {
-		return NSApp.displayDialog(i18.m1);
+		return errorDialog(context,i18.m1);
 	}
 	var scale = 0;
 	var parent = selection[0].parentArtboard();
@@ -34,7 +34,7 @@ function exportSlice(context) {
 
 	var imagetype = 'png';
 	var addressname = [];
-	var settingsWindow = COSAlertWindow.new();
+	var settingsWindow = dialog(context);
 	settingsWindow.addButtonWithTitle(i18.m2);
 	settingsWindow.addButtonWithTitle(i18.m3);
 	settingsWindow.setMessageText(i18.m4);

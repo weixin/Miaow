@@ -752,7 +752,7 @@ function getLink(context, refursh) {
 			}
 		}
 		if (iFlag == 16) {
-			NSApp.displayDialog(pca.name() + i18.m1 + pcb.name() + i18.m2);
+			errorDialog(context,pca.name() + i18.m1 + pcb.name() + i18.m2);
 		}
 
 		return {
@@ -1122,7 +1122,7 @@ var destArtboard, linkLayer;
 if (selection.count() != 1 && selection.count() != 2) {
 	redrawConnections(context);
 	if (!refursh) {
-		return NSApp.displayDialog(i18.m3);
+		return errorDialog(context,i18.m3);
 	}
 }
 

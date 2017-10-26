@@ -10,7 +10,7 @@ function syncUIkit(context) {
 	var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
 	function chooseKit(context) {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m1);
 		settingsWindow.addButtonWithTitle(i18.m2);
 
@@ -93,8 +93,8 @@ function syncUIkit(context) {
 
 	}
 
-	var dialog = chooseKit(context);
-	if (dialog != '1000') {
+	var dialogKit = chooseKit(context);
+	if (dialogKit != '1000') {
 		return;
 	}
 	var uikit = scaleOptionsMatrix.selectedCell();
@@ -262,7 +262,7 @@ function syncUIkit(context) {
 	}
 
 	if (isChangeChild) {
-		NSApp.displayDialog(i18.m17);
+		errorDialog(context,i18.m17);
 	}
 
 	context.document.showMessage(alertData + tbColor);

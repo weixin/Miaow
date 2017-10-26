@@ -170,7 +170,7 @@ function colorReplace(context) {
   }
 
   function createUserInterface(colorToFind) {
-    userInterface = COSAlertWindow.new(); // 创建弹框
+    userInterface = dialog(context); // 创建弹框
 
     userInterface.setMessageText(i18.m1);
 

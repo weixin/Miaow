@@ -36,7 +36,7 @@ var fontCharacters = function (context) {
             if (data.action == 'insert') {
                 var nowcontext = uploadContext(context);
                 if (nowcontext.selection.length == 0) {
-                    return NSApp.displayDialog(i18.m1);
+                    return errorDialog(context,i18.m1);
                 }
                 var fontfamily = [NSFont fontWithName: data.fontFamily size: 14.0];
                 var layer = nowcontext.selection[0];
@@ -69,7 +69,7 @@ var fontCharacters = function (context) {
                         layer.setStringValue(obj.ustr);
                     }
                 } else {
-                    NSApp.displayDialog(i18.m1);
+                    errorDialog(context,i18.m1);
                 }
 
                 windowObject.evaluateWebScript("window.location.hash = '';");

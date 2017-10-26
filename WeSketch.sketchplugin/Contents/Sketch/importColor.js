@@ -34,7 +34,7 @@ var onRun = function (context) {
     var theText = [[NSString alloc] initWithData: theResponseData encoding: NSUTF8StringEncoding];
     var dataPre = [theText substringToIndex: 1];
     if (dataPre == "<") {
-      NSApp.displayDialog(i18.m1);
+      errorDialog(context,i18.m1);
       return;
     } else {
       colorContents = theText

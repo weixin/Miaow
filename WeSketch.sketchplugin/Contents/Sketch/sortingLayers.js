@@ -24,10 +24,10 @@ function sortingLayers(context) {
 
   var selection = context.selection;
   if (selection.length == 0) {
-    return NSApp.displayDialog(i18.m2);
+    return errorDialog(context,i18.m2);
   }
   if (selection[0].className() == "MSArtboardGroup" || selection[0].className() == "MSSymbolMaster") {
-    return NSApp.displayDialog(i18.m3);
+    return errorDialog(context,i18.m3);
   }
   var artboard = selection[0].parentGroup();
   var length = selection.length;

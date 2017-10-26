@@ -189,7 +189,7 @@ var commonPreviewJson = function (context, filePath, show) {
 		var fxlocal = '0';
 
 		function chooseDialog() {
-			var settingsWindow = COSAlertWindow.new();
+			var settingsWindow = dialog(context);
 			settingsWindow.addButtonWithTitle(i18.m2);
 			settingsWindow.addButtonWithTitle(i18.m3);
 
@@ -406,7 +406,7 @@ var commonPreviewJson = function (context, filePath, show) {
 		}
 	}
 	if (!flag) {
-		NSApp.displayDialog(i18.m18);
+		errorDialog(context,i18.m18);
 		return false;
 	}
 

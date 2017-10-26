@@ -78,7 +78,7 @@ function toolbar(context, auto) {
         Toolbar.setTitlebarAppearsTransparent(true);
 
 
-        var toolbarwidth = (obj.length * 53) + 52;
+        var toolbarwidth = (obj.length * 53) + 105;
 
         var locationx = 0;
         if (!auto) {
@@ -97,13 +97,13 @@ function toolbar(context, auto) {
 
 
         var contentView = Toolbar.contentView();
-        var closeButton = addButton(NSMakeRect(20, 36, 18, 18), "close",
+        var closeButton = addButton(NSMakeRect(20, 40, 15, 15), "close",
             function (sender) {
                 coscript.setShouldKeepAround(false);
                 threadDictionary.removeObjectForKey(identifier);
                 Toolbar.close();
                 if (toolbarAuto != 'false') {
-                    var settingsWindow = COSAlertWindow.new();
+                    var settingsWindow = dialog(context);
                     settingsWindow.addButtonWithTitle(i18.m1);
                     settingsWindow.addButtonWithTitle(i18.m2);
                     settingsWindow.setMessageText(i18.m3);
@@ -119,13 +119,24 @@ function toolbar(context, auto) {
             });
         contentView.addSubview(closeButton);
 
-        var wikiButton = addButton(NSMakeRect(22, 10, 14, 14), "wiki",
-            function (sender) {
-                openUrlInBrowser('https://github.com/weixin/wesketch/wiki');
-            });
-        contentView.addSubview(wikiButton);
+        // var wikiButton = addButton(NSMakeRect(60, 40, 15, 15), "wiki",
+        //     function (sender) {
+        //         openUrlInBrowser('https://github.com/weixin/wesketch/wiki');
+        //     });
+        // contentView.addSubview(wikiButton);
 
-        var xlocation = 46;
+        var miaowButton = addButton(NSMakeRect(20, 0, 120, 66), "miaow",
+        function (sender) {
+            openUrlInBrowser('https://github.com/weixin/wesketch');
+        });
+        contentView.addSubview(miaowButton);
+
+        var lineButton = addButton(NSMakeRect(90, 20, 1, 23), "line",
+        function (sender) {
+        });
+        contentView.addSubview(lineButton);
+
+        var xlocation = 96;
 
         if (obj.indexOf('link') > -1) {
             var linkButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "link" + prefix,

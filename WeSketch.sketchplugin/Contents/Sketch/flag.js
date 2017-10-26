@@ -19,7 +19,7 @@ function getFlag(context, refrush) {
 	var colorLineB = rgb(colorLine)[2];
 
 	function deleteDialog(context) {
-		var settingsWindow = COSAlertWindow.new();
+		var settingsWindow = dialog(context);
 		settingsWindow.addButtonWithTitle(i18.m1);
 		settingsWindow.addButtonWithTitle(i18.m2);
 
@@ -293,7 +293,7 @@ function getFlag(context, refrush) {
 	if (context.selection.count() != 1 || refrush) {
 		flags = drawFunction(doc, null);
 		if (!refrush) {
-			NSApp.displayDialog(i18.m6);
+			errorDialog(context,i18.m6);
 		}
 	} else {
 		flags = drawFunction(doc, context.selection[0]);

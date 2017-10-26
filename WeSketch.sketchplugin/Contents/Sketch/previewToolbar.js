@@ -85,7 +85,7 @@ function previewToolbar(context) {
 
         linkButton0 = addButton(NSMakeRect(50, 182, 14, 14), "wiki",
             function (sender) {
-                openUrlInBrowser('https://github.com/weixin/wesketch/wiki');
+                openUrlInBrowser('https://github.com/weixin/WeSketch/wiki/%E2%92%92-PREVIEW');
             });
 
         contentView.addSubview(linkButton0);

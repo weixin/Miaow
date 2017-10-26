@@ -5,7 +5,7 @@ var codeKey = "com.sketchplugins.wechat.codetype";
 var onRun = function (context) {
 	var i18 = _(context).codeSetting;
 
-	var settingsWindow = COSAlertWindow.new();
+	var settingsWindow = dialog(context);
 	settingsWindow.addButtonWithTitle(i18.m1);
 	settingsWindow.addButtonWithTitle(i18.m2);
 	settingsWindow.setMessageText(i18.m3);

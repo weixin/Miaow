@@ -37,6 +37,27 @@ var _ = function (context) {
     return i18Content;
 };
 
+function dialog(context) {
+    var iconImage = NSImage.alloc().initByReferencingFile(context.plugin.urlForResourceNamed("icon.png").path());
+    var alert = COSAlertWindow.new();
+    if (iconImage) {
+        alert.setIcon(iconImage);
+    }
+    return alert;
+}
+
+function errorDialog(context,content) {
+    var iconImage = NSImage.alloc().initByReferencingFile(context.plugin.urlForResourceNamed("icon.png").path());
+    var alert = COSAlertWindow.new();
+    if (iconImage) {
+        alert.setIcon(iconImage);
+    }
+    alert.addButtonWithTitle(_(context).checkForUpdate.m9);
+
+    alert.setMessageText(_(context).checkForUpdate.m10);
+    alert.setInformativeText(content);
+    return alert.runModal();
+}
 
 function initDefaults(pluginDomain, initialValues) {
     kPluginDomain = pluginDomain;
@@ -142,7 +163,7 @@ function get(args) {
     if (jsonData.status == 200) {
         return jsonData;
     } else {
-        NSApp.displayDialog(jsonData.msg);
+        errorDialog(context,jsonData.msg);
         return jsonData;
     }
 }
@@ -155,7 +176,7 @@ function post(args) {
     if (jsonData.status == 200) {
         return jsonData;
     } else {
-        NSApp.displayDialog(jsonData.msg);
+        errorDialog(context,jsonData.msg);
         return jsonData;
     }
 }
