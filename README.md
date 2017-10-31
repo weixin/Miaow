@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/1049575/27730899-8c16e708-5dbd-11e7-98fa-466d674e9fd0.png" width=413 height=75>
+<img src="https://wximg.gtimg.com/tmt/sketch/logo.png" width=413 height=75>
 
 [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
@@ -23,11 +23,11 @@
 
 #### Menu Bar
 
-![Screenshot1](https://user-images.githubusercontent.com/1049575/27730314-5ad18858-5dbb-11e7-811f-48914de53021.png)
+![Screenshot1](https://wximg.gtimg.com/tmt/sketch/menu.png)
 
 #### Tool Bar
 
-![Screenshot2](https://user-images.githubusercontent.com/1049575/27730321-5f6ddd62-5dbb-11e7-8e2e-08f263761c13.png)
+![Screenshot2](https://wximg.gtimg.com/tmt/sketch/toolbar.png)
 
 ## Features & Instruction
 
