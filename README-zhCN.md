@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/1049575/27730899-8c16e708-5dbd-11e7-98fa-466d674e9fd0.png" width=413 height=75>
+<img src="https://wximg.gtimg.com/tmt/sketch/logo.png" width=610 height=192>
 
 [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
@@ -22,11 +22,11 @@
 
 #### 菜单栏
 
-![Screenshot1](https://user-images.githubusercontent.com/1049575/27524016-00be162e-5a64-11e7-8e00-fb2ec1521c66.png)
+![Screenshot1](https://wximg.gtimg.com/tmt/sketch/menu-cn.png)
 
 #### 工具栏
 
-![Screenshot2](https://user-images.githubusercontent.com/1049575/27429370-6f27035e-5777-11e7-91e4-56e49aac5d9d.png)
+![Screenshot2](https://wximg.gtimg.com/tmt/sketch/toolbar-cn.png)
 
 ## 功能 & 教程
 
