@@ -176,6 +176,20 @@ function codeS(context) {
     function exportText(selection) {
         var layerStyle = selection.style();
         var returnText = [];
+        var getShadow = getShadows(layerStyle);
+        if(getShadow.length > 0){
+            var shadowText = '';
+            for(var i = 0;i < getShadow.length; i++) {
+                if(shadowText != ''){
+                    shadowText += ',\n';
+                }
+                if(getShadow[i].type != 'inner'){
+                    shadowText += Math.round(getShadow[i].offsetX / Rate) + keyCode + ' ' + Math.round(getShadow[i].offsetY / Rate) + keyCode + ' ' + Math.round(getShadow[i].blurRadius / Rate) + keyCode + ' ' + getShadow[i].color;
+                }
+            }
+            returnText.push('text-shadow: ' + shadowText + ';');
+        }
+
         if (layerStyle.contextSettings().opacity() != 1) {
             returnText.push('opacity: ' + layerStyle.contextSettings().opacity().toFixed(2) + ';');
         }
@@ -206,6 +220,7 @@ function codeS(context) {
         }
         var backgroundColor = getFills(layerStyle);
         var getBorder = getBorders(layerStyle);
+        var getShadow = getShadows(layerStyle);
         var borderless = 0;
         var rateX = 1;
         if (Rate > 1) {
@@ -220,6 +235,18 @@ function codeS(context) {
                 returnText.push('border: ' + Math.round(getBorder[0].thickness / rateX) + keyCode + ' solid ' + (getBorder[0].color) + ';');
             }
         }
+
+        if(getShadow.length > 0){
+            var shadowText = 'box-shadow: ';
+            for(var i = 0;i < getShadow.length; i++) {
+                if(i != 0){
+                    shadowText += ',\n';
+                }
+                shadowText += Math.round(getShadow[i].offsetX / Rate) + keyCode + ' ' + Math.round(getShadow[i].offsetY / Rate) + keyCode + ' ' + Math.round(getShadow[i].blurRadius / Rate) + keyCode + ' ' + Math.round(getShadow[i].spread / Rate) + keyCode + ' ' + getShadow[i].color + (getShadow[i].type == 'inner' ? ' inset': '');
+            }
+            returnText.push(shadowText + ';');
+        }
+
         var width = selection.rect().size.width / Rate;
         var height = selection.rect().size.height / Rate;
         returnText.push('width: ' + Math.round(width - borderless) + keyCode + ';');
