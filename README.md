@@ -1,5 +1,3 @@
-<img src="https://wximg.gtimg.com/tmt/sketch/logo.png" width=610 height=192>
-
 [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
 > A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing made by Tencent WeChat Team, include:
