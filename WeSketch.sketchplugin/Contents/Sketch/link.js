@@ -1072,18 +1072,16 @@ var redrawConnections = function (context) {
 	var selectionLayer = context.selection;
 
 	//var selectedLayers = doc.findSelectedLayers();
+	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
+	linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
+	loop = linkLayers.objectEnumerator(),
+	connections = [],
+	linkLayer, destinationArtboardID, destinationArtboard, isCondition, linkRect;
 
 	var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
 	if (connectionsGroup) {
 		connectionsGroup.removeFromParent();
 	}
-
-	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
-		linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
-		loop = linkLayers.objectEnumerator(),
-		connections = [],
-		linkLayer, destinationArtboardID, destinationArtboard, isCondition, linkRect;
-
 
 	while (linkLayer = loop.nextObject()) {
 		destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
@@ -1118,6 +1116,34 @@ var redrawConnections = function (context) {
 
 var selection = context.selection;
 var destArtboard, linkLayer;
+
+// 检查有没有被手动删掉的
+var connectionsGroup = getConnectionsGroupInPage(context.document.currentPage());
+if (!connectionsGroup) {
+	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
+	linkLayers = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
+	loop = linkLayers.objectEnumerator(),
+	linkLayer, destinationArtboardID;
+	while (linkLayer = loop.nextObject()) {
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "destinationArtboardID", linkLayer, kPluginDomain);
+	}
+}else{
+	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
+	linkLayers = context.document.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
+	loop = linkLayers.objectEnumerator(),
+	linkLayer, destinationArtboardID;
+	var child = connectionsGroup.layers();
+	while (linkLayer = loop.nextObject()) {
+		for(var i = 0;i < child.length; i++){
+			if(encodeURIComponent(child[i].name()) == encodeURIComponent(linkLayer.objectID())){
+				break;
+			}
+			if(i == child.length-1){
+				context.command.setValue_forKey_onLayer_forPluginIdentifier(nil, "destinationArtboardID", linkLayer, kPluginDomain);
+			}
+		}
+	}		
+}
 
 if (selection.count() != 1 && selection.count() != 2) {
 	redrawConnections(context);
