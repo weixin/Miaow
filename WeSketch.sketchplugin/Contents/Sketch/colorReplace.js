@@ -155,7 +155,7 @@ function colorReplace(context) {
     }
     if ('#' + textcolor.hexValue() == colorToFind) {
       replaceCount++;
-      layer.textColor = MSColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
+      layer.textColor = MSImmutableColor.colorWithRed_green_blue_alpha(colorToReplace.r / 255, colorToReplace.g / 255, colorToReplace.b / 255, 1.0);
     }
   }
 
@@ -269,7 +269,7 @@ function colorReplace(context) {
   }
 
   if (replaceCount) {
-    context.document.showMessage('替换成功，共找到' + replaceCount + '处\r\n');
+    context.document.showMessage('替换成功，共找到' + replaceCount + '处');
   } else {
     context.document.showMessage('没有找到需要替换的颜色');
   }
