@@ -73,23 +73,18 @@ function toolbar(context, auto) {
         coscript.setShouldKeepAround(true);
         Toolbar = NSPanel.alloc().init();
         Toolbar.setStyleMask(NSTitledWindowMask + NSFullSizeContentViewWindowMask);
-        Toolbar.setBackgroundColor(NSColor.colorWithRed_green_blue_alpha(0.92, 0.92, 0.92, 1));
+        Toolbar.setBackgroundColor(NSColor.colorWithRed_green_blue_alpha(1, 1, 1, 1));
         Toolbar.setTitleVisibility(NSWindowTitleHidden);
         Toolbar.setTitlebarAppearsTransparent(true);
 
 
-        var toolbarwidth = (obj.length * 53) + 105;
+        var toolbarwidth = (obj.length * 56) + 65;
 
         var locationx = 0;
-        if (!auto) {
-            var view = context.document.currentView();
-            locationx = view.frame().size.height - 5;
-        } else {
-            // locationx = 300;
-            locationx = NSScreen.mainScreen().frame().size.height - 162;
-        }
+        locationx = NSScreen.mainScreen().frame().size.height - 162;
+        
 
-        Toolbar.setFrame_display(NSMakeRect(285, locationx, toolbarwidth, 65), false);
+        Toolbar.setFrame_display(NSMakeRect(285, locationx, toolbarwidth, 85), false);
         Toolbar.setMovableByWindowBackground(true);
         Toolbar.becomeKeyWindow();
         Toolbar.setLevel(NSFloatingWindowLevel);
@@ -97,7 +92,7 @@ function toolbar(context, auto) {
 
 
         var contentView = Toolbar.contentView();
-        var closeButton = addButton(NSMakeRect(20, 40, 15, 15), "close",
+        var closeButton = addButton(NSMakeRect(20, 53, 11, 11), "close",
             function (sender) {
                 coscript.setShouldKeepAround(false);
                 threadDictionary.removeObjectForKey(identifier);
@@ -125,116 +120,111 @@ function toolbar(context, auto) {
         //     });
         // contentView.addSubview(wikiButton);
 
-        var miaowButton = addButton(NSMakeRect(20, 0, 120, 66), "miaow",
+        var miaowButton = addButton(NSMakeRect(0, 11, 120, 66), "miaow",
         function (sender) {
             openUrlInBrowser('https://github.com/weixin/wesketch');
         });
         contentView.addSubview(miaowButton);
 
-        var lineButton = addButton(NSMakeRect(90, 20, 1, 23), "line",
-        function (sender) {
-        });
-        contentView.addSubview(lineButton);
-
-        var xlocation = 96;
+        var xlocation = 50;
 
         if (obj.indexOf('link') > -1) {
-            var linkButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "link" + prefix,
+            var linkButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "link" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     getLink(nowcontext);
                 });
 
             contentView.addSubview(linkButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('flag') > -1) {
 
-            var flagButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "flag" + prefix,
+            var flagButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "flag" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     getFlag(nowcontext);
                 });
             contentView.addSubview(flagButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('sortingLayers') > -1) {
 
-            var flagButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "sorting" + prefix,
+            var flagButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "sorting" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     sortingLayers(nowcontext);
                 });
             contentView.addSubview(flagButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('iconQ') > -1) {
-            var iconButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "icon" + prefix,
+            var iconButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "icon" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     iconQ(nowcontext);
                 });
             contentView.addSubview(iconButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('syncuikit') > -1) {
-            var syncuiButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "syncui" + prefix,
+            var syncuiButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "syncui" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     syncUIkit(nowcontext);
                 });
             contentView.addSubview(syncuiButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
 
         if (obj.indexOf('synccolor') > -1) {
-            var synccolorButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "synccolor" + prefix,
+            var synccolorButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "synccolor" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     syncColor(nowcontext);
                 });
             contentView.addSubview(synccolorButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('textReplace') > -1) {
-            var textButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "text" + prefix,
+            var textButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "text" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     textReplace(nowcontext);
                 });
 
             contentView.addSubview(textButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('colorReplace') > -1) {
-            var colorButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "color" + prefix,
+            var colorButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "color" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     colorReplace(nowcontext);
                 });
             contentView.addSubview(colorButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('fontReplace') > -1) {
-            var fontButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "font" + prefix,
+            var fontButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "font" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     fontReplace(nowcontext);
                 });
             contentView.addSubview(fontButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('fontCharacters') > -1) {
-            var fontButton = addButton(NSMakeRect(xlocation + 3, 9, 47, 45), "fontCharacters" + prefix,
+            var fontButton = addButton(NSMakeRect(xlocation + 3, 19, 47, 46), "fontCharacters" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     fontCharacters(nowcontext);
@@ -245,44 +235,44 @@ function toolbar(context, auto) {
 
 
         if (obj.indexOf('exportSlice') > -1) {
-            var cutButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "cut" + prefix,
+            var cutButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "cut" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     exportSlice(nowcontext);
                 });
             contentView.addSubview(cutButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('codeColor') > -1) {
-            var codecolorButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "codecolor" + prefix,
+            var codecolorButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "codecolor" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     codeC(nowcontext);
                 });
             contentView.addSubview(codecolorButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('codeStyle') > -1) {
-            var codestyleButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "codestyle" + prefix,
+            var codestyleButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "codestyle" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     codeS(nowcontext);
                 });
             contentView.addSubview(codestyleButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
         if (obj.indexOf('previewToolbar') > -1) {
-            var previewToolbarButton = addButton(NSMakeRect(xlocation + 3, 9, 45, 45), "preview" + prefix,
+            var previewToolbarButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "preview" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
                     previewToolbar(nowcontext);
                 });
 
             contentView.addSubview(previewToolbarButton);
-            xlocation = xlocation + 53;
+            xlocation = xlocation + 56;
         }
 
 

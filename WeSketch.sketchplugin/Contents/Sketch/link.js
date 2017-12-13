@@ -902,6 +902,18 @@ function getLink(context, refursh) {
 		}
 	}
 
+	var isCoincidenis = function (a,b) {
+		var c = {a:Math.min(a.a,a.b),b:Math.min(a.a,a.b)};
+		var d = {a:Math.min(b.a,b.b),b:Math.min(b.a,b.b)};
+		log(c);
+		log(d);
+		if((c.a >= d.a && c.a <= d.b) || (c.b >= d.a && c.b <= d.b)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	var drawLine = function (linepoint, endPoisiton, isLess) {
 		var colorLineLink = NSUserDefaults.standardUserDefaults().objectForKey(lineColorKeyLink) || "#1AAD19";
 		var lineThicknessLink = NSUserDefaults.standardUserDefaults().objectForKey(lineThicknessLinkKey) || "6";
@@ -917,9 +929,9 @@ function getLink(context, refursh) {
 
 		for (var i = 0; i < lineCount - 1; i++) { // 给每个点添加接下来走向的方向和位置属性
 			linepoint[i].direction = getLineDirection(linepoint[i], linepoint[i + 1]);
-			linepoint[i].position = getLinePosition(linepoint[i]]);
-		lineCollections.push(linepoint[i]);
-	}
+			linepoint[i].position = getLinePosition(linepoint[i]);
+			lineCollections.push(linepoint[i]);
+		}
 
 	var comparedLineCollectionCount = lineCollections.length - (lineCount - 1);
 
@@ -927,7 +939,7 @@ function getLink(context, refursh) {
 	for (var i = 0; i < lineCount; i++) {
 		for (var j = 0; j < comparedLineCollectionCount; j++) {
 			if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b') &&
-				(Math.abs(linepoint[i].position - lineCollections[j].position) < 3)) {
+				(Math.abs(linepoint[i].position - lineCollections[j].position) < 3) && isCoincidenis({a:linepoint[i].x,b:linepoint[i+1].x},{a:lineCollections[j].x,b:lineCollections[j+1].x})) {
 				// 不是起始线重合，位于起始点左侧 || 起始线重合: 位于重合线下侧，减去 coincideOffset
 				if ((i != 0 && linepoint[0].x < linepoint[i].x) ||
 					(i == 0 && (linepoint[0].y < lineCollections[j].y))) {
@@ -938,7 +950,7 @@ function getLink(context, refursh) {
 					linepoint[i + 1].x += coincideOffset;
 				}
 			} else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r') &&
-				(Math.abs(linepoint[i].position - lineCollections[j].position) < 3)) {
+				(Math.abs(linepoint[i].position - lineCollections[j].position) < 3) && isCoincidenis({a:linepoint[i].y,b:linepoint[i+1].y},{a:lineCollections[j].y,b:lineCollections[j+1].y})) {
 				// 不是起始线重合，位于起始点上侧 || 起始线重合: 位于重合线左侧，减去 coincideOffset
 				if ((i != 0 && linepoint[0].y < linepoint[i].y) ||
 					(i == 0 && linepoint[0].x < lineCollections[j].x)) {

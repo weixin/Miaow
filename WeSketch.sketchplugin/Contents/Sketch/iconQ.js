@@ -223,11 +223,7 @@ function iconQ(context) {
                 var page = nowcontext.document.currentPage();
                 data.name = data.name.replace('.svg', '');
                 page.setCurrentArtboard(null);
-                var contentDrawView = nowcontext.document.currentView();
-                var midX = parseInt(Math.round((contentDrawView.frame().size.width / 2 - contentDrawView.horizontalRuler().baseLine()) / contentDrawView.zoomValue()));
-                var midY = parseInt(Math.round((contentDrawView.frame().size.height / 2 - contentDrawView.verticalRuler().baseLine()) / contentDrawView.zoomValue()));
-                var x = parseInt(midX - data.width / 2);
-                var y = parseInt(midY - data.height / 2);
+
                 var logo = (data.content);
                 logo = svgtitle + logo.replace('xmlns="http://www.w3.org/2000/svg"', 'version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"').replace(/<title>.*?<\/title>/, '');
                 logo = NSString.stringWithString(logo);
@@ -254,8 +250,7 @@ function iconQ(context) {
                 } else {
 
                 }
-                [svgFrame setX: x];
-                [svgFrame setY: y];
+                
                 page.addLayers([importedSVGLayer]);
                 if (nowcontext.selection.length > 0) {
                     [svgFrame setX: nowcontext.selection[0].absoluteRect().x()];
@@ -266,6 +261,13 @@ function iconQ(context) {
                         nowcontext.selection[i].select_byExpandingSelection(false, false);
                     }
                 } else {
+                    var contentDrawView = nowcontext.document.contentDrawView()||nowcontext.document.currentView();
+                    var midX = parseInt(Math.round((contentDrawView.frame().size.width / 2 - contentDrawView.horizontalRuler().baseLine()) / contentDrawView.zoomValue()));
+                    var midY = parseInt(Math.round((contentDrawView.frame().size.height / 2 - contentDrawView.verticalRuler().baseLine()) / contentDrawView.zoomValue()));
+                    var x = parseInt(midX - data.width / 2);
+                    var y = parseInt(midY - data.height / 2);
+                    [svgFrame setX: x];
+                    [svgFrame setY: y];
                     nowcontext.document.showMessage(i18.m2);
                 }
                 importedSVGLayer.select_byExpandingSelection(true, true);

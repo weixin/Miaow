@@ -50,10 +50,8 @@ function previewToolbar(context) {
         Toolbar2.setTitlebarAppearsTransparent(true);
 
 
-
-        var view = context.document.currentView();
-        var locationx = view.frame().size.width;
-        var locationy = view.frame().size.height;
+        var locationx = NSScreen.mainScreen().frame().size.width;
+        var locationy = NSScreen.mainScreen().frame().size.height;
 
         var xlocation = 20;
 

@@ -1,7 +1,7 @@
 {
   "name": "Miaow",
   "author": "Tencent WeChat",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "identifier": "cn.wechat",
   "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon": "minicon.png",
@@ -257,7 +257,7 @@
       "identifier" : "exportSlice",
       "script" : "exportSlice.js",
       "icon": "../Resources/icons/cut.png",
-      "shortcut": "command shift u",
+      "shortcut": "",
       "istool":"true",
       "handler" : "onRun"
     },
@@ -265,7 +265,7 @@
       "name" : "获取代码片段",
       "identifier" : "getSymbolCode",
       "script" : "symbolCode.js",
-      "shortcut": "command shift y",
+      "shortcut": "",
       "istool":"",
       "handler" : "getSymbolCode"
     },
@@ -273,7 +273,7 @@
       "name" : "设置代码片段",
       "identifier" : "setSymbolCode",
       "script" : "symbolCode.js",
-      "shortcut": "command shift u",
+      "shortcut": "",
       "istool":"",
       "handler" : "setSymbolCode"
     },
@@ -299,7 +299,7 @@
       "name" : "工具栏",
       "identifier" : "toolbar",
       "script" : "toolbar.js",
-      "shortcut": "command shift k",
+      "shortcut": "command shift u",
       "istool":"",
       "handlers" : {
         "run" : "onRunToolBar"
