@@ -1,4 +1,4 @@
-<img src="https://wximg.qq.com/tmt/sketch/miaow.png" width=300 height=210>
+<img src="https://wximg.qq.com/tmt/sketch/miaow.png" width=400 height=170>
 
 [![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
 
