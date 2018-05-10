@@ -104,6 +104,7 @@ function getFlag(context, refrush) {
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(0, 48 * scale), NSMakePoint(15.375 * scale, 36 * scale), NSMakePoint(0, 48 * scale));
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(22 * scale, 60 * scale), NSMakePoint(0, 48 * scale), NSMakePoint(15.375 * scale, 60 * scale));
 		path.closePath();
+		path = MSPath.pathWithBezierPath(path);
 		var flag = MSShapeGroup.shapeWithBezierPath(path);
 		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 0.3));
 		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 1));
@@ -154,6 +155,7 @@ function getFlag(context, refrush) {
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(34 * scale, 12 * scale), NSMakePoint(18.625 * scale, 0 * scale), NSMakePoint(34 * scale, 12 * scale));
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(12 * scale, 24 * scale), NSMakePoint(34 * scale, 12 * scale), NSMakePoint(18.625 * scale, 24 * scale));
 		path.closePath();
+		path = MSPath.pathWithBezierPath(path);
 		var flag = MSShapeGroup.shapeWithBezierPath(path);
 		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 0.3));
 		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 1));

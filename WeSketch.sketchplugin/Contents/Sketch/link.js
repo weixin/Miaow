@@ -1009,7 +1009,7 @@ function getLink(context, refursh) {
 			}
 		}
 	}
-
+	linePath = MSPath.pathWithBezierPath(linePath);
 	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
 	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
 	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
@@ -1021,6 +1021,7 @@ function getLink(context, refursh) {
 	var drawRound = function (x, y) {
 		var linkRect = NSInsetRect(NSMakeRect(x, y, 0, 0), -5, -5);
 		var path = NSBezierPath.bezierPathWithOvalInRect(linkRect);
+		path = MSPath.pathWithBezierPath(path);
 		var hitAreaLayer = MSShapeGroup.shapeWithBezierPath(path);
 		hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 76.5).newMutableCounterpart());
 		hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
@@ -1053,7 +1054,7 @@ function getLink(context, refursh) {
 			arrowPath.lineToPoint(NSMakePoint(x, y));
 			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
 		}
-
+		arrowPath = MSPath.pathWithBezierPath(arrowPath);
 		var arrow = MSShapeGroup.shapeWithBezierPath(arrowPath);
 		var arrowStyle = arrow.style().addStylePartOfType(1);
 		arrowStyle.setThickness(lineThicknessLink);
