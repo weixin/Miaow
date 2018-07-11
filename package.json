@@ -1,0 +1,25 @@
+{
+  "name": "miaow",
+  "version": "1.4.4",
+  "engines": {
+    "sketch": ">=3.0"
+  },
+  "skpm": {
+    "name": "miaow",
+    "manifest": "src/manifest.json",
+    "main": "miaow.sketchplugin",
+    "assets": [
+      "assets/**/*"
+    ]
+  },
+  "scripts": {
+    "build": "skpm-build",
+    "watch": "skpm-build --watch",
+    "start": "skpm-build --watch --run",
+    "postinstall": "npm run build && skpm-link"
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.5.2"
+  },
+  "author": "doubleluo <doubleluo@tencent.com>"
+}

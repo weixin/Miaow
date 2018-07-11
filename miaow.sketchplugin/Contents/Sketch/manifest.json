@@ -1,0 +1,406 @@
+{
+  "name": "Miaow",
+  "author": "Tencent WeChat",
+  "version": "1.4.3",
+  "identifier": "cn.wechat",
+  "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
+  "icon": "minicon.png",
+  "language_name": "English(US)",
+  "language_author": "hzlzh",
+  "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
+  "commands": [
+    {
+      "handlers": {
+        "actions": {
+          "OpenDocument": "onOpenDocument"
+        }
+      },
+      "noshortcut": "true",
+      "script": "onAction.js"
+    },
+    {
+      "name": "Draw Link",
+      "identifier": "link",
+      "script": "link.js",
+      "icon": "../Resources/icons/link.png",
+      "shortcut": "command shift 1",
+      "istool": "true",
+      "handlers": {
+        "run": "onRun"
+      }
+    },
+    {
+      "name": "Mark Index",
+      "identifier": "flag",
+      "script": "flag.js",
+      "icon": "../Resources/icons/flag.png",
+      "shortcut": "command shift 2",
+      "handler": "onRun",
+      "istool": "true"
+    },
+    {
+      "name": "Set Index",
+      "identifier": "setIndex",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "setIndex"
+    },
+    {
+      "name": "Set Dialog",
+      "identifier": "setDialog",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "setDialog"
+    },
+    {
+      "name": "Set Fixed",
+      "identifier": "setFixed",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "setFixed"
+    },
+    {
+      "name": "Set Back",
+      "identifier": "setBacks",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "setBacks"
+    },
+    {
+      "name": "Set Transparent",
+      "identifier": "setNoBuild",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "setNoBuild"
+    },
+    {
+      "name": "Clear",
+      "identifier": "previewClear",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "clearPreview"
+    },
+    {
+      "name": "Show/Hide",
+      "identifier": "previewHide",
+      "script": "commonPreview.js",
+      "shortcut": "",
+      "handler": "hidePreview"
+    },
+    {
+      "name": "Preview",
+      "identifier": "showPreview",
+      "script": "showPreview.js",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Local Preview",
+      "identifier": "localPreview",
+      "script": "localPreview.js",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Web Preview",
+      "identifier": "webPreview",
+      "script": "webPreview.js",
+      "shortcut": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Preview Toolbar",
+      "identifier": "previewToolbar",
+      "script": "previewToolbar.js",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRunPreviewToolBar"
+    },
+    {
+      "name": "Layer Order Organize",
+      "identifier": "sortingLayers",
+      "script": "sortingLayers.js",
+      "shortcut": "command shift p",
+      "handler": "onRun",
+      "istool": "true"
+    },
+    {
+      "name": "Icon Manager",
+      "identifier": "iconQ",
+      "script": "iconQ.js",
+      "icon": "../Resources/icons/icon.png",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "iconQRun"
+    },
+    {
+      "name": "Advanced Font Replace",
+      "identifier": "fontReplace",
+      "script": "fontReplace.js",
+      "icon": "../Resources/icons/font.png",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Advanced Text Replace",
+      "identifier": "textReplace",
+      "script": "textReplace.js",
+      "icon": "../Resources/icons/text.png",
+      "shortcut": "command shift f",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Advanced Color Replace",
+      "identifier": "colorReplace",
+      "script": "colorReplace.js",
+      "icon": "../Resources/icons/color.png",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Font Characters",
+      "identifier": "fontCharacters",
+      "script": "fontCharacters.js",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Sync UI Kit",
+      "identifier": "syncuikit",
+      "script": "syncUIkit.js",
+      "icon": "../Resources/icons/syncui.png",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Import UI Kit",
+      "identifier": "importuikit",
+      "script": "importUIkit.js",
+      "icon": "../Resources/icons/syncui.png",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Export UI Kit",
+      "identifier": "exportuikit",
+      "script": "exportUIkit.js",
+      "icon": "../Resources/icons/syncui.png",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Sync Colors",
+      "identifier": "synccolor",
+      "script": "syncColor.js",
+      "icon": "../Resources/icons/syncColor.png",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Export Colors",
+      "identifier": "exportcolor",
+      "script": "exportColor.js",
+      "icon": "../Resources/icons/syncColor.png",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Import Colors",
+      "identifier": "importcolor",
+      "script": "importColor.js",
+      "icon": "../Resources/icons/syncColor.png",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun"
+    },
+    {
+      "name": "Color Picker",
+      "identifier": "codeColor",
+      "script": "codeColor.js",
+      "icon": "../Resources/icons/codeColor.png",
+      "shortcut": "command shift c",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Copy CSS Style",
+      "identifier": "codeStyle",
+      "script": "codeStyle.js",
+      "icon": "../Resources/icons/codeStyle.png",
+      "shortcut": "command shift d",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Advanced Export",
+      "identifier": "exportSlice",
+      "script": "exportSlice.js",
+      "icon": "../Resources/icons/cut.png",
+      "shortcut": "",
+      "istool": "true",
+      "handler": "onRun"
+    },
+    {
+      "name": "Get Symbol Code",
+      "identifier": "getSymbolCode",
+      "script": "symbolCode.js",
+      "shortcut": "",
+      "istool": "",
+      "handler": "getSymbolCode"
+    },
+    {
+      "name": "Set Symbol Code",
+      "identifier": "setSymbolCode",
+      "script": "symbolCode.js",
+      "shortcut": "",
+      "istool": "",
+      "handler": "setSymbolCode"
+    },
+    {
+      "name": " └─ Settings",
+      "identifier": "codeSetting",
+      "script": "codeSetting.js",
+      "shortcut": "",
+      "handler": "onRun",
+      "istool": "",
+      "noshortcut": "true"
+    },
+    {
+      "name": " └─ Settings",
+      "identifier": "syncSetting",
+      "script": "syncSetting.js",
+      "shortcut": "",
+      "handler": "onRun",
+      "istool": "",
+      "noshortcut": "true"
+    },
+    {
+      "name": "Show Toolbar",
+      "identifier": "toolbar",
+      "script": "toolbar.js",
+      "shortcut": "command shift u",
+      "istool": "",
+      "handlers": {
+        "run": "onRunToolBar"
+      }
+    },
+    {
+      "name": "Settings",
+      "identifier": "setting",
+      "script": "setting.js",
+      "shortcut": "",
+      "handler": "onRun",
+      "istool": "",
+      "noshortcut": "true"
+    },
+    {
+      "name": " └─ Settings",
+      "identifier": "toolSetting",
+      "script": "toolSetting.js",
+      "shortcut": "",
+      "handler": "onRun",
+      "istool": "",
+      "noshortcut": "true"
+    },
+    {
+      "name": "Website",
+      "identifier": "about",
+      "script": "about.js",
+      "shortcut": "",
+      "handler": "onRun",
+      "istool": "",
+      "noshortcut": "true"
+    },
+    {
+      "name": "Feedback",
+      "identifier": "issues",
+      "script": "issues.js",
+      "shortcut": "",
+      "istool": "",
+      "handler": "onRun",
+      "noshortcut": "true"
+    }
+  ],
+  "menu": {
+    "items": [
+      {
+        "title": "UI Kit",
+        "items": [
+          "syncuikit",
+          "importuikit",
+          "exportuikit"
+        ]
+      },
+      {
+        "title": "Color Set",
+        "items": [
+          "synccolor",
+          "importcolor",
+          "exportcolor"
+        ]
+      },
+      "syncSetting",
+      "-",
+      "iconQ",
+      "-",
+      "link",
+      "flag",
+      "toolSetting",
+      "-",
+      {
+        "title": "Generate Preview",
+        "items": [
+          "setIndex",
+          "setDialog",
+          "setBacks",
+          "setFixed",
+          "setNoBuild",
+          "previewClear",
+          "previewHide",
+          "showPreview",
+          "localPreview",
+          "webPreview",
+          "-",
+          "previewToolbar"
+        ]
+      },
+      "-",
+      "sortingLayers",
+      "textReplace",
+      "colorReplace",
+      "fontReplace",
+      "fontCharacters",
+      "-",
+      "codeColor",
+      "exportSlice",
+      "codeStyle",
+      "setSymbolCode",
+      "getSymbolCode",
+      "codeSetting",
+      "-",
+      "toolbar",
+      "-",
+      "setting",
+      {
+        "title": "About",
+        "items": [
+          "about",
+          "issues"
+        ]
+      }
+    ],
+    "title": "Miaow"
+  },
+  "disableCocoaScriptPreprocessor": true
+}
