@@ -2999,7 +2999,7 @@ function webPreview(context) {
     var returnData = Object(_common__WEBPACK_IMPORTED_MODULE_0__["networkRequest"])(['-F', 'image=@' + filePath + '.zip', iconQueryUrl + '/users/uploadHtml']);
     var jsonData = NSString.alloc().initWithData_encoding(returnData, NSUTF8StringEncoding);
     jsonData = JSON.parse(jsonData);
-    var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
+    var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Resources").URLByAppendingPathComponent("library").path();
     Object(_common__WEBPACK_IMPORTED_MODULE_0__["SMPanel"])({
       url: pluginSketch + "/panel/webPreview.html",
       width: 280,

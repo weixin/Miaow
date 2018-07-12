@@ -1,15 +1,14 @@
 # build artifacts
-web-dist
-_sandbox
-*.sketchplugin
+web-dist/
+_sandbox/
 
 # npm
-node_modules
-.npm
+node_modules/
+.npm/
 npm-debug.log
 
 # mac
-.DS_Store
+.DS_Store/
 
 # WebStorm
-.idea
+.idea/

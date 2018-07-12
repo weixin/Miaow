@@ -22,7 +22,7 @@ export function _(context) {
     }
 
     function get_(json, context) {
-        var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json + ".json").path();
+        var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Resources").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json + ".json").path();
         var jsonData = NSData.dataWithContentsOfFile(manifestPath);
         jsonData = NSString.alloc().initWithData_encoding(jsonData,NSUTF8StringEncoding);
         return JSON.parse(jsonData);
