@@ -529,7 +529,7 @@ function _(context) {
   }
 
   function get_(json, context) {
-    var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json + ".json").path();
+    var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Resources").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json + ".json").path();
     var jsonData = NSData.dataWithContentsOfFile(manifestPath);
     jsonData = NSString.alloc().initWithData_encoding(jsonData, NSUTF8StringEncoding);
     return JSON.parse(jsonData);
@@ -698,7 +698,7 @@ function createRadioButtons(options, selectedItem) {
   var buttonMatrix = NSMatrix.alloc().initWithFrame_mode_prototype_numberOfRows_numberOfColumns(NSMakeRect(20.0, 20.0, 300.0, rows * 25), type, buttonCell, rows, columns);
   buttonMatrix.setCellSize(NSMakeSize(140, 20));
 
-  for (i = 0; i < options.length; i++) {
+  for (var i = 0; i < options.length; i++) {
     buttonMatrix.cells().objectAtIndex(i).setTitle(options[i]);
     buttonMatrix.cells().objectAtIndex(i).setTag(i);
   }
@@ -723,7 +723,7 @@ function createRadioButtons2(options, selectedItem) {
   var buttonMatrix = NSMatrix.alloc().initWithFrame_mode_prototype_numberOfRows_numberOfColumns(NSMakeRect(20.0, 20.0, 300.0, rows * 25), type, buttonCell, rows, columns);
   buttonMatrix.setCellSize(NSMakeSize(90, 20));
 
-  for (i = 0; i < options.length; i++) {
+  for (var i = 0; i < options.length; i++) {
     buttonMatrix.cells().objectAtIndex(i).setTitle(options[i]);
     buttonMatrix.cells().objectAtIndex(i).setTag(i);
   }

@@ -8,7 +8,7 @@ node_modules/
 npm-debug.log
 
 # mac
-.DS_Store/
+.DS_Store
 
 # WebStorm
 .idea/

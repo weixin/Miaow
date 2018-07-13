@@ -1,3 +1,7 @@
+if (!global._babelPolyfill) {
+	require('babel-polyfill');
+}
+
 import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,request,networkRequest,zip,encodeData,get,post,getConfig,openUrlInBrowser,createRadioButtons,createRadioButtons2,createArtboard,hexToRgb,unique,SMPanel} from "./common";
 
 export function getFlag(context, refrush) {
@@ -211,6 +215,7 @@ export function getFlag(context, refrush) {
 		var loop = linkLayers.objectEnumerator();
 		var returnLine = [];
 		var isDrawNow = false;
+		var linkLayer;
 		while (linkLayer = loop.nextObject()) {
 			var lastState = 'e';
 			var lastDom = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).FlagID == '" + linkLayer.objectID() + "_l'", kPluginDomainFlag);
@@ -323,6 +328,6 @@ export function getFlag(context, refrush) {
 	if (ga) ga.sendEvent('flag', 'flag');
 }
 
-var onRun = function (context) {
+export function markAction(context) {
 	getFlag(context);
 }

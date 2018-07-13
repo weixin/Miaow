@@ -1,3 +1,7 @@
+if (!global._babelPolyfill) {
+	require('babel-polyfill');
+}
+
 import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,request,networkRequest,zip,encodeData,get,post,getConfig,openUrlInBrowser,createRadioButtons,createRadioButtons2,createArtboard,hexToRgb,unique,SMPanel} from "./common";
 
 
@@ -1213,6 +1217,6 @@ var ga = new Analytics(context);
 if (ga) ga.sendEvent('link', 'link');
 }
 
-var onRun = function (context) {
+export function linkAction(context) {
 	getLink(context);
 }

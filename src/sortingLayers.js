@@ -77,6 +77,6 @@ function sortingLayers(context) {
   if (ga) ga.sendEvent('sortingLayers', 'layers');
 }
 
-var onRun = function (context) {
+export function sortingLayersAction(context) {
   sortingLayers(context);
 };

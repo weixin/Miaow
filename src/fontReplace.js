@@ -240,6 +240,6 @@ function fontReplace(context) {
     if (ga) ga.sendEvent('fontReplace', 'open');
 }
 
-var onRun = function (context) {
+export function fontReplaceAction(context) {
     fontReplace(context);
 }

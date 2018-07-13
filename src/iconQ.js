@@ -497,6 +497,6 @@ function iconQ(context) {
     if (ga) ga.sendEvent('icon', 'open');
 }
 
-var iconQRun = function (context) {
+export function iconQRun(context) {
     iconQ(context);
 }

@@ -277,6 +277,6 @@ function colorReplace(context) {
   if (ga) ga.sendEvent('colorReplace', 'open');
 }
 
-var onRun = function (context) {
+export function colorReplaceAction(context) {
   colorReplace(context);
 }

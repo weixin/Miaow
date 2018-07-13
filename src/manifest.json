@@ -1,13 +1,15 @@
 {
   "name": "Miaow",
   "author": "Tencent WeChat",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "identifier": "cn.wechat",
   "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon": "minicon.png",
   "language_name": "English(US)",
   "language_author": "hzlzh",
   "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
+  "compatibleVersion": 3,
+  "bundleVersion": 1,
   "commands" : [
     {
       "handlers": {
@@ -21,21 +23,23 @@
     {
       "name" : "Draw Link",
       "identifier" : "link",
-      "script" : "link.js",
+      "script" : "./link.js",
       "icon": "../Resources/icons/link.png",
       "shortcut": "command shift 1",
       "istool":"true",
       "handlers" : {
-        "run" : "onRun"
+        "run" : "linkAction"
       }
     },
     {
       "name" : "Mark Index",
       "identifier" : "flag",
-      "script" : "flag.js",
+      "script" : "./flag.js",
       "icon": "../Resources/icons/flag.png",
       "shortcut": "command shift 2",
-      "handler" : "onRun",
+      "handlers": {
+        "run": "markAction"
+      },
       "istool":"true"
     },
     {
@@ -121,15 +125,15 @@
     {
       "name" : "Layer Order Organize",
       "identifier" : "sortingLayers",
-      "script" : "sortingLayers.js",
+      "script" : "./sortingLayers.js",
       "shortcut": "command shift p",
-      "handler" : "onRun",
+      "handler" : "sortingLayersAction",
       "istool":"true"
     },
     {
       "name" : "Icon Manager",
       "identifier" : "iconQ",
-      "script" : "iconQ.js",
+      "script" : "./iconQ.js",
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
       "istool":"true",
@@ -138,37 +142,43 @@
     {
       "name" : "Advanced Font Replace",
       "identifier" : "fontReplace",
-      "script" : "fontReplace.js",
+      "script" : "./fontReplace.js",
       "icon": "../Resources/icons/font.png",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
+      "handlers" : {
+        "run" : "fontReplaceAction"
+      }
     },
     {
       "name" : "Advanced Text Replace",
       "identifier" : "textReplace",
-      "script" : "textReplace.js",
+      "script" : "./textReplace.js",
       "icon": "../Resources/icons/text.png",
       "shortcut": "command shift f",
       "istool":"true",
-      "handler" : "onRun"
+      "handlers" : {
+        "run" : "textReplaceAction"
+      }
     },
     {
       "name" : "Advanced Color Replace",
       "identifier" : "colorReplace",
-      "script" : "colorReplace.js",
+      "script" : "./colorReplace.js",
       "icon": "../Resources/icons/color.png",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
+      "handlers" : {
+        "run" : "colorReplaceAction"
+      }
     },
     {
       "name" : "Font Characters",
       "identifier" : "fontCharacters",
-      "script" : "fontCharacters.js",
+      "script" : "./fontCharacters.js",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRun"
+      "handler" : "fontCharactersAction"
     },
     {
       "name" : "Sync UI Kit",
@@ -330,10 +340,22 @@
       "istool":"",
       "handler" : "onRun",
       "noshortcut":"true"
+    },
+    {
+      "script" : "commands.js",
+      "handlers": {
+        "run": "onShowStickers"
+      },
+      "name" : "Show Stickers",
+      "shortcut": "cmd shift \\",
+      "identifier" : "show_stickers",
+      "description" : "Show or hide the Stickers window.",
+      "icon" : "icon-menu.png"
     }
   ],
   "menu": {
     "items": [
+    "show_stickers",
     {
         "title": "UI Kit",
         "items": [

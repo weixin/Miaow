@@ -151,7 +151,7 @@ function _(context) {
   }
 
   function get_(json, context) {
-    var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json + ".json").path();
+    var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Resources").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent(json + ".json").path();
     var jsonData = NSData.dataWithContentsOfFile(manifestPath);
     jsonData = NSString.alloc().initWithData_encoding(jsonData, NSUTF8StringEncoding);
     return JSON.parse(jsonData);
@@ -320,7 +320,7 @@ function createRadioButtons(options, selectedItem) {
   var buttonMatrix = NSMatrix.alloc().initWithFrame_mode_prototype_numberOfRows_numberOfColumns(NSMakeRect(20.0, 20.0, 300.0, rows * 25), type, buttonCell, rows, columns);
   buttonMatrix.setCellSize(NSMakeSize(140, 20));
 
-  for (i = 0; i < options.length; i++) {
+  for (var i = 0; i < options.length; i++) {
     buttonMatrix.cells().objectAtIndex(i).setTitle(options[i]);
     buttonMatrix.cells().objectAtIndex(i).setTag(i);
   }
@@ -345,7 +345,7 @@ function createRadioButtons2(options, selectedItem) {
   var buttonMatrix = NSMatrix.alloc().initWithFrame_mode_prototype_numberOfRows_numberOfColumns(NSMakeRect(20.0, 20.0, 300.0, rows * 25), type, buttonCell, rows, columns);
   buttonMatrix.setCellSize(NSMakeSize(90, 20));
 
-  for (i = 0; i < options.length; i++) {
+  for (var i = 0; i < options.length; i++) {
     buttonMatrix.cells().objectAtIndex(i).setTitle(options[i]);
     buttonMatrix.cells().objectAtIndex(i).setTag(i);
   }
@@ -636,11 +636,12 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/fontReplace.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: fontReplaceAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fontReplaceAction", function() { return fontReplaceAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 
@@ -868,9 +869,9 @@ function fontReplace(context) {
   if (ga) ga.sendEvent('fontReplace', 'open');
 }
 
-var onRun = function onRun(context) {
+function fontReplaceAction(context) {
   fontReplace(context);
-};
+}
 
 /***/ })
 
@@ -881,6 +882,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['fontReplaceAction'] = __skpm_run.bind(this, 'fontReplaceAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=fontReplace.js.map

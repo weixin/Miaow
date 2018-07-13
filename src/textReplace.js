@@ -174,6 +174,6 @@ function textReplace(context) {
     if (ga) ga.sendEvent('textReplace', 'confirm');
 }
 
-var onRun = function (context) {
+export function textReplaceAction(context) {
     textReplace(context);
 }

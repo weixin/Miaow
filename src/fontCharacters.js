@@ -95,6 +95,6 @@ var fontCharacters = function (context) {
     if (ga) ga.sendEvent('fontCharacters', 'open');
 }
 
-var onRun = function (context) {
+export function fontCharactersAction(context) {
     fontCharacters(context);
 }
