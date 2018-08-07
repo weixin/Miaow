@@ -17,16 +17,6 @@ function _debug() {
   return data;
 }
 
-function _invariant() {
-  const data = _interopRequireDefault(require("invariant"));
-
-  _invariant = function () {
-    return data;
-  };
-
-  return data;
-}
-
 var _index = _interopRequireDefault(require("../index"));
 
 var _scope = _interopRequireDefault(require("../scope"));
@@ -118,7 +108,10 @@ class NodePath {
       hub = parentPath.hub;
     }
 
-    (0, _invariant().default)(parent, "To get a node path the parent needs to exist");
+    if (!parent) {
+      throw new Error("To get a node path the parent needs to exist");
+    }
+
     const targetNode = container[key];
     const paths = _cache.path.get(parent) || [];
 

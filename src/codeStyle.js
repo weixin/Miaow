@@ -321,6 +321,6 @@ function codeS(context) {
     if (ga) ga.sendEvent('codeStyle', 'use');
 }
 
-var onRun = function (context) {
+export function codeSAction(context) {
     codeS(context);
 }

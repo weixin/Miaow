@@ -47,49 +47,63 @@
       "identifier" : "setIndex",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "setIndex"
+      "handlers": {
+        "run": "setIndexAction"
+      }
     },
     {
       "name" : "Set Dialog",
       "identifier" : "setDialog",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "setDialog"
+      "handlers": {
+        "run": "setDialogAction"
+      }
     },
     {
       "name" : "Set Fixed",
       "identifier" : "setFixed",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "setFixed"
+      "handlers": {
+        "run": "setFixedAction"
+      }
     },
     {
       "name" : "Set Back",
       "identifier" : "setBacks",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "setBacks"
+      "handlers": {
+        "run": "setBacksAction"
+      }
     },
     {
       "name" : "Set Transparent",
       "identifier" : "setNoBuild",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "setNoBuild"
+      "handlers": {
+        "run": "setNoBuildAction"
+      }
     },
     {
       "name" : "Clear",
       "identifier" : "previewClear",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "clearPreview"
+      "handlers": {
+        "run": "clearPreviewAction"
+      }
     },
     {
       "name" : "Show/Hide",
       "identifier" : "previewHide",
       "script" : "commonPreview.js",
       "shortcut": "",
-      "handler" : "hidePreview"
+      "handlers": {
+        "run": "hidePreviewAction"
+      }
     },
     {
       "name" : "Preview",
@@ -97,7 +111,9 @@
       "script" : "showPreview.js",
       "shortcut": "",
       "istool":"",
-      "handler" : "onRun"
+      "handlers": {
+        "run": "showPreviewAction"
+      }
     },
     {
       "name" : "Local Preview",
@@ -105,14 +121,18 @@
       "script" : "localPreview.js",
       "shortcut": "",
       "istool":"",
-      "handler" : "onRun"
+      "handlers": {
+        "run": "localPreviewAction"
+      }
     },
     {
       "name" : "Web Preview",
       "identifier" : "webPreview",
       "script" : "webPreview.js",
       "shortcut": "",
-      "handler" : "onRun"
+      "handlers": {
+        "run": "webPreviewAction"
+      }
     },
     {
       "name" : "Preview Toolbar",
@@ -120,15 +140,19 @@
       "script" : "previewToolbar.js",
       "shortcut": "",
       "istool":"true",
-      "handler" : "onRunPreviewToolBar"
+      "handlers": {
+        "run": "onRunPreviewToolBar"
+      }
     },
     {
       "name" : "Layer Order Organize",
       "identifier" : "sortingLayers",
       "script" : "./sortingLayers.js",
       "shortcut": "command shift p",
-      "handler" : "sortingLayersAction",
-      "istool":"true"
+      "istool":"true",
+      "handlers": {
+        "run": "sortingLayersAction"
+      }
     },
     {
       "name" : "Icon Manager",
@@ -241,7 +265,9 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool":"true",
-      "handler" : "onRun"
+      "handlers": {
+        "run": "codeCAction"
+      }
     },
     {
       "name" : "Copy CSS Style",
@@ -250,7 +276,9 @@
       "icon": "../Resources/icons/codeStyle.png",
       "shortcut": "command shift d",
       "istool":"true",
-      "handler" : "onRun"
+      "handlers": {
+        "run": "codeSAction"
+      }
     },
     {
       "name" : "Advanced Export",
@@ -284,7 +312,10 @@
       "shortcut": "",
       "handler" : "onRun",
       "istool":"",
-      "noshortcut":"true"
+      "noshortcut":"true",
+      "handlers": {
+        "run": "codeSettingAction"
+      }
     },
     {
       "name" : " └─ Settings",

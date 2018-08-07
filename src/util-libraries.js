@@ -229,6 +229,63 @@ export function replaceSymbolsInLayerWithLibrary(parentDocument, parentLayer, li
 }
 
 
+
+/**
+ * Replaces all shared styles under (and including) the given parent layer with
+ * those found in the given MSAssetLibrary.
+ */
+export function replaceSharedStylesInLayerWithLibrary(parentDocument, parentLayer, library) {
+  if (parentLayer.children) {
+    let allLayersWithSharedStyle = util.getAllLayersMatchingPredicate(
+        parentLayer, NSPredicate.predicateWithFormat('style.sharedObjectID != nil'));
+
+    let maybeImportForeignSharedStyleWithStyleId = styleId => {
+      let librarySharedStyle = library.document().layerStyles().sharedStyleWithID(styleId)
+          || library.document().layerTextStyles().sharedStyleWithID(styleId);
+      if (librarySharedStyle) {
+        if (librarySharedStyle.foreignObject()) {
+          // the shared style in the target library is a foreign shared style from yet
+          // another library, just grab the MSForeignStyle/MSForeignObject
+          // and add it to the target document
+          let foreignStyle = librarySharedStyle.foreignObject();
+          if (foreignStyle instanceof MSForeignLayerStyle) {
+            parentDocument.documentData().addForeignLayerStyle(foreignSymbol);
+          } else if (foreignStyle instanceof MSForeignTextStyle) {
+            parentDocument.documentData().addForeignTextStyle(foreignStyle);
+          }
+          return foreignStyle;
+        }
+
+        // the symbol in the target library is local to the library, import it
+        // from the library
+        let shareableObjectReference = MSShareableObjectReference.referenceForShareableObject_inLibrary(
+            librarySharedStyle, library);
+        return getLibrariesController().importShareableObjectReference_intoDocument(
+            shareableObjectReference, parentDocument.documentData());
+      }
+
+      return null;
+    };
+
+    allLayersWithSharedStyle.forEach(layerWithSharedStyle => {
+      let styleId = layerWithSharedStyle.style().sharedObjectID();
+      let foreignSharedStyle = maybeImportForeignSharedStyleWithStyleId(styleId);
+      if (foreignSharedStyle) {
+        if (layerWithSharedStyle instanceof MSTextLayer) {
+          // preserve formatted string value before setting shared style (which resets
+          // character-level formatting)
+          let aStr = layerWithSharedStyle.attributedStringValue();
+          layerWithSharedStyle.setSharedStyle(foreignSharedStyle.localSharedStyle());
+          layerWithSharedStyle.setAttributedStringValue(aStr);
+        } else {
+          layerWithSharedStyle.setSharedStyle(foreignSharedStyle.localSharedStyle());
+        }
+      }
+    });
+  }
+}
+
+
 /**
  * Compatibility layer for importForeignSymbol_fromLibrary_intoDocument,
  * removed in Sketch 50.

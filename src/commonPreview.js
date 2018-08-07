@@ -204,7 +204,7 @@ export function buildPreview(context) {
 	return newPreviewObject;
 }
 
-export function setIndex(context) {
+export function setIndexAction(context) {
 	var i18 = _(context).commonPreview;
 	if (context.selection.length == 0) {
 		return errorDialog(context,i18.m1);
@@ -223,7 +223,7 @@ export function setIndex(context) {
 	}
 }
 
-export function setDialog(context) {
+export function setDialogAction(context) {
 	var i18 = _(context).commonPreview;
 	var fx = 0;
 
@@ -270,7 +270,7 @@ export function setDialog(context) {
 	}
 }
 
-export function setFixed(context) {
+export function setFixedAction(context) {
 	var i18 = _(context).commonPreview;
 	var fx = 0;
 
@@ -341,7 +341,7 @@ export function setFixed(context) {
 	}
 }
 
-export function setBacks(context) {
+export function setBacksAction(context) {
 	var i18 = _(context).commonPreview;
 	var setBack_ = function (context, selection) {
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(selection.objectID(), "backMain", selection, previewKey);
@@ -381,7 +381,7 @@ export function setBacks(context) {
 	buildPreview(context);
 }
 
-export function setNoBuild(context) {
+export function setNoBuildAction(context) {
 	var i18 = _(context).commonPreview;
 	var setNoBuild_ = function (context, selection) {
 		context.command.setValue_forKey_onLayer_forPluginIdentifier(selection.objectID(), "noBuildMain", selection, previewKey);
@@ -421,7 +421,7 @@ export function setNoBuild(context) {
 	buildPreview(context);
 }
 
-export function clearPreview(context) {
+export function clearPreviewAction(context) {
 	var i18 = _(context).commonPreview;
 	var domKey = ['backMain', 'fixedMain', 'dialogMain', 'indexMain', 'noBuildMain'];
 	if (context.selection.length == 0) {

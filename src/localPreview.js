@@ -25,6 +25,6 @@ var localPreview = function (context) {
 	NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(NSArray.arrayWithObjects(NSURL.fileURLWithPath(filePath)));
 }
 
-var onRun = function (context) {
+export function localPreviewAction(context) {
 	localPreview(context);
 }

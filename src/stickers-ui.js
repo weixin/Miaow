@@ -17,7 +17,6 @@
 import path from '@skpm/path';
 import fs from '@skpm/fs';
 import BrowserWindow from 'sketch-module-web-view';
-import MochaJSDelegate from 'mocha-js-delegate';
 
 import * as libraries from './util-libraries';
 import * as util from './util';
@@ -105,6 +104,7 @@ export class StickersUI {
     if (UI_MODE == 'cover') {
       this.browserWindow.setResizable(false);
       this.browserWindow._panel.setFrame_display_animate_(docWindow.frame(), false, false);
+      this.browserWindow._panel.setHidesOnDeactivate(false);
     }
     this.browserWindow.once('ready-to-show', () => this.browserWindow.show());
     this.browserWindow.loadURL(String(
@@ -119,11 +119,17 @@ export class StickersUI {
 
 
   setupWebAPI() {
+    let libraryIndexesById = {};
     this.webContents.on('loadStickerIndex', (callbackName, progressCallbackName) => {
       // trigger the creation of the sticker index
       makeStickerIndexForLibraries(
           {onProgress: progress => this.runWebCallback(progressCallbackName, progress)})
-          .then(stickerIndex => this.runWebCallback(callbackName, stickerIndex))
+          .then(stickerIndex => {
+            stickerIndex.libraries.forEach(libraryIndex => {
+              libraryIndexesById[libraryIndex.id] = libraryIndex;
+            });
+            this.runWebCallback(callbackName, stickerIndex);
+          })
           .catch(e => log(e.message));
     });
 
@@ -144,7 +150,9 @@ export class StickersUI {
     // add a handler for a call from web content's javascript
     this.webContents.on('startDragging', (stickerId, rect) => {
       try {
-        this.startDragging(stickerId, rect, this.browserWindow._webview);
+        let [libraryId, layerId] = stickerId.split(/\./, 2);
+        let archiveVersion = libraryIndexesById[libraryId].archiveVersion;
+        this.startDragging(libraryId, archiveVersion, stickerId, rect, this.browserWindow._webview);
       } catch (e) {
         // TODO: do this everywhere somehow
         log(e.message);
@@ -159,9 +167,7 @@ export class StickersUI {
   /**
    * Triggers the beginning of a drag operation on the given sticker ID
    */
-  startDragging(stickerId, rect, srcView) {
-    let [libraryId, layerId] = stickerId.split(/\./, 2);
-
+  startDragging(libraryId, archiveVersion, stickerId, rect, srcView) {
     let library = libraries.getLibraryById(libraryId);
     let image = NSImage.alloc().initWithContentsOfFile(this.getStickerCachedImagePath(stickerId));
 
@@ -170,7 +176,7 @@ export class StickersUI {
         this.getStickerCachedContentPath(stickerId), {encoding: 'utf8'});
     let decodedImmutableObj = MSJSONDataUnarchiver
         .unarchiveObjectWithString_asVersion_corruptionDetected_error(
-            serializedLayerJson, 999, null, null);
+            serializedLayerJson, archiveVersion || 999, null, null);
     let layer = decodedImmutableObj.newMutableCounterpart();
 
     // create a dummy document and import the layer into it, so that
@@ -182,6 +188,8 @@ export class StickersUI {
     // import any symbols used in library (either from the library itself or
     // other libraries referenced from the library... i.e. nested libraries)
     libraries.replaceSymbolsInLayerWithLibrary(dummyDocData, layer, library);
+    // same thing for shared text and layer styles (Sketch 50+)
+    libraries.replaceSharedStylesInLayerWithLibrary(dummyDocData, layer, library);
 
     // initiate cocoa drag operation
     let pbItem = NSPasteboardItem.new();

@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css"/>
+</head>
+<body is-loading>
+  <div class="header-area">
+    <button class="header-area__back-button">
+      <span>Back to Sketch</span>
+    </button>
+    <div class="header-area__search-field-container">
+      <input class="header-area__search-field" autocorrect="off" spellcheck="false" placeholder="Search for a sticker">
+    </div>
+  </div>
+
+  <div class="stickers-area" v-cloak>
+    <div v-for="library in stickerIndex.libraries"
+        class="sticker-library-container"
+        :key="library.id">
+      <div v-for="section in library.sections"
+          :key="section.id"
+          class="sticker-root-section"
+          v-bind:layout="section.layout || 'default'">
+        <div class="sticker-root-section__meta">
+          <div class="sticker-root-section__overline">{{ library.title }}</div>
+          <hilitext class="sticker-root-section__title sticker-root-section__hilitext" v-bind:text="section.title"></hilitext>
+          <hilitext class="sticker-root-section__description sticker-root-section__hilitext" v-bind:text="section.description"></hilitext>
+          <a target="_blank" class="sticker-root-section__link" v-for="link in section.links" v-bind:href="link.url">
+            {{ link.title }}
+          </a>
+        </div>
+        <div class="sticker-root-section__content">
+          <div class="sticker-root-section__content-row" v-for="row in section.rows">
+            <template v-for="item in row.items">
+              <div v-if="item.type == 'section'" v-bind:layout="item.layout || 'default'" class="sticker-sub-section">
+                <!-- subsections treated as columns -->
+                <hilitext class="sticker-sub-section__title sticker-sub-section__hilitext" v-bind:text="item.title"></hilitext>
+                <hilitext class="sticker-sub-section__description sticker-sub-section__hilitext" v-bind:text="item.description"></hilitext>
+                <div class="sticker-sub-section__content"
+                    v-bind:class="{
+                      'is-hide-names': item.hideNames,
+                      'has-background-color': !!item.background
+                    }"
+                    v-bind:style="{'background-color': item.background}">
+                  <sticker
+                      v-bind:parent-section="item"
+                      v-for="subItem in item.items" :key="subItem.id" v-bind:sticker="subItem"></sticker>
+                </div>
+              </div>
+              <template v-if="item.type == 'layer'">
+                <!-- individual sticker -->
+                <sticker v-bind:parent-section="section" v-bind:sticker="item"></sticker>
+              </template>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="zero-state no-stickers" v-if="!$globals.searchText && !stickerIndex.libraries.length">
+      <div class="zero-state__image"></div>
+      <span class="zero-state__text">
+        None of your Sketch libraries have stickers yet!
+      </span>
+      <a class="zero-state__link" href="https://github.com/romannurik/Sketch-Stickers/wiki/Getting-started-for-stickersheet-authors">Learn more</a>
+    </div>
+    <div class="zero-state search-empty" v-if="$globals.searchText">
+      <div class="zero-state__image"></div>
+      <span class="zero-state__text">
+        No stickers or categories matched <em>'{{ $globals.searchText }}'</em>
+      </span>
+    </div>
+  </div>
+
+  <script type="text/x-template" id="sticker-template">
+    <div class="sticker"
+        v-bind:data-sticker-id="sticker.id"
+        v-bind:class="{
+          'has-background-color': !!parentSection.backgroundEach
+        }">
+      <div class="sticker__thumb-container"
+          v-bind:style="{
+            'background-color': parentSection.backgroundEach,
+            'width': drawSize.width + 'px',
+            'height': drawSize.height + 'px'
+          }"
+          v-bind:title="sticker.name">
+        <div class="sticker__thumb"></div>
+      </div>
+      <hilitext class="sticker__caption sticker__hilitext" v-bind:text="sticker.name"></hilitext>
+    </div>
+  </script>
+
+  <div class="zero-state page-loading">
+    <div class="zero-state__image"></div>
+    <span class="zero-state__text">
+      Indexing libraries&hellip;
+    </span>
+    <div class="page-loading__progressbar">
+      <div class="page-loading__progress"></div>
+    </div>
+  </div>
+
+  <script src="plugin-call.js"></script>
+  <script src="index.js"></script>
+
+</body>
+</html>

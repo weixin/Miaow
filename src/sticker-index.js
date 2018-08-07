@@ -18,11 +18,10 @@ import fs from '@skpm/fs';
 import path from '@skpm/path';
 import yaml from 'js-yaml';
 
-import * as libraries from './util-libraries';
 import * as util from './util';
 import {ProgressReporter} from './util-progress-reporter';
 
-const INDEX_FORMAT_VERSION = 2;
+const INDEX_FORMAT_VERSION = 3;
 const FORCE_REBULD = false;
 
 
@@ -32,12 +31,20 @@ const FORCE_REBULD = false;
  */
 export async function makeStickerIndexForLibraries({onProgress}) {
   let libraries = Array.from(NSApp.delegate().librariesController().libraries())
-      .filter(lib => !!lib.locationOnDisk() && !!lib.enabled())
+      .filter(lib => !!lib.locationOnDisk() && !!lib.enabled() && !!lib.libraryID())
       .map(lib => ({
-        // TODO: detect duplicate library IDs
         libraryId: String(lib.libraryID()),
         sketchFilePath: String(lib.locationOnDisk().path()),
-      }));
+      }))
+      // filter out duplicate library IDs
+      .filter((lib, index, self) => {
+        let firstWithId = self.findIndex(l => l.libraryId === lib.libraryId) === index;
+        if (!firstWithId) {
+          log(`Library at ${lib.sketchFilePath} not shown, there's already a library ` +
+              `with ID ${lib.libraryId} in the list of libraries.`);
+        }
+        return firstWithId;
+      });
 
   let progressReporter = new ProgressReporter();
   progressReporter.on('progress', progress => onProgress(progress));
@@ -49,10 +56,9 @@ export async function makeStickerIndexForLibraries({onProgress}) {
     await util.unpeg();
 
     // for this library, get the last modified date of the sketch file
-    let modifiedDateMs = NSFileManager.defaultManager()
-        .attributesOfItemAtPath_error_(lib.sketchFilePath, null)
-        .fileModificationDate()
-        .timeIntervalSince1970();
+    let attrs = NSFileManager.defaultManager()
+        .attributesOfItemAtPath_error_(lib.sketchFilePath, null);
+    let modifiedDateMs = attrs ? attrs.fileModificationDate().timeIntervalSince1970() : 0;
 
     let cachePath = path.join(util.getPluginCachePath(), lib.libraryId);
 
@@ -66,6 +72,7 @@ export async function makeStickerIndexForLibraries({onProgress}) {
 
     if (FORCE_REBULD ||
         !libraryIndex ||
+        !libraryIndex.archiveVersion ||
         libraryIndex.timestamp < modifiedDateMs ||
         (libraryIndex.formatVersion || 0) < INDEX_FORMAT_VERSION) {
       // need to rebuild the cached index
@@ -78,6 +85,7 @@ export async function makeStickerIndexForLibraries({onProgress}) {
       util.mkdirpSync(path.dirname(indexCachePath));
       fs.writeFileSync(indexCachePath,
           JSON.stringify(Object.assign(libraryIndex, {
+            archiveVersion: Number(MSArchiveHeader.metadataForNewHeader()['version']),
             formatVersion: INDEX_FORMAT_VERSION,
             timestamp: modifiedDateMs + 1, // add a second to avoid precision issues
           })),

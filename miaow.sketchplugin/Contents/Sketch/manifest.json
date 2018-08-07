@@ -241,7 +241,9 @@
       "icon": "../Resources/icons/codeColor.png",
       "shortcut": "command shift c",
       "istool": "true",
-      "handler": "onRun"
+      "handlers": {
+        "run": "codeCAction"
+      }
     },
     {
       "name": "Copy CSS Style",
@@ -250,7 +252,9 @@
       "icon": "../Resources/icons/codeStyle.png",
       "shortcut": "command shift d",
       "istool": "true",
-      "handler": "onRun"
+      "handlers": {
+        "run": "codeSAction"
+      }
     },
     {
       "name": "Advanced Export",
@@ -284,7 +288,10 @@
       "shortcut": "",
       "handler": "onRun",
       "istool": "",
-      "noshortcut": "true"
+      "noshortcut": "true",
+      "handlers": {
+        "run": "codeSettingAction"
+      }
     },
     {
       "name": " └─ Settings",

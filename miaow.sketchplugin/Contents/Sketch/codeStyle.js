@@ -95,11 +95,12 @@ var exports =
 /*!**************************!*\
   !*** ./src/codeStyle.js ***!
   \**************************/
-/*! no exports provided */
+/*! exports provided: codeSAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "codeSAction", function() { return codeSAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 
@@ -463,9 +464,9 @@ function codeS(context) {
   if (ga) ga.sendEvent('codeStyle', 'use');
 }
 
-var onRun = function onRun(context) {
+function codeSAction(context) {
   codeS(context);
-};
+}
 
 /***/ }),
 
@@ -1017,6 +1018,7 @@ function SMPanel(options) {
     exports[key](context);
   }
 }
+that['codeSAction'] = __skpm_run.bind(this, 'codeSAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=codeStyle.js.map

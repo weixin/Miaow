@@ -12344,6 +12344,7 @@ function getLink(context, refursh) {
     var pca = a;
     var pcb = b;
     var endPoisiton;
+    var startPointX, startPointY, endPointX, endPointY;
     a = a.absoluteRect();
     b = b.absoluteRect();
 

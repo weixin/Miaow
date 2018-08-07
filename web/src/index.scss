@@ -1,0 +1,470 @@
+/*
+ * Copyright 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// some default styles to make the view more native like
+
+@import './lib/embedded-ui';
+@import './lib/iconfont';
+
+@import './variables';
+
+@import './components/zerostate/zerostate';
+@import './components/button/button';
+
+$headerHeight: 48px;
+$libraryHeaderHeight: 40px;
+
+[v-cloak] {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  box-sizing: border-box;
+  background: transparent;
+  font-family: $fontStackBody;
+  color: $colorBlackSecondary;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  --side-margin: 36px;
+  --left-keyline: 316px;
+  --root-section-vert-padding: 40px;
+
+  &[ui-mode="palette"] {
+    @include medium {
+      --side-margin: 20px;
+      --left-keyline: 256px;
+    }
+  }
+}
+
+.header-area {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: $headerHeight;
+  padding: 0 var(--side-margin);
+  display: grid;
+  align-items: center;
+
+  z-index: 10;
+  box-shadow: 0 1px 0 $colorThinBorder;
+  background-color: rgba(#fff, .85);
+  -webkit-backdrop-filter: blur(12px);
+
+  grid-template-columns: calc(var(--left-keyline) - var(--side-margin)) 1fr;
+  [ui-mode="palette"] & {
+    grid-template-columns: 1fr;
+  }
+
+  &__back-button {
+    [ui-mode="palette"] & {
+      display: none;
+    }
+
+    color: $colorBlackTertiary;
+    display: flex;
+    align-items: center;
+    justify-self: flex-start;
+    margin: 0 0 0 -20px;
+    padding: 0;
+    -webkit-appearance: none;
+    border: 0;
+    background-color: transparent;
+    outline: none;
+    @include type-body-1;
+
+    &::before {
+      @include material-icons;
+      content: 'arrow_back_ios';
+      font-size: 16px;
+      margin-right: 4px;
+    }
+
+    &:hover,
+    &:focus {
+      color: $colorBlackPrimary;
+    }
+  }
+
+  &__search-field-container {
+    position: relative;
+    height: 32px;
+    justify-self: flex-start;
+    width: 100%;
+    max-width: 320px;
+    margin-right: var(--side-margin);
+
+    [ui-mode="palette"] & {
+      justify-self: stretch;
+    }
+
+    &::after {
+      @include material-icons;
+      content: 'search';
+      color: $colorBlackSecondary;
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+
+  &__search-field {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 4px;
+    background-color: rgba(#000, .12);
+    -webkit-appearance: none;
+    padding: 0 0 0 40px;
+    box-sizing: border-box;
+    @include type-body-1;
+
+    &:focus {
+      background-color: rgba(#000, .24);
+      outline: 0;
+    }
+
+    &::placeholder {
+      color: $colorBlackSecondary;
+    }
+  }
+}
+
+.stickers-area {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: $headerHeight;
+}
+
+.sticker-root-section {
+  position: relative;
+  $scrollFadeSize: 60px;
+
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  padding: var(--root-section-vert-padding) 0 0 0;
+  box-shadow: 0 1px 0 $colorThinBorder;
+
+  @include narrow {
+    flex-direction: column;
+  }
+
+  // gradient fade for scrolled portions of the content area
+  &::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--left-keyline) - #{$scrollFadeSize});
+    top: 1px;
+    bottom: 1px;
+    width: $scrollFadeSize;
+    background-image: linear-gradient(to right,
+        rgba(#fff,1.00) 0%,
+        rgba(#fff,0.90) 30%,
+        rgba(#fff,0.67) 60%,
+        rgba(#fff,0.50) 75%,
+        rgba(#fff,0.33) 85%,
+        rgba(#fff,0.00) 100%);
+
+    @include narrow {
+      display: none;
+    }
+  }
+
+  &__meta {
+    z-index: 1;
+
+    align-self: flex-start;
+    position: sticky;
+    position: -webkit-sticky;
+    top: calc(var(--root-section-vert-padding) + #{$headerHeight});
+
+    @include narrow {
+      position: relative;
+      top: unset;
+    }
+
+    box-sizing: border-box;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    width: var(--left-keyline);
+    padding: 0 40px var(--root-section-vert-padding) var(--side-margin);
+  }
+
+  &__overline {
+    @include type-body-4;
+    color: $colorBlackTertiary;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &__title {
+    @include type-headline-1;
+    font-weight: 800;
+    color: $colorBlackPrimary;
+  }
+
+  &__description {
+    @include type-body-2;
+    margin-top: 16px;
+    color: $colorBlackSecondary;
+  }
+
+  &__link {
+    @include button;
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__content-row {
+    padding: 12px var(--side-margin) var(--root-section-vert-padding) (#{$scrollFadeSize}); // space for box-shadows and gradient
+    margin: -12px 0 0 (-$scrollFadeSize); // offset for box shadow
+
+    @include narrow {
+      padding-left: var(--side-margin);
+      margin-left: 0;
+    }
+
+    overflow-x: auto;
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+
+    > * {
+      margin-right: 20px;
+
+      // force a right-margin
+      &:last-child {
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: calc(-1 * var(--side-margin)); // the margin
+          width: 1px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  &[layout="flow"] .sticker-root-section__content-row {
+    flex-flow: row wrap;
+
+    .sticker {
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@mixin sticker-effects {
+  box-shadow: 0 0 0 1px $colorThinBorder inset;
+}
+
+@mixin sticker-no-effects {
+  box-shadow: none !important;
+}
+
+// a column of stickers
+.sticker-sub-section {
+  display: flex;
+  flex-direction: column;
+  margin-right: 48px;
+
+  &__title {
+    @include type-body-1;
+    margin-bottom: 16px;
+    color: $colorBlackPrimary;
+    font-weight: 500;
+  }
+
+  .sticker + .sticker {
+    margin-top: 12px;
+  }
+
+  &__content.has-background-color {
+    @include sticker-effects;
+    padding: 24px;
+  }
+
+  &__content.is-hide-names {
+    .sticker__caption {
+      display: none;
+    }
+  }
+
+  &[layout="row"] &__content {
+    display: flex;
+    flex-direction: row;
+
+    .sticker + .sticker {
+      margin-top: 0;
+      margin-left: 20px;
+    }  
+  }
+}
+
+.sticker {
+  display: flex;
+  flex-direction: column;
+
+  &__thumb {
+    // @include sticker-effects;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: transform .1s ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+
+  &__caption {
+    margin-top: 4px;
+    @include type-body-3;
+    color: $colorBlackTertiary;
+  }
+
+  &.has-background-color {
+    .sticker__thumb-container {
+      @include sticker-effects;
+      padding: 24px;
+    }
+
+    .sticker__caption {
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.no-stickers {
+  @include zero-state-image('./images/zero-state@2x.png');
+}
+
+.search-empty {
+  display: none;
+
+  .no-search-results & {
+    display: flex;
+  }
+
+  @include zero-state-image('./images/no-results@2x.png');
+}
+
+body.has-active-search [data-search-match="none"] {
+  display: none;
+}
+
+body.has-active-search [data-search-match="direct"] [data-search-match="none"] {
+  display: flex;
+}
+
+body.has-active-search [data-search-match="direct"] > .sticker__caption {
+  display: unset;
+}
+
+.search-highlight {
+  background-color: #FBBC04;
+  border-radius: 4px;
+}
+
+body[is-loading] > * {
+  display: none;
+}
+
+body > *:first-child::after {
+  // trigger iconfont loading
+  @include material-icons;
+  content: 'arrow_back';
+  opacity: 0;
+  position: absolute;
+  left: -100px;
+  top: -100px;
+}
+
+.page-loading {
+  display: none;
+
+  body[is-loading] & {
+    display: flex;
+
+    animation: page-load-appear .7s ease .2s;
+    animation-fill-mode: backwards;
+
+    @keyframes page-load-appear {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  }
+
+  @include zero-state-image('./images/indexing@2x.png');
+
+  $progressThickness: 4px;
+
+  &__progressbar {
+    position: relative;
+    margin-top: 40px;
+    height: $progressThickness;
+    width: 160px;
+    // border-radius: 1000px; // during transition, this isn't applied... so just kill it for now
+    background-color: #eee;
+    // overflow: hidden;
+  }
+
+  &__progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(100% - #{$progressThickness} * 2);
+    height: 100%;
+    background-color: $colorAccent;
+    transform-origin: 0% 0%;
+    transform: scaleX(0);
+    transition: transform .5s cubic-bezier(.25, .25, 0, 1);
+  }
+}

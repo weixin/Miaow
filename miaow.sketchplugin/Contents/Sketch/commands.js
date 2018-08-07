@@ -13515,7 +13515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '4.0.0';
+	exports.version = '4.0.1';
 
 
 /***/ },
@@ -15452,11 +15452,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            column: this.startMarker.column
 	        };
 	    };
-	    Parser.prototype.startNode = function (token) {
+	    Parser.prototype.startNode = function (token, lastLineStart) {
+	        if (lastLineStart === void 0) { lastLineStart = 0; }
+	        var column = token.start - token.lineStart;
+	        var line = token.lineNumber;
+	        if (column < 0) {
+	            column += lastLineStart;
+	            line--;
+	        }
 	        return {
 	            index: token.start,
-	            line: token.lineNumber,
-	            column: token.start - token.lineStart
+	            line: line,
+	            column: column
 	        };
 	    };
 	    Parser.prototype.finalize = function (marker, node) {
@@ -15788,7 +15795,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var isGenerator = false;
 	        var node = this.createNode();
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = false;
+	        this.context.allowYield = true;
 	        var params = this.parseFormalParameters();
 	        var method = this.parsePropertyMethod(params);
 	        this.context.allowYield = previousAllowYield;
@@ -15858,7 +15865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nextToken();
 	            computed = this.match('[');
 	            isAsync = !this.hasLineTerminator && (id === 'async') &&
-	                !this.match(':') && !this.match('(') && !this.match('*');
+	                !this.match(':') && !this.match('(') && !this.match('*') && !this.match(',');
 	            key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
 	        }
 	        else if (this.match('*')) {
@@ -16457,12 +16464,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Final reduce to clean-up the stack.
 	            var i = stack.length - 1;
 	            expr = stack[i];
-	            markers.pop();
+	            var lastMarker = markers.pop();
 	            while (i > 1) {
-	                var node = this.startNode(markers.pop());
+	                var marker = markers.pop();
+	                var lastLineStart = lastMarker && lastMarker.lineStart;
+	                var node = this.startNode(marker, lastLineStart);
 	                var operator = stack[i - 1];
 	                expr = this.finalize(node, new Node.BinaryExpression(operator, stack[i - 2], expr));
 	                i -= 2;
+	                lastMarker = marker;
 	            }
 	        }
 	        return expr;
@@ -17244,8 +17254,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var node = this.createNode();
 	        this.expectKeyword('return');
-	        var hasArgument = !this.match(';') && !this.match('}') &&
-	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */;
+	        var hasArgument = (!this.match(';') && !this.match('}') &&
+	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */) ||
+	            this.lookahead.type === 8 /* StringLiteral */ ||
+	            this.lookahead.type === 10 /* Template */;
 	        var argument = hasArgument ? this.parseExpression() : null;
 	        this.consumeSemicolon();
 	        return this.finalize(node, new Node.ReturnStatement(argument));
@@ -17810,7 +17822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = false;
+	        this.context.allowYield = !isGenerator;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length > 0) {
 	            this.tolerateError(messages_1.Messages.BadGetterArity);
@@ -17823,7 +17835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = false;
+	        this.context.allowYield = !isGenerator;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length !== 1) {
 	            this.tolerateError(messages_1.Messages.BadSetterArity);
@@ -17924,13 +17936,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    isAsync = true;
 	                    token = this.lookahead;
 	                    key = this.parseObjectPropertyKey();
-	                    if (token.type === 3 /* Identifier */) {
-	                        if (token.value === 'get' || token.value === 'set') {
-	                            this.tolerateUnexpectedToken(token);
-	                        }
-	                        else if (token.value === 'constructor') {
-	                            this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
-	                        }
+	                    if (token.type === 3 /* Identifier */ && token.value === 'constructor') {
+	                        this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
 	                    }
 	                }
 	            }
@@ -18043,6 +18050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Parser.prototype.parseModule = function () {
 	        this.context.strict = true;
 	        this.context.isModule = true;
+	        this.scanner.isModule = true;
 	        var node = this.createNode();
 	        var body = this.parseDirectivePrologues();
 	        while (this.lookahead.type !== 2 /* EOF */) {
@@ -18471,6 +18479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.source = code;
 	        this.errorHandler = handler;
 	        this.trackComment = false;
+	        this.isModule = false;
 	        this.length = code.length;
 	        this.index = 0;
 	        this.lineNumber = (code.length > 0) ? 1 : 0;
@@ -18676,7 +18685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                }
 	            }
-	            else if (ch === 0x3C) {
+	            else if (ch === 0x3C && !this.isModule) {
 	                if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
 	                    this.index += 4; // `<!--`
 	                    var comment = this.skipSingleLineComment(4);
@@ -24369,80 +24378,6 @@ module.exports = new Type('tag:yaml.org,2002:timestamp', {
 
 /***/ }),
 
-/***/ "./node_modules/mocha-js-delegate/index.js":
-/*!*************************************************!*\
-  !*** ./node_modules/mocha-js-delegate/index.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* globals NSUUID MOClassDescription NSObject NSSelectorFromString NSClassFromString */
-
-module.exports = function (selectorHandlerDict, superclass) {
-  var uniqueClassName = 'MochaJSDelegate_DynamicClass_' + NSUUID.UUID().UUIDString()
-
-  var delegateClassDesc = MOClassDescription.allocateDescriptionForClassWithName_superclass_(uniqueClassName, superclass || NSObject)
-
-  delegateClassDesc.registerClass()
-
-  // Storage Handlers
-  var handlers = {}
-
-  // Define interface
-  this.setHandlerForSelector = function (selectorString, func) {
-    var handlerHasBeenSet = (selectorString in handlers)
-    var selector = NSSelectorFromString(selectorString)
-
-    handlers[selectorString] = func
-
-    /*
-      For some reason, Mocha acts weird about arguments: https://github.com/logancollins/Mocha/issues/28
-      We have to basically create a dynamic handler with a likewise dynamic number of predefined arguments.
-    */
-    if (!handlerHasBeenSet) {
-      var args = []
-      var regex = /:/g
-      while (regex.exec(selectorString)) {
-        args.push('arg' + args.length)
-      }
-
-      var dynamicFunction = eval('(function (' + args.join(', ') + ') { return handlers[selectorString].apply(this, arguments); })')
-
-      delegateClassDesc.addInstanceMethodWithSelector_function_(selector, dynamicFunction)
-    }
-  }
-
-  this.removeHandlerForSelector = function (selectorString) {
-    delete handlers[selectorString]
-  }
-
-  this.getHandlerForSelector = function (selectorString) {
-    return handlers[selectorString]
-  }
-
-  this.getAllHandlers = function () {
-    return handlers
-  }
-
-  this.getClass = function () {
-    return NSClassFromString(uniqueClassName)
-  }
-
-  this.getClassInstance = function () {
-    return NSClassFromString(uniqueClassName).new()
-  }
-
-  // Convenience
-  if (typeof selectorHandlerDict === 'object') {
-    for (var selectorString in selectorHandlerDict) {
-      this.setHandlerForSelector(selectorString, selectorHandlerDict[selectorString])
-    }
-  }
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/promise-polyfill/lib/index.js":
 /*!****************************************************!*\
   !*** ./node_modules/promise-polyfill/lib/index.js ***!
@@ -26718,9 +26653,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _skpm_path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_skpm_path__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-yaml */ "./node_modules/js-yaml/index.js");
 /* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_yaml__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _util_libraries__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util-libraries */ "./src/util-libraries.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util */ "./src/util.js");
-/* harmony import */ var _util_progress_reporter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util-progress-reporter */ "./src/util-progress-reporter.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ "./src/util.js");
+/* harmony import */ var _util_progress_reporter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util-progress-reporter */ "./src/util-progress-reporter.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -26753,8 +26687,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
-var INDEX_FORMAT_VERSION = 2;
+var INDEX_FORMAT_VERSION = 3;
 var FORCE_REBULD = false;
 /**
  * Returns a sticker index JSON for the user's libraries, building and caching it
@@ -26772,7 +26705,7 @@ function _makeStickerIndexForLibraries() {
   _makeStickerIndexForLibraries = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(_ref) {
-    var onProgress, libraries, progressReporter, childProgressReporters, compositeIndex, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, i, lib, modifiedDateMs, cachePath, libraryIndex, indexCachePath, doc;
+    var onProgress, libraries, progressReporter, childProgressReporters, compositeIndex, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, i, lib, attrs, modifiedDateMs, cachePath, libraryIndex, indexCachePath, doc;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -26780,15 +26713,25 @@ function _makeStickerIndexForLibraries() {
           case 0:
             onProgress = _ref.onProgress;
             libraries = Array.from(NSApp.delegate().librariesController().libraries()).filter(function (lib) {
-              return !!lib.locationOnDisk() && !!lib.enabled();
+              return !!lib.locationOnDisk() && !!lib.enabled() && !!lib.libraryID();
             }).map(function (lib) {
               return {
-                // TODO: detect duplicate library IDs
                 libraryId: String(lib.libraryID()),
                 sketchFilePath: String(lib.locationOnDisk().path())
               };
+            }) // filter out duplicate library IDs
+            .filter(function (lib, index, self) {
+              var firstWithId = self.findIndex(function (l) {
+                return l.libraryId === lib.libraryId;
+              }) === index;
+
+              if (!firstWithId) {
+                log("Library at ".concat(lib.sketchFilePath, " not shown, there's already a library ") + "with ID ".concat(lib.libraryId, " in the list of libraries."));
+              }
+
+              return firstWithId;
             });
-            progressReporter = new _util_progress_reporter__WEBPACK_IMPORTED_MODULE_5__["ProgressReporter"]();
+            progressReporter = new _util_progress_reporter__WEBPACK_IMPORTED_MODULE_4__["ProgressReporter"]();
             progressReporter.on('progress', function (progress) {
               return onProgress(progress);
             });
@@ -26805,18 +26748,19 @@ function _makeStickerIndexForLibraries() {
 
           case 11:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 35;
+              _context.next = 36;
               break;
             }
 
             _step$value = _slicedToArray(_step.value, 2), i = _step$value[0], lib = _step$value[1];
             _context.next = 15;
-            return _util__WEBPACK_IMPORTED_MODULE_4__["unpeg"]();
+            return _util__WEBPACK_IMPORTED_MODULE_3__["unpeg"]();
 
           case 15:
             // for this library, get the last modified date of the sketch file
-            modifiedDateMs = NSFileManager.defaultManager().attributesOfItemAtPath_error_(lib.sketchFilePath, null).fileModificationDate().timeIntervalSince1970();
-            cachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(_util__WEBPACK_IMPORTED_MODULE_4__["getPluginCachePath"](), lib.libraryId);
+            attrs = NSFileManager.defaultManager().attributesOfItemAtPath_error_(lib.sketchFilePath, null);
+            modifiedDateMs = attrs ? attrs.fileModificationDate().timeIntervalSince1970() : 0;
+            cachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(_util__WEBPACK_IMPORTED_MODULE_3__["getPluginCachePath"](), lib.libraryId);
             libraryIndex = null;
             indexCachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(cachePath, 'index.json');
 
@@ -26826,85 +26770,86 @@ function _makeStickerIndexForLibraries() {
               }));
             } catch (e) {}
 
-            if (!(FORCE_REBULD || !libraryIndex || libraryIndex.timestamp < modifiedDateMs || (libraryIndex.formatVersion || 0) < INDEX_FORMAT_VERSION)) {
-              _context.next = 30;
+            if (!(FORCE_REBULD || !libraryIndex || !libraryIndex.archiveVersion || libraryIndex.timestamp < modifiedDateMs || (libraryIndex.formatVersion || 0) < INDEX_FORMAT_VERSION)) {
+              _context.next = 31;
               break;
             }
 
             // need to rebuild the cached index
-            doc = _util__WEBPACK_IMPORTED_MODULE_4__["loadDocFromSketchFile"](lib.sketchFilePath);
+            doc = _util__WEBPACK_IMPORTED_MODULE_3__["loadDocFromSketchFile"](lib.sketchFilePath);
             doc.setFileURL(NSURL.fileURLWithPath(lib.sketchFilePath));
-            _context.next = 25;
+            _context.next = 26;
             return buildStickerIndexForLibrary(lib.libraryId, doc, childProgressReporters[i]);
 
-          case 25:
+          case 26:
             libraryIndex = _context.sent;
             // cache the index
-            _util__WEBPACK_IMPORTED_MODULE_4__["mkdirpSync"](_skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.dirname(indexCachePath));
+            _util__WEBPACK_IMPORTED_MODULE_3__["mkdirpSync"](_skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.dirname(indexCachePath));
             _skpm_fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(indexCachePath, JSON.stringify(Object.assign(libraryIndex, {
+              archiveVersion: Number(MSArchiveHeader.metadataForNewHeader()['version']),
               formatVersion: INDEX_FORMAT_VERSION,
               timestamp: modifiedDateMs + 1 // add a second to avoid precision issues
 
             })), {
               encoding: 'utf8'
             });
-            _context.next = 31;
+            _context.next = 32;
             break;
 
-          case 30:
+          case 31:
             childProgressReporters[i].forceProgress(1);
 
-          case 31:
+          case 32:
             compositeIndex.libraries.push(libraryIndex);
 
-          case 32:
+          case 33:
             _iteratorNormalCompletion = true;
             _context.next = 11;
             break;
 
-          case 35:
-            _context.next = 41;
+          case 36:
+            _context.next = 42;
             break;
 
-          case 37:
-            _context.prev = 37;
+          case 38:
+            _context.prev = 38;
             _context.t0 = _context["catch"](9);
             _didIteratorError = true;
             _iteratorError = _context.t0;
 
-          case 41:
-            _context.prev = 41;
+          case 42:
             _context.prev = 42;
+            _context.prev = 43;
 
             if (!_iteratorNormalCompletion && _iterator.return != null) {
               _iterator.return();
             }
 
-          case 44:
-            _context.prev = 44;
+          case 45:
+            _context.prev = 45;
 
             if (!_didIteratorError) {
-              _context.next = 47;
+              _context.next = 48;
               break;
             }
 
             throw _iteratorError;
 
-          case 47:
-            return _context.finish(44);
-
           case 48:
-            return _context.finish(41);
+            return _context.finish(45);
 
           case 49:
-            return _context.abrupt("return", compositeIndex);
+            return _context.finish(42);
 
           case 50:
+            return _context.abrupt("return", compositeIndex);
+
+          case 51:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, this, [[9, 37, 41, 49], [42,, 44, 48]]);
+    }, _callee, this, [[9, 38, 42, 50], [43,, 45, 49]]);
   }));
   return _makeStickerIndexForLibraries.apply(this, arguments);
 }
@@ -26923,11 +26868,11 @@ function _buildStickerIndexForLibrary() {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            cachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(_util__WEBPACK_IMPORTED_MODULE_4__["getPluginCachePath"](), libraryId); // first, find sticker sections (stored in text layers)
+            cachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(_util__WEBPACK_IMPORTED_MODULE_3__["getPluginCachePath"](), libraryId); // first, find sticker sections (stored in text layers)
 
             sectionsById = {};
             sections = [];
-            allTextLayers = _util__WEBPACK_IMPORTED_MODULE_4__["getAllLayersMatchingPredicate"](document, NSPredicate.predicateWithFormat('className == %@', 'MSTextLayer'));
+            allTextLayers = _util__WEBPACK_IMPORTED_MODULE_3__["getAllLayersMatchingPredicate"](document, NSPredicate.predicateWithFormat('className == %@', 'MSTextLayer'));
             allTextLayers.reverse(); // layer list order, not stacking order
 
             _iteratorNormalCompletion2 = true;
@@ -27111,7 +27056,7 @@ function _buildStickerIndexForLibrary() {
 
           case 78:
             // go through all layers tagged to a section
-            possibleStickers = _util__WEBPACK_IMPORTED_MODULE_4__["getAllLayersMatchingPredicate"](document, NSPredicate.predicateWithFormat('name matches ".*@.*"'));
+            possibleStickers = _util__WEBPACK_IMPORTED_MODULE_3__["getAllLayersMatchingPredicate"](document, NSPredicate.predicateWithFormat('name matches ".*@.*"'));
             possibleStickers.reverse(); // layer list order, not stacking order
 
             progressReporter.total = possibleStickers.length;
@@ -27173,7 +27118,7 @@ function _buildStickerIndexForLibrary() {
               height: Number(layer.absoluteInfluenceRect().size.height)
             }; // capture layer image
 
-            _util__WEBPACK_IMPORTED_MODULE_4__["captureLayerImage"](document, layer, layerInfo.imagePath); // capture layer content
+            _util__WEBPACK_IMPORTED_MODULE_3__["captureLayerImage"](document, layer, layerInfo.imagePath); // capture layer content
 
             serializedLayer = JSON.parse(MSJSONDataArchiver.archiveStringWithRootObject_error_(layer.immutableModelObject(), null));
             _skpm_fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(layerInfo.contentPath, JSON.stringify(serializedLayer), {
@@ -27184,7 +27129,7 @@ function _buildStickerIndexForLibrary() {
             _parentSection.items.push(layerInfo);
 
             _context2.next = 110;
-            return _util__WEBPACK_IMPORTED_MODULE_4__["unpeg"]();
+            return _util__WEBPACK_IMPORTED_MODULE_3__["unpeg"]();
 
           case 110:
             _iteratorNormalCompletion3 = true;
@@ -27241,7 +27186,7 @@ function _buildStickerIndexForLibrary() {
             sections = nonEmptyItems(sections);
             return _context2.abrupt("return", {
               id: libraryId,
-              title: _util__WEBPACK_IMPORTED_MODULE_4__["getDocumentName"](document),
+              title: _util__WEBPACK_IMPORTED_MODULE_3__["getDocumentName"](document),
               sections: sections
             });
 
@@ -27274,11 +27219,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _skpm_fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_skpm_fs__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var sketch_module_web_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sketch-module-web-view */ "./node_modules/sketch-module-web-view/lib/index.js");
 /* harmony import */ var sketch_module_web_view__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sketch_module_web_view__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var mocha_js_delegate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! mocha-js-delegate */ "./node_modules/mocha-js-delegate/index.js");
-/* harmony import */ var mocha_js_delegate__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(mocha_js_delegate__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _util_libraries__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util-libraries */ "./src/util-libraries.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./src/util.js");
-/* harmony import */ var _sticker_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sticker-index */ "./src/sticker-index.js");
+/* harmony import */ var _util_libraries__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util-libraries */ "./src/util-libraries.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util */ "./src/util.js");
+/* harmony import */ var _sticker_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./sticker-index */ "./src/sticker-index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -27308,7 +27251,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 
@@ -27409,6 +27351,8 @@ function () {
         this.browserWindow.setResizable(false);
 
         this.browserWindow._panel.setFrame_display_animate_(docWindow.frame(), false, false);
+
+        this.browserWindow._panel.setHidesOnDeactivate(false);
       }
 
       this.browserWindow.once('ready-to-show', function () {
@@ -27427,14 +27371,19 @@ function () {
     value: function setupWebAPI() {
       var _this2 = this;
 
+      var libraryIndexesById = {};
       this.webContents.on('loadStickerIndex', function (callbackName, progressCallbackName) {
         // trigger the creation of the sticker index
-        Object(_sticker_index__WEBPACK_IMPORTED_MODULE_6__["makeStickerIndexForLibraries"])({
+        Object(_sticker_index__WEBPACK_IMPORTED_MODULE_5__["makeStickerIndexForLibraries"])({
           onProgress: function onProgress(progress) {
             return _this2.runWebCallback(progressCallbackName, progress);
           }
         }).then(function (stickerIndex) {
-          return _this2.runWebCallback(callbackName, stickerIndex);
+          stickerIndex.libraries.forEach(function (libraryIndex) {
+            libraryIndexesById[libraryIndex.id] = libraryIndex;
+          });
+
+          _this2.runWebCallback(callbackName, stickerIndex);
         }).catch(function (e) {
           return log(e.message);
         });
@@ -27457,7 +27406,14 @@ function () {
 
       this.webContents.on('startDragging', function (stickerId, rect) {
         try {
-          _this2.startDragging(stickerId, rect, _this2.browserWindow._webview);
+          var _stickerId$split = stickerId.split(/\./, 2),
+              _stickerId$split2 = _slicedToArray(_stickerId$split, 2),
+              libraryId = _stickerId$split2[0],
+              layerId = _stickerId$split2[1];
+
+          var archiveVersion = libraryIndexesById[libraryId].archiveVersion;
+
+          _this2.startDragging(libraryId, archiveVersion, stickerId, rect, _this2.browserWindow._webview);
         } catch (e) {
           // TODO: do this everywhere somehow
           log(e.message);
@@ -27475,19 +27431,14 @@ function () {
 
   }, {
     key: "startDragging",
-    value: function startDragging(stickerId, rect, srcView) {
-      var _stickerId$split = stickerId.split(/\./, 2),
-          _stickerId$split2 = _slicedToArray(_stickerId$split, 2),
-          libraryId = _stickerId$split2[0],
-          layerId = _stickerId$split2[1];
-
-      var library = _util_libraries__WEBPACK_IMPORTED_MODULE_4__["getLibraryById"](libraryId);
+    value: function startDragging(libraryId, archiveVersion, stickerId, rect, srcView) {
+      var library = _util_libraries__WEBPACK_IMPORTED_MODULE_3__["getLibraryById"](libraryId);
       var image = NSImage.alloc().initWithContentsOfFile(this.getStickerCachedImagePath(stickerId)); // deserialize layer
 
       var serializedLayerJson = _skpm_fs__WEBPACK_IMPORTED_MODULE_1___default.a.readFileSync(this.getStickerCachedContentPath(stickerId), {
         encoding: 'utf8'
       });
-      var decodedImmutableObj = MSJSONDataUnarchiver.unarchiveObjectWithString_asVersion_corruptionDetected_error(serializedLayerJson, 999, null, null);
+      var decodedImmutableObj = MSJSONDataUnarchiver.unarchiveObjectWithString_asVersion_corruptionDetected_error(serializedLayerJson, archiveVersion || 999, null, null);
       var layer = decodedImmutableObj.newMutableCounterpart(); // create a dummy document and import the layer into it, so that
       // foreign symbols can be created in it and sent along with the layer
       // to the pasteboard
@@ -27496,7 +27447,9 @@ function () {
       dummyDocData.addBlankPage().addLayer(layer); // import any symbols used in library (either from the library itself or
       // other libraries referenced from the library... i.e. nested libraries)
 
-      _util_libraries__WEBPACK_IMPORTED_MODULE_4__["replaceSymbolsInLayerWithLibrary"](dummyDocData, layer, library); // initiate cocoa drag operation
+      _util_libraries__WEBPACK_IMPORTED_MODULE_3__["replaceSymbolsInLayerWithLibrary"](dummyDocData, layer, library); // same thing for shared text and layer styles (Sketch 50+)
+
+      _util_libraries__WEBPACK_IMPORTED_MODULE_3__["replaceSharedStylesInLayerWithLibrary"](dummyDocData, layer, library); // initiate cocoa drag operation
 
       var pbItem = NSPasteboardItem.new();
       pbItem.setDataProvider_forTypes_(srcView, NSArray.arrayWithObject(NSPasteboardTypePNG));
@@ -27527,7 +27480,7 @@ function () {
           libraryId = _stickerId$split4[0],
           layerId = _stickerId$split4[1];
 
-      return _skpm_path__WEBPACK_IMPORTED_MODULE_0___default.a.join(_util__WEBPACK_IMPORTED_MODULE_5__["getPluginCachePath"](), libraryId, layerId + '.png');
+      return _skpm_path__WEBPACK_IMPORTED_MODULE_0___default.a.join(_util__WEBPACK_IMPORTED_MODULE_4__["getPluginCachePath"](), libraryId, layerId + '.png');
     }
   }, {
     key: "getStickerCachedContentPath",
@@ -27537,7 +27490,7 @@ function () {
           libraryId = _stickerId$split6[0],
           layerId = _stickerId$split6[1];
 
-      return _skpm_path__WEBPACK_IMPORTED_MODULE_0___default.a.join(_util__WEBPACK_IMPORTED_MODULE_5__["getPluginCachePath"](), libraryId, layerId + '.json');
+      return _skpm_path__WEBPACK_IMPORTED_MODULE_0___default.a.join(_util__WEBPACK_IMPORTED_MODULE_4__["getPluginCachePath"](), libraryId, layerId + '.json');
     }
   }]);
 
@@ -27550,7 +27503,7 @@ function () {
 /*!*******************************!*\
   !*** ./src/util-libraries.js ***!
   \*******************************/
-/*! exports provided: swapLocalSymbolsWithLibrary, getLibraryById, addLibrary, replaceSymbolsInLayerWithLibrary, docForLibraryId */
+/*! exports provided: swapLocalSymbolsWithLibrary, getLibraryById, addLibrary, replaceSymbolsInLayerWithLibrary, replaceSharedStylesInLayerWithLibrary, docForLibraryId */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27559,6 +27512,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLibraryById", function() { return getLibraryById; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLibrary", function() { return addLibrary; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "replaceSymbolsInLayerWithLibrary", function() { return replaceSymbolsInLayerWithLibrary; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "replaceSharedStylesInLayerWithLibrary", function() { return replaceSharedStylesInLayerWithLibrary; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "docForLibraryId", function() { return docForLibraryId; });
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ "./src/util.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -27737,9 +27691,10 @@ function replaceSymbolsInLayerWithLibrary(parentDocument, parentLayer, library) 
           // the symbol in the target library is a foreign symbol from yet
           // another library, just grab the MSForeignSymbol/MSForeignObject
           // and add it to the target document
-          var foreignSymbol = librarySymbolMaster.foreignObject();
-          parentDocument.documentData().addForeignSymbol(foreignSymbol);
-          return foreignSymbol;
+          var _foreignSymbol = librarySymbolMaster.foreignObject();
+
+          parentDocument.documentData().addForeignSymbol(_foreignSymbol);
+          return _foreignSymbol;
         } // the symbol in the target library is local to the library, import it
         // from the library
 
@@ -27759,12 +27714,12 @@ function replaceSymbolsInLayerWithLibrary(parentDocument, parentLayer, library) 
 
     var deepImportOverrides = function deepImportOverrides(dict, localToForeignSymbolIdMap) {
       if (dict.symbolID) {
-        var foreignSymbol = maybeImportForeignSymbolWithSymbolId(dict.symbolID);
+        var _foreignSymbol2 = maybeImportForeignSymbolWithSymbolId(dict.symbolID);
 
-        if (foreignSymbol) {
+        if (_foreignSymbol2) {
           // swap out the symbol ID that's local to the library for the symbol ID
           // for the foreign symbol in the new document linked to the library
-          localToForeignSymbolIdMap[String(dict.symbolID)] = String(foreignSymbol.symbolMaster().symbolID());
+          localToForeignSymbolIdMap[String(dict.symbolID)] = String(_foreignSymbol2.symbolMaster().symbolID());
         }
       }
 
@@ -27796,6 +27751,61 @@ function replaceSymbolsInLayerWithLibrary(parentDocument, parentLayer, library) 
       }
 
       symbolInstance.updateOverridesWithObjectIDMap(localToForeignSymbolIdMap);
+    });
+  }
+}
+/**
+ * Replaces all shared styles under (and including) the given parent layer with
+ * those found in the given MSAssetLibrary.
+ */
+
+function replaceSharedStylesInLayerWithLibrary(parentDocument, parentLayer, library) {
+  if (parentLayer.children) {
+    var allLayersWithSharedStyle = _util__WEBPACK_IMPORTED_MODULE_0__["getAllLayersMatchingPredicate"](parentLayer, NSPredicate.predicateWithFormat('style.sharedObjectID != nil'));
+
+    var maybeImportForeignSharedStyleWithStyleId = function maybeImportForeignSharedStyleWithStyleId(styleId) {
+      var librarySharedStyle = library.document().layerStyles().sharedStyleWithID(styleId) || library.document().layerTextStyles().sharedStyleWithID(styleId);
+
+      if (librarySharedStyle) {
+        if (librarySharedStyle.foreignObject()) {
+          // the shared style in the target library is a foreign shared style from yet
+          // another library, just grab the MSForeignStyle/MSForeignObject
+          // and add it to the target document
+          var foreignStyle = librarySharedStyle.foreignObject();
+
+          if (foreignStyle instanceof MSForeignLayerStyle) {
+            parentDocument.documentData().addForeignLayerStyle(foreignSymbol);
+          } else if (foreignStyle instanceof MSForeignTextStyle) {
+            parentDocument.documentData().addForeignTextStyle(foreignStyle);
+          }
+
+          return foreignStyle;
+        } // the symbol in the target library is local to the library, import it
+        // from the library
+
+
+        var shareableObjectReference = MSShareableObjectReference.referenceForShareableObject_inLibrary(librarySharedStyle, library);
+        return getLibrariesController().importShareableObjectReference_intoDocument(shareableObjectReference, parentDocument.documentData());
+      }
+
+      return null;
+    };
+
+    allLayersWithSharedStyle.forEach(function (layerWithSharedStyle) {
+      var styleId = layerWithSharedStyle.style().sharedObjectID();
+      var foreignSharedStyle = maybeImportForeignSharedStyleWithStyleId(styleId);
+
+      if (foreignSharedStyle) {
+        if (layerWithSharedStyle instanceof MSTextLayer) {
+          // preserve formatted string value before setting shared style (which resets
+          // character-level formatting)
+          var aStr = layerWithSharedStyle.attributedStringValue();
+          layerWithSharedStyle.setSharedStyle(foreignSharedStyle.localSharedStyle());
+          layerWithSharedStyle.setAttributedStringValue(aStr);
+        } else {
+          layerWithSharedStyle.setSharedStyle(foreignSharedStyle.localSharedStyle());
+        }
+      }
     });
   }
 }

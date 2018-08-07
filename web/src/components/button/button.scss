@@ -1,0 +1,64 @@
+/*
+ * Copyright 2018 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@mixin button($size: small, $level: secondary) {
+  --color: #{$colorAccent};
+  display: flex;
+  color: var(--color);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+
+  @if $size == small {
+    @include type-body-3;
+    padding: 6px 12px;
+  }
+  @else if $size == large {
+    @include type-body-1;
+    padding: 10px 16px;
+  }
+
+  @if $level == secondary {
+    box-shadow: 0 0 0 1px var(--color) inset;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: #fff;
+      background-color: var(--color);
+    }
+
+    &:focus,
+    &:active {
+      --color: #{darken($colorAccent, 10%)};
+    }
+  }
+  @else if $level == primary {
+    color: #fff;
+    background-color: var(--color);
+
+    &:hover,
+    &:focus,
+    &:active {
+      --color: #{darken($colorAccent, 10%)};
+    }
+
+    &:focus,
+    &:active {
+      --color: #{darken($colorAccent, 20%)};
+    }
+  }
+}

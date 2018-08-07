@@ -95,16 +95,16 @@ var exports =
 /*!****************************!*\
   !*** ./src/codeSetting.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: codeSettingAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "codeSettingAction", function() { return codeSettingAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 var codeKey = "com.sketchplugins.wechat.codetype";
-
-var onRun = function onRun(context) {
+function codeSettingAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).codeSetting;
 
   var settingsWindow = Object(_common__WEBPACK_IMPORTED_MODULE_0__["dialog"])(context);
@@ -138,7 +138,7 @@ var onRun = function onRun(context) {
 
     context.document.showMessage(i18.m7);
   }
-};
+}
 
 /***/ }),
 

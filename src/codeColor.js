@@ -195,6 +195,6 @@ function codeC(context) {
     var ga = new Analytics(context);
     if (ga) ga.sendEvent('codeColor', 'use');
 }
-var onRun = function (context) {
+export function codeCAction(context) {
     codeC(context);
 }

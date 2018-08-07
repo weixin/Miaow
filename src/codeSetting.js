@@ -3,7 +3,7 @@ import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,r
 var codeKey = "com.sketchplugins.wechat.codetype";
 
 
-var onRun = function (context) {
+export function codeSettingAction(context) {
 	var i18 = _(context).codeSetting;
 
 	var settingsWindow = dialog(context);

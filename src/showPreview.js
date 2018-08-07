@@ -63,6 +63,6 @@ function showPreview(context) {
 
 }
 
-var onRun = function (context) {
+export function showPreviewAction(context) {
 	showPreview(context);
 }

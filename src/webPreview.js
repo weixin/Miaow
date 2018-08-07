@@ -58,6 +58,6 @@ function webPreview(context) {
 
 }
 
-var onRun = function (context) {
+export function webPreviewAction(context) {
 	webPreview(context);
 }

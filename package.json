@@ -9,17 +9,16 @@
     "manifest": "src/manifest.json",
     "main": "miaow.sketchplugin",
     "assets": [
-      "assets/**/*"
+      "assets/**/*",
+      "!assets/**/*.js",
+      "web-dist/**/*",
+      "!web-dist/plugin-call.js"
     ]
   },
   "scripts": {
-    "build": "skpm-build",
-    "watch": "skpm-build --watch",
-    "start": "skpm-build --watch --run",
+    "build": "./skpm-build-with-child.js web",
+    "watch": "./skpm-build-with-child.js web --watch",
     "postinstall": "npm run build && skpm-link"
-  },
-  "devDependencies": {
-    "@skpm/builder": "^0.5.2"
   },
   "author": "doubleluo <doubleluo@tencent.com>",
   "dependencies": {
@@ -27,8 +26,25 @@
     "@skpm/fs": "^0.1.2",
     "@skpm/path": "^0.1.0",
     "babel-polyfill": "^6.26.0",
+    "event-emitter": "^0.3.5",
+    "file-loader": "^1.1.11",
+    "jquery": "^3.3.1",
     "js-yaml": "^3.11.0",
     "mocha-js-delegate": "^0.1.1",
-    "sketch-module-web-view": "git://github.com/romannurik/sketch-module-wk-web-view.git"
+    "node-sass-asset-functions": "^0.1.0",
+    "sketch-module-web-view": "git://github.com/romannurik/sketch-module-wk-web-view.git",
+    "vue": "^2.5.16",
+    "@skpm/builder": "^0.5.4",
+    "css-loader": "^0.28.11",
+    "extract-loader": "^2.0.1",
+    "file-loader": "^1.1.11",
+    "html-loader": "^0.5.5",
+    "image-webpack-loader": "^4.2.0",
+    "json-loader": "^0.5.7",
+    "node-sass": "^4.8.3",
+    "node-sass-asset-functions": "^0.1.0",
+    "sass-loader": "^7.0.1",
+    "webpack-cli": "^2.0.14",
+    "webpack-dev-server": "^3.1.3"
   }
 }

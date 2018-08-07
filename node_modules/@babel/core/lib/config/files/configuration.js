@@ -63,6 +63,8 @@ var _configApi = _interopRequireDefault(require("../helpers/config-api"));
 
 var _utils = require("./utils");
 
+var _patternToRegex = _interopRequireDefault(require("../pattern-to-regex"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const debug = (0, _debug().default)("babel:config:loading:files:configuration");
@@ -247,11 +249,20 @@ const readConfigJSON5 = (0, _utils.makeStaticFileCache)((filepath, content) => {
   };
 });
 const readIgnoreConfig = (0, _utils.makeStaticFileCache)((filepath, content) => {
-  const ignore = content.split("\n").map(line => line.replace(/#(.*?)$/, "").trim()).filter(line => !!line);
+  const ignoreDir = _path().default.dirname(filepath);
+
+  const ignorePatterns = content.split("\n").map(line => line.replace(/#(.*?)$/, "").trim()).filter(line => !!line);
+
+  for (const pattern of ignorePatterns) {
+    if (pattern[0] === "!") {
+      throw new Error(`Negation of file paths is not supported.`);
+    }
+  }
+
   return {
     filepath,
     dirname: _path().default.dirname(filepath),
-    ignore
+    ignore: ignorePatterns.map(pattern => (0, _patternToRegex.default)(pattern, ignoreDir))
   };
 });
 
