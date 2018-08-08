@@ -636,12 +636,13 @@ function SMPanel(options) {
 /*!**************************!*\
   !*** ./src/syncColor.js ***!
   \**************************/
-/*! exports provided: SyncColor2 */
+/*! exports provided: SyncColor2, syncColorAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SyncColor2", function() { return SyncColor2; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "syncColorAction", function() { return syncColorAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 function SyncColor2(context, UIKITURL) {
@@ -719,9 +720,9 @@ function syncColor(context) {
   if (ga) ga.sendEvent('syncColor', 'confirm');
 }
 
-var onRun = function onRun(context) {
+function syncColorAction(context) {
   syncColor(context);
-};
+}
 
 /***/ })
 
@@ -732,6 +733,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['syncColorAction'] = __skpm_run.bind(this, 'syncColorAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=syncColor.js.map

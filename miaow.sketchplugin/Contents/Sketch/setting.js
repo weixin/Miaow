@@ -636,15 +636,15 @@ function SMPanel(options) {
 /*!************************!*\
   !*** ./src/setting.js ***!
   \************************/
-/*! no exports provided */
+/*! exports provided: settingAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settingAction", function() { return settingAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
-
-var onRun = function onRun(context) {
+function settingAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).setting;
 
   var i18nKey = "com.sketchplugins.wechat.i18n";
@@ -730,7 +730,7 @@ var onRun = function onRun(context) {
   });
   var ga = new Analytics(context);
   if (ga) ga.sendEvent('setting', 'confirm');
-};
+}
 
 /***/ })
 
@@ -741,6 +741,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['settingAction'] = __skpm_run.bind(this, 'settingAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=setting.js.map

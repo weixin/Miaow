@@ -257,6 +257,6 @@ function exportSlice(context) {
 	}
 }
 
-var onRun = function (context) {
+export function exportSliceAction(context) {
 	exportSlice(context);
 }

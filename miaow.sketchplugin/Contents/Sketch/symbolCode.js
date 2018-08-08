@@ -636,15 +636,16 @@ function SMPanel(options) {
 /*!***************************!*\
   !*** ./src/symbolCode.js ***!
   \***************************/
-/*! no exports provided */
+/*! exports provided: getSymbolCode, setSymbolCode */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSymbolCode", function() { return getSymbolCode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setSymbolCode", function() { return setSymbolCode; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 var symbolCodeKey = "com.sketchplugins.wechat.symbolCode";
-
 function getSymbolCode(context) {
   if (context.selection.length == 0) {
     return;
@@ -670,7 +671,6 @@ function getSymbolCode(context) {
   var ga = new Analytics(context);
   if (ga) ga.sendEvent('code', 'get');
 }
-
 function setSymbolCode(context) {
   if (context.selection[0].className() == 'MSSymbolMaster') {
     var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();

@@ -636,16 +636,16 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/importColor.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: importColorAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importColorAction", function() { return importColorAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 var importUrlKey = "com.sketchplugins.wechat.importcolorurl";
-
-var onRun = function onRun(context) {
+function importColorAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).importColor;
 
   var doc = context.document;
@@ -698,7 +698,7 @@ var onRun = function onRun(context) {
 
   var ga = new Analytics(context);
   if (ga) ga.sendEvent('importColor', 'open');
-};
+}
 
 /***/ })
 
@@ -709,6 +709,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['importColorAction'] = __skpm_run.bind(this, 'importColorAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=importColor.js.map

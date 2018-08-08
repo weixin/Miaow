@@ -48,7 +48,7 @@ function addButton(index, func) {
 	return button;
 }
 
-var onRun = function (context) {
+export function toolSettingAction(context) {
 	var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path(),
 		manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
 

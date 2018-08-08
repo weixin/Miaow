@@ -636,12 +636,13 @@ function SMPanel(options) {
 /*!**************************!*\
   !*** ./src/syncColor.js ***!
   \**************************/
-/*! exports provided: SyncColor2 */
+/*! exports provided: SyncColor2, syncColorAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SyncColor2", function() { return SyncColor2; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "syncColorAction", function() { return syncColorAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 function SyncColor2(context, UIKITURL) {
@@ -719,9 +720,9 @@ function syncColor(context) {
   if (ga) ga.sendEvent('syncColor', 'confirm');
 }
 
-var onRun = function onRun(context) {
+function syncColorAction(context) {
   syncColor(context);
-};
+}
 
 /***/ }),
 
@@ -729,11 +730,12 @@ var onRun = function onRun(context) {
 /*!**************************!*\
   !*** ./src/syncUIkit.js ***!
   \**************************/
-/*! no exports provided */
+/*! exports provided: syncUIkitAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "syncUIkitAction", function() { return syncUIkitAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 /* harmony import */ var _syncColor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./syncColor */ "./src/syncColor.js");
 
@@ -1029,9 +1031,9 @@ function syncUIkit(context) {
   if (ga) ga.sendEvent('syncUIkit', 'confirm');
 }
 
-var onRun = function onRun(context) {
+function syncUIkitAction(context) {
   syncUIkit(context);
-};
+}
 
 /***/ })
 
@@ -1042,6 +1044,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['syncUIkitAction'] = __skpm_run.bind(this, 'syncUIkitAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=syncUIkit.js.map

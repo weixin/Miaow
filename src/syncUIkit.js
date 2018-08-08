@@ -268,6 +268,6 @@ function syncUIkit(context) {
 	if (ga) ga.sendEvent('syncUIkit', 'confirm');
 }
 
-var onRun = function (context) {
+export function syncUIkitAction(context) {
 	syncUIkit(context);
 }

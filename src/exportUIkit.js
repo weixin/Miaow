@@ -1,6 +1,6 @@
 import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,request,networkRequest,zip,encodeData,get,post,getConfig,openUrlInBrowser,createRadioButtons,createRadioButtons2,createArtboard,hexToRgb,unique,SMPanel} from "./common";
 
-var onRun = function (context) {
+export function exportUIkitAction(context) {
 	var i18 = _(context).exportUIkit;
 
 	var save = NSSavePanel.savePanel();

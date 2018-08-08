@@ -636,17 +636,18 @@ function SMPanel(options) {
 /*!***********************!*\
   !*** ./src/issues.js ***!
   \***********************/
-/*! no exports provided */
+/*! exports provided: issuesAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "issuesAction", function() { return issuesAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
-
-var onRun = function onRun(context) {
+function issuesAction(context) {
   Object(_common__WEBPACK_IMPORTED_MODULE_0__["openUrlInBrowser"])("https://github.com/weixin/wesketch/issues");
-};
+}
+;
 
 /***/ })
 

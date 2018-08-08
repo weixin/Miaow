@@ -2,7 +2,7 @@ import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,r
 var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
 var colorUrlKey = "com.sketchplugins.wechat.colorurl";
 
-var onRun = function (context) {
+export function syncSettingAction(context) {
 
     var i18 = _(context).syncSetting;
 

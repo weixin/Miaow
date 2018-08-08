@@ -3,7 +3,7 @@ import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,r
 var importUrlKey = "com.sketchplugins.wechat.importcolorurl";
 
 
-var onRun = function (context) {
+export function importColorAction(context) {
   var i18 = _(context).importColor;
 
   var doc = context.document;

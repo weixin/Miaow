@@ -636,15 +636,15 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/exportColor.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: exportColorAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportColorAction", function() { return exportColorAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
-
-var onRun = function onRun(context) {
+function exportColorAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).exportColor;
 
   var doc = context.document;
@@ -681,7 +681,7 @@ var onRun = function onRun(context) {
   } else {
     Object(_common__WEBPACK_IMPORTED_MODULE_0__["errorDialog"])(context, i18.m2);
   }
-};
+}
 
 /***/ })
 
@@ -692,6 +692,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['exportColorAction'] = __skpm_run.bind(this, 'exportColorAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=exportColor.js.map

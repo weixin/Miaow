@@ -12933,11 +12933,12 @@ function linkAction(context) {
 /*!*****************************!*\
   !*** ./src/localPreview.js ***!
   \*****************************/
-/*! no exports provided */
+/*! exports provided: localPreviewAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "localPreviewAction", function() { return localPreviewAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 /* harmony import */ var _link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./link */ "./src/link.js");
 
@@ -12972,9 +12973,9 @@ var localPreview = function localPreview(context) {
   NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(NSArray.arrayWithObjects(NSURL.fileURLWithPath(filePath)));
 };
 
-var onRun = function onRun(context) {
+function localPreviewAction(context) {
   localPreview(context);
-};
+}
 
 /***/ })
 
@@ -12985,6 +12986,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['localPreviewAction'] = __skpm_run.bind(this, 'localPreviewAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=localPreview.js.map

@@ -636,15 +636,15 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/exportUIkit.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: exportUIkitAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportUIkitAction", function() { return exportUIkitAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
-
-var onRun = function onRun(context) {
+function exportUIkitAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).exportUIkit;
 
   var save = NSSavePanel.savePanel();
@@ -694,7 +694,7 @@ var onRun = function onRun(context) {
     newDoc.writeToURL_ofType_forSaveOperation_originalContentsURL_error_(filePath, "com.bohemiancoding.sketch.drawing", NSSaveOperation, nil, nil);
     context.document.showMessage(i18.m1);
   }
-};
+}
 
 /***/ })
 
@@ -705,6 +705,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['exportUIkitAction'] = __skpm_run.bind(this, 'exportUIkitAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=exportUIkit.js.map

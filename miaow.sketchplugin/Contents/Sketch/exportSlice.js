@@ -636,11 +636,12 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/exportSlice.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: exportSliceAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportSliceAction", function() { return exportSliceAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 
@@ -911,9 +912,9 @@ function exportSlice(context) {
   }
 }
 
-var onRun = function onRun(context) {
+function exportSliceAction(context) {
   exportSlice(context);
-};
+}
 
 /***/ })
 
@@ -924,6 +925,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['exportSliceAction'] = __skpm_run.bind(this, 'exportSliceAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=exportSlice.js.map

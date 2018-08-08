@@ -636,16 +636,16 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/importUIkit.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: importUIkitAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importUIkitAction", function() { return importUIkitAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 var importUrlKey = "com.sketchplugins.wechat.importuikiturl";
-
-var onRun = function onRun(context) {
+function importUIkitAction(context) {
   function isSame(a, b) {
     var layers = a.layers();
 
@@ -855,7 +855,7 @@ var onRun = function onRun(context) {
   }
 
   context.document.showMessage(alertData);
-};
+}
 
 /***/ })
 
@@ -866,6 +866,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['importUIkitAction'] = __skpm_run.bind(this, 'importUIkitAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=importUIkit.js.map

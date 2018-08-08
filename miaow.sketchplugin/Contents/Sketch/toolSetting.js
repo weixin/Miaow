@@ -13305,11 +13305,12 @@ function linkAction(context) {
 /*!****************************!*\
   !*** ./src/toolSetting.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: toolSettingAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toolSettingAction", function() { return toolSettingAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 /* harmony import */ var _link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./link */ "./src/link.js");
 /* harmony import */ var _flag__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./flag */ "./src/flag.js");
@@ -13361,7 +13362,7 @@ function addButton(index, func) {
   return button;
 }
 
-var onRun = function onRun(context) {
+function toolSettingAction(context) {
   var manifestPath = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("manifest.json").path(),
       manifest = NSJSONSerialization.JSONObjectWithData_options_error(NSData.dataWithContentsOfFile(manifestPath), NSJSONReadingMutableContainers, nil);
   var manifestPathZh = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("i18n").URLByAppendingPathComponent("manifest.json").path(),
@@ -13495,7 +13496,7 @@ var onRun = function onRun(context) {
     var ga = new Analytics(context);
     if (ga) ga.sendEvent('toolbarSetting', 'confirm');
   }
-};
+}
 
 /***/ })
 
@@ -13506,6 +13507,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['toolSettingAction'] = __skpm_run.bind(this, 'toolSettingAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=toolSetting.js.map

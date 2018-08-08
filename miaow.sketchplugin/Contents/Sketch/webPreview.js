@@ -11606,7 +11606,7 @@ function SMPanel(options) {
 /*!******************************!*\
   !*** ./src/commonPreview.js ***!
   \******************************/
-/*! exports provided: getConnectionsInPage, getConnectionsLinkInPage, buildPreview, setIndex, setDialog, setFixed, setBacks, setNoBuild, clearPreview, hidePreview */
+/*! exports provided: getConnectionsInPage, getConnectionsLinkInPage, buildPreview, setIndexAction, setDialogAction, setFixedAction, setBacksAction, setNoBuildAction, clearPreviewAction, hidePreview */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11614,12 +11614,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getConnectionsInPage", function() { return getConnectionsInPage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getConnectionsLinkInPage", function() { return getConnectionsLinkInPage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buildPreview", function() { return buildPreview; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setIndex", function() { return setIndex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setDialog", function() { return setDialog; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setFixed", function() { return setFixed; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setBacks", function() { return setBacks; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setNoBuild", function() { return setNoBuild; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearPreview", function() { return clearPreview; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setIndexAction", function() { return setIndexAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setDialogAction", function() { return setDialogAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setFixedAction", function() { return setFixedAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setBacksAction", function() { return setBacksAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setNoBuildAction", function() { return setNoBuildAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearPreviewAction", function() { return clearPreviewAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hidePreview", function() { return hidePreview; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
@@ -11828,7 +11828,7 @@ function buildPreview(context) {
   ;
   return newPreviewObject;
 }
-function setIndex(context) {
+function setIndexAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).commonPreview;
 
   if (context.selection.length == 0) {
@@ -11851,7 +11851,7 @@ function setIndex(context) {
     buildPreview(context);
   }
 }
-function setDialog(context) {
+function setDialogAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).commonPreview;
 
   var fx = 0;
@@ -11899,7 +11899,7 @@ function setDialog(context) {
     buildPreview(context);
   }
 }
-function setFixed(context) {
+function setFixedAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).commonPreview;
 
   var fx = 0;
@@ -11972,7 +11972,7 @@ function setFixed(context) {
     buildPreview(context);
   }
 }
-function setBacks(context) {
+function setBacksAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).commonPreview;
 
   var setBack_ = function setBack_(context, selection) {
@@ -12019,7 +12019,7 @@ function setBacks(context) {
 
   buildPreview(context);
 }
-function setNoBuild(context) {
+function setNoBuildAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).commonPreview;
 
   var setNoBuild_ = function setNoBuild_(context, selection) {
@@ -12066,7 +12066,7 @@ function setNoBuild(context) {
 
   buildPreview(context);
 }
-function clearPreview(context) {
+function clearPreviewAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).commonPreview;
 
   var domKey = ['backMain', 'fixedMain', 'dialogMain', 'indexMain', 'noBuildMain'];
@@ -13932,11 +13932,12 @@ function linkAction(context) {
 /*!***************************!*\
   !*** ./src/webPreview.js ***!
   \***************************/
-/*! no exports provided */
+/*! exports provided: webPreviewAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "webPreviewAction", function() { return webPreviewAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 /* harmony import */ var _link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./link */ "./src/link.js");
 /* harmony import */ var _commonPreviewJson__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./commonPreviewJson */ "./src/commonPreviewJson.js");
@@ -14001,9 +14002,9 @@ function webPreview(context) {
   }
 }
 
-var onRun = function onRun(context) {
+function webPreviewAction(context) {
   webPreview(context);
-};
+}
 
 /***/ })
 
@@ -14014,6 +14015,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['webPreviewAction'] = __skpm_run.bind(this, 'webPreviewAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=webPreview.js.map

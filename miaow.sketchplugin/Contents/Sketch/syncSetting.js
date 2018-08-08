@@ -636,17 +636,17 @@ function SMPanel(options) {
 /*!****************************!*\
   !*** ./src/syncSetting.js ***!
   \****************************/
-/*! no exports provided */
+/*! exports provided: syncSettingAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "syncSettingAction", function() { return syncSettingAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
 var colorUrlKey = "com.sketchplugins.wechat.colorurl";
-
-var onRun = function onRun(context) {
+function syncSettingAction(context) {
   var i18 = Object(_common__WEBPACK_IMPORTED_MODULE_0__["_"])(context).syncSetting;
 
   var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
@@ -726,7 +726,7 @@ var onRun = function onRun(context) {
   });
   var ga = new Analytics(context);
   if (ga) ga.sendEvent('syncSetting', 'confirm');
-};
+}
 
 /***/ })
 
@@ -737,6 +737,7 @@ var onRun = function onRun(context) {
     exports[key](context);
   }
 }
+that['syncSettingAction'] = __skpm_run.bind(this, 'syncSettingAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=syncSetting.js.map

@@ -47,49 +47,63 @@
       "identifier": "setIndex",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "setIndex"
+      "handlers": {
+        "run": "setIndexAction"
+      }
     },
     {
       "name": "Set Dialog",
       "identifier": "setDialog",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "setDialog"
+      "handlers": {
+        "run": "setDialogAction"
+      }
     },
     {
       "name": "Set Fixed",
       "identifier": "setFixed",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "setFixed"
+      "handlers": {
+        "run": "setFixedAction"
+      }
     },
     {
       "name": "Set Back",
       "identifier": "setBacks",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "setBacks"
+      "handlers": {
+        "run": "setBacksAction"
+      }
     },
     {
       "name": "Set Transparent",
       "identifier": "setNoBuild",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "setNoBuild"
+      "handlers": {
+        "run": "setNoBuildAction"
+      }
     },
     {
       "name": "Clear",
       "identifier": "previewClear",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "clearPreview"
+      "handlers": {
+        "run": "clearPreviewAction"
+      }
     },
     {
       "name": "Show/Hide",
       "identifier": "previewHide",
       "script": "commonPreview.js",
       "shortcut": "",
-      "handler": "hidePreview"
+      "handlers": {
+        "run": "hidePreviewAction"
+      }
     },
     {
       "name": "Preview",
@@ -97,7 +111,9 @@
       "script": "showPreview.js",
       "shortcut": "",
       "istool": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "showPreviewAction"
+      }
     },
     {
       "name": "Local Preview",
@@ -105,14 +121,18 @@
       "script": "localPreview.js",
       "shortcut": "",
       "istool": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "localPreviewAction"
+      }
     },
     {
       "name": "Web Preview",
       "identifier": "webPreview",
       "script": "webPreview.js",
       "shortcut": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "webPreviewAction"
+      }
     },
     {
       "name": "Preview Toolbar",
@@ -120,15 +140,19 @@
       "script": "previewToolbar.js",
       "shortcut": "",
       "istool": "true",
-      "handler": "onRunPreviewToolBar"
+      "handlers": {
+        "run": "onRunPreviewToolBar"
+      }
     },
     {
       "name": "Layer Order Organize",
       "identifier": "sortingLayers",
       "script": "sortingLayers.js",
       "shortcut": "command shift p",
-      "handler": "sortingLayersAction",
-      "istool": "true"
+      "istool": "true",
+      "handlers": {
+        "run": "sortingLayersAction"
+      }
     },
     {
       "name": "Icon Manager",
@@ -178,7 +202,9 @@
       "script": "fontCharacters.js",
       "shortcut": "",
       "istool": "true",
-      "handler": "fontCharactersAction"
+      "handlers": {
+        "run": "fontCharactersAction"
+      }
     },
     {
       "name": "Sync UI Kit",
@@ -187,7 +213,9 @@
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool": "true",
-      "handler": "onRun"
+      "handlers": {
+        "run": "syncUIkitAction"
+      }
     },
     {
       "name": "Import UI Kit",
@@ -196,7 +224,9 @@
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "importUIkitAction"
+      }
     },
     {
       "name": "Export UI Kit",
@@ -205,7 +235,9 @@
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "exportUIkitAction"
+      }
     },
     {
       "name": "Sync Colors",
@@ -214,7 +246,9 @@
       "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
       "istool": "true",
-      "handler": "onRun"
+      "handlers": {
+        "run": "syncColorAction"
+      }
     },
     {
       "name": "Export Colors",
@@ -223,7 +257,9 @@
       "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
       "istool": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "exportColorAction"
+      }
     },
     {
       "name": "Import Colors",
@@ -232,7 +268,9 @@
       "icon": "../Resources/icons/syncColor.png",
       "shortcut": "",
       "istool": "",
-      "handler": "onRun"
+      "handlers": {
+        "run": "importColorAction"
+      }
     },
     {
       "name": "Color Picker",
@@ -263,7 +301,9 @@
       "icon": "../Resources/icons/cut.png",
       "shortcut": "",
       "istool": "true",
-      "handler": "onRun"
+      "handlers": {
+        "run": "exportSliceAction"
+      }
     },
     {
       "name": "Get Symbol Code",
@@ -271,7 +311,9 @@
       "script": "symbolCode.js",
       "shortcut": "",
       "istool": "",
-      "handler": "getSymbolCode"
+      "handlers": {
+        "run": "getSymbolCode"
+      }
     },
     {
       "name": "Set Symbol Code",
@@ -279,7 +321,9 @@
       "script": "symbolCode.js",
       "shortcut": "",
       "istool": "",
-      "handler": "setSymbolCode"
+      "handlers": {
+        "run": "setSymbolCode"
+      }
     },
     {
       "name": " └─ Settings",
@@ -298,9 +342,11 @@
       "identifier": "syncSetting",
       "script": "syncSetting.js",
       "shortcut": "",
-      "handler": "onRun",
       "istool": "",
-      "noshortcut": "true"
+      "noshortcut": "true",
+      "handlers": {
+        "run": "syncSettingAction"
+      }
     },
     {
       "name": "Show Toolbar",
@@ -317,27 +363,33 @@
       "identifier": "setting",
       "script": "setting.js",
       "shortcut": "",
-      "handler": "onRun",
+      "noshortcut": "true",
       "istool": "",
-      "noshortcut": "true"
+      "handlers": {
+        "run": "settingAction"
+      }
     },
     {
       "name": " └─ Settings",
       "identifier": "toolSetting",
       "script": "toolSetting.js",
       "shortcut": "",
-      "handler": "onRun",
       "istool": "",
-      "noshortcut": "true"
+      "noshortcut": "true",
+      "handlers": {
+        "run": "toolSettingAction"
+      }
     },
     {
       "name": "Website",
       "identifier": "about",
       "script": "about.js",
       "shortcut": "",
-      "handler": "onRun",
       "istool": "",
-      "noshortcut": "true"
+      "noshortcut": "true",
+      "handlers": {
+        "run": "aboutAction"
+      }
     },
     {
       "name": "Feedback",
@@ -350,14 +402,14 @@
     },
     {
       "script": "commands.js",
-      "handlers": {
-        "run": "onShowStickers"
-      },
       "name": "Show Stickers",
       "shortcut": "cmd shift \\",
       "identifier": "show_stickers",
       "description": "Show or hide the Stickers window.",
-      "icon": "icon-menu.png"
+      "icon": "icon-menu.png",
+      "handlers": {
+        "run": "onShowStickers"
+      }
     }
   ],
   "menu": {

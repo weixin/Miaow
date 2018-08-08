@@ -90,6 +90,6 @@ function syncColor(context) {
 
 
 
-var onRun = function (context) {
+export function syncColorAction(context) {
 	syncColor(context);
 }

@@ -2,7 +2,7 @@ import {_,dialog,errorDialog,initDefaults,saveDefaults,uploadContext,paste,rgb,r
 
 var symbolCodeKey = "com.sketchplugins.wechat.symbolCode";
 
-function getSymbolCode(context) {
+export function getSymbolCode(context) {
     if(context.selection.length == 0){
         return;
     }
@@ -24,7 +24,7 @@ function getSymbolCode(context) {
     if (ga) ga.sendEvent('code', 'get');
 }
 
-function setSymbolCode(context) {
+export function setSymbolCode(context) {
     if(context.selection[0].className() == 'MSSymbolMaster'){
         var pluginSketch = context.plugin.url().URLByAppendingPathComponent("Contents").URLByAppendingPathComponent("Sketch").URLByAppendingPathComponent("library").path();
         SMPanel({

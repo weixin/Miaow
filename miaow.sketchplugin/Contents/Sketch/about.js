@@ -95,17 +95,18 @@ var exports =
 /*!**********************!*\
   !*** ./src/about.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: aboutAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aboutAction", function() { return aboutAction; });
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
-
-var onRun = function onRun(context) {
+function aboutAction(context) {
   Object(_common__WEBPACK_IMPORTED_MODULE_0__["openUrlInBrowser"])("https://github.com/weixin/WeSketch");
-};
+}
+;
 
 /***/ }),
 
@@ -657,6 +658,7 @@ function SMPanel(options) {
     exports[key](context);
   }
 }
+that['aboutAction'] = __skpm_run.bind(this, 'aboutAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=about.js.map
