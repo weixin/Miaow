@@ -215,6 +215,7 @@ export function replaceSymbolsInLayerWithLibrary(parentDocument, parentLayer, li
       let foreignSymbol = maybeImportForeignSymbolWithSymbolId(symbolId);
       if (foreignSymbol) {
         symbolInstance.changeInstanceToSymbol(foreignSymbol.symbolMaster());
+        replaceSymbolsInLayerWithLibrary(parentDocument, foreignSymbol.symbolMaster(), library);
       }
 
       let localToForeignSymbolIdMap = {};

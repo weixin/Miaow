@@ -55,6 +55,10 @@ class StickersClient {
   startDragging(stickerId, rect) {
     pluginCall('startDragging', stickerId, rect);
   }
+
+  addLibraryColors(libraryId) {
+    pluginCall('addLibraryColors', libraryId);
+  }
 };
 
 ee(StickersClient.prototype);

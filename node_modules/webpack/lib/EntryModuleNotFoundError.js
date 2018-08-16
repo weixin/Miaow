@@ -8,9 +8,10 @@ const WebpackError = require("./WebpackError");
 
 class EntryModuleNotFoundError extends WebpackError {
 	constructor(err) {
-		super("Entry module not found: " + err);
+		super();
 
 		this.name = "EntryModuleNotFoundError";
+		this.message = "Entry module not found: " + err;
 		this.details = err.details;
 		this.error = err;
 

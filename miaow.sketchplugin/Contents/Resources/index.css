@@ -154,17 +154,25 @@ html {
   .zero-state__link {
     --color: #3D5AFE;
     display: flex;
+    align-items: center;
     color: var(--color);
     font-weight: 500;
     text-decoration: none;
     border-radius: 4px;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
     font-size: 14px;
     line-height: 20px;
     padding: 10px 16px;
     color: #fff;
     background-color: var(--color);
     margin-top: 24px; }
-    .zero-state__link:hover, .zero-state__link:focus, .zero-state__link:active {
+    .zero-state__link .material-icons:first-child:not(:last-child) {
+      margin-right: 4px; }
+    .zero-state__link .material-icons:last-child:not(:first-child) {
+      margin-left: 4px; }
+    .zero-state__link:hover {
       --color: #0a2ffe; }
     .zero-state__link:focus, .zero-state__link:active {
       --color: #0121d4; }
@@ -338,13 +346,123 @@ body {
   flex-direction: column;
   padding-top: 48px; }
 
+.sticker-library-header {
+  padding: 16px var(--side-margin);
+  background-color: rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center; }
+  body.has-active-search .sticker-library-header {
+    display: none; }
+  .sticker-library-header__title-lockup {
+    display: flex;
+    flex-direction: column;
+    flex: 1; }
+  .sticker-library-header__icon {
+    background-size: cover;
+    border-radius: 4px;
+    width: 48px;
+    height: 48px;
+    margin-right: 8px; }
+  .sticker-library-header__title {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.54); }
+  .sticker-library-header__subtitle {
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(0, 0, 0, 0.54); }
+  .sticker-library-header__colors-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: -8px 0; }
+  .sticker-library-header__colors-added {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 12px;
+    line-height: 16px; }
+    .sticker-library-header__colors-added::before {
+      font-family: '__MaterialIcons__';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      /* Preferred icon size */
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      /* Support for all WebKit browsers. */
+      -webkit-font-smoothing: antialiased;
+      /* Support for Safari and Chrome. */
+      text-rendering: optimizeLegibility;
+      /* Support for Firefox. */
+      -moz-osx-font-smoothing: grayscale;
+      /* Support for IE. */
+      -webkit-font-feature-settings: 'liga';
+      -moz-font-feature-settings: 'liga';
+      font-feature-settings: 'liga';
+      /* Custom added for GMP */
+      user-select: none;
+      content: 'check';
+      font-size: 16px;
+      margin-right: 4px; }
+  .sticker-library-header__add-colors {
+    --color: #3D5AFE;
+    display: flex;
+    align-items: center;
+    color: var(--color);
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 6px 12px;
+    background-color: transparent;
+    --color: rgba(0, 0, 0, 0.87); }
+    .sticker-library-header__add-colors .material-icons {
+      font-size: 20px; }
+    .sticker-library-header__add-colors .material-icons:first-child:not(:last-child) {
+      margin-right: 4px; }
+    .sticker-library-header__add-colors .material-icons:last-child:not(:first-child) {
+      margin-left: 4px; }
+    .sticker-library-header__add-colors:hover {
+      --color: #0a2ffe; }
+    .sticker-library-header__add-colors:focus, .sticker-library-header__add-colors:active {
+      --color: #0121d4; }
+  .sticker-library-header__colors-preview {
+    display: flex;
+    flex-direction: row; }
+  .sticker-library-header__color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-left: 4px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12) inset; }
+  .sticker-library-header__color-more {
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(0, 0, 0, 0.54);
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    width: auto; }
+
 .sticker-root-section {
   position: relative;
   display: flex;
   align-items: stretch;
   flex-shrink: 0;
   padding: var(--root-section-vert-padding) 0 0 0;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12); }
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   @media only screen and (max-width: 440px) {
     .sticker-root-section {
       flex-direction: column; } }
@@ -395,16 +513,27 @@ body {
   .sticker-root-section__link {
     --color: #3D5AFE;
     display: flex;
+    align-items: center;
     color: var(--color);
     font-weight: 500;
     text-decoration: none;
     border-radius: 4px;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
     font-size: 12px;
     line-height: 16px;
     padding: 6px 12px;
     box-shadow: 0 0 0 1px var(--color) inset;
+    background-color: transparent;
     align-self: flex-start;
     margin-top: 8px; }
+    .sticker-root-section__link .material-icons {
+      font-size: 20px; }
+    .sticker-root-section__link .material-icons:first-child:not(:last-child) {
+      margin-right: 4px; }
+    .sticker-root-section__link .material-icons:last-child:not(:first-child) {
+      margin-left: 4px; }
     .sticker-root-section__link:hover, .sticker-root-section__link:focus, .sticker-root-section__link:active {
       color: #fff;
       background-color: var(--color); }

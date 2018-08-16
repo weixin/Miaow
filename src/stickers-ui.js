@@ -20,6 +20,7 @@ import BrowserWindow from 'sketch-module-web-view';
 
 import * as libraries from './util-libraries';
 import * as util from './util';
+import * as colorUtil from './color-util';
 
 import {makeStickerIndexForLibraries} from './sticker-index';
 
@@ -126,6 +127,10 @@ export class StickersUI {
           {onProgress: progress => this.runWebCallback(progressCallbackName, progress)})
           .then(stickerIndex => {
             stickerIndex.libraries.forEach(libraryIndex => {
+              if (libraryIndex.colors) {
+                libraryIndex.colorsAdded = colorUtil.areAllLibraryColorsInDocument(
+                    libraryIndex.colors, this.context.document);
+              }
               libraryIndexesById[libraryIndex.id] = libraryIndex;
             });
             this.runWebCallback(callbackName, stickerIndex);
@@ -160,6 +165,18 @@ export class StickersUI {
       }
       if (UI_MODE == 'cover') {
         this.browserWindow.close();
+      }
+    });
+
+    // add a handler for a call from web content's javascript
+    this.webContents.on('addLibraryColors', (libraryId) => {
+      try {
+        let library = libraryIndexesById[libraryId];
+        colorUtil.addLibraryColorsToDocument(library.colors, this.context.document);
+      } catch (e) {
+        // TODO: do this everywhere somehow
+        log(e.message);
+        log(e);
       }
     })
   }

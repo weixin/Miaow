@@ -16,6 +16,8 @@
 
 const path = require('path');
 const sassAssetFunctions = require('node-sass-asset-functions');
+const express = require('express');
+const os = require('os');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -24,6 +26,10 @@ module.exports = {
     compress: true,
     port: 9000,
     watchContentBase: true,
+    before(app) {
+      app.use('/real-sticker-cache', express.static(path.join(
+          os.homedir(), 'Library/Caches/net.nurik.roman.sketch.stickers/')));
+    }
   },
   entry: {
     'plugin-call': [

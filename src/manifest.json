@@ -8,9 +8,31 @@
   "language_name": "English(US)",
   "language_author": "hzlzh",
   "appcast": "https://wximg.qq.com/tmt/sketch/appcast.xml",
-  "compatibleVersion": 3,
+  "compatibleVersion": 49,
   "bundleVersion": 1,
-  "commands" : [
+  "icon": "icon-plugin.png",
+  "commands": [
+    {
+      "script" : "./commands.js",
+      "handlers": {
+        "run": "onShowStickers"
+      },
+      "name" : "Show Stickers",
+      "shortcut": "cmd shift \\",
+      "identifier" : "show_stickers",
+      "description" : "Show or hide the Stickers window.",
+      "icon" : "icon-menu.png"
+    },
+    {
+      "script" : "./commands.js",
+      "handlers": {
+        "run": "onClearCache"
+      },
+      "name" : "Clear Library Index",
+      "identifier" : "clear_cache",
+      "description" : "Clear the Stickers library index for troubleshooting purposes.",
+      "icon" : "icon-menu.png"
+    },
     {
       "handlers": {
               "actions": {
@@ -399,17 +421,6 @@
       "istool":"",
       "handler" : "onRun",
       "noshortcut":"true"
-    },
-    {
-      "script" : "commands.js",
-      "name" : "Show Stickers",
-      "shortcut": "cmd shift \\",
-      "identifier" : "show_stickers",
-      "description" : "Show or hide the Stickers window.",
-      "icon" : "icon-menu.png",
-      "handlers": {
-        "run": "onShowStickers"
-      }
     }
   ],
   "menu": {

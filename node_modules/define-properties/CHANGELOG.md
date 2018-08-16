@@ -1,3 +1,12 @@
+1.1.3 / 2018-08-14
+=================
+ * [Refactor] use a for loop instead of `foreach` to make for smaller bundle sizes
+ * [Robustness] cache `Array.prototype.concat` and `Object.defineProperty`
+ * [Deps] update `object-keys`
+ * [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `nsp`, `tape`, `jscs`; remove unused eccheck script + dep
+ * [Tests] use pretest/posttest for linting/security
+ * [Tests] fix npm upgrades on older nodes
+
 1.1.2 / 2015-10-14
 =================
  * [Docs] Switch from vb.teelaun.ch to versionbadg.es for the npm version badge SVG

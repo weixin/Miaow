@@ -186,6 +186,12 @@ class StickersPage {
       data: {
         stickerIndex: this.stickerIndex,
       },
+      methods: {
+        addLibraryColors(library) {
+          StickersClient.addLibraryColors(library.id);
+          library.colorsAdded = true;
+        }
+      },
     });
 
     $(document).on('mousedown', '.sticker__thumb', ev => {
@@ -213,7 +219,7 @@ class StickersPage {
     this.fetchedImages = this.fetchedImages || new Set();
     $('.sticker').each((index, el) => {
       let stickerId = $(el).attr('data-sticker-id');
-      if (this.fetchedImages.has(stickerId)) {
+      if ($(el).attr('data-loaded')) {
         return;
       }
 
@@ -223,6 +229,7 @@ class StickersPage {
 
       this.fetchedImages.add(stickerId);
       StickersClient.getStickerImageUrl(stickerId).then(url => {
+        $(el).attr('data-loaded', true);
         $(el).find('.sticker__thumb').css('background-image', `url(${url})`);
       });
     });

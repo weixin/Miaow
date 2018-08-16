@@ -173,7 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '4.0.1';
+	exports.version = '4.0.0';
 
 
 /***/ },
@@ -2110,18 +2110,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            column: this.startMarker.column
 	        };
 	    };
-	    Parser.prototype.startNode = function (token, lastLineStart) {
-	        if (lastLineStart === void 0) { lastLineStart = 0; }
-	        var column = token.start - token.lineStart;
-	        var line = token.lineNumber;
-	        if (column < 0) {
-	            column += lastLineStart;
-	            line--;
-	        }
+	    Parser.prototype.startNode = function (token) {
 	        return {
 	            index: token.start,
-	            line: line,
-	            column: column
+	            line: token.lineNumber,
+	            column: token.start - token.lineStart
 	        };
 	    };
 	    Parser.prototype.finalize = function (marker, node) {
@@ -2453,7 +2446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var isGenerator = false;
 	        var node = this.createNode();
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = true;
+	        this.context.allowYield = false;
 	        var params = this.parseFormalParameters();
 	        var method = this.parsePropertyMethod(params);
 	        this.context.allowYield = previousAllowYield;
@@ -2523,7 +2516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nextToken();
 	            computed = this.match('[');
 	            isAsync = !this.hasLineTerminator && (id === 'async') &&
-	                !this.match(':') && !this.match('(') && !this.match('*') && !this.match(',');
+	                !this.match(':') && !this.match('(') && !this.match('*');
 	            key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
 	        }
 	        else if (this.match('*')) {
@@ -3122,15 +3115,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Final reduce to clean-up the stack.
 	            var i = stack.length - 1;
 	            expr = stack[i];
-	            var lastMarker = markers.pop();
+	            markers.pop();
 	            while (i > 1) {
-	                var marker = markers.pop();
-	                var lastLineStart = lastMarker && lastMarker.lineStart;
-	                var node = this.startNode(marker, lastLineStart);
+	                var node = this.startNode(markers.pop());
 	                var operator = stack[i - 1];
 	                expr = this.finalize(node, new Node.BinaryExpression(operator, stack[i - 2], expr));
 	                i -= 2;
-	                lastMarker = marker;
 	            }
 	        }
 	        return expr;
@@ -3912,10 +3902,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var node = this.createNode();
 	        this.expectKeyword('return');
-	        var hasArgument = (!this.match(';') && !this.match('}') &&
-	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */) ||
-	            this.lookahead.type === 8 /* StringLiteral */ ||
-	            this.lookahead.type === 10 /* Template */;
+	        var hasArgument = !this.match(';') && !this.match('}') &&
+	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */;
 	        var argument = hasArgument ? this.parseExpression() : null;
 	        this.consumeSemicolon();
 	        return this.finalize(node, new Node.ReturnStatement(argument));
@@ -4480,7 +4468,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = !isGenerator;
+	        this.context.allowYield = false;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length > 0) {
 	            this.tolerateError(messages_1.Messages.BadGetterArity);
@@ -4493,7 +4481,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = !isGenerator;
+	        this.context.allowYield = false;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length !== 1) {
 	            this.tolerateError(messages_1.Messages.BadSetterArity);
@@ -4594,8 +4582,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    isAsync = true;
 	                    token = this.lookahead;
 	                    key = this.parseObjectPropertyKey();
-	                    if (token.type === 3 /* Identifier */ && token.value === 'constructor') {
-	                        this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
+	                    if (token.type === 3 /* Identifier */) {
+	                        if (token.value === 'get' || token.value === 'set') {
+	                            this.tolerateUnexpectedToken(token);
+	                        }
+	                        else if (token.value === 'constructor') {
+	                            this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
+	                        }
 	                    }
 	                }
 	            }
@@ -4708,7 +4701,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Parser.prototype.parseModule = function () {
 	        this.context.strict = true;
 	        this.context.isModule = true;
-	        this.scanner.isModule = true;
 	        var node = this.createNode();
 	        var body = this.parseDirectivePrologues();
 	        while (this.lookahead.type !== 2 /* EOF */) {
@@ -5137,7 +5129,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.source = code;
 	        this.errorHandler = handler;
 	        this.trackComment = false;
-	        this.isModule = false;
 	        this.length = code.length;
 	        this.index = 0;
 	        this.lineNumber = (code.length > 0) ? 1 : 0;
@@ -5343,7 +5334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                }
 	            }
-	            else if (ch === 0x3C && !this.isModule) {
+	            else if (ch === 0x3C) {
 	                if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
 	                    this.index += 4; // `<!--`
 	                    var comment = this.skipSingleLineComment(4);

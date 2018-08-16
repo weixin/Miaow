@@ -19,6 +19,32 @@
     <div v-for="library in stickerIndex.libraries"
         class="sticker-library-container"
         :key="library.id">
+      <div class="sticker-library-header">
+        <div class="sticker-library-header__icon" v-if="library.iconPath"
+             v-bind:style="{'background-image':'url(file://' + library.iconPath + ')'}"></div>
+        <div class="sticker-library-header__title-lockup">
+          <div class="sticker-library-header__title">{{ library.title }}</div>
+          <div class="sticker-library-header__subtitle" v-if="library.subtitle">{{ library.subtitle }}</div>
+        </div>
+        <div class="sticker-library-header__colors-area">
+          <span class="sticker-library-header__colors-added" v-if="library.colors && library.colorsAdded">
+            Library colors added
+          </span>
+          <button class="sticker-library-header__add-colors"
+                  v-if="library.colors && !library.colorsAdded"
+                  v-on:click="addLibraryColors(library)">
+            <i class="material-icons">add_circle_outline</i>
+            <span>Add library colors to document</span>
+          </button>
+          <div class="sticker-library-header__colors-preview" v-if="library.colors && !library.colorsAdded">
+            <div class="sticker-library-header__color" v-for="color in library.colors.slice(0, 3)"
+                v-bind:style="{'background-color': color}"></div>
+            <div class="sticker-library-header__color sticker-library-header__color-more" v-if="library.colors.length > 3">
+              +{{ library.colors.length - 3 }}
+            </div>
+          </div>
+        </div>
+      </div>
       <div v-for="section in library.sections"
           :key="section.id"
           class="sticker-root-section"

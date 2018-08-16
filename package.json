@@ -1,13 +1,14 @@
 {
-  "name": "miaow",
-  "version": "1.4.4",
+  "name": "MiaoW",
+  "description": "A Sketch plugin that lets you browse and quickly drag+drop stickers (specially tagged layers) in your Sketch Libraries.",
+  "version": "0.2.3",
   "engines": {
-    "sketch": ">=3.0"
+    "sketch": ">=49.0"
   },
   "skpm": {
-    "name": "miaow",
+    "name": "MiaoW",
     "manifest": "src/manifest.json",
-    "main": "miaow.sketchplugin",
+    "main": "MiaoW.sketchplugin",
     "assets": [
       "assets/**/*",
       "!assets/**/*.js",
@@ -20,31 +21,41 @@
     "watch": "./skpm-build-with-child.js web --watch",
     "postinstall": "npm run build && skpm-link"
   },
-  "author": "doubleluo <doubleluo@tencent.com>",
+  "resources": [
+    "assets/**/*.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/romannurik/Sketch-Stickers.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/romannurik/Sketch-Stickers/issues"
+  },
+  "homepage": "https://github.com/romannurik/Sketch-Stickers#readme",
+  "author": "Roman Nurik <roman@nurik.net>",
   "dependencies": {
     "@skpm/events": "^0.1.1",
     "@skpm/fs": "^0.1.2",
     "@skpm/path": "^0.1.0",
     "babel-polyfill": "^6.26.0",
+    "css-loader": "^1.0.0",
     "event-emitter": "^0.3.5",
-    "file-loader": "^1.1.11",
-    "jquery": "^3.3.1",
-    "js-yaml": "^3.11.0",
-    "mocha-js-delegate": "^0.1.1",
-    "node-sass-asset-functions": "^0.1.0",
-    "sketch-module-web-view": "git://github.com/romannurik/sketch-module-wk-web-view.git",
-    "vue": "^2.5.16",
-    "@skpm/builder": "^0.5.4",
-    "css-loader": "^0.28.11",
+    "express": "^4.16.3",
     "extract-loader": "^2.0.1",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
-    "image-webpack-loader": "^4.2.0",
-    "json-loader": "^0.5.7",
-    "node-sass": "^4.8.3",
+    "image-webpack-loader": "^4.3.1",
+    "jquery": "^3.3.1",
+    "js-yaml": "^3.11.0",
+    "mocha-js-delegate": "^0.1.1",
+    "multi": "^0.1.3",
     "node-sass-asset-functions": "^0.1.0",
-    "sass-loader": "^7.0.1",
-    "webpack-cli": "^2.0.14",
-    "webpack-dev-server": "^3.1.3"
+    "sass-loader": "^7.1.0",
+    "sketch-module-web-view": "git://github.com/romannurik/sketch-module-wk-web-view.git",
+    "vue": "^2.5.17"
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.5.4"
   }
 }

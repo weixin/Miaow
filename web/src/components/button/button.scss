@@ -14,25 +14,41 @@
  * limitations under the License.
  */
 
-@mixin button($size: small, $level: secondary) {
-  --color: #{$colorAccent};
+@mixin button($size: small, $level: secondary, $color: $colorAccent) {
+  --color: #{$color};
   display: flex;
+  align-items: center;
   color: var(--color);
   font-weight: 500;
   text-decoration: none;
   border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+  outline: 0;
 
   @if $size == small {
     @include type-body-3;
     padding: 6px 12px;
+
+    .material-icons {
+      font-size: 20px;
+    }
   }
   @else if $size == large {
     @include type-body-1;
     padding: 10px 16px;
   }
 
+  .material-icons:first-child:not(:last-child) {
+    margin-right: 4px;
+  }
+  .material-icons:last-child:not(:first-child) {
+    margin-left: 4px;
+  }
+
   @if $level == secondary {
     box-shadow: 0 0 0 1px var(--color) inset;
+    background-color: transparent;
 
     &:hover,
     &:focus,
@@ -43,22 +59,32 @@
 
     &:focus,
     &:active {
-      --color: #{darken($colorAccent, 10%)};
+      --color: #{darken($color, 10%)};
+    }
+  }
+  @else if $level == flat {
+    background-color: transparent;
+
+    &:hover {
+      --color: #{darken($color, 10%)};
+    }
+
+    &:focus,
+    &:active {
+      --color: #{darken($color, 20%)};
     }
   }
   @else if $level == primary {
     color: #fff;
     background-color: var(--color);
 
-    &:hover,
-    &:focus,
-    &:active {
-      --color: #{darken($colorAccent, 10%)};
+    &:hover {
+      --color: #{darken($color, 10%)};
     }
 
     &:focus,
     &:active {
-      --color: #{darken($colorAccent, 20%)};
+      --color: #{darken($color, 20%)};
     }
   }
 }

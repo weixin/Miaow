@@ -6,9 +6,6 @@
 const ModuleDependency = require("./ModuleDependency");
 
 class SingleEntryDependency extends ModuleDependency {
-	/**
-	 * @param {string} request request path for entry
-	 */
 	constructor(request) {
 		super(request);
 	}

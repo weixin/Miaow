@@ -41,32 +41,17 @@ var exports =
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
 /******/ 		}
 /******/ 	};
 /******/
 /******/ 	// define __esModule on exports
 /******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
 /******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -401,49 +386,12 @@ module.exports.accessSync = function(path, mode) {
 
 module.exports.appendFileSync = function(file, data, options) {
   if (!module.exports.existsSync(file)) {
-    return module.exports.writeFileSync(file, data, options)
+    data.writeToFile_atomically(file, true)
+  } else {
+    var handle = NSFileHandle.fileHandleForWritingAtPath(file)
+    handle.seekToEndOfFile()
+    handle.writeData(data.dataUsingEncoding(NSUTF8StringEncoding))
   }
-
-  var handle = NSFileHandle.fileHandleForWritingAtPath(file)
-  handle.seekToEndOfFile()
-
-  if (data && data.mocha && data.mocha().class() === 'NSData') {
-    handle.writeData(data)
-    return
-  }
-
-  var encoding = options && options.encoding ? options.encoding : (options ? options : 'utf8')
-
-  var string = NSString.stringWithString(data)
-  var nsdata
-
-  switch (encoding) {
-    case 'utf8':
-      nsdata = string.dataUsingEncoding(NSUTF8StringEncoding)
-      break
-    case 'ascii':
-      nsdata = string.dataUsingEncoding(NSASCIIStringEncoding)
-      break
-    case 'utf16le':
-    case 'ucs2':
-      nsdata = string.dataUsingEncoding(NSUTF16LittleEndianStringEncoding)
-      break
-    case 'base64':
-      var plainData = string.dataUsingEncoding(NSUTF8StringEncoding)
-      nsdata = plainData.base64EncodedStringWithOptions(0).dataUsingEncoding(NSUTF8StringEncoding)
-      break
-    case 'latin1':
-    case 'binary':
-      nsdata = string.dataUsingEncoding(NSISOLatin1StringEncoding)
-      break
-    case 'hex':
-      // TODO: how?
-    default:
-      nsdata = string.dataUsingEncoding(NSUTF8StringEncoding)
-      break
-  }
-
-  handle.writeData(data)
 }
 
 module.exports.chmodSync = function(path, mode) {
@@ -523,6 +471,7 @@ module.exports.readdirSync = function(path) {
 
 module.exports.readFileSync = function(path, options) {
   var encoding = options && options.encoding ? options.encoding : (options ? options : 'buffer')
+  var err = MOPointer.alloc().init()
   var fileManager = NSFileManager.defaultManager()
   var data = fileManager.contentsAtPath(path)
   switch (encoding) {
@@ -673,32 +622,28 @@ module.exports.writeFileSync = function(path, data, options) {
   switch (encoding) {
     case 'utf8':
       string.writeToFile_atomically_encoding_error(path, true, NSUTF8StringEncoding, err)
-      break
+      return
     case 'ascii':
-      string.writeToFile_atomically_encoding_error(path, true, NSASCIIStringEncoding, err)
-      break
+      string.writeToFile_atomically_encoding_error(path, true, NSASCIIStringEncoding)
+      return
     case 'utf16le':
     case 'ucs2':
-      string.writeToFile_atomically_encoding_error(path, true, NSUTF16LittleEndianStringEncoding, err)
-      break
+      string.writeToFile_atomically_encoding_error(path, true, NSUTF16LittleEndianStringEncoding)
+      return
     case 'base64':
       var plainData = string.dataUsingEncoding(NSUTF8StringEncoding)
       var nsdataEncoded = plainData.base64EncodedStringWithOptions(0)
       nsdataEncoded.writeToFile_atomically(path, true)
-      break
+      return
     case 'latin1':
     case 'binary':
-      string.writeToFile_atomically_encoding_error(path, true, NSISOLatin1StringEncoding, err)
-      break
+      string.writeToFile_atomically_encoding_error(path, true, NSISOLatin1StringEncoding)
+      return
     case 'hex':
       // TODO: how?
     default:
       string.writeToFile_atomically_encoding_error(path, true, NSUTF8StringEncoding, err)
-      break
-  }
-
-  if (err.value() !== null) {
-    throw new Error(err.value())
+      return
   }
 }
 
@@ -4366,7 +4311,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.7' };
+var core = module.exports = { version: '2.5.5' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -5536,8 +5481,7 @@ module.exports = function () {
     };
   // environments with maybe non-completely correct, but existent Promise
   } else if (Promise && Promise.resolve) {
-    // Promise.resolve without an argument throws an error in LG WebOS 2
-    var promise = Promise.resolve(undefined);
+    var promise = Promise.resolve();
     notify = function () {
       promise.then(flush);
     };
@@ -6363,18 +6307,12 @@ module.exports = function (key) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/modules/_core.js");
 var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/modules/_global.js");
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: core.version,
-  mode: __webpack_require__(/*! ./_library */ "./node_modules/core-js/modules/_library.js") ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
-});
+module.exports = function (key) {
+  return store[key] || (store[key] = {});
+};
 
 
 /***/ }),
@@ -9635,13 +9573,10 @@ var task = __webpack_require__(/*! ./_task */ "./node_modules/core-js/modules/_t
 var microtask = __webpack_require__(/*! ./_microtask */ "./node_modules/core-js/modules/_microtask.js")();
 var newPromiseCapabilityModule = __webpack_require__(/*! ./_new-promise-capability */ "./node_modules/core-js/modules/_new-promise-capability.js");
 var perform = __webpack_require__(/*! ./_perform */ "./node_modules/core-js/modules/_perform.js");
-var userAgent = __webpack_require__(/*! ./_user-agent */ "./node_modules/core-js/modules/_user-agent.js");
 var promiseResolve = __webpack_require__(/*! ./_promise-resolve */ "./node_modules/core-js/modules/_promise-resolve.js");
 var PROMISE = 'Promise';
 var TypeError = global.TypeError;
 var process = global.process;
-var versions = process && process.versions;
-var v8 = versions && versions.v8 || '';
 var $Promise = global[PROMISE];
 var isNode = classof(process) == 'process';
 var empty = function () { /* empty */ };
@@ -9656,13 +9591,7 @@ var USE_NATIVE = !!function () {
       exec(empty, empty);
     };
     // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
-    return (isNode || typeof PromiseRejectionEvent == 'function')
-      && promise.then(empty) instanceof FakePromise
-      // v8 6.6 (Node 10 and Chrome 66) have a bug with resolving custom thenables
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=830565
-      // we can't detect it synchronously, so just check versions
-      && v8.indexOf('6.6') !== 0
-      && userAgent.indexOf('Chrome/66') === -1;
+    return (isNode || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
   } catch (e) { /* empty */ }
 }();
 
@@ -11366,12 +11295,12 @@ $export($export.P + $export.U + $export.F * __webpack_require__(/*! ./_fails */ 
     if ($slice !== undefined && end === undefined) return $slice.call(anObject(this), start); // FF fix
     var len = anObject(this).byteLength;
     var first = toAbsoluteIndex(start, len);
-    var fin = toAbsoluteIndex(end === undefined ? len : end, len);
-    var result = new (speciesConstructor(this, $ArrayBuffer))(toLength(fin - first));
+    var final = toAbsoluteIndex(end === undefined ? len : end, len);
+    var result = new (speciesConstructor(this, $ArrayBuffer))(toLength(final - first));
     var viewS = new $DataView(this);
     var viewT = new $DataView(result);
     var index = 0;
-    while (first < fin) {
+    while (first < final) {
       viewT.setUint8(index++, viewS.getUint8(first++));
     } return result;
   }
@@ -13515,7 +13444,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '4.0.1';
+	exports.version = '4.0.0';
 
 
 /***/ },
@@ -15452,18 +15381,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            column: this.startMarker.column
 	        };
 	    };
-	    Parser.prototype.startNode = function (token, lastLineStart) {
-	        if (lastLineStart === void 0) { lastLineStart = 0; }
-	        var column = token.start - token.lineStart;
-	        var line = token.lineNumber;
-	        if (column < 0) {
-	            column += lastLineStart;
-	            line--;
-	        }
+	    Parser.prototype.startNode = function (token) {
 	        return {
 	            index: token.start,
-	            line: line,
-	            column: column
+	            line: token.lineNumber,
+	            column: token.start - token.lineStart
 	        };
 	    };
 	    Parser.prototype.finalize = function (marker, node) {
@@ -15795,7 +15717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var isGenerator = false;
 	        var node = this.createNode();
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = true;
+	        this.context.allowYield = false;
 	        var params = this.parseFormalParameters();
 	        var method = this.parsePropertyMethod(params);
 	        this.context.allowYield = previousAllowYield;
@@ -15865,7 +15787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.nextToken();
 	            computed = this.match('[');
 	            isAsync = !this.hasLineTerminator && (id === 'async') &&
-	                !this.match(':') && !this.match('(') && !this.match('*') && !this.match(',');
+	                !this.match(':') && !this.match('(') && !this.match('*');
 	            key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
 	        }
 	        else if (this.match('*')) {
@@ -16464,15 +16386,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Final reduce to clean-up the stack.
 	            var i = stack.length - 1;
 	            expr = stack[i];
-	            var lastMarker = markers.pop();
+	            markers.pop();
 	            while (i > 1) {
-	                var marker = markers.pop();
-	                var lastLineStart = lastMarker && lastMarker.lineStart;
-	                var node = this.startNode(marker, lastLineStart);
+	                var node = this.startNode(markers.pop());
 	                var operator = stack[i - 1];
 	                expr = this.finalize(node, new Node.BinaryExpression(operator, stack[i - 2], expr));
 	                i -= 2;
-	                lastMarker = marker;
 	            }
 	        }
 	        return expr;
@@ -17254,10 +17173,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var node = this.createNode();
 	        this.expectKeyword('return');
-	        var hasArgument = (!this.match(';') && !this.match('}') &&
-	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */) ||
-	            this.lookahead.type === 8 /* StringLiteral */ ||
-	            this.lookahead.type === 10 /* Template */;
+	        var hasArgument = !this.match(';') && !this.match('}') &&
+	            !this.hasLineTerminator && this.lookahead.type !== 2 /* EOF */;
 	        var argument = hasArgument ? this.parseExpression() : null;
 	        this.consumeSemicolon();
 	        return this.finalize(node, new Node.ReturnStatement(argument));
@@ -17822,7 +17739,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = !isGenerator;
+	        this.context.allowYield = false;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length > 0) {
 	            this.tolerateError(messages_1.Messages.BadGetterArity);
@@ -17835,7 +17752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.createNode();
 	        var isGenerator = false;
 	        var previousAllowYield = this.context.allowYield;
-	        this.context.allowYield = !isGenerator;
+	        this.context.allowYield = false;
 	        var formalParameters = this.parseFormalParameters();
 	        if (formalParameters.params.length !== 1) {
 	            this.tolerateError(messages_1.Messages.BadSetterArity);
@@ -17936,8 +17853,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    isAsync = true;
 	                    token = this.lookahead;
 	                    key = this.parseObjectPropertyKey();
-	                    if (token.type === 3 /* Identifier */ && token.value === 'constructor') {
-	                        this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
+	                    if (token.type === 3 /* Identifier */) {
+	                        if (token.value === 'get' || token.value === 'set') {
+	                            this.tolerateUnexpectedToken(token);
+	                        }
+	                        else if (token.value === 'constructor') {
+	                            this.tolerateUnexpectedToken(token, messages_1.Messages.ConstructorIsAsync);
+	                        }
 	                    }
 	                }
 	            }
@@ -18050,7 +17972,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Parser.prototype.parseModule = function () {
 	        this.context.strict = true;
 	        this.context.isModule = true;
-	        this.scanner.isModule = true;
 	        var node = this.createNode();
 	        var body = this.parseDirectivePrologues();
 	        while (this.lookahead.type !== 2 /* EOF */) {
@@ -18479,7 +18400,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.source = code;
 	        this.errorHandler = handler;
 	        this.trackComment = false;
-	        this.isModule = false;
 	        this.length = code.length;
 	        this.index = 0;
 	        this.lineNumber = (code.length > 0) ? 1 : 0;
@@ -18685,7 +18605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                }
 	            }
-	            else if (ch === 0x3C && !this.isModule) {
+	            else if (ch === 0x3C) {
 	                if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
 	                    this.index += 4; // `<!--`
 	                    var comment = this.skipSingleLineComment(4);
@@ -20548,12 +20468,6 @@ function isPlainSafeFirst(c) {
     && c !== CHAR_GRAVE_ACCENT;
 }
 
-// Determines whether block indentation indicator is required.
-function needIndentIndicator(string) {
-  var leadingSpaceRe = /^\n* /;
-  return leadingSpaceRe.test(string);
-}
-
 var STYLE_PLAIN   = 1,
     STYLE_SINGLE  = 2,
     STYLE_LITERAL = 3,
@@ -20621,7 +20535,7 @@ function chooseScalarStyle(string, singleLineOnly, indentPerLevel, lineWidth, te
       ? STYLE_PLAIN : STYLE_SINGLE;
   }
   // Edge case: block indentation indicator can only have one digit.
-  if (indentPerLevel > 9 && needIndentIndicator(string)) {
+  if (string[0] === ' ' && indentPerLevel > 9) {
     return STYLE_DOUBLE;
   }
   // At this point we know block styles are valid.
@@ -20685,7 +20599,7 @@ function writeScalar(state, string, level, iskey) {
 
 // Pre-conditions: string is valid for a block scalar, 1 <= indentPerLevel <= 9.
 function blockHeader(string, indentPerLevel) {
-  var indentIndicator = needIndentIndicator(string) ? String(indentPerLevel) : '';
+  var indentIndicator = (string[0] === ' ') ? String(indentPerLevel) : '';
 
   // note the special case: the string '\n' counts as a "trailing" empty line.
   var clip =          string[string.length - 1] === '\n';
@@ -23845,14 +23759,8 @@ function constructJavascriptFunction(data) {
 
   // Esprima's ranges include the first '{' and the last '}' characters on
   // function expressions. So cut them out.
-  if (ast.body[0].expression.body.type === 'BlockStatement') {
-    /*eslint-disable no-new-func*/
-    return new Function(params, source.slice(body[0] + 1, body[1] - 1));
-  }
-  // ES6 arrow functions can omit the BlockStatement. In that case, just return
-  // the body.
   /*eslint-disable no-new-func*/
-  return new Function(params, 'return ' + source.slice(body[0], body[1]));
+  return new Function(params, source.slice(body[0] + 1, body[1] - 1));
 }
 
 function representJavascriptFunction(object /*, style*/) {
@@ -26591,6 +26499,86 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/color-util.js":
+/*!***************************!*\
+  !*** ./src/color-util.js ***!
+  \***************************/
+/*! exports provided: areAllLibraryColorsInDocument, addLibraryColorsToDocument, svgColorToMSColor, msColorToSVGColor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "areAllLibraryColorsInDocument", function() { return areAllLibraryColorsInDocument; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLibraryColorsToDocument", function() { return addLibraryColorsToDocument; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "svgColorToMSColor", function() { return svgColorToMSColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "msColorToSVGColor", function() { return msColorToSVGColor; });
+/**
+ * Returns true if every color in the array of SVG colors is already
+ * in the document.
+ */
+function areAllLibraryColorsInDocument(libSvgColors, document) {
+  var assets = document.documentData().assets();
+  var libMSColors = libSvgColors.map(function (c) {
+    return svgColorToMSColor(c);
+  }); // collect all colors currently in this doc that aren't in the
+  // target colors and save them, to add back at the end
+
+  var existingColors = Array.from(assets.colors());
+  var libColorsInDoc = libMSColors.filter(function (libColor) {
+    return existingColors.find(function (docColor) {
+      return docColor.isEqual(libColor);
+    });
+  });
+  return libColorsInDoc.length == libMSColors.length;
+}
+/**
+ * Adds all the colors in the given array of SVG colors to the document's
+ * colors.
+ */
+
+function addLibraryColorsToDocument(libSvgColors, document) {
+  var assets = document.documentData().assets();
+  var libMSColors = libSvgColors.map(function (c) {
+    return svgColorToMSColor(c);
+  }); // collect all colors currently in this doc that aren't in the
+  // target colors and save them, to add back at the end
+
+  var existingColorsToKeep = Array.from(assets.colors()).filter(function (color) {
+    return libMSColors.reduce(function (keep, libColor) {
+      return keep && !color.isEqual(libColor);
+    }, true);
+  });
+  assets.removeAllColors();
+  libMSColors.forEach(function (color) {
+    return assets.addColor(color);
+  });
+  existingColorsToKeep.forEach(function (color) {
+    return assets.addColor(color);
+  });
+}
+/**
+ * Converts an SVG/CSS color string like '#fff' or 'rgba(...)'
+ * to an MSColor
+ */
+
+function svgColorToMSColor(color) {
+  var ic = MSImmutableColor.colorWithSVGString(color);
+  return MSColor.alloc().initWithRed_green_blue_alpha_(ic.red(), ic.green(), ic.blue(), ic.alpha());
+}
+/**
+ * Converts an MSColor to an SVG/CSS color string.
+ */
+
+function msColorToSVGColor(color) {
+  var r = Math.round(255 * color.red());
+  var g = Math.round(255 * color.green());
+  var b = Math.round(255 * color.blue());
+  var a = Number(Number(color.alpha()).toFixed(2));
+  return "rgba(".concat(r, ", ").concat(g, ", ").concat(b, ", ").concat(a, ")");
+}
+
+/***/ }),
+
 /***/ "./src/commands.js":
 /*!*************************!*\
   !*** ./src/commands.js ***!
@@ -26654,7 +26642,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-yaml */ "./node_modules/js-yaml/index.js");
 /* harmony import */ var js_yaml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_yaml__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ "./src/util.js");
-/* harmony import */ var _util_progress_reporter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util-progress-reporter */ "./src/util-progress-reporter.js");
+/* harmony import */ var _color_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./color-util */ "./src/color-util.js");
+/* harmony import */ var _util_progress_reporter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util-progress-reporter */ "./src/util-progress-reporter.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -26663,9 +26652,7 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } } function _next(value) { step("next", value); } function _throw(err) { step("throw", err); } _next(); }); }; }
 
 /*
  * Copyright 2018 Google Inc.
@@ -26687,7 +26674,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var INDEX_FORMAT_VERSION = 3;
+
+var INDEX_FORMAT_VERSION = 4;
 var FORCE_REBULD = false;
 /**
  * Returns a sticker index JSON for the user's libraries, building and caching it
@@ -26705,7 +26693,7 @@ function _makeStickerIndexForLibraries() {
   _makeStickerIndexForLibraries = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(_ref) {
-    var onProgress, libraries, progressReporter, childProgressReporters, compositeIndex, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, i, lib, attrs, modifiedDateMs, cachePath, libraryIndex, indexCachePath, doc;
+    var onProgress, libraries, progressReporter, childProgressReporters, compositeIndex, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _step2$value, i, lib, fileHash, cachePath, libraryIndex, indexCachePath, doc, colors;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -26731,7 +26719,7 @@ function _makeStickerIndexForLibraries() {
 
               return firstWithId;
             });
-            progressReporter = new _util_progress_reporter__WEBPACK_IMPORTED_MODULE_4__["ProgressReporter"]();
+            progressReporter = new _util_progress_reporter__WEBPACK_IMPORTED_MODULE_5__["ProgressReporter"]();
             progressReporter.on('progress', function (progress) {
               return onProgress(progress);
             });
@@ -26740,26 +26728,26 @@ function _makeStickerIndexForLibraries() {
             compositeIndex = {
               libraries: []
             };
-            _iteratorNormalCompletion = true;
-            _didIteratorError = false;
-            _iteratorError = undefined;
+            _iteratorNormalCompletion2 = true;
+            _didIteratorError2 = false;
+            _iteratorError2 = undefined;
             _context.prev = 9;
-            _iterator = libraries.entries()[Symbol.iterator]();
+            _iterator2 = libraries.entries()[Symbol.iterator]();
 
           case 11:
-            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 36;
+            if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
+              _context.next = 37;
               break;
             }
 
-            _step$value = _slicedToArray(_step.value, 2), i = _step$value[0], lib = _step$value[1];
+            _step2$value = _slicedToArray(_step2.value, 2), i = _step2$value[0], lib = _step2$value[1];
             _context.next = 15;
             return _util__WEBPACK_IMPORTED_MODULE_3__["unpeg"]();
 
           case 15:
-            // for this library, get the last modified date of the sketch file
-            attrs = NSFileManager.defaultManager().attributesOfItemAtPath_error_(lib.sketchFilePath, null);
-            modifiedDateMs = attrs ? attrs.fileModificationDate().timeIntervalSince1970() : 0;
+            // for this library, checksum the contents so we can later check if it's changed
+            // NOTE: performance should be pretty good for files a few MB in size
+            fileHash = String(NSFileManager.defaultManager().contentsAtPath(lib.sketchFilePath).sha1AsString());
             cachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(_util__WEBPACK_IMPORTED_MODULE_3__["getPluginCachePath"](), lib.libraryId);
             libraryIndex = null;
             indexCachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(cachePath, 'index.json');
@@ -26770,86 +26758,94 @@ function _makeStickerIndexForLibraries() {
               }));
             } catch (e) {}
 
-            if (!(FORCE_REBULD || !libraryIndex || !libraryIndex.archiveVersion || libraryIndex.timestamp < modifiedDateMs || (libraryIndex.formatVersion || 0) < INDEX_FORMAT_VERSION)) {
-              _context.next = 31;
+            if (!(FORCE_REBULD || !libraryIndex || !libraryIndex.archiveVersion || libraryIndex.fileHash !== fileHash || (libraryIndex.formatVersion || 0) < INDEX_FORMAT_VERSION)) {
+              _context.next = 32;
               break;
             }
 
             // need to rebuild the cached index
             doc = _util__WEBPACK_IMPORTED_MODULE_3__["loadDocFromSketchFile"](lib.sketchFilePath);
             doc.setFileURL(NSURL.fileURLWithPath(lib.sketchFilePath));
-            _context.next = 26;
+            _context.next = 25;
             return buildStickerIndexForLibrary(lib.libraryId, doc, childProgressReporters[i]);
 
-          case 26:
+          case 25:
             libraryIndex = _context.sent;
-            // cache the index
+            // store library colors
+            colors = doc.documentData().assets().colors();
+
+            if (colors.length) {
+              libraryIndex.colors = Array.from(colors).map(function (c) {
+                return _color_util__WEBPACK_IMPORTED_MODULE_4__["msColorToSVGColor"](c);
+              });
+            } // cache the index
+
+
             _util__WEBPACK_IMPORTED_MODULE_3__["mkdirpSync"](_skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.dirname(indexCachePath));
             _skpm_fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(indexCachePath, JSON.stringify(Object.assign(libraryIndex, {
               archiveVersion: Number(MSArchiveHeader.metadataForNewHeader()['version']),
               formatVersion: INDEX_FORMAT_VERSION,
-              timestamp: modifiedDateMs + 1 // add a second to avoid precision issues
-
+              fileHash: fileHash
             })), {
               encoding: 'utf8'
             });
-            _context.next = 32;
+            _context.next = 33;
             break;
 
-          case 31:
+          case 32:
             childProgressReporters[i].forceProgress(1);
 
-          case 32:
+          case 33:
             compositeIndex.libraries.push(libraryIndex);
 
-          case 33:
-            _iteratorNormalCompletion = true;
+          case 34:
+            _iteratorNormalCompletion2 = true;
             _context.next = 11;
             break;
 
-          case 36:
-            _context.next = 42;
+          case 37:
+            _context.next = 43;
             break;
 
-          case 38:
-            _context.prev = 38;
+          case 39:
+            _context.prev = 39;
             _context.t0 = _context["catch"](9);
-            _didIteratorError = true;
-            _iteratorError = _context.t0;
+            _didIteratorError2 = true;
+            _iteratorError2 = _context.t0;
 
-          case 42:
-            _context.prev = 42;
+          case 43:
             _context.prev = 43;
+            _context.prev = 44;
 
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+              _iterator2.return();
             }
 
-          case 45:
-            _context.prev = 45;
+          case 46:
+            _context.prev = 46;
 
-            if (!_didIteratorError) {
-              _context.next = 48;
+            if (!_didIteratorError2) {
+              _context.next = 49;
               break;
             }
 
-            throw _iteratorError;
-
-          case 48:
-            return _context.finish(45);
+            throw _iteratorError2;
 
           case 49:
-            return _context.finish(42);
+            return _context.finish(46);
 
           case 50:
-            return _context.abrupt("return", compositeIndex);
+            return _context.finish(43);
 
           case 51:
+            return _context.abrupt("return", compositeIndex);
+
+          case 52:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, this, [[9, 38, 42, 50], [43,, 45, 49]]);
+    }, _callee, this, [[9, 39, 43, 51], [44,, 46, 50]]);
   }));
   return _makeStickerIndexForLibraries.apply(this, arguments);
 }
@@ -26857,261 +26853,244 @@ function _makeStickerIndexForLibraries() {
 function buildStickerIndexForLibrary(_x2, _x3, _x4) {
   return _buildStickerIndexForLibrary.apply(this, arguments);
 }
+/**
+ * Parses the given string for stickers metadata (i.e. "!StickerSection ...")
+ */
+
 
 function _buildStickerIndexForLibrary() {
   _buildStickerIndexForLibrary = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee2(libraryId, document, progressReporter) {
-    var cachePath, sectionsById, sections, allTextLayers, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, textLayer, text, stickerSections, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, _text, sectionIdMatch, id, stickerSection, _arr2, _i2, section, parentId, parentSection, possibleStickers, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, layer, name, sectionMatch, parentSectionId, _parentSection, layerId, _id, layerInfo, serializedLayer, nonEmptyItems;
+    var libraryIndex, cachePath, sectionsById, allTextLayers, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, textLayer, text, parsedMetadata, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, section, _arr2, _i2, _section, parentId, parentSection, possibleStickers, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, layer, parsedName, layerId, id, layerInfo, imm, serializedLayer, _iteratorNormalCompletion6, _didIteratorError6, _iteratorError6, _iterator6, _step6, sectionId, _section2, nonEmptyItems;
 
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            libraryIndex = {
+              id: libraryId,
+              sections: []
+            };
             cachePath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(_util__WEBPACK_IMPORTED_MODULE_3__["getPluginCachePath"](), libraryId); // first, find sticker sections (stored in text layers)
 
             sectionsById = {};
-            sections = [];
             allTextLayers = _util__WEBPACK_IMPORTED_MODULE_3__["getAllLayersMatchingPredicate"](document, NSPredicate.predicateWithFormat('className == %@', 'MSTextLayer'));
             allTextLayers.reverse(); // layer list order, not stacking order
 
-            _iteratorNormalCompletion2 = true;
-            _didIteratorError2 = false;
-            _iteratorError2 = undefined;
+            _iteratorNormalCompletion3 = true;
+            _didIteratorError3 = false;
+            _iteratorError3 = undefined;
             _context2.prev = 8;
-            _iterator2 = allTextLayers[Symbol.iterator]();
+            _iterator3 = allTextLayers[Symbol.iterator]();
 
           case 10:
-            if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-              _context2.next = 48;
+            if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+              _context2.next = 40;
               break;
             }
 
-            textLayer = _step2.value;
-            text = textLayer.stringValue().replace(/[‘’]/g, "'").replace(/[“”]/g, "\"");
-            stickerSections = text.split(/!StickerSection\s+/g).slice(1);
-            _iteratorNormalCompletion4 = true;
-            _didIteratorError4 = false;
-            _iteratorError4 = undefined;
-            _context2.prev = 17;
-            _iterator4 = stickerSections[Symbol.iterator]();
+            textLayer = _step3.value;
+            text = textLayer.stringValue();
 
-          case 19:
-            if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
-              _context2.next = 31;
+            if (!(text.indexOf('!Sticker') < 0)) {
+              _context2.next = 15;
               break;
             }
 
-            _text = _step4.value;
-            sectionIdMatch = _text.match(/^@[\w\.]+$/igm);
+            return _context2.abrupt("continue", 37);
 
-            if (sectionIdMatch) {
-              _context2.next = 24;
-              break;
+          case 15:
+            parsedMetadata = parseStickerMetadata(text);
+            _iteratorNormalCompletion5 = true;
+            _didIteratorError5 = false;
+            _iteratorError5 = undefined;
+            _context2.prev = 19;
+
+            for (_iterator5 = parsedMetadata.sections[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+              section = _step5.value;
+              section.libraryId = libraryId;
+
+              if (section.id in sectionsById) {
+                log("Duplicate sticker section id ".concat(section.id, ", skipping duplicates"));
+              } else {
+                sectionsById[section.id] = section;
+                libraryIndex.sections.push(section);
+              }
             }
 
-            return _context2.abrupt("continue", 28);
-
-          case 24:
-            id = sectionIdMatch[0];
-            stickerSection = {
-              title: id
-            };
-
-            try {
-              stickerSection = Object.assign(stickerSection, js_yaml__WEBPACK_IMPORTED_MODULE_2___default.a.safeLoad(_text.substr(sectionIdMatch[0].length)), {
-                id: id,
-                items: [],
-                type: 'section',
-                libraryId: libraryId
-              });
-            } catch (e) {
-              log("Error parsing sticker section YAML for ".concat(id));
-            }
-
-            if (id in sectionsById) {
-              log("Duplicate sticker section id ".concat(id, ", skipping duplicates"));
-            } else {
-              sectionsById[id] = stickerSection;
-              sections.push(stickerSection);
-            }
-
-          case 28:
-            _iteratorNormalCompletion4 = true;
-            _context2.next = 19;
+            _context2.next = 27;
             break;
 
-          case 31:
-            _context2.next = 37;
-            break;
+          case 23:
+            _context2.prev = 23;
+            _context2.t0 = _context2["catch"](19);
+            _didIteratorError5 = true;
+            _iteratorError5 = _context2.t0;
+
+          case 27:
+            _context2.prev = 27;
+            _context2.prev = 28;
+
+            if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+              _iterator5.return();
+            }
+
+          case 30:
+            _context2.prev = 30;
+
+            if (!_didIteratorError5) {
+              _context2.next = 33;
+              break;
+            }
+
+            throw _iteratorError5;
 
           case 33:
-            _context2.prev = 33;
-            _context2.t0 = _context2["catch"](17);
-            _didIteratorError4 = true;
-            _iteratorError4 = _context2.t0;
+            return _context2.finish(30);
+
+          case 34:
+            return _context2.finish(27);
+
+          case 35:
+            if (parsedMetadata.libraryMeta.title) {
+              libraryIndex.title = parsedMetadata.libraryMeta.title;
+            }
+
+            if (parsedMetadata.libraryMeta.subtitle) {
+              libraryIndex.subtitle = parsedMetadata.libraryMeta.subtitle;
+            }
 
           case 37:
-            _context2.prev = 37;
-            _context2.prev = 38;
-
-            if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-              _iterator4.return();
-            }
-
-          case 40:
-            _context2.prev = 40;
-
-            if (!_didIteratorError4) {
-              _context2.next = 43;
-              break;
-            }
-
-            throw _iteratorError4;
-
-          case 43:
-            return _context2.finish(40);
-
-          case 44:
-            return _context2.finish(37);
-
-          case 45:
-            _iteratorNormalCompletion2 = true;
+            _iteratorNormalCompletion3 = true;
             _context2.next = 10;
             break;
 
-          case 48:
-            _context2.next = 54;
+          case 40:
+            _context2.next = 46;
             break;
 
-          case 50:
-            _context2.prev = 50;
+          case 42:
+            _context2.prev = 42;
             _context2.t1 = _context2["catch"](8);
-            _didIteratorError2 = true;
-            _iteratorError2 = _context2.t1;
+            _didIteratorError3 = true;
+            _iteratorError3 = _context2.t1;
+
+          case 46:
+            _context2.prev = 46;
+            _context2.prev = 47;
+
+            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+              _iterator3.return();
+            }
+
+          case 49:
+            _context2.prev = 49;
+
+            if (!_didIteratorError3) {
+              _context2.next = 52;
+              break;
+            }
+
+            throw _iteratorError3;
+
+          case 52:
+            return _context2.finish(49);
+
+          case 53:
+            return _context2.finish(46);
 
           case 54:
-            _context2.prev = 54;
-            _context2.prev = 55;
-
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
-            }
-
-          case 57:
-            _context2.prev = 57;
-
-            if (!_didIteratorError2) {
-              _context2.next = 60;
-              break;
-            }
-
-            throw _iteratorError2;
-
-          case 60:
-            return _context2.finish(57);
-
-          case 61:
-            return _context2.finish(54);
-
-          case 62:
             // nest sections
-            _arr2 = Array.from(sections);
+            _arr2 = Array.from(libraryIndex.sections);
             _i2 = 0;
 
-          case 64:
+          case 56:
             if (!(_i2 < _arr2.length)) {
-              _context2.next = 78;
+              _context2.next = 70;
               break;
             }
 
-            section = _arr2[_i2];
-            parentId = section.id.substr(0, section.id.lastIndexOf('.'));
+            _section = _arr2[_i2];
+            parentId = _section.id.substr(0, _section.id.lastIndexOf('.'));
 
             if (!parentId) {
-              _context2.next = 75;
+              _context2.next = 67;
               break;
             }
 
             parentSection = sectionsById[parentId];
 
             if (parentSection) {
-              _context2.next = 72;
+              _context2.next = 64;
               break;
             }
 
             log("Unknown parent section ".concat(parentId));
-            return _context2.abrupt("continue", 75);
+            return _context2.abrupt("continue", 67);
 
-          case 72:
+          case 64:
             parentSection.items = parentSection.items || [];
-            parentSection.items.push(section); // remove from the root
+            parentSection.items.push(_section); // remove from the root
 
-            sections.splice(sections.indexOf(section), 1);
+            libraryIndex.sections.splice(libraryIndex.sections.indexOf(_section), 1);
 
-          case 75:
+          case 67:
             _i2++;
-            _context2.next = 64;
+            _context2.next = 56;
             break;
 
-          case 78:
+          case 70:
             // go through all layers tagged to a section
             possibleStickers = _util__WEBPACK_IMPORTED_MODULE_3__["getAllLayersMatchingPredicate"](document, NSPredicate.predicateWithFormat('name matches ".*@.*"'));
             possibleStickers.reverse(); // layer list order, not stacking order
 
             progressReporter.total = possibleStickers.length;
-            _iteratorNormalCompletion3 = true;
-            _didIteratorError3 = false;
-            _iteratorError3 = undefined;
-            _context2.prev = 84;
-            _iterator3 = possibleStickers[Symbol.iterator]();
+            _iteratorNormalCompletion4 = true;
+            _didIteratorError4 = false;
+            _iteratorError4 = undefined;
+            _context2.prev = 76;
+            _iterator4 = possibleStickers[Symbol.iterator]();
 
-          case 86:
-            if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
-              _context2.next = 113;
+          case 78:
+            if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
+              _context2.next = 118;
               break;
             }
 
-            layer = _step3.value;
+            layer = _step4.value;
             progressReporter.increment();
-            name = layer.name();
-            sectionMatch = name.match(/(.*?)\s*(@[\w\.]+)$/);
 
-            if (sectionMatch) {
-              _context2.next = 93;
+            if (!(layer instanceof MSTextLayer && String(layer.name()).startsWith('!Sticker'))) {
+              _context2.next = 83;
               break;
             }
 
-            return _context2.abrupt("continue", 110);
+            return _context2.abrupt("continue", 115);
 
-          case 93:
-            if (!(layer instanceof MSTextLayer && name.startsWith('!Sticker'))) {
-              _context2.next = 95;
+          case 83:
+            parsedName = parseLayerName(layer.name(), function (sectionId) {
+              return sectionId in sectionsById;
+            }); // if this is an icon, capture it as the icon
+
+            if (parsedName.specialInstructions.icon) {
+              libraryIndex.iconPath = _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(cachePath, 'icon.png');
+              _util__WEBPACK_IMPORTED_MODULE_3__["captureLayerImage"](document, layer, libraryIndex.iconPath);
+            }
+
+            if (!parsedName.isSticker) {
+              _context2.next = 115;
               break;
             }
 
-            return _context2.abrupt("continue", 110);
-
-          case 95:
-            parentSectionId = sectionMatch[2];
-            _parentSection = sectionsById[parentSectionId];
-
-            if (_parentSection) {
-              _context2.next = 100;
-              break;
-            }
-
-            log("Sticker section not found ".concat(parentSectionId, " for layer named ").concat(name));
-            return _context2.abrupt("continue", 110);
-
-          case 100:
+            // this is a sticker
             layerId = String(layer.objectID());
-            _id = libraryId + '.' + layerId;
+            id = libraryId + '.' + layerId;
             layerInfo = {
               type: 'layer',
-              id: _id,
+              id: id,
               layer: layer,
-              name: sectionMatch[1],
+              name: parsedName.sanitizedName,
               imagePath: _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(cachePath, layerId + '.png'),
               contentPath: _skpm_path__WEBPACK_IMPORTED_MODULE_1___default.a.join(cachePath, layerId + '.json'),
               width: Number(layer.absoluteInfluenceRect().size.width),
@@ -27120,57 +27099,102 @@ function _buildStickerIndexForLibrary() {
 
             _util__WEBPACK_IMPORTED_MODULE_3__["captureLayerImage"](document, layer, layerInfo.imagePath); // capture layer content
 
-            serializedLayer = JSON.parse(MSJSONDataArchiver.archiveStringWithRootObject_error_(layer.immutableModelObject(), null));
+            imm = layer.immutableModelObject();
+            imm.setName(parsedName.sanitizedName);
+            serializedLayer = JSON.parse(MSJSONDataArchiver.archiveStringWithRootObject_error_(imm, null));
             _skpm_fs__WEBPACK_IMPORTED_MODULE_0___default.a.writeFileSync(layerInfo.contentPath, JSON.stringify(serializedLayer), {
               encoding: 'utf8'
             });
-            _parentSection.items = _parentSection.items || [];
-
-            _parentSection.items.push(layerInfo);
-
-            _context2.next = 110;
+            _context2.next = 96;
             return _util__WEBPACK_IMPORTED_MODULE_3__["unpeg"]();
 
-          case 110:
-            _iteratorNormalCompletion3 = true;
-            _context2.next = 86;
-            break;
+          case 96:
+            _iteratorNormalCompletion6 = true;
+            _didIteratorError6 = false;
+            _iteratorError6 = undefined;
+            _context2.prev = 99;
 
-          case 113:
-            _context2.next = 119;
-            break;
+            for (_iterator6 = parsedName.sectionIds[Symbol.iterator](); !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+              sectionId = _step6.value;
+              _section2 = sectionsById[sectionId];
+              _section2.items = _section2.items || [];
 
-          case 115:
-            _context2.prev = 115;
-            _context2.t2 = _context2["catch"](84);
-            _didIteratorError3 = true;
-            _iteratorError3 = _context2.t2;
-
-          case 119:
-            _context2.prev = 119;
-            _context2.prev = 120;
-
-            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-              _iterator3.return();
+              _section2.items.push(layerInfo);
             }
 
-          case 122:
-            _context2.prev = 122;
+            _context2.next = 107;
+            break;
 
-            if (!_didIteratorError3) {
-              _context2.next = 125;
+          case 103:
+            _context2.prev = 103;
+            _context2.t2 = _context2["catch"](99);
+            _didIteratorError6 = true;
+            _iteratorError6 = _context2.t2;
+
+          case 107:
+            _context2.prev = 107;
+            _context2.prev = 108;
+
+            if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+              _iterator6.return();
+            }
+
+          case 110:
+            _context2.prev = 110;
+
+            if (!_didIteratorError6) {
+              _context2.next = 113;
               break;
             }
 
-            throw _iteratorError3;
+            throw _iteratorError6;
 
-          case 125:
-            return _context2.finish(122);
+          case 113:
+            return _context2.finish(110);
 
-          case 126:
-            return _context2.finish(119);
+          case 114:
+            return _context2.finish(107);
+
+          case 115:
+            _iteratorNormalCompletion4 = true;
+            _context2.next = 78;
+            break;
+
+          case 118:
+            _context2.next = 124;
+            break;
+
+          case 120:
+            _context2.prev = 120;
+            _context2.t3 = _context2["catch"](76);
+            _didIteratorError4 = true;
+            _iteratorError4 = _context2.t3;
+
+          case 124:
+            _context2.prev = 124;
+            _context2.prev = 125;
+
+            if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+              _iterator4.return();
+            }
 
           case 127:
+            _context2.prev = 127;
+
+            if (!_didIteratorError4) {
+              _context2.next = 130;
+              break;
+            }
+
+            throw _iteratorError4;
+
+          case 130:
+            return _context2.finish(127);
+
+          case 131:
+            return _context2.finish(124);
+
+          case 132:
             // cull any sections that don't indirectly or directly contain stickers
             nonEmptyItems = function nonEmptyItems(items) {
               return items.filter(function (item) {
@@ -27183,21 +27207,130 @@ function _buildStickerIndexForLibrary() {
               });
             };
 
-            sections = nonEmptyItems(sections);
-            return _context2.abrupt("return", {
-              id: libraryId,
-              title: _util__WEBPACK_IMPORTED_MODULE_3__["getDocumentName"](document),
-              sections: sections
-            });
+            libraryIndex.sections = nonEmptyItems(libraryIndex.sections);
+            libraryIndex.title = libraryIndex.title || _util__WEBPACK_IMPORTED_MODULE_3__["getDocumentName"](document);
+            return _context2.abrupt("return", libraryIndex);
 
-          case 130:
+          case 136:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[8, 50, 54, 62], [17, 33, 37, 45], [38,, 40, 44], [55,, 57, 61], [84, 115, 119, 127], [120,, 122, 126]]);
+    }, _callee2, this, [[8, 42, 46, 54], [19, 23, 27, 35], [28,, 30, 34], [47,, 49, 53], [76, 120, 124, 132], [99, 103, 107, 115], [108,, 110, 114], [125,, 127, 131]]);
   }));
   return _buildStickerIndexForLibrary.apply(this, arguments);
+}
+
+function parseStickerMetadata(str) {
+  var parsed = {
+    sections: [],
+    libraryMeta: {}
+  };
+  var items = str.replace(/[‘’]/g, "'").replace(/[“”]/g, "\"").split(/!Sticker(Section|Library)\s*/g).slice(1).reduce(function (result, value, index, array) {
+    // split array [1,2,3,4] into pairs [[1,2],[3,4]]
+    if (index % 2 == 0) {
+      result.push(array.slice(index, index + 2));
+    }
+
+    return result;
+  }, []);
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var _step$value = _slicedToArray(_step.value, 2),
+          type = _step$value[0],
+          text = _step$value[1];
+
+      if ('Section' === type) {
+        var sectionIdMatch = text.match(/^@[\w\.]+$/igm);
+
+        if (!sectionIdMatch) {
+          continue;
+        }
+
+        var id = sectionIdMatch[0];
+
+        try {
+          parsed.sections.push(Object.assign({
+            title: id
+          }, js_yaml__WEBPACK_IMPORTED_MODULE_2___default.a.safeLoad(text.substr(sectionIdMatch[0].length)), {
+            id: id,
+            items: [],
+            type: 'section'
+          }));
+        } catch (e) {
+          log("Error parsing sticker section YAML for ".concat(id));
+        }
+      } else if ('Library' === type) {
+        try {
+          Object.assign(parsed.libraryMeta, js_yaml__WEBPACK_IMPORTED_MODULE_2___default.a.safeLoad(text));
+        } catch (e) {
+          log("Error parsing library metadata YAML");
+        }
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return parsed;
+}
+
+var SPECIAL_INSTRUCTIONS = new Set(['icon']);
+/**
+ * Parses the given layer name. The second arg is a function
+ * that returns true if the given section ID (e.g. "@Foo.Bar") is a
+ * valid section ID.
+ */
+
+function parseLayerName(name, isValidSectionIdFn) {
+  var parsed = {
+    isSticker: false,
+    sectionIds: [],
+    sanitizedName: name,
+    specialInstructions: {}
+  };
+  name = String(name || '');
+  var unspecialParts = name.split(/(@+[\w\.]+)/).filter(function (part) {
+    if ('@' === part.charAt(0)) {
+      if ('@' === part.charAt(1)) {
+        // special instruction
+        var instr = part.slice(2);
+
+        if (SPECIAL_INSTRUCTIONS.has(instr)) {
+          parsed.specialInstructions[instr] = true;
+          return false; // remove from sanitized name
+        }
+      } else {
+        // possible section id
+        if (isValidSectionIdFn(part)) {
+          parsed.sectionIds.push(part);
+          parsed.isSticker = true;
+          return false; // remove from sanitized name
+        } else {//   log(`Sticker section not found ${sectionId} for layer named ${name}`);
+            //   continue;
+          }
+      }
+    }
+
+    return true;
+  });
+  parsed.sanitizedName = unspecialParts.join('').replace(/^\s+|\s+$/g, '').replace(/\s+/, ' ');
+  return parsed;
 }
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/promise-polyfill/lib/index.js */ "./node_modules/promise-polyfill/lib/index.js")))
 
@@ -27221,7 +27354,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sketch_module_web_view__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sketch_module_web_view__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _util_libraries__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util-libraries */ "./src/util-libraries.js");
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util */ "./src/util.js");
-/* harmony import */ var _sticker_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./sticker-index */ "./src/sticker-index.js");
+/* harmony import */ var _color_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./color-util */ "./src/color-util.js");
+/* harmony import */ var _sticker_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./sticker-index */ "./src/sticker-index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -27251,6 +27385,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 
 
 
@@ -27374,12 +27509,16 @@ function () {
       var libraryIndexesById = {};
       this.webContents.on('loadStickerIndex', function (callbackName, progressCallbackName) {
         // trigger the creation of the sticker index
-        Object(_sticker_index__WEBPACK_IMPORTED_MODULE_5__["makeStickerIndexForLibraries"])({
+        Object(_sticker_index__WEBPACK_IMPORTED_MODULE_6__["makeStickerIndexForLibraries"])({
           onProgress: function onProgress(progress) {
             return _this2.runWebCallback(progressCallbackName, progress);
           }
         }).then(function (stickerIndex) {
           stickerIndex.libraries.forEach(function (libraryIndex) {
+            if (libraryIndex.colors) {
+              libraryIndex.colorsAdded = _color_util__WEBPACK_IMPORTED_MODULE_5__["areAllLibraryColorsInDocument"](libraryIndex.colors, _this2.context.document);
+            }
+
             libraryIndexesById[libraryIndex.id] = libraryIndex;
           });
 
@@ -27422,6 +27561,17 @@ function () {
 
         if (UI_MODE == 'cover') {
           _this2.browserWindow.close();
+        }
+      }); // add a handler for a call from web content's javascript
+
+      this.webContents.on('addLibraryColors', function (libraryId) {
+        try {
+          var library = libraryIndexesById[libraryId];
+          _color_util__WEBPACK_IMPORTED_MODULE_5__["addLibraryColorsToDocument"](library.colors, _this2.context.document);
+        } catch (e) {
+          // TODO: do this everywhere somehow
+          log(e.message);
+          log(e);
         }
       });
     }
@@ -27736,6 +27886,7 @@ function replaceSymbolsInLayerWithLibrary(parentDocument, parentLayer, library) 
 
       if (foreignSymbol) {
         symbolInstance.changeInstanceToSymbol(foreignSymbol.symbolMaster());
+        replaceSymbolsInLayerWithLibrary(parentDocument, foreignSymbol.symbolMaster(), library);
       }
 
       var localToForeignSymbolIdMap = {};
@@ -27880,6 +28031,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } _setPrototypeOf(subClass.prototype, superClass && superClass.prototype); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
@@ -27888,11 +28043,7 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
 /*
  * Copyright 2018 Google Inc.
@@ -27913,8 +28064,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 var ProgressReporter =
 /*#__PURE__*/
 function (_EventEmitter) {
-  _inherits(ProgressReporter, _EventEmitter);
-
   function ProgressReporter() {
     var _this;
 
@@ -27991,6 +28140,8 @@ function (_EventEmitter) {
       }, 0) + this.counter) / (this.total + this.childReporters.length);
     }
   }]);
+
+  _inherits(ProgressReporter, _EventEmitter);
 
   return ProgressReporter;
 }(_skpm_events__WEBPACK_IMPORTED_MODULE_0___default.a);
@@ -28301,6 +28452,7 @@ function getDocumentName(document) {
   }
 }
 that['onShowStickers'] = __skpm_run.bind(this, 'onShowStickers');
-that['onRun'] = __skpm_run.bind(this, 'default')
+that['onRun'] = __skpm_run.bind(this, 'default');
+that['onClearCache'] = __skpm_run.bind(this, 'onClearCache')
 
 //# sourceMappingURL=commands.js.map

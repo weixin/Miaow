@@ -25,7 +25,6 @@
 @import './components/button/button';
 
 $headerHeight: 48px;
-$libraryHeaderHeight: 40px;
 
 [v-cloak] {
   display: none !important;
@@ -167,6 +166,92 @@ body {
   padding-top: $headerHeight;
 }
 
+.sticker-library-header {
+  body.has-active-search & {
+    display: none;
+  }
+
+  padding: 16px var(--side-margin);
+  background-color: rgba(#000, .04);
+  border-bottom: 1px solid $colorThinBorder;
+  display: flex;
+  align-items: center;
+
+  &__title-lockup {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  &__icon {
+    // box-shadow: 0 0 0 1px rgba(#000, .12) inset;
+    background-size: cover;
+    border-radius: 4px;
+    width: 48px;
+    height: 48px;
+    margin-right: 8px;
+  }
+
+  &__title {
+    @include type-headline-1;
+    font-weight: 500;
+    color: $colorBlackSecondary;
+  }
+
+  &__subtitle {
+    @include type-body-3;
+    color: $colorBlackSecondary;
+  }
+
+  &__colors-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: -8px 0;
+  }
+
+  &__colors-added {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    @include type-body-3;
+
+    &::before {
+      @include material-icons;
+      content: 'check';
+      font-size: 16px;
+      margin-right: 4px;
+    }
+  }
+
+  &__add-colors {
+    @include button(small, flat);
+    --color: #{$colorBlackPrimary};
+  }
+
+  &__colors-preview {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-left: 4px;
+    box-shadow: 0 0 0 1px rgba(#000, .12) inset;
+  }
+
+  &__color-more {
+    @include type-body-3;
+    color: $colorBlackSecondary;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    width: auto;
+  }
+}
+
 .sticker-root-section {
   position: relative;
   $scrollFadeSize: 60px;
@@ -175,7 +260,7 @@ body {
   align-items: stretch;
   flex-shrink: 0;
   padding: var(--root-section-vert-padding) 0 0 0;
-  box-shadow: 0 1px 0 $colorThinBorder;
+  border-bottom: 1px solid $colorThinBorder;
 
   @include narrow {
     flex-direction: column;

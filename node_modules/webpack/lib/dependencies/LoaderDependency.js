@@ -6,9 +6,6 @@
 const ModuleDependency = require("./ModuleDependency");
 
 class LoaderDependency extends ModuleDependency {
-	/**
-	 * @param {string} request request string
-	 */
 	constructor(request) {
 		super(request);
 	}
