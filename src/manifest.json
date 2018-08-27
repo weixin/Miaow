@@ -352,7 +352,6 @@
       "identifier" : "codeSetting",
       "script" : "codeSetting.js",
       "shortcut": "",
-      "handler" : "onRun",
       "istool":"",
       "noshortcut":"true",
       "handlers": {
