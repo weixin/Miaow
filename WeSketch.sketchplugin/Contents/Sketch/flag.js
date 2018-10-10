@@ -104,8 +104,8 @@ function getFlag(context, refrush) {
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(0, 48 * scale), NSMakePoint(15.375 * scale, 36 * scale), NSMakePoint(0, 48 * scale));
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(22 * scale, 60 * scale), NSMakePoint(0, 48 * scale), NSMakePoint(15.375 * scale, 60 * scale));
 		path.closePath();
-		path = MSPath.pathWithBezierPath(path);
-		var flag = MSShapeGroup.shapeWithBezierPath(path);
+		// path = MSPath.pathWithBezierPath(path);
+		var flag = MSShapePathLayer.layerWithPath(MSPath.pathWithBezierPath(path));
 		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 0.3));
 		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 1));
 		flag.absoluteRect().setX(linexl);
@@ -130,7 +130,7 @@ function getFlag(context, refrush) {
 
 		doc.currentPage().addLayers([flag, textLayer]);
 		var connectionLayers = MSLayerArray.arrayWithLayers([flag, textLayer]);
-		connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+		connectionsGroup = MSLayerGroup.groupWithLayers(connectionLayers);
 		connectionsGroup.setName(dom.objectID());
 		return connectionsGroup;
 	}
@@ -155,8 +155,8 @@ function getFlag(context, refrush) {
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(34 * scale, 12 * scale), NSMakePoint(18.625 * scale, 0 * scale), NSMakePoint(34 * scale, 12 * scale));
 		path.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(12 * scale, 24 * scale), NSMakePoint(34 * scale, 12 * scale), NSMakePoint(18.625 * scale, 24 * scale));
 		path.closePath();
-		path = MSPath.pathWithBezierPath(path);
-		var flag = MSShapeGroup.shapeWithBezierPath(path);
+		// path = MSPath.pathWithBezierPath(path);
+		var flag = MSShapePathLayer.layerWithPath(MSPath.pathWithBezierPath(path));
 		flag.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 0.3));
 		flag.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithRed_green_blue_alpha(colorLineR, colorLineG, colorLineB, 1));
 		flag.absoluteRect().setX(linexr);
@@ -181,7 +181,7 @@ function getFlag(context, refrush) {
 
 		doc.currentPage().addLayers([flag, textLayer]);
 		var connectionLayers = MSLayerArray.arrayWithLayers([flag, textLayer]);
-		connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+		connectionsGroup = MSLayerGroup.groupWithLayers(connectionLayers);
 		connectionsGroup.setName(dom.objectID());
 		return connectionsGroup;
 	}
@@ -309,7 +309,7 @@ function getFlag(context, refrush) {
 	}
 
 	var connectionLayers = MSLayerArray.arrayWithLayers(flags);
-	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
+	connectionsGroup = MSLayerGroup.groupWithLayers(connectionLayers);
 	connectionsGroup.setName("___flags");
 	connectionsGroup.setIsLocked(1);
 	context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isflagContainer", connectionsGroup, kPluginDomainFlag);

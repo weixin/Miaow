@@ -933,199 +933,199 @@ function getLink(context, refursh) {
 			lineCollections.push(linepoint[i]);
 		}
 
-	var comparedLineCollectionCount = lineCollections.length - (lineCount - 1);
+		var comparedLineCollectionCount = lineCollections.length - (lineCount - 1);
 
-	// 解决线重合问题
-	for (var i = 0; i < lineCount; i++) {
-		for (var j = 0; j < comparedLineCollectionCount; j++) {
-			if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b') &&
-				(Math.abs(linepoint[i].position - lineCollections[j].position) < 3) && isCoincidenis({a:linepoint[i].x,b:linepoint[i+1].x},{a:lineCollections[j].x,b:lineCollections[j+1].x})) {
-				// 不是起始线重合，位于起始点左侧 || 起始线重合: 位于重合线下侧，减去 coincideOffset
-				if ((i != 0 && linepoint[0].x < linepoint[i].x) ||
-					(i == 0 && (linepoint[0].y < lineCollections[j].y))) {
-					linepoint[i].x -= coincideOffset;
-					linepoint[i + 1].x -= coincideOffset;
-				} else {
-					linepoint[i].x += coincideOffset;
-					linepoint[i + 1].x += coincideOffset;
-				}
-			} else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r') &&
-				(Math.abs(linepoint[i].position - lineCollections[j].position) < 3) && isCoincidenis({a:linepoint[i].y,b:linepoint[i+1].y},{a:lineCollections[j].y,b:lineCollections[j+1].y})) {
-				// 不是起始线重合，位于起始点上侧 || 起始线重合: 位于重合线左侧，减去 coincideOffset
-				if ((i != 0 && linepoint[0].y < linepoint[i].y) ||
-					(i == 0 && linepoint[0].x < lineCollections[j].x)) {
-					linepoint[i].y -= coincideOffset;
-					linepoint[i + 1].y -= coincideOffset;
-				} else {
-					linepoint[i].y += coincideOffset;
-					linepoint[i + 1].y += coincideOffset;
-				}
-			} else {}
+		// 解决线重合问题
+		for (var i = 0; i < lineCount; i++) {
+			for (var j = 0; j < comparedLineCollectionCount; j++) {
+				if ((linepoint[i].direction == 't' || linepoint[i].direction == 'b') &&
+					(Math.abs(linepoint[i].position - lineCollections[j].position) < 3) && isCoincidenis({a:linepoint[i].x,b:linepoint[i+1].x},{a:lineCollections[j].x,b:lineCollections[j+1].x})) {
+					// 不是起始线重合，位于起始点左侧 || 起始线重合: 位于重合线下侧，减去 coincideOffset
+					if ((i != 0 && linepoint[0].x < linepoint[i].x) ||
+						(i == 0 && (linepoint[0].y < lineCollections[j].y))) {
+						linepoint[i].x -= coincideOffset;
+						linepoint[i + 1].x -= coincideOffset;
+					} else {
+						linepoint[i].x += coincideOffset;
+						linepoint[i + 1].x += coincideOffset;
+					}
+				} else if ((linepoint[i].direction == 'l' || linepoint[i].direction == 'r') &&
+					(Math.abs(linepoint[i].position - lineCollections[j].position) < 3) && isCoincidenis({a:linepoint[i].y,b:linepoint[i+1].y},{a:lineCollections[j].y,b:lineCollections[j+1].y})) {
+					// 不是起始线重合，位于起始点上侧 || 起始线重合: 位于重合线左侧，减去 coincideOffset
+					if ((i != 0 && linepoint[0].y < linepoint[i].y) ||
+						(i == 0 && linepoint[0].x < lineCollections[j].x)) {
+						linepoint[i].y -= coincideOffset;
+						linepoint[i + 1].y -= coincideOffset;
+					} else {
+						linepoint[i].y += coincideOffset;
+						linepoint[i + 1].y += coincideOffset;
+					}
+				} else {}
+			}
 		}
-	}
 
-	for (var i = 0; i < lineCount - 1; i++) {
-		if (i === 0) { // 第一个点不做修改
-			linePath.moveToPoint(NSMakePoint(linepoint[i].x, linepoint[i].y));
-		}
-		if (i === lineCount - 2) { // 倒数第二个点绘制直线
-			linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y));
-		} else {
-			// 先绘制到下一个点的直线，然后绘制到下下个点的曲线
-			// 0.13 = 1 - cos(30)
-			// 0.5 = 1- sin(30)
-			if (linepoint[i].direction === 't') { // 上
-				linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y + offset));
-				// 绘制过渡曲线
-				if (linepoint[i + 1].direction === 'l') { // 下一条线的方向 左
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x - offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y + offset * 0.5), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y + offset * 0.13));
+		for (var i = 0; i < lineCount - 1; i++) {
+			if (i === 0) { // 第一个点不做修改
+				linePath.moveToPoint(NSMakePoint(linepoint[i].x, linepoint[i].y));
+			}
+			if (i === lineCount - 2) { // 倒数第二个点绘制直线
+				linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y));
+			} else {
+				// 先绘制到下一个点的直线，然后绘制到下下个点的曲线
+				// 0.13 = 1 - cos(30)
+				// 0.5 = 1- sin(30)
+				if (linepoint[i].direction === 't') { // 上
+					linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y + offset));
+					// 绘制过渡曲线
+					if (linepoint[i + 1].direction === 'l') { // 下一条线的方向 左
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x - offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y + offset * 0.5), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y + offset * 0.13));
+					} else { // 右
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x + offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y + offset * 0.5), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y + offset * 0.13));
+					}
+				} else if (linepoint[i].direction === 'b') { // 下
+					linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y - offset));
+					// 绘制过渡曲线
+					if (linepoint[i + 1].direction === 'l') { // 下一条线的方向 左
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x - offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y - offset * 0.5), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y - offset * 0.13));
+					} else { // 右
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x + offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y - offset * 0.5), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y - offset * 0.13));
+					}
+				} else if (linepoint[i].direction === 'l') { // 左
+					linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x + offset, linepoint[i + 1].y));
+					// 绘制过渡曲线
+					if (linepoint[i + 1].direction === 't') { // 下一条线的方向 上
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y - offset), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y - offset * 0.13), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y - offset * 0.5));
+					} else { // 下
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y + offset), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y + offset * 0.13), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y + offset * 0.5));
+					}
 				} else { // 右
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x + offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y + offset * 0.5), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y + offset * 0.13));
-				}
-			} else if (linepoint[i].direction === 'b') { // 下
-				linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y - offset));
-				// 绘制过渡曲线
-				if (linepoint[i + 1].direction === 'l') { // 下一条线的方向 左
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x - offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y - offset * 0.5), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y - offset * 0.13));
-				} else { // 右
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x + offset, linepoint[i + 1].y), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y - offset * 0.5), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y - offset * 0.13));
-				}
-			} else if (linepoint[i].direction === 'l') { // 左
-				linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x + offset, linepoint[i + 1].y));
-				// 绘制过渡曲线
-				if (linepoint[i + 1].direction === 't') { // 下一条线的方向 上
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y - offset), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y - offset * 0.13), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y - offset * 0.5));
-				} else { // 下
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y + offset), NSMakePoint(linepoint[i + 1].x + offset * 0.5, linepoint[i + 1].y + offset * 0.13), NSMakePoint(linepoint[i + 1].x + offset * 0.13, linepoint[i + 1].y + offset * 0.5));
-				}
-			} else { // 右
-				linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x - offset, linepoint[i + 1].y));
-				// 绘制过渡曲线
-				if (linepoint[i + 1].direction === 't') { // 下一条线的方向 上
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y - offset), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y - offset * 0.13), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y - offset * 0.5));
-				} else { // 下
-					linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y + offset), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y + offset * 0.13), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y + offset * 0.5));
+					linePath.lineToPoint(NSMakePoint(linepoint[i + 1].x - offset, linepoint[i + 1].y));
+					// 绘制过渡曲线
+					if (linepoint[i + 1].direction === 't') { // 下一条线的方向 上
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y - offset), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y - offset * 0.13), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y - offset * 0.5));
+					} else { // 下
+						linePath.curveToPoint_controlPoint1_controlPoint2(NSMakePoint(linepoint[i + 1].x, linepoint[i + 1].y + offset), NSMakePoint(linepoint[i + 1].x - offset * 0.5, linepoint[i + 1].y + offset * 0.13), NSMakePoint(linepoint[i + 1].x - offset * 0.13, linepoint[i + 1].y + offset * 0.5));
+					}
 				}
 			}
 		}
-	}
-	linePath = MSPath.pathWithBezierPath(linePath);
-	var lineSh = MSShapeGroup.shapeWithBezierPath(linePath);
-	var hitAreaBorder = lineSh.style().addStylePartOfType(1);
-	hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
-	hitAreaBorder.setThickness(lineThicknessLink);
-	hitAreaBorder.setPosition(0);
-	lineSh.setName('Line');
+		var lineSh = MSShapePathLayer.layerWithPath(MSPath.pathWithBezierPath(linePath));
+		var hitAreaBorder = lineSh.style().addStylePartOfType(1);
+		hitAreaBorder.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
+		hitAreaBorder.setThickness(lineThicknessLink);
+		hitAreaBorder.setPosition(0);
+		lineSh.setName('Line');
 
-	// 绘制起点圆圈
-	var drawRound = function (x, y) {
-		var linkRect = NSInsetRect(NSMakeRect(x, y, 0, 0), -5, -5);
-		var path = NSBezierPath.bezierPathWithOvalInRect(linkRect);
-		path = MSPath.pathWithBezierPath(path);
-		var hitAreaLayer = MSShapeGroup.shapeWithBezierPath(path);
-		hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 76.5).newMutableCounterpart());
-		hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
-		hitAreaLayer.setName('Point');
-		return hitAreaLayer;
-	}
+		// 绘制起点圆圈
+		var drawRound = function (x, y) {
+			var linkRect = NSInsetRect(NSMakeRect(x, y, 0, 0), -5, -5);
+			// path = MSPath.pathWithBezierPath(path);
 
-	// 绘制终点箭头
-	var drawArrow = function (x, y, z) {
-		// 绘制箭头
-		var arrowDirection = z; // 1. 箭头方向
-		var arrowOffset = 20 * (lineThicknessLink / 6); // 2. 箭头长度
-		var arrowPath = NSBezierPath.bezierPath();
-
-		arrowPath.moveToPoint(NSMakePoint(x, y));
-		if (arrowDirection == 't') {
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
-		} else if (arrowDirection == 'b') {
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
-		} else if (arrowDirection == 'l') {
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
-		} else {
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
-			arrowPath.lineToPoint(NSMakePoint(x, y));
-			arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
+			var hitAreaLayer = MSOvalShape.alloc().initWithFrame(linkRect);
+			hitAreaLayer.style().addStylePartOfType(0).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 76.5).newMutableCounterpart());
+			hitAreaLayer.style().addStylePartOfType(1).setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
+			hitAreaLayer.setName('Point');
+			return hitAreaLayer;
 		}
-		arrowPath = MSPath.pathWithBezierPath(arrowPath);
-		var arrow = MSShapeGroup.shapeWithBezierPath(arrowPath);
-		var arrowStyle = arrow.style().addStylePartOfType(1);
-		arrowStyle.setThickness(lineThicknessLink);
-		arrowStyle.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
-		arrow.setName('Arrow');
-		return arrow;
-	}
 
-	var startRound = drawRound(linepoint[0].x, linepoint[0].y);
+		// 绘制终点箭头
+		var drawArrow = function (x, y, z) {
+			// 绘制箭头
+			var arrowDirection = z; // 1. 箭头方向
+			var arrowOffset = 20 * (lineThicknessLink / 6); // 2. 箭头长度
+			var arrowPath = NSBezierPath.bezierPath();
 
-	var endArrow = drawArrow(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y, linepoint[lineCount - 2].direction);
+			arrowPath.moveToPoint(NSMakePoint(x, y));
+			if (arrowDirection == 't') {
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
+			} else if (arrowDirection == 'b') {
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
+			} else if (arrowDirection == 'l') {
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y - arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x + arrowOffset, y + arrowOffset));
+			} else {
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y - arrowOffset));
+				arrowPath.lineToPoint(NSMakePoint(x, y));
+				arrowPath.lineToPoint(NSMakePoint(x - arrowOffset, y + arrowOffset));
+			}
+			// arrowPath = MSPath.pathWithBezierPath(arrowPath);
 
-	return [lineSh, startRound, endArrow];
-}
-
-var drawConnections = function (connection, doc) {
-	var draw = drawPPP(connection.linkRect, connection.artboard, doc);
-	doc.addLayers(draw);
-
-	var connectionLayersDom = MSLayerArray.arrayWithLayers(draw);
-	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayersDom);
-	connectionsGroup.setName(connection.linkRect.objectID());
-	return connectionsGroup;
-}
-
-var redrawConnections = function (context) {
-	var doc = context.document;
-	var selectionLayer = context.selection;
-
-	//var selectedLayers = doc.findSelectedLayers();
-	var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
-	linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
-	loop = linkLayers.objectEnumerator(),
-	connections = [],
-	linkLayer, destinationArtboardID, destinationArtboard, isCondition, linkRect;
-
-	var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
-	if (connectionsGroup) {
-		connectionsGroup.removeFromParent();
-	}
-
-	while (linkLayer = loop.nextObject()) {
-		destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
-		var Message = destinationArtboardID.split('____');
-		destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
-
-		if (destinationArtboard && Message[0] == linkLayer.objectID()) {
-			sanitizeArtboard(destinationArtboard, context);
-			connections.push(drawConnections({
-				linkRect: linkLayer,
-				artboard: destinationArtboard
-			}, doc.currentPage()));
+			var arrow = MSShapePathLayer.layerWithPath(MSPath.pathWithBezierPath(arrowPath));
+			var arrowStyle = arrow.style().addStylePartOfType(1);
+			arrowStyle.setThickness(lineThicknessLink);
+			arrowStyle.setColor(MSImmutableColor.colorWithIntegerRed_green_blue_alpha(colorLineLinkR, colorLineLinkG, colorLineLinkB, 255).newMutableCounterpart());
+			arrow.setName('Arrow');
+			return arrow;
 		}
+
+		var startRound = drawRound(linepoint[0].x, linepoint[0].y);
+
+		var endArrow = drawArrow(linepoint[lineCount - 1].x, linepoint[lineCount - 1].y, linepoint[lineCount - 2].direction);
+		// 
+		return [lineSh,  startRound , endArrow];
 	}
 
-	var connectionLayers = MSLayerArray.arrayWithLayers(connections);
-	connectionsGroup = MSLayerGroup.groupFromLayers(connectionLayers);
-	connectionsGroup.setName("Connections");
-	connectionsGroup.setIsLocked(1);
-	context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, kPluginDomain);
+	var drawConnections = function (connection, doc) {
+		var draw = drawPPP(connection.linkRect, connection.artboard, doc);
+		doc.addLayers(draw);
 
-	for (var i = 0; i < context.selection.length; i++) {
-		context.selection[i].select_byExpandingSelection(false, false);
+		var connectionLayersDom = MSLayerArray.arrayWithLayers(draw);
+		connectionsGroup = MSLayerGroup.groupWithLayers(connectionLayersDom);
+		connectionsGroup.setName(connection.linkRect.objectID());
+		return connectionsGroup;
 	}
 
-	for (var i = 0; i < selectionLayer.count(); i++) {
-		selectionLayer[i].select_byExpandingSelection(true, true);
-	}
+	var redrawConnections = function (context) {
+		var doc = context.document;
+		var selectionLayer = context.selection;
 
-	return connectionsGroup;
-}
+		//var selectedLayers = doc.findSelectedLayers();
+		var linkLayersPredicate = NSPredicate.predicateWithFormat("userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).destinationArtboardID != nil", kPluginDomain),
+		linkLayers = doc.currentPage().children().filteredArrayUsingPredicate(linkLayersPredicate),
+		loop = linkLayers.objectEnumerator(),
+		connections = [],
+		linkLayer, destinationArtboardID, destinationArtboard, isCondition, linkRect;
+
+		var connectionsGroup = getConnectionsGroupInPage(doc.currentPage());
+		if (connectionsGroup) {
+			connectionsGroup.removeFromParent();
+		}
+
+		while (linkLayer = loop.nextObject()) {
+			destinationArtboardID = context.command.valueForKey_onLayer_forPluginIdentifier("destinationArtboardID", linkLayer, kPluginDomain);
+			var Message = destinationArtboardID.split('____');
+			destinationArtboard = doc.currentPage().children().filteredArrayUsingPredicate(NSPredicate.predicateWithFormat("(objectID == %@) || (userInfo != nil && function(userInfo, 'valueForKeyPath:', %@).artboardID == %@)", Message[1], kPluginDomain, Message[1])).firstObject();
+
+			if (destinationArtboard && Message[0] == linkLayer.objectID()) {
+				sanitizeArtboard(destinationArtboard, context);
+				connections.push(drawConnections({
+					linkRect: linkLayer,
+					artboard: destinationArtboard
+				}, doc.currentPage()));
+			}
+		}
+
+		var connectionLayers = MSLayerArray.arrayWithLayers(connections);
+		connectionsGroup = MSLayerGroup.groupWithLayers(connectionLayers);
+		connectionsGroup.setName("Connections");
+		connectionsGroup.setIsLocked(1);
+		context.command.setValue_forKey_onLayer_forPluginIdentifier(true, "isConnectionsContainer", connectionsGroup, kPluginDomain);
+
+		for (var i = 0; i < context.selection.length; i++) {
+			context.selection[i].select_byExpandingSelection(false, false);
+		}
+
+		for (var i = 0; i < selectionLayer.count(); i++) {
+			selectionLayer[i].select_byExpandingSelection(true, true);
+		}
+
+		return connectionsGroup;
+	}
 
 var selection = context.selection;
 var destArtboard, linkLayer;
