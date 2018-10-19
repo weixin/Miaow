@@ -244,6 +244,14 @@
       "handler" : "onRun"
     },
     {
+      "name" : "Text Picker",
+      "identifier" : "codeText",
+      "script" : "copyText.js",
+      "shortcut": "command control c",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "Copy CSS Style",
       "identifier" : "codeStyle",
       "script" : "codeStyle.js",
@@ -402,6 +410,7 @@
     "fontCharacters",
     "-",
     "codeColor",
+    "codeText",
     "exportSlice",
     "codeStyle",
     "setSymbolCode",

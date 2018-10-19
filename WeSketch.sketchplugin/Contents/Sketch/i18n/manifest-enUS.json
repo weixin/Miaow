@@ -1,7 +1,7 @@
 {
   "name": "Miaow",
   "author": "Tencent WeChat",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "identifier": "cn.wechat",
   "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon": "minicon.png",
@@ -244,6 +244,14 @@
       "handler" : "onRun"
     },
     {
+      "name" : "Text Picker",
+      "identifier" : "codeText",
+      "script" : "copyText.js",
+      "shortcut": "command shift t",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "Copy CSS Style",
       "identifier" : "codeStyle",
       "script" : "codeStyle.js",
@@ -402,6 +410,7 @@
     "fontCharacters",
     "-",
     "codeColor",
+    "codeText",
     "exportSlice",
     "codeStyle",
     "setSymbolCode",

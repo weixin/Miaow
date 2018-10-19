@@ -235,6 +235,14 @@
       "handler" : "onRun"
     },
     {
+      "name" : "获取文字",
+      "identifier" : "codeText",
+      "script" : "copyText.js",
+      "shortcut": "command control c",
+      "istool":"true",
+      "handler" : "onRun"
+    },
+    {
       "name" : "快捷取色",
       "identifier" : "codeColor",
       "script" : "codeColor.js",
@@ -385,6 +393,7 @@
     "fontCharacters",
     "-",
     "codeColor",
+    "codeText",
     "exportSlice",
     "codeStyle",
     "codeSetting",
