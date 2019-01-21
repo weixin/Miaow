@@ -1,61 +1,23 @@
 {
-  "name": "MiaoW",
-  "description": "A Sketch plugin that lets you browse and quickly drag+drop stickers (specially tagged layers) in your Sketch Libraries.",
-  "version": "0.2.3",
+  "name": "hello_world",
+  "description": "Pretty much the smallest example Sketch Plugin you could have.",
+  "author": "Mathieu Dutour <mathieu@bohemiancoding.com>",
+  "version": "2.0.0",
   "engines": {
-    "sketch": ">=49.0"
+    "sketch": ">=3.0"
   },
   "skpm": {
-    "name": "MiaoW",
+    "name": "Hello World",
     "manifest": "src/manifest.json",
-    "main": "MiaoW.sketchplugin",
-    "assets": [
-      "assets/**/*",
-      "!assets/**/*.js",
-      "web-dist/**/*",
-      "!web-dist/plugin-call.js"
-    ]
+    "main": "plugin.sketchplugin"
   },
   "scripts": {
-    "build": "./skpm-build-with-child.js web",
-    "watch": "./skpm-build-with-child.js web --watch",
+    "build": "skpm-build",
+    "watch": "skpm-build --watch",
+    "start": "skpm-build --watch --run",
     "postinstall": "npm run build && skpm-link"
   },
-  "resources": [
-    "assets/**/*.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/romannurik/Sketch-Stickers.git"
-  },
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/romannurik/Sketch-Stickers/issues"
-  },
-  "homepage": "https://github.com/romannurik/Sketch-Stickers#readme",
-  "author": "Roman Nurik <roman@nurik.net>",
-  "dependencies": {
-    "@skpm/events": "^0.1.1",
-    "@skpm/fs": "^0.1.2",
-    "@skpm/path": "^0.1.0",
-    "babel-polyfill": "^6.26.0",
-    "css-loader": "^1.0.0",
-    "event-emitter": "^0.3.5",
-    "express": "^4.16.3",
-    "extract-loader": "^2.0.1",
-    "file-loader": "^1.1.11",
-    "html-loader": "^0.5.5",
-    "image-webpack-loader": "^4.3.1",
-    "jquery": "^3.3.1",
-    "js-yaml": "^3.11.0",
-    "mocha-js-delegate": "^0.1.1",
-    "multi": "^0.1.3",
-    "node-sass-asset-functions": "^0.1.0",
-    "sass-loader": "^7.1.0",
-    "sketch-module-web-view": "git://github.com/romannurik/sketch-module-wk-web-view.git",
-    "vue": "^2.5.17"
-  },
   "devDependencies": {
-    "@skpm/builder": "^0.5.4"
+    "@skpm/builder": "^0.4.0"
   }
 }

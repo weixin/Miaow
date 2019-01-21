@@ -1,55 +1,54 @@
-<img src="https://wximg.gtimg.com/tmt/sketch/miaow.png" width=400 height=170>
+# Hello World
 
-[![Version Number](https://img.shields.io/github/release/weixin/WeSketch.svg?style=flat)](https://github.com/weixin/WeSketch/ "Version Number")
+This is an extremely simple plugin example, which illustrates how to add a menu command to the Plugins menu and execute some code when it is selected.
 
-> A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing made by Tencent WeChat Team, include:
+_It was created using `skpm`. For a detailed explanation on how things work, checkout the [skpm Readme](https://github.com/skpm/skpm/blob/master/README.md)._
 
-* UI Kit & Color Set Sync for design team
-* Icon Manager, Draw Links, Mark Index, Advanced Font & Color replacement
-* Advanced image export and Copy CSS for web developer
+## Usage
 
-[中文(Chinese) >](https://github.com/weixin/WeSketch/blob/master/README-zhCN.md)
+Download the example or [clone the repo](https://github.com/BohemianCoding/SketchAPI):
 
-## Install from download
+```bash
+curl https://codeload.github.com/BohemianCoding/SketchAPI/tar.gz/develop | tar -xz --strip=2 SketchAPI-develop/examples/hello-world
+cd hello-world
+```
 
-1. [Download the Zip file](https://github.com/weixin/WeSketch/archive/master.zip) and unzip。 *(Support Sketch Version 44+)*  
-2. Open `wesketch.sketchplugin` to install
+Install the dependencies
 
-## Install with Sketch Runner or Sketchpacks
+```bash
+npm install
+```
 
-<a href="http://www.sketchrunner.com"><img src="https://user-images.githubusercontent.com/1049575/27900476-1a3ea8a2-6261-11e7-8358-ab6e7f168886.jpg" width="160px"></a> <a href="https://sketchpacks.com/weixin/WeSketch/install"><img src="http://sketchpacks-com.s3.amazonaws.com/assets/badges/sketchpacks-badge-install.png" width="160px"></a>
+Once the installation is done, you can run some commands inside the project folder:
 
-## Screenshots
+```bash
+npm run build
+```
 
-#### Menu Bar
+To watch for changes:
 
-![Screenshot1](https://wximg.gtimg.com/tmt/sketch/menu.png)
+```bash
+npm run watch
+```
 
-#### Tool Bar
+Additionally, if you wish to run the plugin every time it is built:
 
-![Screenshot2](https://wximg.gtimg.com/tmt/sketch/toolbar.png)
+```bash
+npm run start
+```
 
-## Features & Instruction
+## Debugging
 
-*Note: English wiki comming soon.*
+To view the output of your `console.log`, you have a few different options:
 
-1. [UI Kit Manager](https://github.com/weixin/WeSketch/wiki/%E2%92%88-UIkit-Sync)
-2. [Color Set](https://github.com/weixin/WeSketch/wiki/%E2%92%89-Color-Sync)
-3. [Advanced Replace](https://github.com/weixin/WeSketch/wiki/%E2%92%8A-Advanced-Replace)
-4. [Draw Link](https://github.com/weixin/WeSketch/wiki/%E2%92%8B-Draw-Link)
-5. [Mark Index](https://github.com/weixin/WeSketch/wiki/%E2%92%8C-Make-Mark)
-6. [Advanced Export](https://github.com/weixin/WeSketch/wiki/%E2%92%8D-Advanced-Export)
-7. [Copy CSS](https://github.com/weixin/WeSketch/wiki/%E2%92%8E-Copy-CSS)
-8. [Quick Color Picker](https://github.com/weixin/WeSketch/wiki/%E2%92%8F-Quick-Copy-Color)
-9. [Icon Manager](https://github.com/weixin/WeSketch/wiki/%E2%92%90-Icon-Manager)
-10. [Shortcuts](https://github.com/weixin/WeSketch/wiki/%E2%92%91-Shortcuts)
+* Use the [`sketch-dev-tools`](https://github.com/skpm/sketch-dev-tools)
+* Open `Console.app` and look for the sketch logs
+* Look at the `~/Library/Logs/com.bohemiancoding.sketch3/Plugin Output.log` file
 
-## License
+Skpm provides a convenient way to do the latter:
 
-This is an open source project under [MIT License](http://opensource.org/licenses/MIT)，you can `fork` and rebuild for your own team.  
+```bash
+skpm log
+```
 
-## Contribution
-
-Help us improve multi-language support. [Learn More](https://github.com/weixin/WeSketch/wiki/%E2%92%93-Contribution--to-lanauage)
- 
-If you got `Feedbacks` or `Features Request`，please make [Issues](https://github.com/weixin/WeSketch/issues) or send [Pull Request](https://github.com/weixin/WeSketch/pulls), thanks :)
+The `-f` option causes `skpm log` to not stop when the end of logs is reached, but rather to wait for additional data to be appended to the input
