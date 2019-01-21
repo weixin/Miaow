@@ -1,6 +1,6 @@
 @import "common.js";
-var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
-var colorUrlKey = "com.sketchplugins.wechat.colorurl";
+var uiKitUrlKey = "com.sketchplugins.wechat.newuikiturl";
+var colorUrlKey = "com.sketchplugins.wechat.newcolorurl";
 
 var onRun = function (context) {
 

@@ -5,8 +5,8 @@
 @import 'fontCharacters.js';
 @import 'textReplace.js';
 @import 'colorReplace.js';
-@import 'iconQ.js';
-@import 'syncUIkit.js';
+// @import 'iconQ.js';
+@import 'newSyncUikit.js';
 @import 'syncColor.js';
 @import 'exportSlice.js';
 @import 'codeStyle.js';
@@ -16,6 +16,7 @@
 
 
 function toolbar(context, auto) {
+    var self = this;
     var i18 = _(context).toolbar;
     var i18nKey = "com.sketchplugins.wechat.i18n";
     var lang = NSUserDefaults.standardUserDefaults().objectForKey(i18nKey);
@@ -78,7 +79,7 @@ function toolbar(context, auto) {
         Toolbar.setTitlebarAppearsTransparent(true);
 
 
-        var toolbarwidth = (obj.length * 56) + 65;
+        var toolbarwidth = ((obj.length - 1) * 56) + 65;
 
         var locationx = 0;
         locationx = NSScreen.mainScreen().frame().size.height - 162;
@@ -161,21 +162,21 @@ function toolbar(context, auto) {
             xlocation = xlocation + 56;
         }
 
-        if (obj.indexOf('iconQ') > -1) {
-            var iconButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "icon" + prefix,
-                function (sender) {
-                    var nowcontext = uploadContext(context);
-                    iconQ(nowcontext);
-                });
-            contentView.addSubview(iconButton);
-            xlocation = xlocation + 56;
-        }
+        // if (obj.indexOf('iconQ') > -1) {
+        //     var iconButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "icon" + prefix,
+        //         function (sender) {
+        //             var nowcontext = uploadContext(context);
+        //             iconQ(nowcontext);
+        //         });
+        //     contentView.addSubview(iconButton);
+        //     xlocation = xlocation + 56;
+        // }
 
         if (obj.indexOf('syncuikit') > -1) {
             var syncuiButton = addButton(NSMakeRect(xlocation + 3, 19, 46, 46), "syncui" + prefix,
                 function (sender) {
                     var nowcontext = uploadContext(context);
-                    syncUIkit(nowcontext);
+                    newSyncUikit(nowcontext);
                 });
             contentView.addSubview(syncuiButton);
             xlocation = xlocation + 56;

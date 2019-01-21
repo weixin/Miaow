@@ -1,7 +1,7 @@
 {
   "name": "Miaow",
   "author": "Tencent WeChat",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "identifier": "cn.wechat",
   "description": "A set of plugins for Sketch include drawing links & marks, UI Kit & Color sync, font & text replacing",
   "icon": "minicon.png",
@@ -132,7 +132,6 @@
       "script" : "iconQ.js",
       "icon": "../Resources/icons/icon.png",
       "shortcut": "",
-      "istool":"true",
       "handler" : "iconQRun"
     },
     {
@@ -183,7 +182,7 @@
     {
       "name" : "Sync UI Kit",
       "identifier" : "syncuikit",
-      "script" : "syncUIkit.js",
+      "script" : "newSyncUIkit.js",
       "icon": "../Resources/icons/syncui.png",
       "shortcut": "",
       "istool":"true",

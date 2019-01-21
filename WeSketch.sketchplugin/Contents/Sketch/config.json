@@ -5,10 +5,8 @@
     {"key":"zhCN","name":"简体中文(zhCN)"},
 	  {"key":"zhTW","name":"繁體中文(zhTW)"}
   ],
-  "UIKIT": [{"title":"WeUI","url":"http://tmtdemo.qq.com/sketch/weui.sketch"},
-  			{"title":"AndroidDesign","url":"http://tmtdemo.qq.com/sketch/android.sketch"},
-  			{"title":"iOSDesign","url":"http://tmtdemo.qq.com/sketch/iOS.sketch"}
+  "UIKIT": [{"title":"WeChat UI Kit","url":"https://team.weui.io/double/WeChat.sketch"}
   		],
-  "COLOR": [{"title":"WeUI","url":"http://tmtdemo.qq.com/wechatcolor.json"
+  "COLOR": [{"title":"WeUI","url":""
   			}]
 }

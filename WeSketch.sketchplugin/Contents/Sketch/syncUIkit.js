@@ -6,8 +6,8 @@ function syncUIkit(context) {
 	var i18 = _(context).syncUIkit;
 	var scaleOptionsMatrix;
 	var scaleOptionsMatrix2;
-	var uiKitUrlKey = "com.sketchplugins.wechat.uikiturl";
-	var colorUrlKey = "com.sketchplugins.wechat.colorurl";
+	var uiKitUrlKey = "com.sketchplugins.wechat.newuikiturl";
+	var colorUrlKey = "com.sketchplugins.wechat.newcolorurl";
 
 	function chooseKit(context) {
 		var settingsWindow = dialog(context);
