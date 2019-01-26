@@ -193,12 +193,16 @@ var syncUIKit = function syncUIKit(context, fileType, fileMarkup) {
   }
 
   var runExportModal = function runExportModal() {
+    var syncWeChatKey = 'com.sketchplugins.wechat.syncWeChatKey';
+    
     var exportModal = COSAlertWindow["new"]();
     var iconImage = NSImage.alloc().initByReferencingFile(context.plugin.urlForResourceNamed("icon.png").path());
     if (iconImage) {
         exportModal.setIcon(iconImage);
     }
     exportModal.setMessageText("\u8BF7\u9009\u62E9\u8981\u5BFC\u5165\u7684 Library");
+    exportModal.setInformativeText('下载可能需要10-15秒下载文件');
+
     exportModal.addButtonWithTitle("确认");
     exportModal.addButtonWithTitle("取消");
 
@@ -228,14 +232,13 @@ var syncUIKit = function syncUIKit(context, fileType, fileMarkup) {
       return;
     } else {
       var uikit = scaleOptionsMatrix.selectedCell();
-      context.document.showMessage(uikit);
 
       var index = uikit.tag();
-      context.document.showMessage(index);
+      context.document.showMessage('导入中');
 
       var data = networkRequest([uikitList[index].url]);
       var save = NSSavePanel.savePanel();
-      var databasePath = (save.URL().path() + '.sketch').replace('Untitled', 'WeChat');
+      var databasePath = (save.URL().path() + '.sketch').replace('Untitled', uikitList[index].title);
       data = NSData.alloc().initWithData(data);
       data.writeToFile_atomically(databasePath, true);
 

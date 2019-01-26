@@ -1,5 +1,6 @@
 @import "toolbar.js";
 @import "checkForUpdate.js";
+@import "common.js"
 
 var selectionDom = "com.sketchplugins.wechat.selectionDom";
 var selectionDom1 = "com.sketchplugins.wechat.selectionDom1";
@@ -47,4 +48,45 @@ var onOpenDocument = function (context) {
     if (toolbarAuto != 'false') {
         toolbar(context, true);
     }
+    // var syncWeChatKey = 'com.sketchplugins.wechat.syncWeChatKey';
+    // var syncWeChatTime = 'com.sketchplugins.wechat.syncWeChatTime';
+
+    // var time = NSUserDefaults.standardUserDefaults().objectForKey(syncWeChatTime);
+
+    // var myDate = new Date();
+    // var toDay = myDate.toLocaleDateString();
+    // if(toDay == time){
+    //     return;
+    // }else{
+    //     NSUserDefaults.standardUserDefaults().setObject_forKey(toDay, syncWeChatTime);
+    // }
+
+
+    // var returnData = networkRequest([getConfig('config', context).VERSION])
+    // var jsonData = [[NSString alloc] initWithData: returnData encoding: NSUTF8StringEncoding];
+    // jsonData = JSON.parse(jsonData);
+    // var currentVersion = jsonData.currentVersion;
+
+
+    // var version = NSUserDefaults.standardUserDefaults().objectForKey(syncWeChatKey);
+    // if(version != currentVersion){
+    //     var i18 = _(context).checkForUpdate;
+    //     var updateAlert = dialog(context);
+    //     updateAlert.setMessageText('检查到有新的 libary ，是否更新？');
+    //     updateAlert.setInformativeText('更新可能需要10-15秒下载文件');
+    //     updateAlert.addButtonWithTitle(i18.m7);
+    //     updateAlert.addButtonWithTitle(i18.m8);
+    //     var response = updateAlert.runModal();
+    //     if (response == "1000") {
+    //       var data = networkRequest(['https://team.weui.io/double/WeChat.sketch']);
+    //       var save = NSSavePanel.savePanel();
+    //       var databasePath = (save.URL().path() + '.sketch').replace('Untitled', 'WeChat');
+    //       data = NSData.alloc().initWithData(data);
+    //       data.writeToFile_atomically(databasePath, true);
+    //       NSUserDefaults.standardUserDefaults().setObject_forKey(currentVersion, syncWeChatKey);
+    //       context.document.showMessage('导入成功，请在 Symbol 中使用您的 Library');
+
+    //     }
+    // }
+
 };
