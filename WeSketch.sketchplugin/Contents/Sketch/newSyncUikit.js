@@ -194,7 +194,9 @@ var syncUIKit = function syncUIKit(context, fileType, fileMarkup) {
 
   var runExportModal = function runExportModal() {
     var syncWeChatKey = 'com.sketchplugins.wechat.syncWeChatKey';
-    
+    var uiKitUrlSave = "com.sketchplugins.wechat.newuikitsaveurl";
+    var uiKitLocalSave = 'com.sketchplugins.wechat.newuikitdatabasePath';
+
     var exportModal = COSAlertWindow["new"]();
     var iconImage = NSImage.alloc().initByReferencingFile(context.plugin.urlForResourceNamed("icon.png").path());
     if (iconImage) {
@@ -232,8 +234,15 @@ var syncUIKit = function syncUIKit(context, fileType, fileMarkup) {
       return;
     } else {
       var uikit = scaleOptionsMatrix.selectedCell();
-
       var index = uikit.tag();
+
+      var returnData = networkRequest([uikitList[index].url.replace('.sketch','.json')]);
+      var jsonData = NSString.alloc().initWithData_encoding(returnData,NSUTF8StringEncoding);
+      jsonData = JSON.parse(jsonData);
+      var currentVersion = jsonData.VERSION;
+      NSUserDefaults.standardUserDefaults().setObject_forKey(currentVersion, syncWeChatKey);
+      NSUserDefaults.standardUserDefaults().setObject_forKey(uikitList[index].url, uiKitUrlSave);
+      
       context.document.showMessage('导入中');
 
       var data = networkRequest([uikitList[index].url]);
@@ -243,6 +252,7 @@ var syncUIKit = function syncUIKit(context, fileType, fileMarkup) {
       data.writeToFile_atomically(databasePath, true);
 
       var library = Library.getLibraryForDocumentAtPath(databasePath);
+      NSUserDefaults.standardUserDefaults().setObject_forKey(databasePath, uiKitLocalSave);
 
       context.document.showMessage('导入成功，请在 Symbol 中使用您的 Library');
     }
