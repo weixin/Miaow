@@ -31,7 +31,7 @@
 
 ## Features & Instruction
 
-*Note: English wiki comming soon.*
+*Note: English wiki coming soon.*
 
 1. [UI Kit Manager](https://github.com/weixin/WeSketch/wiki/%E2%92%88-UIkit-Sync)
 2. [Color Set](https://github.com/weixin/WeSketch/wiki/%E2%92%89-Color-Sync)
